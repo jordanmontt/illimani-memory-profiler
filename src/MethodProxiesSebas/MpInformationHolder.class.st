@@ -46,6 +46,13 @@ MpInformationHolder >> createdObject: anObject [
 	createdObject := anObject
 ]
 
+{ #category : #printing }
+MpInformationHolder >> printOn: aStream [
+
+	aStream << context methodClass name << ' --> ' << createdObject class asString << ' --> '
+	<< timestamp nanoSecond asString
+]
+
 { #category : #accessing }
 MpInformationHolder >> timestamp [
 

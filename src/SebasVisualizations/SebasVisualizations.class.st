@@ -5,17 +5,28 @@ Class {
 	#name : #SebasVisualizations,
 	#superclass : #Object,
 	#instVars : [
-		'names',
-		'y',
-		'x'
+		'allocations'
 	],
 	#category : #SebasVisualizations
 }
 
+{ #category : #accessing }
+SebasVisualizations >> allocations: aCollection [ 
+	allocations := aCollection
+]
+
 { #category : #visualization }
 SebasVisualizations >> barChart [
 
-	| chart barPlot |
+	| chart barPlot ocurrences names y x |
+	names := OrderedCollection new.
+	y := OrderedCollection new.
+	ocurrences := Bag newFrom: (allocations collect: [:e | e context methodClass]).
+	ocurrences doWithOccurrences: [ :key : value |
+		y add: value.
+		names add: key name ].
+	x := 1 to: names size.
+
 	chart := RSChart new.
 	barPlot := RSBarPlot new x: x y: y.
 
@@ -29,40 +40,4 @@ SebasVisualizations >> barChart [
 	chart build.
 	barPlot bars @ RSPopup.
 	^ chart canvas
-]
-
-{ #category : #accessing }
-SebasVisualizations >> names [
-
-	^ names
-]
-
-{ #category : #accessing }
-SebasVisualizations >> names: anObject [
-
-	names := anObject
-]
-
-{ #category : #accessing }
-SebasVisualizations >> x [
-
-	^ x
-]
-
-{ #category : #accessing }
-SebasVisualizations >> x: anObject [
-
-	x := anObject
-]
-
-{ #category : #accessing }
-SebasVisualizations >> y [
-
-	^ y
-]
-
-{ #category : #accessing }
-SebasVisualizations >> y: anObject [
-
-	y := anObject
 ]
