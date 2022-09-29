@@ -19,6 +19,11 @@ MpColorAllocationProfilerHandler >> afterExecutionWithReceiver: receiver argumen
 	^ returnValue
 ]
 
+{ #category : #accessing }
+MpColorAllocationProfilerHandler >> allocations [
+	^ allocations
+]
+
 { #category : #evaluating }
 MpColorAllocationProfilerHandler >> contextThatCreatesTheColor: aContext [
 
