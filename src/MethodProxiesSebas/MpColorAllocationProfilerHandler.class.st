@@ -3,52 +3,20 @@ I am a handler that register when a color is created. I keep that of both the co
 "
 Class {
 	#name : #MpColorAllocationProfilerHandler,
-	#superclass : #MpHandler,
-	#instVars : [
-		'allocations',
-		'classesToAvoid'
-	],
+	#superclass : #MpObjectAllocationProfilerHandler,
 	#category : #MethodProxiesSebas
 }
 
 { #category : #evaluating }
-MpColorAllocationProfilerHandler >> afterExecutionWithReceiver: receiver arguments: arguments returnValue: returnValue [
+MpColorAllocationProfilerHandler >> classToRegister [
 
-	returnValue class = Color ifTrue: [
-		allocations add: (self contextThatCreatesTheColor: thisContext) -> returnValue ].
-	^ returnValue
-]
-
-{ #category : #accessing }
-MpColorAllocationProfilerHandler >> allocations [
-	^ allocations
-]
-
-{ #category : #evaluating }
-MpColorAllocationProfilerHandler >> contextThatCreatesTheColor: aContext [
-
-	"(classToAvoid includes: aContext sender methodClass) ifFalse: [ 
-	^ aContext sender methodClass ].
-	^ self classThatCreatesTheColor: aContext sender"
-
-	| sender |
-	sender := aContext sender.
-	[ classesToAvoid includes: sender methodClass ] whileTrue: [ 
-		sender := sender sender ].
-	^ sender
+	^ Color
 ]
 
 { #category : #initialization }
-MpColorAllocationProfilerHandler >> initialize [
+MpColorAllocationProfilerHandler >> customClassesToAvoid [
 
-	super initialize.
-	allocations := OrderedCollection new.
-	classesToAvoid := { 
+	^ { 
 		Color class.
-		Color.
-		MpColorAllocationProfilerHandler.
-		MpMethodProxy.
-		BlockClosure.
-		FullBlockClosure.
-		CompiledBlock }
+		Color }
 ]
