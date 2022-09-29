@@ -11,8 +11,11 @@ Class {
 { #category : #evaluating }
 MpObjectAllocationProfilerHandler >> afterExecutionWithReceiver: receiver arguments: arguments returnValue: returnValue [
 
-	returnValue class = self classToRegister ifTrue: [
-		allocations add: (self contextThatCreatesTheColor: thisContext) -> returnValue ].
+	returnValue class = self classToRegister ifTrue: [ 
+		allocations add:
+			(MpInformationHolder
+				context: (self contextThatCreatesTheColor: thisContext)
+				createdObject: returnValue) ].
 	^ returnValue
 ]
 
