@@ -1,0 +1,1 @@
+# object-creation-pharo-experiment
