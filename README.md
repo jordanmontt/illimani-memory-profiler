@@ -12,7 +12,13 @@ p2 := MpMethodProxy
 p2 install.
 h.
 
-
 p1 uninstall.
 p2 uninstall.
+
+
+sebasVisualizations := SebasVisualizations new
+	allocations: h allocations.
+barChart :=	sebasVisualizations barChart.
+lineChart :=	sebasVisualizations lineChart.
+lineChartTopClasses :=	sebasVisualizations lineChartTopClasses.
 ```
