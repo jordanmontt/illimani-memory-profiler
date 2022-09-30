@@ -19,5 +19,5 @@ BaselineOfObjectCreationExperiment >> baseline: spec [
 		spec package: 'MethodProxiesSebas' with: [ spec requires: #( MethodProxies ) ].
 		spec package: 'SebasVisualizations' with: [ spec requires: #( MethodProxiesSebas ) ].
 
-		spec group: 'default' with: #( 'MethodProxiesSebas' ) ]
+		spec group: 'default' with: #( 'MethodProxiesSebas' 'SebasVisualizations' ) ]
 ]
