@@ -17,6 +17,7 @@ BaselineOfObjectCreationExperiment >> baseline: spec [
 			with: [ spec repository: 'github://pharo-contributions/MethodProxies/src' ].
 
 		spec package: 'MethodProxiesSebas' with: [ spec requires: #( MethodProxies ) ].
+		spec package: 'SebasVisualizations' with: [ spec requires: #( MethodProxiesSebas ) ].
 
 		spec group: 'default' with: #( 'MethodProxiesSebas' ) ]
 ]
