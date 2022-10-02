@@ -10,6 +10,17 @@ Class {
 	#category : #SebasVisualizations
 }
 
+{ #category : #defaults }
+SebasVisualizations >> addLabelsX: xText y: yText ForChart: chart [
+
+	(chart xlabel: xText) shape
+		color: Color black;
+		fontFamily: 'Impact'.
+	(chart ylabel: yText) shape
+		color: Color black;
+		fontFamily: 'Impact'
+]
+
 { #category : #accessing }
 SebasVisualizations >> allocations: aCollection [
 
@@ -17,30 +28,55 @@ SebasVisualizations >> allocations: aCollection [
 ]
 
 { #category : #visualization }
-SebasVisualizations >> barChartCanvas [
+SebasVisualizations >> barChartClassesCanvas [
 
-	| chart barPlot ocurrences names y x |
-	names := OrderedCollection new.
-	y := OrderedCollection new.
-	ocurrences := Bag newFrom: (allocations collect: [:e | e context methodClass]).
-	ocurrences doWithOccurrences: [ :key : value |
-		y add: value.
-		names add: key name ].
-	x := 1 to: names size.
-
-	chart := RSChart new.
-	barPlot := RSBarPlot new x: x y: y.
-
-	chart addPlot: barPlot.
-	chart add: RSVerticalTick new.
-	chart addDecoration: (RSHorizontalTick new
-		useVerticalLabel;
-		fromNames: names;
-		yourself).
-
+	| chart names objectsCreated x |
+	objectsCreated := self occurrencesByMethodClass.
+	names := objectsCreated collect: [ :e | e key name ].
+	x := 1 to: objectsCreated size.
+	chart := self createBarChartFor: objectsCreated x: x.
+	self addLabelsX: 'Classes' y: 'Number of Created Objects' ForChart: chart.
 	chart build.
-	barPlot bars @ RSPopup.
 	^ chart canvas
+]
+
+{ #category : #visualization }
+SebasVisualizations >> barChartTopClassesCanvas [
+
+	| chart names objectsCreated x |
+	objectsCreated := self occurrencesByMethodClass first: 10.
+	names := objectsCreated collect: [ :e | e key name ].
+	x := 1 to: objectsCreated size.
+	
+	chart := self createBarChartFor: objectsCreated x: x.
+	self addLabelsX: 'Classes' y: 'Number of Created Objects' ForChart: chart.
+	chart build.
+	^ chart canvas
+]
+
+{ #category : #visualization }
+SebasVisualizations >> barChartTopMethodsCanvas [
+
+	| chart names objectsCreated x |
+	objectsCreated := self occurrencesByMethod first: 10.
+	names := objectsCreated collect: [ :e | e ].
+	x := 1 to: objectsCreated size.
+
+	chart := self createBarChartFor: objectsCreated x: x.
+	self addLabelsX: 'Methods' y: 'Number of Created Objects' ForChart: chart.
+	chart build.
+	^ chart canvas
+]
+
+{ #category : #defaults }
+SebasVisualizations >> createBarChartFor: objectsCreated x: x [
+
+	| chart barPlot |
+	chart := RSChart new.
+	barPlot := RSBarPlot new x: x y: (objectsCreated collect: #value).
+	chart addPlot: barPlot.
+	self tuneBarChart: chart for: objectsCreated.
+	^ chart
 ]
 
 { #category : #defaults }
@@ -66,6 +102,8 @@ SebasVisualizations >> lineChartCanvas [
 	chart add: linePlot.
 	self tuneChartForLinePlot: chart.
 	chart build.
+	
+	linePlot line @ RSPopup.
 	^ chart canvas
 ]
 
@@ -89,6 +127,7 @@ SebasVisualizations >> lineChartTopClassesCanvas [
 		legend text: class name withBoxColor: linePlot computeColor ].
 	
 	self tuneChartForLinePlot: chart.
+	
 	legend location
 		middle;
 		right.
@@ -96,22 +135,51 @@ SebasVisualizations >> lineChartTopClassesCanvas [
 		borderColor: 'black';
 		scaleBy: 0.5;
 		padding: 10 ].
+	
 	chart build.
 	legend build.
+	
 	^ chart canvas
+]
+
+{ #category : #defaults }
+SebasVisualizations >> occurrencesBy: aBlock [
+
+	| objectsCreated ocurrences |
+	objectsCreated := OrderedCollection new.
+	ocurrences := Bag newFrom: (allocations collect: aBlock).
+	ocurrences doWithOccurrences: [ :key :value | objectsCreated add: key -> value ].
+	^ objectsCreated sorted: [ :a :b | a value > b value ]
+]
+
+{ #category : #defaults }
+SebasVisualizations >> occurrencesByMethod [
+
+	^ self occurrencesBy: [ :e | e context asString ]
+]
+
+{ #category : #defaults }
+SebasVisualizations >> occurrencesByMethodClass [
+
+	^ self occurrencesBy: [ :e | e context methodClass ]
+]
+
+{ #category : #defaults }
+SebasVisualizations >> tuneBarChart: chart for: objectsCreated [
+
+	chart add: RSVerticalTick new.
+	chart addDecoration: (RSHorizontalTick new
+			 useVerticalLabel;
+			 fromNames: objectsCreated;
+			 yourself)
 ]
 
 { #category : #defaults }
 SebasVisualizations >> tuneChartForLinePlot: chart [
 
 	chart add: (RSHorizontalTick new
-		labelConversion: [ :number | (number / (10 raisedTo: 9)) asFloat ];
-		yourself).
+			 labelConversion: [ :number | (number / (10 raisedTo: 9)) asFloat ];
+			 yourself).
 	chart add: RSVerticalTick new.
-	(chart xlabel: 'Seconds') shape
-		color: Color black;
-		fontFamily: 'Impact'.
-	(chart ylabel: 'Number of instances created') shape
-		color: Color black;
-		fontFamily: 'Impact'
+	self addLabelsX: 'Seconds' y: 'Number of Created Objects' ForChart: chart
 ]

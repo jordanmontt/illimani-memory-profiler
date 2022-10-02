@@ -71,14 +71,54 @@ MpObjectAllocationProfilerHandler >> initialize [
 ]
 
 { #category : #'inspector tabs' }
-MpObjectAllocationProfilerHandler >> inspectorBarChart [
+MpObjectAllocationProfilerHandler >> inspectorBarChartClasses [
 
-	<inspectorPresentationOrder: 0 title: 'Bar Chart'>
+	"<inspectorPresentationOrder: 0 title: 'Classes Bar Chart'>"
 	^ SpRoassalPresenter new
 		canvas: (SebasVisualizations new
 			allocations: self allocations;
-			barChartCanvas);
+			barChartClassesCanvas);
 		yourself
+]
+
+{ #category : #'inspector tabs' }
+MpObjectAllocationProfilerHandler >> inspectorBarChartClassesContext: aContext [
+
+	aContext withoutEvaluator
+]
+
+{ #category : #'inspector tabs' }
+MpObjectAllocationProfilerHandler >> inspectorBarChartTopClasses [
+
+	<inspectorPresentationOrder: 0 title: 'Top Classes Bar Chart'>
+	^ SpRoassalPresenter new
+		canvas: (SebasVisualizations new
+			allocations: self allocations;
+			barChartTopClassesCanvas);
+		yourself
+]
+
+{ #category : #'inspector tabs' }
+MpObjectAllocationProfilerHandler >> inspectorBarChartTopClassesContext: aContext [
+
+	aContext withoutEvaluator
+]
+
+{ #category : #'inspector tabs' }
+MpObjectAllocationProfilerHandler >> inspectorBarChartTopMethods [
+
+	<inspectorPresentationOrder: 0 title: 'Top Methods Bar Chart'>
+	^ SpRoassalPresenter new
+		canvas: (SebasVisualizations new
+			allocations: self allocations;
+			barChartTopMethodsCanvas);
+		yourself
+]
+
+{ #category : #'inspector tabs' }
+MpObjectAllocationProfilerHandler >> inspectorBarChartTopMethodsContext: aContext [
+
+	aContext withoutEvaluator
 ]
 
 { #category : #'inspector tabs' }
@@ -93,6 +133,12 @@ MpObjectAllocationProfilerHandler >> inspectorLineChart [
 ]
 
 { #category : #'inspector tabs' }
+MpObjectAllocationProfilerHandler >> inspectorLineChartContext: aContext [
+
+	aContext withoutEvaluator
+]
+
+{ #category : #'inspector tabs' }
 MpObjectAllocationProfilerHandler >> inspectorLineChartTopClasses [
 
 	<inspectorPresentationOrder: 0 title: 'Line Chart Top Classes'>
@@ -101,4 +147,19 @@ MpObjectAllocationProfilerHandler >> inspectorLineChartTopClasses [
 			allocations: self allocations;
 			lineChartTopClassesCanvas);
 		yourself
+]
+
+{ #category : #'inspector tabs' }
+MpObjectAllocationProfilerHandler >> inspectorLineChartTopClassesContext: aContext [
+
+	aContext withoutEvaluator
+]
+
+{ #category : #'inspector tabs' }
+MpObjectAllocationProfilerHandler >> inspectorStats [
+
+	<inspectorPresentationOrder: 0 title: 'Stats'>
+	^ ObjecInstantiationStatsPresenter new
+		allocations: allocations;
+		yourself 
 ]
