@@ -17,7 +17,7 @@ SebasVisualizations >> allocations: aCollection [
 ]
 
 { #category : #visualization }
-SebasVisualizations >> barChart [
+SebasVisualizations >> barChartCanvas [
 
 	| chart barPlot ocurrences names y x |
 	names := OrderedCollection new.
@@ -58,7 +58,7 @@ SebasVisualizations >> createLinePlotForAllocations: someAllocations [
 ]
 
 { #category : #visualization }
-SebasVisualizations >> lineChart [
+SebasVisualizations >> lineChartCanvas [
 
 	| chart linePlot |
 	linePlot := self createLinePlotForAllocations: allocations.
@@ -70,7 +70,7 @@ SebasVisualizations >> lineChart [
 ]
 
 { #category : #visualization }
-SebasVisualizations >> lineChartTopClasses [
+SebasVisualizations >> lineChartTopClassesCanvas [
 
 	| chart classGroups linePlot sortedGroupKeys legend |
 	classGroups := allocations groupedBy: [ :holder | holder context methodClass ].

@@ -69,3 +69,36 @@ MpObjectAllocationProfilerHandler >> initialize [
 	allocations := OrderedCollection new.
 	classesToAvoid := self defaultClassesToAvoid , self customClassesToAvoid
 ]
+
+{ #category : #'inspector tabs' }
+MpObjectAllocationProfilerHandler >> inspectorBarChart [
+
+	<inspectorPresentationOrder: 0 title: 'Bar Chart'>
+	^ SpRoassalPresenter new
+		canvas: (SebasVisualizations new
+			allocations: self allocations;
+			barChartCanvas);
+		yourself
+]
+
+{ #category : #'inspector tabs' }
+MpObjectAllocationProfilerHandler >> inspectorLineChart [
+
+	<inspectorPresentationOrder: 0 title: 'Line Chart'>
+	^ SpRoassalPresenter new
+		canvas: (SebasVisualizations new
+			allocations: self allocations;
+			lineChartCanvas);
+		yourself
+]
+
+{ #category : #'inspector tabs' }
+MpObjectAllocationProfilerHandler >> inspectorLineChartTopClasses [
+
+	<inspectorPresentationOrder: 0 title: 'Line Chart Top Classes'>
+	^ SpRoassalPresenter new
+		canvas: (SebasVisualizations new
+			allocations: self allocations;
+			lineChartTopClassesCanvas);
+		yourself
+]

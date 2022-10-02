@@ -9,5 +9,5 @@ Class {
 
 { #category : #'code-critics' }
 ManifestSebasVisualizations class >> ruleCollectionProtocolRuleV1FalsePositive [
-	^ #(#(#(#RGMethodDefinition #(#SebasVisualizations #lineChartTopClasses #false)) #'2022-09-30T10:45:39.209076+02:00') )
+	^ #(#(#(#RGMethodDefinition #(#SebasVisualizations #lineChartTopClassesCanvas #false)) #'2022-09-30T10:45:39.209076+02:00') )
 ]
