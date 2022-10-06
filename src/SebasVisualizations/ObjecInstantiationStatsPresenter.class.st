@@ -65,6 +65,12 @@ ObjecInstantiationStatsPresenter >> numberOfMethods [
 	^ (allocations collect: [ :e | e context asString ]) asSet
 ]
 
+{ #category : #printing }
+ObjecInstantiationStatsPresenter >> printOn: aStream [
+
+	aStream << 'Hola'
+]
+
 { #category : #'accessing - model' }
 ObjecInstantiationStatsPresenter >> setModelBeforeInitialization: someAllocations [
 
