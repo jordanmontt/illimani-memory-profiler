@@ -159,7 +159,11 @@ MpObjectAllocationProfilerHandler >> inspectorLineChartTopClassesContext: aConte
 MpObjectAllocationProfilerHandler >> inspectorStats [
 
 	<inspectorPresentationOrder: 0 title: 'Stats'>
-	^ ObjecInstantiationStatsPresenter new
-		allocations: allocations;
-		yourself 
+	^ ObjecInstantiationStatsPresenter on: allocations
+]
+
+{ #category : #accessing }
+MpObjectAllocationProfilerHandler >> statsString [
+
+	^ (ObjecInstantiationStatsPresenter on: allocations) asString
 ]

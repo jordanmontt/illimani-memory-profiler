@@ -44,7 +44,7 @@ SebasVisualizations >> barChartClassesCanvas [
 SebasVisualizations >> barChartTopClassesCanvas [
 
 	| chart names objectsCreated x |
-	objectsCreated := self occurrencesByMethodClass first: 10.
+	objectsCreated := self occurrencesByMethodClass first: (10 min: self occurrencesByMethodClass size).
 	names := objectsCreated collect: [ :e | e key name ].
 	x := 1 to: objectsCreated size.
 	
@@ -58,7 +58,7 @@ SebasVisualizations >> barChartTopClassesCanvas [
 SebasVisualizations >> barChartTopMethodsCanvas [
 
 	| chart names objectsCreated x |
-	objectsCreated := self occurrencesByMethod first: 10.
+	objectsCreated := self occurrencesByMethod first: (10 min: self occurrencesByMethodClass size).
 	names := objectsCreated collect: [ :e | e ].
 	x := 1 to: objectsCreated size.
 
@@ -114,7 +114,7 @@ SebasVisualizations >> lineChartTopClassesCanvas [
 	classGroups := allocations groupedBy: [ :holder | holder context methodClass ].
 	sortedGroupKeys := classGroups keys sorted: [ :key1 :key2 | 
 		(classGroups at: key1) size > (classGroups at: key2) size ].
-	sortedGroupKeys := sortedGroupKeys first: 3.
+	sortedGroupKeys := sortedGroupKeys first: (3 min: classGroups keys size).
 	
 	chart := RSChart new.
 	legend := RSLegend new.
