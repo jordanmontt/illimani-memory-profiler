@@ -37,7 +37,9 @@ ObjectInstantiationWatcher >> proxyHandler [
 { #category : #accessing }
 ObjectInstantiationWatcher >> proxyHandler: aProxyHandler [
 
-	proxyHandler := aProxyHandler
+	proxyHandler := aProxyHandler.
+	proxyA := MpMethodProxy onMethod: Behavior >> #basicNew handler: proxyHandler.
+	proxyB := MpMethodProxy onMethod: Behavior >> #basicNew: handler: proxyHandler
 ]
 
 { #category : #api }
