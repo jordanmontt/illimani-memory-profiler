@@ -68,7 +68,10 @@ ObjecInstantiationStatsPresenter >> numberOfMethods [
 { #category : #printing }
 ObjecInstantiationStatsPresenter >> printOn: aStream [
 
-	aStream << 'Hola'
+	aStream << 'Classes that create objects: ' << numberOfClassesLabel label << String cr
+	<< 'Methods that create objects: ' << numberOfMethodsLabel label << String cr
+	<< 'Total instantiated objects: ' << totalInstantiatedObjectLabel label << String cr
+	<< 'Total unique instantiated objects ' << totalUniqueInstantiatedObjectsLabal label
 ]
 
 { #category : #'accessing - model' }
