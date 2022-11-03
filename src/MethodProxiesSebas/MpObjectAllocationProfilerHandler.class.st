@@ -14,7 +14,7 @@ MpObjectAllocationProfilerHandler >> afterExecutionWithReceiver: receiver argume
 	returnValue class = self classToRegister ifTrue: [ 
 		allocations add:
 			(MpInformationHolder
-				context: (self contextThatCreatesTheColor: thisContext)
+				context: (self contextThatCreatesTheColor: thisContext) copyStack
 				createdObject: returnValue) ].
 	^ returnValue
 ]
@@ -46,16 +46,10 @@ MpObjectAllocationProfilerHandler >> contextThatCreatesTheColor: aContext [
 ]
 
 { #category : #initialization }
-MpObjectAllocationProfilerHandler >> customClassesToAvoid [
-
-	^ self subclassResponsibility
-]
-
-{ #category : #initialization }
 MpObjectAllocationProfilerHandler >> defaultClassesToAvoid [
 
 	^{ 
-		MpColorAllocationProfilerHandler.
+		self class.
 		MpMethodProxy.
 		BlockClosure.
 		FullBlockClosure.
@@ -67,7 +61,7 @@ MpObjectAllocationProfilerHandler >> initialize [
 
 	super initialize.
 	allocations := OrderedCollection new.
-	classesToAvoid := self defaultClassesToAvoid , self customClassesToAvoid
+	classesToAvoid := self defaultClassesToAvoid , { self classToRegister . self classToRegister class }
 ]
 
 { #category : #'inspector tabs' }

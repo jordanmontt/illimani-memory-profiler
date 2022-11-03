@@ -1,11 +1,11 @@
 Class {
-	#name : #MpPointAllocationProfilerHandler,
+	#name : #MpDictionaryAllocationProfilerHandler,
 	#superclass : #MpObjectAllocationProfilerHandler,
 	#category : #MethodProxiesSebas
 }
 
 { #category : #evaluating }
-MpPointAllocationProfilerHandler >> classToRegister [
+MpDictionaryAllocationProfilerHandler >> classToRegister [
 
-	^ Point
+	^ Dictionary
 ]

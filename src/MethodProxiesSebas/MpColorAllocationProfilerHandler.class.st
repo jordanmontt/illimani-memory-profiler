@@ -12,11 +12,3 @@ MpColorAllocationProfilerHandler >> classToRegister [
 
 	^ Color
 ]
-
-{ #category : #initialization }
-MpColorAllocationProfilerHandler >> customClassesToAvoid [
-
-	^ { 
-		Color class.
-		Color }
-]
