@@ -9,7 +9,7 @@ Class {
 		'timestamp',
 		'createdObject'
 	],
-	#category : #MethodProxiesSebas
+	#category : #AllocationProfiler
 }
 
 { #category : #'instance creation' }

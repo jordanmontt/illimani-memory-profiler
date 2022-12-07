@@ -1,7 +1,7 @@
 Class {
 	#name : #MpMegaAllocationProfilerHandler,
 	#superclass : #MpObjectAllocationProfilerHandler,
-	#category : #MethodProxiesSebas
+	#category : #AllocationProfiler
 }
 
 { #category : #evaluating }

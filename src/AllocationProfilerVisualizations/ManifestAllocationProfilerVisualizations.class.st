@@ -2,12 +2,12 @@
 Please describe the package using the class comment of the included manifest class. The manifest class also includes other additional metadata for the package. These meta data are used by other tools such as the SmalllintManifestChecker and the critics Browser
 "
 Class {
-	#name : #ManifestSebasVisualizations,
+	#name : #ManifestAllocationProfilerVisualizations,
 	#superclass : #PackageManifest,
-	#category : #'SebasVisualizations-Manifest'
+	#category : #'AllocationProfilerVisualizations-Manifest'
 }
 
 { #category : #'code-critics' }
-ManifestSebasVisualizations class >> ruleCollectionProtocolRuleV1FalsePositive [
+ManifestAllocationProfilerVisualizations class >> ruleCollectionProtocolRuleV1FalsePositive [
 	^ #(#(#(#RGMethodDefinition #(#SebasVisualizations #lineChartTopClassesCanvas #false)) #'2022-09-30T10:45:39.209076+02:00') )
 ]

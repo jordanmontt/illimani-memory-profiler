@@ -9,7 +9,7 @@ Class {
 		'proxyA',
 		'proxyB'
 	],
-	#category : #MethodProxiesSebas
+	#category : #AllocationProfiler
 }
 
 { #category : #accessing }

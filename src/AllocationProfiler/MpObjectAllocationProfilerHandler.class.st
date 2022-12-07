@@ -5,7 +5,7 @@ Class {
 		'allocations',
 		'classesToAvoid'
 	],
-	#category : #MethodProxiesSebas
+	#category : #AllocationProfiler
 }
 
 { #category : #evaluating }

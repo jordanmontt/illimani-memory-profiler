@@ -7,7 +7,7 @@ Class {
 	#instVars : [
 		'allocations'
 	],
-	#category : #SebasVisualizations
+	#category : #AllocationProfilerVisualizations
 }
 
 { #category : #defaults }

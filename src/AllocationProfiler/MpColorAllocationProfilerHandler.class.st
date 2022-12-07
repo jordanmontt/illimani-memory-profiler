@@ -4,7 +4,7 @@ I am a handler that register when a color is created. I keep that of both the co
 Class {
 	#name : #MpColorAllocationProfilerHandler,
 	#superclass : #MpObjectAllocationProfilerHandler,
-	#category : #MethodProxiesSebas
+	#category : #AllocationProfiler
 }
 
 { #category : #evaluating }

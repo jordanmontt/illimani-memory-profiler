@@ -1,7 +1,7 @@
 Class {
 	#name : #MpPointAllocationProfilerHandler,
 	#superclass : #MpObjectAllocationProfilerHandler,
-	#category : #MethodProxiesSebas
+	#category : #AllocationProfiler
 }
 
 { #category : #evaluating }

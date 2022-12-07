@@ -1,6 +1,6 @@
 Extension { #name : #MpAllocationProfilerHandler }
 
-{ #category : #'*MethodProxiesSebas' }
+{ #category : #'*AllocationProfiler' }
 MpAllocationProfilerHandler >> allocations [
 
 	^ allocations

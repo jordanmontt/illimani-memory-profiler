@@ -8,7 +8,7 @@ Class {
 		'totalInstantiatedObjectLabel',
 		'totalUniqueInstantiatedObjectsLabal'
 	],
-	#category : #SebasVisualizations
+	#category : #AllocationProfilerVisualizations
 }
 
 { #category : #layout }
