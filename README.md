@@ -1,5 +1,14 @@
 # object-creation-pharo-experiment
 
+## How to install it
+
+```st
+Metacello new
+  baseline: 'AllocationProfiler';
+  repository: 'github://jordanmontt/object-creation-pharo-experiment:main';
+  load.
+```
+
 ## How to use it
 
 You need to instantiate an `ObjectInstantiationWatcher`. You can watch either the colors or the points allocations.
