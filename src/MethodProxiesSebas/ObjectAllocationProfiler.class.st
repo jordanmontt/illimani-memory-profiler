@@ -2,7 +2,7 @@
 I am an object that will install and unistall the method proxies inside the methods: `basicNew` and `basicNew:`
 "
 Class {
-	#name : #ObjectAllocationObserver,
+	#name : #ObjectAllocationProfiler,
 	#superclass : #Object,
 	#instVars : [
 		'proxyHandler',
@@ -13,13 +13,13 @@ Class {
 }
 
 { #category : #accessing }
-ObjectAllocationObserver >> allocations [
+ObjectAllocationProfiler >> allocations [
 
 	^ proxyHandler allocations
 ]
 
 { #category : #initialization }
-ObjectAllocationObserver >> initialize [
+ObjectAllocationProfiler >> initialize [
 
 	super initialize.
 	proxyHandler := MpColorAllocationProfilerHandler new.
@@ -29,13 +29,13 @@ ObjectAllocationObserver >> initialize [
 ]
 
 { #category : #accessing }
-ObjectAllocationObserver >> proxyHandler [
+ObjectAllocationProfiler >> proxyHandler [
 
 	^ proxyHandler
 ]
 
 { #category : #accessing }
-ObjectAllocationObserver >> proxyHandler: aProxyHandler [
+ObjectAllocationProfiler >> proxyHandler: aProxyHandler [
 
 	proxyHandler := aProxyHandler.
 	proxyA := MpMethodProxy onMethod: Behavior >> #basicNew handler: proxyHandler.
@@ -43,14 +43,14 @@ ObjectAllocationObserver >> proxyHandler: aProxyHandler [
 ]
 
 { #category : #api }
-ObjectAllocationObserver >> startObserving [
+ObjectAllocationProfiler >> startProfiling [
 
 	proxyA install.
 	proxyB install
 ]
 
 { #category : #api }
-ObjectAllocationObserver >> stopObserving [
+ObjectAllocationProfiler >> stopProfiling [
 
 	proxyA uninstall.
 	proxyB uninstall

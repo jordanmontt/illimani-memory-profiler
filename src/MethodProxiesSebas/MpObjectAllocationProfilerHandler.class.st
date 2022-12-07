@@ -13,7 +13,7 @@ MpObjectAllocationProfilerHandler >> afterExecutionWithReceiver: receiver argume
 
 	returnValue class = self classToRegister ifTrue: [ 
 		allocations add:
-			(MpInformationHolder
+			(AllocationInformationHolder
 				context: (self contextThatCreatesTheColor: thisContext) copyStack
 				createdObject: returnValue) ].
 	^ returnValue

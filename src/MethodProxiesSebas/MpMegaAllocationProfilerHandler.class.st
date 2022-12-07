@@ -8,7 +8,7 @@ Class {
 MpMegaAllocationProfilerHandler >> afterExecutionWithReceiver: receiver arguments: arguments returnValue: returnValue [
 
 	allocations add:
-		(MpInformationHolder
+		(AllocationInformationHolder
 			context: (self contextThatCreatesTheColor: thisContext) copyStack
 			createdObject: returnValue).
 	^ returnValue

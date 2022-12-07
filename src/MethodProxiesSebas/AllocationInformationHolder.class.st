@@ -2,7 +2,7 @@
 I am an object that hols the information that was was captured by the method proxies
 "
 Class {
-	#name : #MpInformationHolder,
+	#name : #AllocationInformationHolder,
 	#superclass : #Object,
 	#instVars : [
 		'context',
@@ -13,7 +13,7 @@ Class {
 }
 
 { #category : #'instance creation' }
-MpInformationHolder class >> context: aContext createdObject: objectCreated [
+AllocationInformationHolder class >> context: aContext createdObject: objectCreated [
 
 	^ self new
 		context: aContext;
@@ -23,44 +23,44 @@ MpInformationHolder class >> context: aContext createdObject: objectCreated [
 ]
 
 { #category : #accessing }
-MpInformationHolder >> context [
+AllocationInformationHolder >> context [
 
 	^ context
 ]
 
 { #category : #accessing }
-MpInformationHolder >> context: anObject [
+AllocationInformationHolder >> context: anObject [
 
 	context := anObject
 ]
 
 { #category : #accessing }
-MpInformationHolder >> createdObject [
+AllocationInformationHolder >> createdObject [
 
 	^ createdObject
 ]
 
 { #category : #accessing }
-MpInformationHolder >> createdObject: anObject [
+AllocationInformationHolder >> createdObject: anObject [
 
 	createdObject := anObject
 ]
 
 { #category : #printing }
-MpInformationHolder >> printOn: aStream [
+AllocationInformationHolder >> printOn: aStream [
 
 	aStream << context methodClass name << ' --> ' << createdObject class asString << ' --> '
 	<< timestamp nanoSecond asString
 ]
 
 { #category : #accessing }
-MpInformationHolder >> timestamp [
+AllocationInformationHolder >> timestamp [
 
 	^ timestamp
 ]
 
 { #category : #accessing }
-MpInformationHolder >> timestamp: anObject [
+AllocationInformationHolder >> timestamp: anObject [
 
 	timestamp := anObject
 ]
