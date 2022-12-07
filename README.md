@@ -5,12 +5,12 @@
 You need to instantiate an `ObjectInstantiationWatcher`. You can watch either the colors or the points allocations.
 
 ```st
-objectInstatiationWatcher := ObjectInstantiationWatcher new.
+objectAllocationProfiler := ObjectAllocationProfiler new.
 
-objectInstatiationWatcher startWatching.
-objectInstatiationWatcher stopWatching.
+objectAllocationProfiler startProfiling.
+objectAllocationProfiler stopProfiling.
 
-objectInstatiationWatcher proxyHandler inspect
+objectAllocationProfiler proxyHandler inspect
 ```
 
 In the inspector you will able to see all the that are presented here visualizations and also a presenter with the stats.
@@ -18,7 +18,7 @@ In the inspector you will able to see all the that are presented here visualizat
 For watching points:
 
 ```st
-objectInstatiationWatcher proxyHandler: MpPointAllocationProfilerHandler new
+objectAllocationProfiler proxyHandler: MpPointAllocationProfilerHandler new
 ```
 
 ## Results
