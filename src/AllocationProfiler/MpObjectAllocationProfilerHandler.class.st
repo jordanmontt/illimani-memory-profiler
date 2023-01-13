@@ -76,49 +76,16 @@ MpObjectAllocationProfilerHandler >> inspectorBarChartClasses [
 ]
 
 { #category : #'inspector tabs' }
-MpObjectAllocationProfilerHandler >> inspectorBarChartClassesContext: aContext [
+MpObjectAllocationProfilerHandler >> inspectorGeneralStats [
 
-	aContext withoutEvaluator
+	<inspectorPresentationOrder: 0 title: 'General Stats'>
+	^ ObjecInstantiationStatsPresenter on: allocations
 ]
 
 { #category : #'inspector tabs' }
-MpObjectAllocationProfilerHandler >> inspectorBarChartTopClasses [
+MpObjectAllocationProfilerHandler >> inspectorNumberOfAllocatedObjectsPerSecond [
 
-	<inspectorPresentationOrder: 0 title: 'Top Classes Bar Chart'>
-	^ SpRoassalPresenter new
-		canvas: (SebasVisualizations new
-			allocations: self allocations;
-			barChartTopClassesCanvas);
-		yourself
-]
-
-{ #category : #'inspector tabs' }
-MpObjectAllocationProfilerHandler >> inspectorBarChartTopClassesContext: aContext [
-
-	aContext withoutEvaluator
-]
-
-{ #category : #'inspector tabs' }
-MpObjectAllocationProfilerHandler >> inspectorBarChartTopMethods [
-
-	<inspectorPresentationOrder: 0 title: 'Top Methods Bar Chart'>
-	^ SpRoassalPresenter new
-		canvas: (SebasVisualizations new
-			allocations: self allocations;
-			barChartTopMethodsCanvas);
-		yourself
-]
-
-{ #category : #'inspector tabs' }
-MpObjectAllocationProfilerHandler >> inspectorBarChartTopMethodsContext: aContext [
-
-	aContext withoutEvaluator
-]
-
-{ #category : #'inspector tabs' }
-MpObjectAllocationProfilerHandler >> inspectorLineChart [
-
-	<inspectorPresentationOrder: 0 title: 'Line Chart'>
+	<inspectorPresentationOrder: 1 title: 'Number of Allocated Objects per Second'>
 	^ SpRoassalPresenter new
 		canvas: (SebasVisualizations new
 			allocations: self allocations;
@@ -126,16 +93,16 @@ MpObjectAllocationProfilerHandler >> inspectorLineChart [
 		yourself
 ]
 
-{ #category : #'inspector tabs' }
-MpObjectAllocationProfilerHandler >> inspectorLineChartContext: aContext [
+{ #category : #'inspector context' }
+MpObjectAllocationProfilerHandler >> inspectorNumberOfAllocatedObjectsPerSecondContext: aContext [
 
 	aContext withoutEvaluator
 ]
 
 { #category : #'inspector tabs' }
-MpObjectAllocationProfilerHandler >> inspectorLineChartTopClasses [
+MpObjectAllocationProfilerHandler >> inspectorNumberOfAllocatedObjectsPerSecondPerClass [
 
-	<inspectorPresentationOrder: 0 title: 'Line Chart Top Classes'>
+	<inspectorPresentationOrder: 2 title: 'Number of Allocated Objects per Second per Class'>
 	^ SpRoassalPresenter new
 		canvas: (SebasVisualizations new
 			allocations: self allocations;
@@ -143,17 +110,44 @@ MpObjectAllocationProfilerHandler >> inspectorLineChartTopClasses [
 		yourself
 ]
 
-{ #category : #'inspector tabs' }
-MpObjectAllocationProfilerHandler >> inspectorLineChartTopClassesContext: aContext [
+{ #category : #'inspector context' }
+MpObjectAllocationProfilerHandler >> inspectorNumberOfAllocatedObjectsPerSecondPerClassContext: aContext [
 
 	aContext withoutEvaluator
 ]
 
 { #category : #'inspector tabs' }
-MpObjectAllocationProfilerHandler >> inspectorStats [
+MpObjectAllocationProfilerHandler >> inspectorTopClassesThatAllocateObjects [
 
-	<inspectorPresentationOrder: 0 title: 'Stats'>
-	^ ObjecInstantiationStatsPresenter on: allocations
+	<inspectorPresentationOrder: 4 title: 'Top Classes That Allocate Objects'>
+	^ SpRoassalPresenter new
+		canvas: (SebasVisualizations new
+			allocations: self allocations;
+			barChartTopClassesCanvas);
+		yourself
+]
+
+{ #category : #'inspector context' }
+MpObjectAllocationProfilerHandler >> inspectorTopClassesThatAllocateObjectsContext: aContext [
+
+	aContext withoutEvaluator
+]
+
+{ #category : #'inspector tabs' }
+MpObjectAllocationProfilerHandler >> inspectorTopMethodsThatAllocateObjects [
+
+	<inspectorPresentationOrder: 3 title: 'Top Methods That Allocate Objects'>
+	^ SpRoassalPresenter new
+		canvas: (SebasVisualizations new
+			allocations: self allocations;
+			barChartTopMethodsCanvas);
+		yourself
+]
+
+{ #category : #'inspector context' }
+MpObjectAllocationProfilerHandler >> inspectorTopMethodsThatAllocateObjectsContext: aContext [
+
+	aContext withoutEvaluator
 ]
 
 { #category : #accessing }

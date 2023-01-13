@@ -1,3 +1,6 @@
+"
+I am a presenter class that shows basic stats about the object allocations.
+"
 Class {
 	#name : #ObjecInstantiationStatsPresenter,
 	#superclass : #SpPresenter,
@@ -68,10 +71,10 @@ ObjecInstantiationStatsPresenter >> numberOfMethods [
 { #category : #printing }
 ObjecInstantiationStatsPresenter >> printOn: aStream [
 
-	aStream << 'Classes that create objects: ' << numberOfClassesLabel label << String cr
-	<< 'Methods that create objects: ' << numberOfMethodsLabel label << String cr
-	<< 'Total instantiated objects: ' << totalInstantiatedObjectLabel label << String cr
-	<< 'Total unique instantiated objects ' << totalUniqueInstantiatedObjectsLabal label
+	aStream << 'Different classes that allocate objects: ' << numberOfClassesLabel label << String cr
+	<< 'Different methods that allocate objects: ' << numberOfMethodsLabel label << String cr
+	<< 'Total allocated objects: ' << totalInstantiatedObjectLabel label << String cr
+	<< 'Total unique allocated objects ' << totalUniqueInstantiatedObjectsLabal label
 ]
 
 { #category : #'accessing - model' }
