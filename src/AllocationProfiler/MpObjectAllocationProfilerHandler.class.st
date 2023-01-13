@@ -79,7 +79,7 @@ MpObjectAllocationProfilerHandler >> inspectorBarChartClasses [
 MpObjectAllocationProfilerHandler >> inspectorGeneralStats [
 
 	<inspectorPresentationOrder: 0 title: 'General Stats'>
-	^ ObjecInstantiationStatsPresenter on: allocations
+	^ ObjecAllocationStatsPresenter on: allocations
 ]
 
 { #category : #'inspector tabs' }
@@ -89,7 +89,7 @@ MpObjectAllocationProfilerHandler >> inspectorNumberOfAllocatedObjectsPerSecond 
 	^ SpRoassalPresenter new
 		canvas: (SebasVisualizations new
 			allocations: self allocations;
-			lineChartCanvas);
+			numberOfAllocatedObjectsPerSecondLineChartCanvas);
 		yourself
 ]
 
@@ -106,7 +106,7 @@ MpObjectAllocationProfilerHandler >> inspectorNumberOfAllocatedObjectsPerSecondP
 	^ SpRoassalPresenter new
 		canvas: (SebasVisualizations new
 			allocations: self allocations;
-			lineChartTopClassesCanvas);
+			numberOfAllocatedObjectsPerSecondPerClassLineChartCanvas);
 		yourself
 ]
 
@@ -123,7 +123,7 @@ MpObjectAllocationProfilerHandler >> inspectorTopClassesThatAllocateObjects [
 	^ SpRoassalPresenter new
 		canvas: (SebasVisualizations new
 			allocations: self allocations;
-			barChartTopClassesCanvas);
+			topClassesThatAllocateObjectsBarChartCanvas);
 		yourself
 ]
 
@@ -140,7 +140,7 @@ MpObjectAllocationProfilerHandler >> inspectorTopMethodsThatAllocateObjects [
 	^ SpRoassalPresenter new
 		canvas: (SebasVisualizations new
 			allocations: self allocations;
-			barChartTopMethodsCanvas);
+			topMethodsThatAllocateObjectsBarChartCanvas);
 		yourself
 ]
 
@@ -153,5 +153,5 @@ MpObjectAllocationProfilerHandler >> inspectorTopMethodsThatAllocateObjectsConte
 { #category : #accessing }
 MpObjectAllocationProfilerHandler >> statsString [
 
-	^ (ObjecInstantiationStatsPresenter on: allocations) asString
+	^ (ObjecAllocationStatsPresenter on: allocations) asString
 ]

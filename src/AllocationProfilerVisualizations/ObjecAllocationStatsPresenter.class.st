@@ -2,7 +2,7 @@
 I am a presenter class that shows basic stats about the object allocations.
 "
 Class {
-	#name : #ObjecInstantiationStatsPresenter,
+	#name : #ObjecAllocationStatsPresenter,
 	#superclass : #SpPresenter,
 	#instVars : [
 		'allocations',
@@ -15,13 +15,13 @@ Class {
 }
 
 { #category : #layout }
-ObjecInstantiationStatsPresenter >> allocations: someAllocations [
+ObjecAllocationStatsPresenter >> allocations: someAllocations [
 
 	allocations := someAllocations
 ]
 
 { #category : #layout }
-ObjecInstantiationStatsPresenter >> defaultLayout [
+ObjecAllocationStatsPresenter >> defaultLayout [
 
 	^ SpGridLayout new
 		add: 'Classes that create objects' at: 1 @ 1;
@@ -37,7 +37,7 @@ ObjecInstantiationStatsPresenter >> defaultLayout [
 ]
 
 { #category : #initialization }
-ObjecInstantiationStatsPresenter >> initializePresenters [
+ObjecAllocationStatsPresenter >> initializePresenters [
 
 	numberOfClassesLabel := self newLabel
 		label: self numberOfClasses size asString;
@@ -57,19 +57,19 @@ ObjecInstantiationStatsPresenter >> initializePresenters [
 ]
 
 { #category : #layout }
-ObjecInstantiationStatsPresenter >> numberOfClasses [
+ObjecAllocationStatsPresenter >> numberOfClasses [
 
 	^ (allocations collect: [ :e | e context methodClass ]) asSet
 ]
 
 { #category : #layout }
-ObjecInstantiationStatsPresenter >> numberOfMethods [
+ObjecAllocationStatsPresenter >> numberOfMethods [
 
 	^ (allocations collect: [ :e | e context asString ]) asSet
 ]
 
 { #category : #printing }
-ObjecInstantiationStatsPresenter >> printOn: aStream [
+ObjecAllocationStatsPresenter >> printOn: aStream [
 
 	aStream << 'Different classes that allocate objects: ' << numberOfClassesLabel label << String cr
 	<< 'Different methods that allocate objects: ' << numberOfMethodsLabel label << String cr
@@ -78,19 +78,19 @@ ObjecInstantiationStatsPresenter >> printOn: aStream [
 ]
 
 { #category : #'accessing - model' }
-ObjecInstantiationStatsPresenter >> setModelBeforeInitialization: someAllocations [
+ObjecAllocationStatsPresenter >> setModelBeforeInitialization: someAllocations [
 
 	allocations := someAllocations
 ]
 
 { #category : #layout }
-ObjecInstantiationStatsPresenter >> totalInstantiatedObjects [
+ObjecAllocationStatsPresenter >> totalInstantiatedObjects [
 
 	^ allocations
 ]
 
 { #category : #layout }
-ObjecInstantiationStatsPresenter >> totalUniqueInstantiatedObjects [
+ObjecAllocationStatsPresenter >> totalUniqueInstantiatedObjects [
 
 	^ (allocations collect: [ :a | a createdObject ]) asSet
 ]

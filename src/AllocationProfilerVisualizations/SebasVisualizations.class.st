@@ -40,34 +40,6 @@ SebasVisualizations >> barChartClassesCanvas [
 	^ chart canvas
 ]
 
-{ #category : #visualization }
-SebasVisualizations >> barChartTopClassesCanvas [
-
-	| chart names objectsCreated x |
-	objectsCreated := self occurrencesByMethodClass first: (10 min: self occurrencesByMethodClass size).
-	names := objectsCreated collect: [ :e | e key name ].
-	x := 1 to: objectsCreated size.
-	
-	chart := self createBarChartFor: objectsCreated x: x.
-	self addLabelsX: 'Classes' y: 'Number of Created Objects' ForChart: chart.
-	chart build.
-	^ chart canvas
-]
-
-{ #category : #visualization }
-SebasVisualizations >> barChartTopMethodsCanvas [
-
-	| chart names objectsCreated x |
-	objectsCreated := self occurrencesByMethod first: (10 min: self occurrencesByMethodClass size).
-	names := objectsCreated collect: [ :e | e ].
-	x := 1 to: objectsCreated size.
-
-	chart := self createBarChartFor: objectsCreated x: x.
-	self addLabelsX: 'Methods' y: 'Number of Created Objects' ForChart: chart.
-	chart build.
-	^ chart canvas
-]
-
 { #category : #defaults }
 SebasVisualizations >> createBarChartFor: objectsCreated x: x [
 
@@ -94,7 +66,7 @@ SebasVisualizations >> createLinePlotForAllocations: someAllocations [
 ]
 
 { #category : #visualization }
-SebasVisualizations >> lineChartCanvas [
+SebasVisualizations >> numberOfAllocatedObjectsPerSecondLineChartCanvas [
 
 	| chart linePlot |
 	linePlot := self createLinePlotForAllocations: allocations.
@@ -108,7 +80,7 @@ SebasVisualizations >> lineChartCanvas [
 ]
 
 { #category : #visualization }
-SebasVisualizations >> lineChartTopClassesCanvas [
+SebasVisualizations >> numberOfAllocatedObjectsPerSecondPerClassLineChartCanvas [
 
 	| chart classGroups linePlot sortedGroupKeys legend |
 	classGroups := allocations groupedBy: [ :holder | holder context methodClass ].
@@ -162,6 +134,34 @@ SebasVisualizations >> occurrencesByMethod [
 SebasVisualizations >> occurrencesByMethodClass [
 
 	^ self occurrencesBy: [ :e | e context methodClass ]
+]
+
+{ #category : #visualization }
+SebasVisualizations >> topClassesThatAllocateObjectsBarChartCanvas [
+
+	| chart names objectsCreated x |
+	objectsCreated := self occurrencesByMethodClass first: (10 min: self occurrencesByMethodClass size).
+	names := objectsCreated collect: [ :e | e key name ].
+	x := 1 to: objectsCreated size.
+	
+	chart := self createBarChartFor: objectsCreated x: x.
+	self addLabelsX: 'Classes' y: 'Number of Created Objects' ForChart: chart.
+	chart build.
+	^ chart canvas
+]
+
+{ #category : #visualization }
+SebasVisualizations >> topMethodsThatAllocateObjectsBarChartCanvas [
+
+	| chart names objectsCreated x |
+	objectsCreated := self occurrencesByMethod first: (10 min: self occurrencesByMethodClass size).
+	names := objectsCreated collect: [ :e | e ].
+	x := 1 to: objectsCreated size.
+
+	chart := self createBarChartFor: objectsCreated x: x.
+	self addLabelsX: 'Methods' y: 'Number of Created Objects' ForChart: chart.
+	chart build.
+	^ chart canvas
 ]
 
 { #category : #defaults }
