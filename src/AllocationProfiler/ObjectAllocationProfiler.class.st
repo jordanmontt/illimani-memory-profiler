@@ -16,11 +16,17 @@ Class {
 	#category : #AllocationProfiler
 }
 
+{ #category : #api }
+ObjectAllocationProfiler >> captureTheColors [
+
+	proxyHandler := MpColorAllocationProfilerHandler new
+]
+
 { #category : #initialization }
 ObjectAllocationProfiler >> initialize [
 
 	super initialize.
-	proxyHandler := MpColorAllocationProfilerHandler new.
+	proxyHandler := MpMegaAllocationProfilerHandler new.
 	proxyBasicNew := MpMethodProxy onMethod: Behavior >> #basicNew handler: proxyHandler.
 	proxyBasicNewKeyword := MpMethodProxy onMethod: Behavior >> #basicNew: handler: proxyHandler.
 	
