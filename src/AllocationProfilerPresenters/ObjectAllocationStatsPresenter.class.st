@@ -11,7 +11,7 @@ Class {
 		'totalAllocatedObjectsLabel',
 		'totalUniqueAllocatedObjectsLabal'
 	],
-	#category : #AllocationProfilerVisualizations
+	#category : #AllocationProfilerPresenters
 }
 
 { #category : #accessing }
