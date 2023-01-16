@@ -1,3 +1,6 @@
+"
+I will capture ALL the allocations of objects of any type.
+"
 Class {
 	#name : #MpMegaAllocationProfilerHandler,
 	#superclass : #MpObjectAllocationProfilerHandler,

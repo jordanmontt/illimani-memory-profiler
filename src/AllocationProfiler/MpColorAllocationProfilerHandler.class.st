@@ -1,5 +1,5 @@
 "
-I am a handler that register when a color is created. I keep that of both the color and the creation context
+I am a handler that register when an object of type color is allocated.
 "
 Class {
 	#name : #MpColorAllocationProfilerHandler,

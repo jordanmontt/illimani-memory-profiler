@@ -1,5 +1,9 @@
 "
-I am an object that will install and unistall the method proxies inside the methods: `basicNew` and `basicNew:`
+I am a Memory Profiler.
+
+I will put a proxy method  inside the methods: `basicNew` and `basicNew:` of the Behavior class. When you send the message `startProfiling` I will start to register the allocation of objects of the specified type. If no type is specified, I will capture all the allocations. You need to send the message `stopProfiling` to stop the registration.
+
+Keep in mind that your image can get slow and big. The Pharo image allocate thousands, even houndreads of thousands, of objects per minute.
 "
 Class {
 	#name : #ObjectAllocationProfiler,
