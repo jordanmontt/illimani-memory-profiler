@@ -9,7 +9,8 @@ Class {
 		'numberOfClassesLabel',
 		'numberOfMethodsLabel',
 		'totalAllocatedObjectsLabel',
-		'totalUniqueAllocatedObjectsLabal'
+		'totalUniqueAllocatedObjectsLabel',
+		'statsModel'
 	],
 	#category : #AllocationProfilerPresenters
 }
@@ -31,7 +32,7 @@ ObjectAllocationStatsPresenter >> defaultLayout [
 		add: 'Total allocated objects: ' at: 1 @ 3;
 		add: totalAllocatedObjectsLabel at: 2 @ 3 span: 2 @ 1;
 		add: 'Total unique allocated objects: ' at: 1 @ 4;
-		add: totalUniqueAllocatedObjectsLabal at: 2 @ 4 span: 2 @ 1;
+		add: totalUniqueAllocatedObjectsLabel at: 2 @ 4 span: 2 @ 1;
 		beColumnNotHomogeneous;
 		yourself
 ]
@@ -40,48 +41,48 @@ ObjectAllocationStatsPresenter >> defaultLayout [
 ObjectAllocationStatsPresenter >> initializePresenters [
 
 	numberOfClassesLabel := self newLabel
-		label: self numberOfClasses size asString;
+		label: self numberOfClasses asString;
 		yourself.
 
 	numberOfMethodsLabel := self newLabel
-		label: self numberOfMethods size asString;
+		label: self numberOfMethods asString;
 		yourself.
 
 	totalAllocatedObjectsLabel := self newLabel
-		label: self totalAllocatedObjects size asString;
+		label: self totalAllocatedObjects asString;
 		yourself.
 
-	totalUniqueAllocatedObjectsLabal := self newLabel
-		label: self totalUniqueAllocatedObjects size asString;
+	totalUniqueAllocatedObjectsLabel := self newLabel
+		label: self totalUniqueAllocatedObjects asString;
 		yourself
 ]
 
 { #category : #accessing }
 ObjectAllocationStatsPresenter >> numberOfClasses [
 
-	^ (allocations collect: [ :e | e context methodClass ]) asSet
+	^ statsModel calculateNumberOfClasses
 ]
 
 { #category : #accessing }
 ObjectAllocationStatsPresenter >> numberOfMethods [
 
-	^ (allocations collect: [ :e | e context asString ]) asSet
+	^ statsModel numberOfMethods
 ]
 
 { #category : #'accessing - model' }
 ObjectAllocationStatsPresenter >> setModelBeforeInitialization: someAllocations [
 
-	allocations := someAllocations
+	statsModel := ObjectAllocationStats allocations: allocations.
 ]
 
 { #category : #accessing }
 ObjectAllocationStatsPresenter >> totalAllocatedObjects [
 
-	^ allocations
+	^ statsModel totalAllocatedObjects
 ]
 
 { #category : #accessing }
 ObjectAllocationStatsPresenter >> totalUniqueAllocatedObjects [
 
-	^ (allocations collect: [ :a | a createdObject ]) asSet
+	^ statsModel totalUniqueInstantiatedObjects
 ]

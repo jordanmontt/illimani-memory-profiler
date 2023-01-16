@@ -8,7 +8,7 @@ Class {
 }
 
 { #category : #evaluating }
-MpColorAllocationProfilerHandler >> classToRegister [
+MpColorAllocationProfilerHandler >> classesToRegister [
 
-	^ Color
+	^ { Color }
 ]

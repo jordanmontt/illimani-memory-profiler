@@ -12,12 +12,6 @@ Class {
 	#category : #AllocationProfiler
 }
 
-{ #category : #accessing }
-ObjectAllocationProfiler >> allocations [
-
-	^ proxyHandler allocations
-]
-
 { #category : #initialization }
 ObjectAllocationProfiler >> initialize [
 
@@ -26,6 +20,12 @@ ObjectAllocationProfiler >> initialize [
 	proxyBasicNew := MpMethodProxy onMethod: Behavior >> #basicNew handler: proxyHandler.
 	proxyBasicNewKeyword := MpMethodProxy onMethod: Behavior >> #basicNew: handler: proxyHandler.
 	
+]
+
+{ #category : #accessing }
+ObjectAllocationProfiler >> objectAllocations [
+
+	^ proxyHandler objectAllocations
 ]
 
 { #category : #accessing }

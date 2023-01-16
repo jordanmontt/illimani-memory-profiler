@@ -5,7 +5,7 @@ Class {
 }
 
 { #category : #evaluating }
-MpDictionaryAllocationProfilerHandler >> classToRegister [
+MpDictionaryAllocationProfilerHandler >> classesToRegister [
 
-	^ Dictionary
+	^ { Dictionary }
 ]

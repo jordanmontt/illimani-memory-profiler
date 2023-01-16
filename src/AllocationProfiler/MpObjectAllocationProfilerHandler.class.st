@@ -2,8 +2,9 @@ Class {
 	#name : #MpObjectAllocationProfilerHandler,
 	#superclass : #MpHandler,
 	#instVars : [
-		'allocations',
-		'classesToAvoid'
+		'objectAllocations',
+		'classesToRegister',
+		'classesToAvoidInTheContextSearch'
 	],
 	#category : #AllocationProfiler
 }
@@ -11,28 +12,22 @@ Class {
 { #category : #evaluating }
 MpObjectAllocationProfilerHandler >> afterExecutionWithReceiver: receiver arguments: arguments returnValue: returnValue [
 
-	returnValue class = self classToRegister ifTrue: [ 
-		allocations add:
+	 (classesToRegister includes: returnValue class) ifTrue: [ 
+		objectAllocations add:
 			(AllocationInformationHolder
-				context: (self contextThatCreatesTheColor: thisContext) copyStack
-				createdObject: returnValue) ].
+				context: (self contextThatAllocatesTheObject: thisContext) copyStack
+				allocatedObject: returnValue) ].
 	^ returnValue
 ]
 
-{ #category : #accessing }
-MpObjectAllocationProfilerHandler >> allocations [
-
-	^ allocations
-]
-
 { #category : #evaluating }
-MpObjectAllocationProfilerHandler >> classToRegister [
+MpObjectAllocationProfilerHandler >> classesToRegister [
 
 	^ self subclassResponsibility
 ]
 
 { #category : #evaluating }
-MpObjectAllocationProfilerHandler >> contextThatCreatesTheColor: aContext [
+MpObjectAllocationProfilerHandler >> contextThatAllocatesTheObject: aContext [
 
 	"(classToAvoid includes: aContext sender methodClass) ifFalse: [ 
 	^ aContext sender methodClass ].
@@ -40,13 +35,13 @@ MpObjectAllocationProfilerHandler >> contextThatCreatesTheColor: aContext [
 
 	| sender |
 	sender := aContext sender.
-	[ classesToAvoid includes: sender methodClass ] whileTrue: [ 
+	[ classesToAvoidInTheContextSearch includes: sender methodClass ] whileTrue: [ 
 		sender := sender sender ].
 	^ sender
 ]
 
 { #category : #initialization }
-MpObjectAllocationProfilerHandler >> defaultClassesToAvoid [
+MpObjectAllocationProfilerHandler >> defaultClassesToAvoidInTheContextSearch [
 
 	^{ 
 		self class.
@@ -60,12 +55,20 @@ MpObjectAllocationProfilerHandler >> defaultClassesToAvoid [
 MpObjectAllocationProfilerHandler >> initialize [
 
 	super initialize.
-	allocations := OrderedCollection new.
-	classesToAvoid := self defaultClassesToAvoid , { self classToRegister . self classToRegister class }
+	classesToRegister := self classesToRegister.
+	objectAllocations := OrderedCollection new.
+	classesToAvoidInTheContextSearch := self defaultClassesToAvoidInTheContextSearch , classesToRegister.
+	classesToAvoidInTheContextSearch := classesToAvoidInTheContextSearch , (classesToRegister collect: [ :aClass | aClass class])
 ]
 
 { #category : #accessing }
-MpObjectAllocationProfilerHandler >> statsString [
+MpObjectAllocationProfilerHandler >> objectAllocations [
 
-	^ (ObjectAllocationStatsPresenter on: allocations) asString
+	^ objectAllocations
+]
+
+{ #category : #accessing }
+MpObjectAllocationProfilerHandler >> stats [
+
+	^ ObjectAllocationStats allocations: objectAllocations
 ]

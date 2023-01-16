@@ -5,7 +5,7 @@ Class {
 }
 
 { #category : #evaluating }
-MpPointAllocationProfilerHandler >> classToRegister [
+MpPointAllocationProfilerHandler >> classesToRegister [
 
-	^ Point
+	^ { Point }
 ]

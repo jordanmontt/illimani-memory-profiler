@@ -7,23 +7,14 @@ Class {
 { #category : #evaluating }
 MpMegaAllocationProfilerHandler >> afterExecutionWithReceiver: receiver arguments: arguments returnValue: returnValue [
 
-	allocations add:
-		(AllocationInformationHolder
-			context: (self contextThatCreatesTheColor: thisContext) copyStack
-			createdObject: returnValue).
+	objectAllocations add: (AllocationInformationHolder
+		context: (self contextThatAllocatesTheObject: thisContext) copyStack
+		allocatedObject: returnValue).
 	^ returnValue
 ]
 
 { #category : #evaluating }
-MpMegaAllocationProfilerHandler >> classToRegister [
+MpMegaAllocationProfilerHandler >> classesToRegister [
 
-	^ nil
-]
-
-{ #category : #initialization }
-MpMegaAllocationProfilerHandler >> initialize [
-
-	super initialize.
-	allocations := OrderedCollection new.
-	classesToAvoid := self defaultClassesToAvoid
+	^ {  }
 ]
