@@ -14,7 +14,7 @@ Class {
 	#category : #AllocationProfilerVisualizations
 }
 
-{ #category : #layout }
+{ #category : #accessing }
 ObjectAllocationStatsPresenter >> allocations: someAllocations [
 
 	allocations := someAllocations
@@ -56,13 +56,13 @@ ObjectAllocationStatsPresenter >> initializePresenters [
 		yourself
 ]
 
-{ #category : #layout }
+{ #category : #accessing }
 ObjectAllocationStatsPresenter >> numberOfClasses [
 
 	^ (allocations collect: [ :e | e context methodClass ]) asSet
 ]
 
-{ #category : #layout }
+{ #category : #accessing }
 ObjectAllocationStatsPresenter >> numberOfMethods [
 
 	^ (allocations collect: [ :e | e context asString ]) asSet
@@ -74,13 +74,13 @@ ObjectAllocationStatsPresenter >> setModelBeforeInitialization: someAllocations 
 	allocations := someAllocations
 ]
 
-{ #category : #layout }
+{ #category : #accessing }
 ObjectAllocationStatsPresenter >> totalAllocatedObjects [
 
 	^ allocations
 ]
 
-{ #category : #layout }
+{ #category : #accessing }
 ObjectAllocationStatsPresenter >> totalUniqueAllocatedObjects [
 
 	^ (allocations collect: [ :a | a createdObject ]) asSet

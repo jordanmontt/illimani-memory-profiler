@@ -22,7 +22,7 @@ AllocationVisualizations >> addLabelsX: xText y: yText forChart: chart [
 		color: Color black.
 ]
 
-{ #category : #visualization }
+{ #category : #visualizations }
 AllocationVisualizations >> allocatedObjectsPerSecondLineChartCanvas [
 
 	| chart linePlot |
@@ -34,7 +34,7 @@ AllocationVisualizations >> allocatedObjectsPerSecondLineChartCanvas [
 	^ chart canvas
 ]
 
-{ #category : #visualization }
+{ #category : #visualizations }
 AllocationVisualizations >> allocatedObjectsPerSecondPerClassLineChartCanvas [
 
 	| chart linePlot topClassesByNumberOfAllocations legend |
@@ -60,7 +60,7 @@ AllocationVisualizations >> allocations: aCollection [
 	allocations := aCollection
 ]
 
-{ #category : #visualization }
+{ #category : #visualizations }
 AllocationVisualizations >> barChartClassesCanvas [
 
 	| chart names allocatedObjects  |
@@ -149,7 +149,7 @@ AllocationVisualizations >> topClasses: anInteger [
 	numberOfTopClasses := anInteger
 ]
 
-{ #category : #visualization }
+{ #category : #visualizations }
 AllocationVisualizations >> topClassesThatAllocateObjectsBarChartCanvas [
 
 	| chart names allocatedObjects |
@@ -168,7 +168,7 @@ AllocationVisualizations >> topMethods: anInteger [
 	numberOfTopMethods := anInteger
 ]
 
-{ #category : #visualization }
+{ #category : #visualizations }
 AllocationVisualizations >> topMethodsThatAllocateObjectsBarChartCanvas [
 
 	| chart names allocatedObjects |

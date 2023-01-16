@@ -6,8 +6,8 @@ Class {
 	#superclass : #Object,
 	#instVars : [
 		'proxyHandler',
-		'proxyA',
-		'proxyB'
+		'proxyBasicNew',
+		'proxyBasicNewKeyword'
 	],
 	#category : #AllocationProfiler
 }
@@ -23,8 +23,8 @@ ObjectAllocationProfiler >> initialize [
 
 	super initialize.
 	proxyHandler := MpColorAllocationProfilerHandler new.
-	proxyA := MpMethodProxy onMethod: Behavior >> #basicNew handler: proxyHandler.
-	proxyB := MpMethodProxy onMethod: Behavior >> #basicNew: handler: proxyHandler.
+	proxyBasicNew := MpMethodProxy onMethod: Behavior >> #basicNew handler: proxyHandler.
+	proxyBasicNewKeyword := MpMethodProxy onMethod: Behavior >> #basicNew: handler: proxyHandler.
 	
 ]
 
@@ -38,20 +38,20 @@ ObjectAllocationProfiler >> proxyHandler [
 ObjectAllocationProfiler >> proxyHandler: aProxyHandler [
 
 	proxyHandler := aProxyHandler.
-	proxyA := MpMethodProxy onMethod: Behavior >> #basicNew handler: proxyHandler.
-	proxyB := MpMethodProxy onMethod: Behavior >> #basicNew: handler: proxyHandler
+	proxyBasicNew := MpMethodProxy onMethod: Behavior >> #basicNew handler: proxyHandler.
+	proxyBasicNewKeyword := MpMethodProxy onMethod: Behavior >> #basicNew: handler: proxyHandler
 ]
 
 { #category : #api }
 ObjectAllocationProfiler >> startProfiling [
 
-	proxyA install.
-	proxyB install
+	proxyBasicNew install.
+	proxyBasicNewKeyword install
 ]
 
 { #category : #api }
 ObjectAllocationProfiler >> stopProfiling [
 
-	proxyA uninstall.
-	proxyB uninstall
+	proxyBasicNew uninstall.
+	proxyBasicNewKeyword uninstall
 ]
