@@ -70,9 +70,9 @@ ObjectAllocationStatsPresenter >> numberOfMethods [
 ]
 
 { #category : #'accessing - model' }
-ObjectAllocationStatsPresenter >> setModelBeforeInitialization: someAllocations [
+ObjectAllocationStatsPresenter >> setModelBeforeInitialization: aModel [
 
-	statsModel := ObjectAllocationStats allocations: allocations.
+	statsModel := aModel
 ]
 
 { #category : #accessing }
@@ -84,5 +84,5 @@ ObjectAllocationStatsPresenter >> totalAllocatedObjects [
 { #category : #accessing }
 ObjectAllocationStatsPresenter >> totalUniqueAllocatedObjects [
 
-	^ statsModel totalUniqueInstantiatedObjects
+	^ statsModel totalUniqueAllocatedObjects
 ]

@@ -6,7 +6,7 @@ MpObjectAllocationProfilerHandler >> inspectorBarChartClasses [
 	"<inspectorPresentationOrder: 0 title: 'Classes Bar Chart'>"
 	^ SpRoassalPresenter new
 		canvas: (AllocationVisualizations new
-			allocations: objectAllocations;
+			statsModel: self stats;
 			barChartClassesCanvas);
 		yourself
 ]
@@ -15,7 +15,7 @@ MpObjectAllocationProfilerHandler >> inspectorBarChartClasses [
 MpObjectAllocationProfilerHandler >> inspectorGeneralStats [
 
 	<inspectorPresentationOrder: 0 title: 'General Stats'>
-	^ ObjectAllocationStatsPresenter on: objectAllocations
+	^ ObjectAllocationStatsPresenter on: self stats
 ]
 
 { #category : #'*AllocationProfilerVisualizations' }
@@ -24,7 +24,7 @@ MpObjectAllocationProfilerHandler >> inspectorNumberOfAllocatedObjectsPerSecond 
 	<inspectorPresentationOrder: 1 title: 'Allocated Objects per Second'>
 	^ SpRoassalPresenter new
 		canvas: (AllocationVisualizations new
-			allocations: objectAllocations;
+			statsModel: self stats;
 			allocatedObjectsPerSecondLineChartCanvas);
 		yourself
 ]
@@ -41,7 +41,7 @@ MpObjectAllocationProfilerHandler >> inspectorNumberOfAllocatedObjectsPerSecondP
 	<inspectorPresentationOrder: 2 title: 'Allocated Objects per Second per Class'>
 	^ SpRoassalPresenter new
 		canvas: (AllocationVisualizations new
-			allocations: objectAllocations;
+			statsModel: self stats;
 			allocatedObjectsPerSecondPerClassLineChartCanvas);
 		yourself
 ]
@@ -58,7 +58,7 @@ MpObjectAllocationProfilerHandler >> inspectorTopClassesThatAllocateObjects [
 	<inspectorPresentationOrder: 4 title: 'Top Allocator Classes'>
 	^ SpRoassalPresenter new
 		canvas: (AllocationVisualizations new
-			allocations: objectAllocations;
+			statsModel: self stats;
 			topClassesThatAllocateObjectsBarChartCanvas);
 		yourself
 ]
@@ -75,7 +75,7 @@ MpObjectAllocationProfilerHandler >> inspectorTopMethodsThatAllocateObjects [
 	<inspectorPresentationOrder: 3 title: 'Top Allocator Methods'>
 	^ SpRoassalPresenter new
 		canvas: (AllocationVisualizations new
-			allocations: objectAllocations;
+			statsModel: self stats;
 			topMethodsThatAllocateObjectsBarChartCanvas);
 		yourself
 ]

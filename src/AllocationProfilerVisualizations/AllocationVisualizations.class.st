@@ -5,9 +5,7 @@ Class {
 	#name : #AllocationVisualizations,
 	#superclass : #Object,
 	#instVars : [
-		'allocations',
-		'numberOfTopClasses',
-		'numberOfTopMethods'
+		'statsModel'
 	],
 	#category : #AllocationProfilerVisualizations
 }
@@ -26,7 +24,7 @@ AllocationVisualizations >> addLabelsX: xText y: yText forChart: chart [
 AllocationVisualizations >> allocatedObjectsPerSecondLineChartCanvas [
 
 	| chart linePlot |
-	linePlot := self createLinePlotForAllocations: allocations.
+	linePlot := self createLinePlotForAllocations: statsModel allocations.
 	chart := RSChart new.
 	chart add: linePlot.
 	self tuneChartForLinePlot: chart.
@@ -38,7 +36,7 @@ AllocationVisualizations >> allocatedObjectsPerSecondLineChartCanvas [
 AllocationVisualizations >> allocatedObjectsPerSecondPerClassLineChartCanvas [
 
 	| chart linePlot topClassesByNumberOfAllocations legend |
-	topClassesByNumberOfAllocations := self calculateTopAllocatingClasses.
+	topClassesByNumberOfAllocations := statsModel calculateTopAllocatingClasses.
 	chart := RSChart new.
 	legend := RSLegend new.
 	legend container: chart canvas.
@@ -54,12 +52,6 @@ AllocationVisualizations >> allocatedObjectsPerSecondPerClassLineChartCanvas [
 	^ chart canvas
 ]
 
-{ #category : #accessing }
-AllocationVisualizations >> allocations: aCollection [
-
-	allocations := aCollection
-]
-
 { #category : #visualizations }
 AllocationVisualizations >> barChartClassesCanvas [
 
@@ -71,20 +63,6 @@ AllocationVisualizations >> barChartClassesCanvas [
 	self addLabelsX: 'Classes' y: 'Allocated Objects' forChart: chart.
 	chart build.
 	^ chart canvas
-]
-
-{ #category : #'chart construction' }
-AllocationVisualizations >> calculateTopAllocatingClasses [
-
-	| classesWithTheirAllocations topClassesByNumberOfAllocations |
-	classesWithTheirAllocations := allocations groupedBy: [ :holder | holder context methodClass ].
-	
-	topClassesByNumberOfAllocations := classesWithTheirAllocations keys sorted: [ :key1 :key2 | 
-		(classesWithTheirAllocations at: key1) size > (classesWithTheirAllocations at: key2) size ].
-	topClassesByNumberOfAllocations := topClassesByNumberOfAllocations first:
-		(numberOfTopClasses min: classesWithTheirAllocations keys size).
-	
-	^ topClassesByNumberOfAllocations collect: [ :each | each -> (classesWithTheirAllocations at: each) ]	
 ]
 
 { #category : #'chart construction' }
@@ -106,7 +84,7 @@ AllocationVisualizations >> createLinePlotForAllocations: someAllocations [
 	"The times are in nano seconds"
 	times := someAllocations collect: [ :each | each timestamp asNanoSeconds ].
 	"To start in 0"
-	times := times - allocations first timestamp asNanoSeconds.
+	times := times - someAllocations first timestamp asNanoSeconds.
 	indices := 1 to: times size.
 
 	linePlot := RSLinePlot new x: times y: indices.
@@ -121,32 +99,10 @@ AllocationVisualizations >> initialize [
 	numberOfTopMethods := 10
 ]
 
-{ #category : #'chart construction' }
-AllocationVisualizations >> occurrencesBy: aBlock [
-
-	| objectsCreated ocurrences |
-	objectsCreated := OrderedCollection new.
-	ocurrences := Bag newFrom: (allocations collect: aBlock).
-	ocurrences doWithOccurrences: [ :key :value | objectsCreated add: key -> value ].
-	^ objectsCreated sorted: [ :a :b | a value < b value ]
-]
-
-{ #category : #'chart construction' }
-AllocationVisualizations >> occurrencesByClass [
-
-	^ self occurrencesBy: [ :e | e context methodClass ]
-]
-
-{ #category : #'chart construction' }
-AllocationVisualizations >> occurrencesByMethod [
-
-	^ self occurrencesBy: [ :e | e context asString ]
-]
-
 { #category : #accessing }
-AllocationVisualizations >> topClasses: anInteger [
+AllocationVisualizations >> statsModel: aModel [
 
-	numberOfTopClasses := anInteger
+	statsModel := aModel
 ]
 
 { #category : #visualizations }
@@ -162,21 +118,15 @@ AllocationVisualizations >> topClassesThatAllocateObjectsBarChartCanvas [
 	^ chart canvas
 ]
 
-{ #category : #accessing }
-AllocationVisualizations >> topMethods: anInteger [
-
-	numberOfTopMethods := anInteger
-]
-
 { #category : #visualizations }
 AllocationVisualizations >> topMethodsThatAllocateObjectsBarChartCanvas [
 
 	| chart names allocatedObjects |
-	allocatedObjects := self occurrencesByMethod first: (numberOfTopMethods min: self occurrencesByClass size).
+	allocatedObjects := statsModel nAllocationsOrderedByMethod: 10.
 	names := allocatedObjects collect: [ :e | e asString ].
 
 	chart := self createBarChartForAllocations: allocatedObjects.
-	self addLabelsX: 'Number of Created Objects' y: 'Methods' forChart: chart.
+	self addLabelsX: 'Allocated Objects' y: 'Methods' forChart: chart.
 	chart build.
 	^ chart canvas
 ]
