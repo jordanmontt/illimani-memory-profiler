@@ -10,7 +10,7 @@ Class {
 	#category : #AllocationProfilerVisualizations
 }
 
-{ #category : #defaults }
+{ #category : #'chart construction' }
 SebasVisualizations >> addLabelsX: xText y: yText ForChart: chart [
 
 	(chart xlabel: xText) shape
@@ -40,7 +40,7 @@ SebasVisualizations >> barChartClassesCanvas [
 	^ chart canvas
 ]
 
-{ #category : #defaults }
+{ #category : #'chart construction' }
 SebasVisualizations >> createBarChartFor: objectsCreated x: x [
 
 	| chart barPlot |
@@ -51,7 +51,7 @@ SebasVisualizations >> createBarChartFor: objectsCreated x: x [
 	^ chart
 ]
 
-{ #category : #defaults }
+{ #category : #'chart construction' }
 SebasVisualizations >> createLinePlotForAllocations: someAllocations [
 
 	| times linePlot values |
@@ -114,7 +114,7 @@ SebasVisualizations >> numberOfAllocatedObjectsPerSecondPerClassLineChartCanvas 
 	^ chart canvas
 ]
 
-{ #category : #defaults }
+{ #category : #'chart construction' }
 SebasVisualizations >> occurrencesBy: aBlock [
 
 	| objectsCreated ocurrences |
@@ -124,13 +124,13 @@ SebasVisualizations >> occurrencesBy: aBlock [
 	^ objectsCreated sorted: [ :a :b | a value > b value ]
 ]
 
-{ #category : #defaults }
+{ #category : #'chart construction' }
 SebasVisualizations >> occurrencesByMethod [
 
 	^ self occurrencesBy: [ :e | e context asString ]
 ]
 
-{ #category : #defaults }
+{ #category : #'chart construction' }
 SebasVisualizations >> occurrencesByMethodClass [
 
 	^ self occurrencesBy: [ :e | e context methodClass ]
@@ -164,7 +164,7 @@ SebasVisualizations >> topMethodsThatAllocateObjectsBarChartCanvas [
 	^ chart canvas
 ]
 
-{ #category : #defaults }
+{ #category : #'chart construction' }
 SebasVisualizations >> tuneBarChart: chart for: objectsCreated [
 
 	chart add: RSVerticalTick new.
@@ -174,7 +174,7 @@ SebasVisualizations >> tuneBarChart: chart for: objectsCreated [
 			 yourself)
 ]
 
-{ #category : #defaults }
+{ #category : #'chart construction' }
 SebasVisualizations >> tuneChartForLinePlot: chart [
 
 	chart add: (RSHorizontalTick new
