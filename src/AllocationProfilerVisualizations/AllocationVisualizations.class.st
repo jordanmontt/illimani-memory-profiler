@@ -56,7 +56,7 @@ AllocationVisualizations >> allocatedObjectsPerSecondPerClassLineChartCanvas [
 AllocationVisualizations >> barChartClassesCanvas [
 
 	| chart names allocatedObjects  |
-	allocatedObjects := self occurrencesByClass.
+	allocatedObjects := statsModel allocationsOrderedByClass.
 	names := allocatedObjects collect: [ :e | e key name ].
 
 	chart := self createBarChartForAllocations: allocatedObjects.
@@ -91,14 +91,6 @@ AllocationVisualizations >> createLinePlotForAllocations: someAllocations [
 	^ linePlot
 ]
 
-{ #category : #initialization }
-AllocationVisualizations >> initialize [ 
-
-	super initialize.
-	numberOfTopClasses := 10.
-	numberOfTopMethods := 10
-]
-
 { #category : #accessing }
 AllocationVisualizations >> statsModel: aModel [
 
@@ -108,12 +100,11 @@ AllocationVisualizations >> statsModel: aModel [
 { #category : #visualizations }
 AllocationVisualizations >> topClassesThatAllocateObjectsBarChartCanvas [
 
-	| chart names allocatedObjects |
-	allocatedObjects := self occurrencesByClass first: (numberOfTopClasses min: self occurrencesByClass size).
-	names := allocatedObjects collect: [ :e | e key name ].
+	| chart allocatedObjects |
+	allocatedObjects := statsModel nAllocationsOrderedByClass: 10.
 	
 	chart := self createBarChartForAllocations: allocatedObjects.
-	self addLabelsX: 'Number of Created Objects' y: 'Classes' forChart: chart.
+	self addLabelsX: 'Allocated Objects' y: 'Classes' forChart: chart.
 	chart build.
 	^ chart canvas
 ]
