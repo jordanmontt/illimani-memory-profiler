@@ -27,7 +27,7 @@ ObjectAllocationProfiler >> captureAll [
 { #category : #api }
 ObjectAllocationProfiler >> captureTheColors [
 
-	proxyHandler := MpMegaAllocationProfilerHandler new.
+	proxyHandler := MpColorAllocationProfilerHandler new.
 	proxyBasicNew := MpMethodProxy onMethod: Behavior >> #basicNew handler: proxyHandler.
 	proxyBasicNewKeyword := MpMethodProxy onMethod: Behavior >> #basicNew: handler: proxyHandler.
 ]
