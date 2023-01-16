@@ -17,19 +17,26 @@ Class {
 }
 
 { #category : #api }
+ObjectAllocationProfiler >> captureAll [
+
+	proxyHandler := MpMegaAllocationProfilerHandler new.
+	proxyBasicNew := MpMethodProxy onMethod: Behavior >> #basicNew handler: proxyHandler.
+	proxyBasicNewKeyword := MpMethodProxy onMethod: Behavior >> #basicNew: handler: proxyHandler
+]
+
+{ #category : #api }
 ObjectAllocationProfiler >> captureTheColors [
 
-	proxyHandler := MpColorAllocationProfilerHandler new
+	proxyHandler := MpMegaAllocationProfilerHandler new.
+	proxyBasicNew := MpMethodProxy onMethod: Behavior >> #basicNew handler: proxyHandler.
+	proxyBasicNewKeyword := MpMethodProxy onMethod: Behavior >> #basicNew: handler: proxyHandler.
 ]
 
 { #category : #initialization }
 ObjectAllocationProfiler >> initialize [
 
 	super initialize.
-	proxyHandler := MpMegaAllocationProfilerHandler new.
-	proxyBasicNew := MpMethodProxy onMethod: Behavior >> #basicNew handler: proxyHandler.
-	proxyBasicNewKeyword := MpMethodProxy onMethod: Behavior >> #basicNew: handler: proxyHandler.
-	
+	self captureAll.
 ]
 
 { #category : #accessing }

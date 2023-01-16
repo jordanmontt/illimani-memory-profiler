@@ -135,6 +135,12 @@ ObjectAllocationStats >> totalAllocatedObjects [
 ]
 
 { #category : #statistics }
+ObjectAllocationStats >> totalProfiledTime [
+
+	^ allocations last timestamp - allocations first timestamp
+]
+
+{ #category : #statistics }
 ObjectAllocationStats >> totalUniqueAllocatedObjects [
 
 	^ totalUniqueAllocatedObjects ifNil: [ totalUniqueAllocatedObjects := self calculateTotalUniqueAllocatedObjects ]
