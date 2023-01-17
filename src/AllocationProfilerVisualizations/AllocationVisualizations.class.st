@@ -38,11 +38,11 @@ AllocationVisualizations >> allocatedObjectsPerSecondLineChartCanvas [
 AllocationVisualizations >> allocatedObjectsPerSecondPerClassLineChartCanvas [
 
 	| chart linePlot topClassesByNumberOfAllocations legend |
-	topClassesByNumberOfAllocations := statsModel calculateTopAllocatingClasses.
+	topClassesByNumberOfAllocations := statsModel calculateTopNAllocatingClasses: numberOfTopClasses.
 	chart := RSChart new.
 	legend := RSLegend new.
 	legend container: chart canvas.
-	topClassesByNumberOfAllocations do: [ :aPair | 
+	topClassesByNumberOfAllocations do: [ :aPair |
 		linePlot := self createLinePlotForAllocations: aPair value.
 		chart add: linePlot.
 		legend text: aPair key name withBoxColor: linePlot computeColor ].
@@ -98,8 +98,8 @@ AllocationVisualizations >> statsModel: aModel [
 AllocationVisualizations >> topClassesThatAllocateObjectsBarChartCanvas [
 
 	| chart allocatedObjects |
-	allocatedObjects := statsModel nAllocationsOrderedByClass: 10.
-	
+	allocatedObjects := statsModel nAllocationsOrderedByClass: numberOfTopClasses.
+
 	chart := self createBarChartForAllocations: allocatedObjects.
 	self addLabelsX: 'Allocated Objects' y: 'Classes' forChart: chart.
 	chart build.

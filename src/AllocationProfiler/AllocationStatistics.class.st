@@ -55,6 +55,14 @@ AllocationStatistics >> calculateTopAllocatingClasses [
 ]
 
 { #category : #statistics }
+AllocationStatistics >> calculateTopNAllocatingClasses: n [
+
+	| classesWithTheirAllocations |
+	classesWithTheirAllocations := self calculateTopAllocatingClasses.
+	^ classesWithTheirAllocations first: (n min: classesWithTheirAllocations size)
+]
+
+{ #category : #statistics }
 AllocationStatistics >> nAllocationsOrderedByClass: n [
 
 	| allocationsOrderedByClass |
