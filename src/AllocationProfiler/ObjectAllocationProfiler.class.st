@@ -36,7 +36,7 @@ ObjectAllocationProfiler >> captureTheColors [
 ObjectAllocationProfiler >> initialize [
 
 	super initialize.
-	self captureAll.
+	self captureAll
 ]
 
 { #category : #accessing }
@@ -64,6 +64,12 @@ ObjectAllocationProfiler >> startProfiling [
 
 	proxyBasicNew install.
 	proxyBasicNewKeyword install
+]
+
+{ #category : #accessing }
+ObjectAllocationProfiler >> stats [
+
+	^ AllocationStatistics allocations: proxyHandler objectAllocations
 ]
 
 { #category : #api }

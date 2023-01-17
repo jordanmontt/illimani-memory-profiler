@@ -40,13 +40,13 @@ ObjectAllocationStatsPresenter >> initializePresenters [
 { #category : #accessing }
 ObjectAllocationStatsPresenter >> numberOfClasses [
 
-	^ statsModel calculateNumberOfClasses
+	^ statsModel numberOfClasses asString
 ]
 
 { #category : #accessing }
 ObjectAllocationStatsPresenter >> numberOfMethods [
 
-	^ statsModel numberOfMethods
+	^ statsModel numberOfMethods asString
 ]
 
 { #category : #'accessing - model' }
@@ -58,18 +58,21 @@ ObjectAllocationStatsPresenter >> setModelBeforeInitialization: aModel [
 { #category : #accessing }
 ObjectAllocationStatsPresenter >> totalAllocatedObjects [
 
-	^ statsModel totalAllocatedObjects
+	^ statsModel totalAllocatedObjects asString
 ]
 
 { #category : #accessing }
 ObjectAllocationStatsPresenter >> totalProfiledTime [
 
-	^ ((statsModel totalProfiledTime asNanoSeconds / (10 raisedTo: 9))
-		asFloat printShowingDecimalPlaces: 2) , ' seconds'
+	| time |
+	time := statsModel totalProfiledTime.
+	^ time
+		ifNil: [ 'No time' ]
+		ifNotNil: [ ((time asNanoSeconds / (10 raisedTo: 9)) asFloat printShowingDecimalPlaces: 2) , ' seconds' ]
 ]
 
 { #category : #accessing }
 ObjectAllocationStatsPresenter >> totalUniqueAllocatedObjects [
 
-	^ statsModel totalUniqueAllocatedObjects
+	^ statsModel totalUniqueAllocatedObjects asString
 ]

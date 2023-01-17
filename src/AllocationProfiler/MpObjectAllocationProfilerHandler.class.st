@@ -71,9 +71,3 @@ MpObjectAllocationProfilerHandler >> objectAllocations [
 
 	^ objectAllocations
 ]
-
-{ #category : #accessing }
-MpObjectAllocationProfilerHandler >> stats [
-
-	^ ObjectAllocationStats allocations: objectAllocations
-]
