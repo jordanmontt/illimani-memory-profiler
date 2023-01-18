@@ -7,7 +7,8 @@ Class {
 		'startButton',
 		'stopButton',
 		'isItProfiling',
-		'refreshButton'
+		'refreshButton',
+		'toolbarPresenter'
 	],
 	#category : #AllocationProfiler
 }
@@ -34,9 +35,7 @@ IllimaniAllocatorProfiler >> connectPresenters [
 IllimaniAllocatorProfiler >> controlButtonsLayout [
 
 	^ SpBoxLayout newLeftToRight
-		  add: startButton;
-		  add: stopButton;
-		  addLast: refreshButton;
+		  add: toolbarPresenter;
 		  yourself
 ]
 
@@ -88,22 +87,44 @@ IllimaniAllocatorProfiler >> initializePresenters [
 	notebookPresenter := self newNotebook.
 	notebookPresenter
 		addPageTitle: 'General Stats' provider: [ self initializeGeneralStats ];
-		addPageTitle: 'Allocated Objects per Second' provider: [ self initializeAllocatedObjectsPerSecond ];
-				addPageTitle: 'Allocated Objects per Second per Class' provider: [ self initializeAllocatedObjectsPerSecondPerClass ];
+		addPageTitle: 'Allocated Objects per Second'
+		provider: [ self initializeAllocatedObjectsPerSecond ];
+		addPageTitle: 'Allocated Objects per Second per Class'
+		provider: [ self initializeAllocatedObjectsPerSecondPerClass ];
 		addPageTitle: 'Top Allocator Classes' provider: [ self initializeTopClassesPresenter ];
 		addPageTitle: 'Top Allocator Methods' provider: [ self initializeTopMethodsPresenter ].
 
-	startButton := self newButton
-		label: 'Start Profiling';
-		iconName: #smallProfile.
-	stopButton := self newButton
-		label: 'Stop Profiling';
-		iconName: #smallCancel;
-		disable.
-	refreshButton := self newButton
-		label: 'Refresh';
-		iconName: #smallUpdate;
-		yourself
+	self initializeToolbar
+]
+
+{ #category : #initialization }
+IllimaniAllocatorProfiler >> initializeToolbar [
+
+	startButton := self newToolbarButton
+		               label: 'Start Profiling';
+		               icon: (self iconNamed: #smallProfile);
+		               action: [
+			               objectAllocationProfiler startProfiling.
+			               self toggleStartStopButtons ];
+		               yourself.
+	stopButton := self newToolbarButton
+		              label: 'Stop Profiling';
+		              icon: (self iconNamed: #smallCancel);
+		              action: [
+			              objectAllocationProfiler stopProfiling.
+			              self toggleStartStopButtons ];
+		              yourself.
+	refreshButton := self newToolbarButton
+		                 label: 'Refresh';
+		                 icon: (self iconNamed: #smallUpdate);
+		                 action: [ self layout: self defaultLayout ];
+		                 yourself.
+	toolbarPresenter := self newToolbar
+		                    beBoth;
+		                    addItemLeft: startButton;
+		                    addItemLeft: stopButton;
+		                    addItemLeft: refreshButton;
+		                    yourself
 ]
 
 { #category : #initialization }
@@ -148,7 +169,11 @@ IllimaniAllocatorProfiler >> layoutWhenThereIsNotData [
 
 	^ SpBoxLayout newTopToBottom
 		  add: self controlButtonsLayout expand: false;
-		  add: 'No data to show. Start profiling!';
+		  add: (SpBoxLayout newTopToBottom
+				   vAlignCenter;
+				   hAlignCenter;
+				   add: 'No data to show. Start profiling!';
+				   yourself);
 		  yourself
 ]
 
