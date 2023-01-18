@@ -11,7 +11,7 @@ Class {
 		'toolbarPresenter',
 		'profilerHandlerDropListPresenter'
 	],
-	#category : #AllocationProfilerPresenters
+	#category : #'AllocationProfiler-UI'
 }
 
 { #category : #'instance creation' }

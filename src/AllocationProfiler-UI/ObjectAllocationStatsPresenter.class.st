@@ -8,7 +8,7 @@ Class {
 		'statsModel',
 		'codeEvaluator'
 	],
-	#category : #AllocationProfilerPresenters
+	#category : #'AllocationProfiler-UI'
 }
 
 { #category : #api }

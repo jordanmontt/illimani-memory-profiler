@@ -9,7 +9,7 @@ Class {
 		'numberOfTopClasses',
 		'numberOfTopMethods'
 	],
-	#category : #AllocationProfilerVisualizations
+	#category : #'AllocationProfiler-UI'
 }
 
 { #category : #'chart construction' }
