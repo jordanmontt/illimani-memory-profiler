@@ -17,8 +17,7 @@ BaselineOfAllocationProfiler >> baseline: spec [
 			with: [ spec repository: 'github://pharo-contributions/MethodProxies/src' ].
 
 		spec package: 'AllocationProfiler' with: [ spec requires: #( 'MethodProxies' ) ].
-		spec package: 'AllocationProfilerVisualizations' with: [ spec requires: #( 'AllocationProfiler' ) ].
-		spec package: 'AllocationProfilerPresenters' with: [ spec requires: #( 'AllocationProfiler' ) ].
+		spec package: 'AllocationProfiler-UI' with: [ spec requires: #( 'AllocationProfiler' ) ].
 
-		spec group: 'default' with: #( 'AllocationProfiler' 'AllocationProfilerVisualizations' 'AllocationProfilerPresenters' ) ]
+		spec group: 'default' with: #( 'AllocationProfiler' 'AllocationProfilerVisualizations' 'AllocationProfiler-UI' ) ]
 ]
