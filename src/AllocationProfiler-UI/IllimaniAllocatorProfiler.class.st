@@ -174,7 +174,7 @@ IllimaniAllocatorProfiler >> initializeTopMethodsPresenter [
 IllimaniAllocatorProfiler >> initializeWindow: aWindowPresenter [
 
 	aWindowPresenter
-		title: 'Illimani: a Memory Profiler';
+		title: 'Illimani Memory Profiler';
 		initialExtent: 1000 @ 650
 ]
 
