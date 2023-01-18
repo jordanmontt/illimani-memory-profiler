@@ -11,7 +11,7 @@ Class {
 		'toolbarPresenter',
 		'profilerHandlerDropListPresenter'
 	],
-	#category : #AllocationProfiler
+	#category : #AllocationProfilerPresenters
 }
 
 { #category : #'instance creation' }
@@ -42,6 +42,7 @@ IllimaniAllocatorProfiler >> controlButtonsLayout [
 		  add: toolbarPresenter;
 		  add: (SpBoxLayout newLeftToRight
 				   vAlignCenter;
+				   spacing: 5;
 				   add: 'Profile the allocation of: ' expand: false;
 				   add: profilerHandlerDropListPresenter;
 				   yourself);
@@ -87,7 +88,9 @@ IllimaniAllocatorProfiler >> initializeAllocatedObjectsPerSecondPerClass [
 { #category : #'initialization - custom presenters' }
 IllimaniAllocatorProfiler >> initializeGeneralStats [
 
-	^ ObjectAllocationStatsPresenter on: objectAllocationProfiler stats
+	^ (ObjectAllocationStatsPresenter on: objectAllocationProfiler stats)
+		  beEvaluatorForObject: objectAllocationProfiler;
+		  yourself
 ]
 
 { #category : #'initialization - custom presenters' }
@@ -136,7 +139,7 @@ IllimaniAllocatorProfiler >> initializeToolbar [
 		              disable;
 		              yourself.
 	refreshButton := self newToolbarButton
-		                 label: 'Refresh';
+		                 label: 'Refresh views';
 		                 icon: (self iconNamed: #smallUpdate);
 		                 yourself.
 	toolbarPresenter := self newToolbar
@@ -192,7 +195,7 @@ IllimaniAllocatorProfiler >> layoutWhenThereIsNotData [
 		  add: (SpBoxLayout newTopToBottom
 				   vAlignCenter;
 				   hAlignCenter;
-				   add: 'No data to show. Start profiling!';
+				   add: 'No data to display. Start profiling and then click the refresh button.';
 				   yourself);
 		  yourself
 ]

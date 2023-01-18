@@ -5,36 +5,35 @@ Class {
 	#name : #ObjectAllocationStatsPresenter,
 	#superclass : #SpPresenter,
 	#instVars : [
-		'statsModel'
+		'statsModel',
+		'codeEvaluator'
 	],
 	#category : #AllocationProfilerPresenters
 }
 
+{ #category : #api }
+ObjectAllocationStatsPresenter >> beEvaluatorForObject: anObject [
+
+	codeEvaluator beForObject: anObject
+]
+
 { #category : #layout }
 ObjectAllocationStatsPresenter >> defaultLayout [
 
-	^ SpGridLayout new
-		add: 'Total profiled time: ' at: 1 @ 1;
-		add: self totalProfiledTime at: 2 @ 1 span: 2 @ 1;
-	
-		add: 'Classes that allocate objects: ' at: 1 @ 2;
-		add: self numberOfClasses at: 2 @ 2 span: 2 @ 1;
-		
-		add: 'Methods that allocate objects: ' at: 1 @ 3;
-		add: self numberOfMethods at: 2 @ 3 span: 2 @ 1;
-		
-		add: 'Total allocated objects: ' at: 1 @ 4;
-		add: self totalAllocatedObjects at: 2 @ 4 span: 2 @ 1;
-		
-		add: 'Total unique allocated objects: ' at: 1 @ 5;
-		add: self totalUniqueAllocatedObjects at: 2 @ 5 span: 2 @ 1;
-		
-		beColumnNotHomogeneous;
-		yourself
+	^ SpPanedLayout newTopToBottom
+		  positionOfSlider: 0.7;
+		  add: self statsGridLayout;
+		  add: codeEvaluator;
+		  yourself
 ]
 
 { #category : #initialization }
 ObjectAllocationStatsPresenter >> initializePresenters [
+
+	codeEvaluator := self newCode
+		withoutLineNumbers;
+		text: 'self objectAllocations';
+		yourself
 ]
 
 { #category : #accessing }
@@ -53,6 +52,24 @@ ObjectAllocationStatsPresenter >> numberOfMethods [
 ObjectAllocationStatsPresenter >> setModelBeforeInitialization: aModel [
 
 	statsModel := aModel
+]
+
+{ #category : #layout }
+ObjectAllocationStatsPresenter >> statsGridLayout [
+
+	^ SpGridLayout new
+		  add: 'Total profiled time: ' at: 1 @ 1;
+		  add: self totalProfiledTime at: 2 @ 1 span: 2 @ 1;
+		  add: 'Classes that allocate objects: ' at: 1 @ 2;
+		  add: self numberOfClasses at: 2 @ 2 span: 2 @ 1;
+		  add: 'Methods that allocate objects: ' at: 1 @ 3;
+		  add: self numberOfMethods at: 2 @ 3 span: 2 @ 1;
+		  add: 'Total allocated objects: ' at: 1 @ 4;
+		  add: self totalAllocatedObjects at: 2 @ 4 span: 2 @ 1;
+		  add: 'Total unique allocated objects: ' at: 1 @ 5;
+		  add: self totalUniqueAllocatedObjects at: 2 @ 5 span: 2 @ 1;
+		  beColumnNotHomogeneous;
+		  yourself
 ]
 
 { #category : #accessing }
