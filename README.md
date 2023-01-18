@@ -1,87 +1,32 @@
-# object-creation-pharo-experiment
+# Illimani: a Memory Profiler
+
+<p align="center">
+  <img src="https://cdn.fstoppers.com/styles/full/s3/photos/171592/10/30/1d2b5ac3df32b99cd9a22454527e04ff.jpg" width="500">
+</p>
+
+<p align="center">
+  <em>The Illimani mountain in La Paz, Bolivia</em>
+</p>
 
 ## How to install it
 
 ```st
 Metacello new
   baseline: 'AllocationProfiler';
-  repository: 'github://jordanmontt/object-creation-pharo-experiment:main';
+  repository: 'github://jordanmontt/illimani-memory-profiler:main';
   load.
 ```
 
 ## How to use it
 
-You need to instantiate an `ObjectInstantiationWatcher`. You can watch either the colors or the points allocations.
+Open the tool with the message `IllimaniAllocatorProfiler open`.
 
-```st
-objectAllocationProfiler := ObjectAllocationProfiler new.
+![](https://i.imgur.com/6uzowKd.gif)
 
-objectAllocationProfiler startProfiling.
-objectAllocationProfiler stopProfiling.
+## Implementation
 
-objectAllocationProfiler proxyHandler inspect
-```
+Illimani relies on [method proxies](https://github.com/pharo-contributions/MethodProxies) library to capture the allocations. It is a top layer of method proxies that eases the use for the allocation capturing. The UI is completly independent of the profiler. It can be used without it. You will have access to all allocations and to some basic statistics.
 
-In the inspector you will able to see all the that are presented here visualizations and also a presenter with the stats.
+## How to profile your specific type of object
 
-For watching points:
-
-```st
-objectAllocationProfiler proxyHandler: MpPointAllocationProfilerHandler new
-```
-
-## Results
-
-All this (mini) experiments were rur for 60 approximatively seconds and in a Pharo 11 image.
-
-### 1. Watching a brand new image and using it normally
-
-I downloaded a Pharo 11 image. Opened `iceberg`. Installed this repository. Opened a Playground.
-
-Then I run the code in the how to use it section and the method proxies watched the allocations for 60 seconds.
-
-Then, I use the image like a normally do: I opened the system browser. Write code. Save a method. Commit to `iceberg`. I also opened the remote part on `iceberg` which contains a Form. Maybe that is why we have ~4000 different colors created (?)
-
-|     |     |
-| --- | --- |
-| Classes that allocate a Color object | 46 |
-| Methods that allocate a Color object | 90  |
-| Total allocated colors | 26932 |
-| Total allocated unique colors | 4323  |
-
-![](./img/new%20image%20using%20it%20normally%20opening%20remtotes/line.png)
-
-![](./img/new%20image%20using%20it%20normally%20opening%20remtotes/line-3-classes.png)
-
-Top 10 hot classes that allocates colors objects
-
-![](./img/new%20image%20using%20it%20normally%20opening%20remtotes/bar-classes.png)
-
-Top 10 hot methods that allocates colors objects
-
-![](./img/new%20image%20using%20it%20normally%20opening%20remtotes/bar-methods.png)
-
-### 2. Watching a one week image and using it normally
-
-For this part, I did the same as in the last experiment, except that I used an image that had 1 week old. It was an image that was not that much used. It was only used for 2 hours in total approximately.
-
-|     |     |
-| --- | --- |
-| Classes that allocate a Color object | 34 |
-| Methods that allocate a Color object | 68  |
-| Total allocated colors | 22670 |
-| Total allocated unique colors | 56 |
-
-![](./img/used%20image%20using%20it%20normally/line.png)
-
-![](./img/used%20image%20using%20it%20normally/line-3-classes.png)
-
-Top 10 hot classes that allocates colors objects
-
-![](./img/used%20image%20using%20it%20normally/classes-bar.png)
-
-Top 10 hot methods that allocates colors objects
-
-![](./img/used%20image%20using%20it%20normally/mathods-bar.png)
-
-_Note: This is only a first approach to investigate why we create so many unnecessary colors in Pharo. More rigorous experiment are required to drop to consistent conclusions_
+You need to create a sublclass of `MpObjectAllocationProfilerHandler` and define the instance side method `classesToRegister` with the class.es that you want to capture. This method should return an array. And you also need to define the class side method `prettyName` with a name of your preference. Then the tool will automatically add it.
