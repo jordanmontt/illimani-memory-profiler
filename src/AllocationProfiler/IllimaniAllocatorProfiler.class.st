@@ -8,7 +8,8 @@ Class {
 		'stopButton',
 		'isItProfiling',
 		'refreshButton',
-		'toolbarPresenter'
+		'toolbarPresenter',
+		'profilerHandlerDropListPresenter'
 	],
 	#category : #AllocationProfiler
 }
@@ -23,19 +24,27 @@ IllimaniAllocatorProfiler class >> open [
 { #category : #initialization }
 IllimaniAllocatorProfiler >> connectPresenters [
 
-	startButton action: [ objectAllocationProfiler startProfiling.
+	startButton action: [
+		objectAllocationProfiler startProfiling.
 		self toggleStartStopButtons ].
-	stopButton action: [ objectAllocationProfiler stopProfiling.
+	stopButton action: [
+		objectAllocationProfiler stopProfiling.
 		self toggleStartStopButtons ].
-
-	refreshButton action: [ self layout: self defaultLayout ]
+	refreshButton action: [ self layout: self defaultLayout ].
+	profilerHandlerDropListPresenter whenSelectedItemChangedDo: [ :aClass | objectAllocationProfiler profilerHandler: aClass new ]
 ]
 
 { #category : #layout }
 IllimaniAllocatorProfiler >> controlButtonsLayout [
 
-	^ SpBoxLayout newLeftToRight
+	^ SpBoxLayout newTopToBottom
+		  spacing: 5;
 		  add: toolbarPresenter;
+		  add: (SpBoxLayout newLeftToRight
+				   vAlignCenter;
+				   add: 'Profile the allocation of: ' expand: false;
+				   add: profilerHandlerDropListPresenter;
+				   yourself);
 		  yourself
 ]
 
@@ -50,12 +59,12 @@ IllimaniAllocatorProfiler >> defaultLayout [
 { #category : #initialization }
 IllimaniAllocatorProfiler >> initialize [
 
-	super initialize.
 	objectAllocationProfiler := ObjectAllocationProfiler new.
-	isItProfiling := false
+	isItProfiling := false.
+	super initialize
 ]
 
-{ #category : #initialization }
+{ #category : #'initialization - custom presenters' }
 IllimaniAllocatorProfiler >> initializeAllocatedObjectsPerSecond [
 
 	^ SpRoassalPresenter new
@@ -65,7 +74,7 @@ IllimaniAllocatorProfiler >> initializeAllocatedObjectsPerSecond [
 		yourself
 ]
 
-{ #category : #initialization }
+{ #category : #'initialization - custom presenters' }
 IllimaniAllocatorProfiler >> initializeAllocatedObjectsPerSecondPerClass [
 
 	^ SpRoassalPresenter new
@@ -75,14 +84,14 @@ IllimaniAllocatorProfiler >> initializeAllocatedObjectsPerSecondPerClass [
 		yourself
 ]
 
-{ #category : #initialization }
+{ #category : #'initialization - custom presenters' }
 IllimaniAllocatorProfiler >> initializeGeneralStats [
 
 	^ ObjectAllocationStatsPresenter on: objectAllocationProfiler stats
 ]
 
-{ #category : #initialization }
-IllimaniAllocatorProfiler >> initializePresenters [
+{ #category : #'initialization - custom presenters' }
+IllimaniAllocatorProfiler >> initializeNotebook [
 
 	notebookPresenter := self newNotebook.
 	notebookPresenter
@@ -92,32 +101,43 @@ IllimaniAllocatorProfiler >> initializePresenters [
 		addPageTitle: 'Allocated Objects per Second per Class'
 		provider: [ self initializeAllocatedObjectsPerSecondPerClass ];
 		addPageTitle: 'Top Allocator Classes' provider: [ self initializeTopClassesPresenter ];
-		addPageTitle: 'Top Allocator Methods' provider: [ self initializeTopMethodsPresenter ].
-
-	self initializeToolbar
+		addPageTitle: 'Top Allocator Methods' provider: [ self initializeTopMethodsPresenter ]
 ]
 
 { #category : #initialization }
+IllimaniAllocatorProfiler >> initializePresenters [
+
+	self initializeNotebook.
+	self initializeToolbar.
+	self initializeProxyHandlerDropList
+]
+
+{ #category : #'initialization - custom presenters' }
+IllimaniAllocatorProfiler >> initializeProxyHandlerDropList [
+
+	profilerHandlerDropListPresenter := self newDropList
+		items: (MpObjectAllocationProfilerHandler allSubclasses sorted: [ :a :b | a prettyName < b prettyName ]);
+		display: [ :aClass | aClass prettyName ];
+		selectItem: objectAllocationProfiler class
+		defaultProfilerHandlerClass;
+		yourself
+]
+
+{ #category : #'initialization - custom presenters' }
 IllimaniAllocatorProfiler >> initializeToolbar [
 
 	startButton := self newToolbarButton
 		               label: 'Start Profiling';
 		               icon: (self iconNamed: #smallProfile);
-		               action: [
-			               objectAllocationProfiler startProfiling.
-			               self toggleStartStopButtons ];
 		               yourself.
 	stopButton := self newToolbarButton
 		              label: 'Stop Profiling';
 		              icon: (self iconNamed: #smallCancel);
-		              action: [
-			              objectAllocationProfiler stopProfiling.
-			              self toggleStartStopButtons ];
+		              disable;
 		              yourself.
 	refreshButton := self newToolbarButton
 		                 label: 'Refresh';
 		                 icon: (self iconNamed: #smallUpdate);
-		                 action: [ self layout: self defaultLayout ];
 		                 yourself.
 	toolbarPresenter := self newToolbar
 		                    beBoth;
@@ -127,7 +147,7 @@ IllimaniAllocatorProfiler >> initializeToolbar [
 		                    yourself
 ]
 
-{ #category : #initialization }
+{ #category : #'initialization - custom presenters' }
 IllimaniAllocatorProfiler >> initializeTopClassesPresenter [
 
 	^ SpRoassalPresenter new
@@ -137,7 +157,7 @@ IllimaniAllocatorProfiler >> initializeTopClassesPresenter [
 		yourself
 ]
 
-{ #category : #initialization }
+{ #category : #'initialization - custom presenters' }
 IllimaniAllocatorProfiler >> initializeTopMethodsPresenter [
 
 	^ SpRoassalPresenter new

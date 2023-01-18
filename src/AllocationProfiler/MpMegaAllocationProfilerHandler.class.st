@@ -7,6 +7,12 @@ Class {
 	#category : #AllocationProfiler
 }
 
+{ #category : #printing }
+MpMegaAllocationProfilerHandler class >> prettyName [
+
+	^ 'All objects'
+]
+
 { #category : #evaluating }
 MpMegaAllocationProfilerHandler >> afterExecutionWithReceiver: receiver arguments: arguments returnValue: returnValue [
 

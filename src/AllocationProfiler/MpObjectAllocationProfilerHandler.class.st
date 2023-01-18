@@ -14,6 +14,12 @@ Class {
 	#category : #AllocationProfiler
 }
 
+{ #category : #printing }
+MpObjectAllocationProfilerHandler class >> prettyName [
+
+	^ self subclassResponsibility
+]
+
 { #category : #evaluating }
 MpObjectAllocationProfilerHandler >> afterExecutionWithReceiver: receiver arguments: arguments returnValue: returnValue [
 

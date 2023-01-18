@@ -9,54 +9,51 @@ Class {
 	#name : #ObjectAllocationProfiler,
 	#superclass : #Object,
 	#instVars : [
-		'proxyHandler',
 		'proxyBasicNew',
-		'proxyBasicNewKeyword'
+		'proxyBasicNewKeyword',
+		'profilerHandler'
 	],
 	#category : #AllocationProfiler
 }
 
-{ #category : #api }
-ObjectAllocationProfiler >> captureAll [
+{ #category : #accessing }
+ObjectAllocationProfiler class >> defaultProfilerHandlerClass [
 
-	proxyHandler := MpMegaAllocationProfilerHandler new.
-	proxyBasicNew := MpMethodProxy onMethod: Behavior >> #basicNew handler: proxyHandler.
-	proxyBasicNewKeyword := MpMethodProxy onMethod: Behavior >> #basicNew: handler: proxyHandler
-]
-
-{ #category : #api }
-ObjectAllocationProfiler >> captureTheColors [
-
-	proxyHandler := MpColorAllocationProfilerHandler new.
-	proxyBasicNew := MpMethodProxy onMethod: Behavior >> #basicNew handler: proxyHandler.
-	proxyBasicNewKeyword := MpMethodProxy onMethod: Behavior >> #basicNew: handler: proxyHandler.
+	^ MpMegaAllocationProfilerHandler
 ]
 
 { #category : #initialization }
 ObjectAllocationProfiler >> initialize [
 
 	super initialize.
-	self captureAll
+	profilerHandler := self class defaultProfilerHandlerClass new.
+	self installMethodProxies
+]
+
+{ #category : #api }
+ObjectAllocationProfiler >> installMethodProxies [
+
+	proxyBasicNew := MpMethodProxy onMethod: Behavior >> #basicNew handler: profilerHandler.
+	proxyBasicNewKeyword := MpMethodProxy onMethod: Behavior >> #basicNew: handler: profilerHandler
 ]
 
 { #category : #accessing }
 ObjectAllocationProfiler >> objectAllocations [
 
-	^ proxyHandler objectAllocations
+	^ profilerHandler objectAllocations
 ]
 
 { #category : #accessing }
-ObjectAllocationProfiler >> proxyHandler [
+ObjectAllocationProfiler >> profilerHandler [
 
-	^ proxyHandler
+	^ profilerHandler
 ]
 
 { #category : #accessing }
-ObjectAllocationProfiler >> proxyHandler: aProxyHandler [
+ObjectAllocationProfiler >> profilerHandler: anObjectAllocationProfilerHandler [
 
-	proxyHandler := aProxyHandler.
-	proxyBasicNew := MpMethodProxy onMethod: Behavior >> #basicNew handler: proxyHandler.
-	proxyBasicNewKeyword := MpMethodProxy onMethod: Behavior >> #basicNew: handler: proxyHandler
+	profilerHandler := anObjectAllocationProfilerHandler.
+	self installMethodProxies
 ]
 
 { #category : #api }
@@ -69,7 +66,7 @@ ObjectAllocationProfiler >> startProfiling [
 { #category : #accessing }
 ObjectAllocationProfiler >> stats [
 
-	^ AllocationStatistics allocations: proxyHandler objectAllocations
+	^ AllocationStatistics allocations: profilerHandler objectAllocations
 ]
 
 { #category : #api }

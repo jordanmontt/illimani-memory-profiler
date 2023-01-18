@@ -7,6 +7,12 @@ Class {
 	#category : #AllocationProfiler
 }
 
+{ #category : #printing }
+MpDictionaryAllocationProfilerHandler class >> prettyName [
+
+	^ 'Dictionaries'
+]
+
 { #category : #evaluating }
 MpDictionaryAllocationProfilerHandler >> classesToRegister [
 

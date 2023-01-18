@@ -7,6 +7,12 @@ Class {
 	#category : #AllocationProfiler
 }
 
+{ #category : #printing }
+MpPointAllocationProfilerHandler class >> prettyName [
+
+	^ 'Points'
+]
+
 { #category : #evaluating }
 MpPointAllocationProfilerHandler >> classesToRegister [
 

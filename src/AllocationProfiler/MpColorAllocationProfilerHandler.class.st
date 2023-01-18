@@ -7,6 +7,12 @@ Class {
 	#category : #AllocationProfiler
 }
 
+{ #category : #printing }
+MpColorAllocationProfilerHandler class >> prettyName [
+
+	^ 'Colors'
+]
+
 { #category : #evaluating }
 MpColorAllocationProfilerHandler >> classesToRegister [
 
