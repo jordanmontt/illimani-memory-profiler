@@ -33,20 +33,20 @@ AllocationStatistics >> allocations: aCollection [
 { #category : #statistics }
 AllocationStatistics >> allocationsOrderedByClass [
 
-	^ self occurrencesBy: [ :e | e context methodClass ]
+	^ self occurrencesBy: [ :e | e objectClass ]
 ]
 
 { #category : #statistics }
 AllocationStatistics >> allocationsOrderedByMethod [
 
-	^ self occurrencesBy: [ :e | e context asString ]
+	^ self occurrencesBy: [ :e | e fullMethodName ]
 ]
 
 { #category : #statistics }
 AllocationStatistics >> calculateTopAllocatingClasses [
 
 	| classesWithTheirAllocations topClassesByNumberOfAllocations |
-	classesWithTheirAllocations := allocations groupedBy: [ :holder | holder context methodClass ].
+	classesWithTheirAllocations := allocations groupedBy: [ :holder | holder objectClass ].
 
 	topClassesByNumberOfAllocations := classesWithTheirAllocations keys sorted: [ :key1 :key2 |
 		(classesWithTheirAllocations at: key1) size > (classesWithTheirAllocations at: key2) size ].
@@ -81,13 +81,13 @@ AllocationStatistics >> nAllocationsOrderedByMethod: n [
 { #category : #statistics }
 AllocationStatistics >> numberOfClasses [
 
-	^ (allocations collect: [ :e | e context methodClass ]) asSet size
+	^ (allocations collect: [ :e | e objectClass ]) asSet size
 ]
 
 { #category : #statistics }
 AllocationStatistics >> numberOfMethods [
 
-	^ (allocations collect: [ :e | e context asString ]) asSet size
+	^ (allocations collect: [ :e | e fullMethodName ]) asSet size
 ]
 
 { #category : #computations }

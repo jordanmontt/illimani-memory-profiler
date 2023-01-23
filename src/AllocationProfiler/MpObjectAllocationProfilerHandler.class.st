@@ -23,12 +23,24 @@ MpObjectAllocationProfilerHandler class >> prettyName [
 { #category : #evaluating }
 MpObjectAllocationProfilerHandler >> afterExecutionWithReceiver: receiver arguments: arguments returnValue: returnValue [
 
-	 (classesToRegister includes: returnValue class) ifTrue: [ 
-		objectAllocations add:
-			(AllocationInformationHolder
-				context: (self contextThatAllocatesTheObject: thisContext) copyStack
-				allocatedObject: returnValue) ].
+	(classesToRegister includes: returnValue class) ifTrue: [
+		objectAllocations add: (self allocationHolderForObject: returnValue) ].
 	^ returnValue
+]
+
+{ #category : #evaluating }
+MpObjectAllocationProfilerHandler >> allocationHolderForObject: returnValue [
+
+	| context timeNow |
+	timeNow := DateAndTime now.
+	context := (self contextThatAllocatesTheObject: thisContext).
+	^ AllocationInformationHolder new
+		"context: (self contextThatAllocatesTheObject: thisContext) copyStack"
+		objectClass: context methodClass;
+		fullMethodName: context asString;
+		allocatedObject: returnValue;
+		timestamp: timeNow;
+		yourself
 ]
 
 { #category : #evaluating }
@@ -54,7 +66,8 @@ MpObjectAllocationProfilerHandler >> contextThatAllocatesTheObject: aContext [
 { #category : #initialization }
 MpObjectAllocationProfilerHandler >> defaultClassesToAvoidInTheContextSearch [
 
-	^{ 
+	^{
+		MpObjectAllocationProfilerHandler.
 		self class.
 		MpMethodProxy.
 		BlockClosure.
