@@ -33,11 +33,12 @@ MpObjectAllocationProfilerHandler >> allocationHolderForObject: returnValue [
 
 	| context timeNow |
 	timeNow := DateAndTime now.
-	context := (self contextThatAllocatesTheObject: thisContext).
+	context := self contextThatAllocatesTheObject: thisContext.
+
 	^ AllocationInformationHolder new
 		"context: (self contextThatAllocatesTheObject: thisContext) copyStack"
 		objectClass: context methodClass;
-		fullMethodName: context asString;
+		fullMethodName: context compiledCode method name;
 		allocatedObject: returnValue;
 		timestamp: timeNow;
 		yourself

@@ -38,7 +38,7 @@ AllocationVisualizations >> allocatedObjectsPerSecondLineChartCanvas [
 AllocationVisualizations >> allocatedObjectsPerSecondPerClassLineChartCanvas [
 
 	| chart linePlot topClassesByNumberOfAllocations legend |
-	topClassesByNumberOfAllocations := statsModel calculateTopNAllocatingClasses: numberOfTopClasses.
+	topClassesByNumberOfAllocations := statsModel groupedNAllocatingClasses: numberOfTopClasses.
 	chart := RSChart new.
 	legend := RSLegend new.
 	legend container: chart canvas.
@@ -98,7 +98,7 @@ AllocationVisualizations >> statsModel: aModel [
 AllocationVisualizations >> topClassesThatAllocateObjectsBarChartCanvas [
 
 	| chart allocatedObjects |
-	allocatedObjects := statsModel nAllocationsOrderedByClass: numberOfTopClasses.
+	allocatedObjects := (statsModel topNAllocationsByClasses: numberOfTopClasses) reversed.
 
 	chart := self createBarChartForAllocations: allocatedObjects.
 	self addLabelsX: 'Allocated Objects' y: 'Classes' forChart: chart.
@@ -109,9 +109,8 @@ AllocationVisualizations >> topClassesThatAllocateObjectsBarChartCanvas [
 { #category : #visualizations }
 AllocationVisualizations >> topMethodsThatAllocateObjectsBarChartCanvas [
 
-	| chart names allocatedObjects |
-	allocatedObjects := statsModel nAllocationsOrderedByMethod: numberOfTopMethods.
-	names := allocatedObjects collect: [ :e | e asString ].
+	| chart allocatedObjects |
+	allocatedObjects := (statsModel topNAllocationsByMethods: numberOfTopMethods) reversed.
 
 	chart := self createBarChartForAllocations: allocatedObjects.
 	self addLabelsX: 'Allocated Objects' y: 'Methods' forChart: chart.

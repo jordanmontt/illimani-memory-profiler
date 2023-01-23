@@ -31,19 +31,19 @@ AllocationStatistics >> allocations: aCollection [
 ]
 
 { #category : #statistics }
-AllocationStatistics >> allocationsOrderedByClass [
+AllocationStatistics >> allocationsByClasses [
 
 	^ self occurrencesBy: [ :e | e objectClass ]
 ]
 
 { #category : #statistics }
-AllocationStatistics >> allocationsOrderedByMethod [
+AllocationStatistics >> allocationsByMethods [
 
 	^ self occurrencesBy: [ :e | e fullMethodName ]
 ]
 
 { #category : #statistics }
-AllocationStatistics >> calculateTopAllocatingClasses [
+AllocationStatistics >> groupedAllocatingClasses [
 
 	| classesWithTheirAllocations topClassesByNumberOfAllocations |
 	classesWithTheirAllocations := allocations groupedBy: [ :holder | holder objectClass ].
@@ -55,27 +55,11 @@ AllocationStatistics >> calculateTopAllocatingClasses [
 ]
 
 { #category : #statistics }
-AllocationStatistics >> calculateTopNAllocatingClasses: n [
+AllocationStatistics >> groupedNAllocatingClasses: n [
 
 	| classesWithTheirAllocations |
-	classesWithTheirAllocations := self calculateTopAllocatingClasses.
+	classesWithTheirAllocations := self groupedAllocatingClasses.
 	^ classesWithTheirAllocations first: (n min: classesWithTheirAllocations size)
-]
-
-{ #category : #statistics }
-AllocationStatistics >> nAllocationsOrderedByClass: n [
-
-	| allocationsOrderedByClass |
-	allocationsOrderedByClass := self allocationsOrderedByClass.
-	^ allocationsOrderedByClass first: (n min: allocationsOrderedByClass size)
-]
-
-{ #category : #statistics }
-AllocationStatistics >> nAllocationsOrderedByMethod: n [
-
-	| allocationsOrderedByMethod |
-	allocationsOrderedByMethod := self allocationsOrderedByMethod.
-	^ allocationsOrderedByMethod first: (n min: allocationsOrderedByMethod size)
 ]
 
 { #category : #statistics }
@@ -97,7 +81,23 @@ AllocationStatistics >> occurrencesBy: aBlock [
 	sortedAllocatedObjects := OrderedCollection new.
 	ocurrences := Bag newFrom: (allocations collect: aBlock).
 	ocurrences doWithOccurrences: [ :key :value | sortedAllocatedObjects add: key -> value ].
-	^ sortedAllocatedObjects sorted: [ :a :b | a value < b value ]
+	^ sortedAllocatedObjects sorted: [ :a :b | a value > b value ]
+]
+
+{ #category : #statistics }
+AllocationStatistics >> topNAllocationsByClasses: n [
+
+	| allocationsOrderedByClass |
+	allocationsOrderedByClass := self allocationsByClasses.
+	^ allocationsOrderedByClass first: (n min: allocationsOrderedByClass size)
+]
+
+{ #category : #statistics }
+AllocationStatistics >> topNAllocationsByMethods: n [
+
+	| allocationsOrderedByMethod |
+	allocationsOrderedByMethod := self allocationsByMethods.
+	^ allocationsOrderedByMethod first: (n min: allocationsOrderedByMethod size)
 ]
 
 { #category : #statistics }
