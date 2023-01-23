@@ -19,5 +19,5 @@ BaselineOfAllocationProfiler >> baseline: spec [
 		spec package: 'AllocationProfiler' with: [ spec requires: #( 'MethodProxies' ) ].
 		spec package: 'AllocationProfiler-UI' with: [ spec requires: #( 'AllocationProfiler' ) ].
 
-		spec group: 'default' with: #( 'AllocationProfiler' 'AllocationProfilerVisualizations' 'AllocationProfiler-UI' ) ]
+		spec group: 'default' with: #( 'AllocationProfiler' 'AllocationProfiler-UI' ) ]
 ]
