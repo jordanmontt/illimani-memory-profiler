@@ -16,9 +16,7 @@ MpMegaAllocationProfilerHandler class >> prettyName [
 { #category : #evaluating }
 MpMegaAllocationProfilerHandler >> afterExecutionWithReceiver: receiver arguments: arguments returnValue: returnValue [
 
-	objectAllocations add: (AllocationInformationHolder
-		context: (self contextThatAllocatesTheObject: thisContext) copyStack
-		allocatedObject: returnValue).
+	objectAllocations add: (self allocationHolderForObject: returnValue).
 	^ returnValue
 ]
 

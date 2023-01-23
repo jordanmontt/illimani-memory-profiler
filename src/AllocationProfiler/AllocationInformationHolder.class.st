@@ -7,10 +7,21 @@ Class {
 	#instVars : [
 		'context',
 		'timestamp',
-		'allocatedObject'
+		'allocatedObject',
+		'fullMethodName',
+		'objectClass'
 	],
 	#category : #AllocationProfiler
 }
+
+{ #category : #'instance creation' }
+AllocationInformationHolder class >> allocatedObject: objectCreated [
+
+	^ self new
+		allocatedObject: objectCreated;
+		timestamp: DateAndTime now;
+		yourself
+]
 
 { #category : #'instance creation' }
 AllocationInformationHolder class >> context: aContext allocatedObject: objectCreated [
@@ -46,10 +57,34 @@ AllocationInformationHolder >> context: anObject [
 	context := anObject
 ]
 
+{ #category : #accessing }
+AllocationInformationHolder >> fullMethodName [
+
+	^ fullMethodName
+]
+
+{ #category : #accessing }
+AllocationInformationHolder >> fullMethodName: anObject [
+
+	fullMethodName := anObject
+]
+
+{ #category : #accessing }
+AllocationInformationHolder >> objectClass [
+
+	^ objectClass
+]
+
+{ #category : #accessing }
+AllocationInformationHolder >> objectClass: anObject [
+
+	objectClass := anObject
+]
+
 { #category : #printing }
 AllocationInformationHolder >> printOn: aStream [
 
-	aStream << context methodClass name << ' --> ' << allocatedObject class asString << ' --> '
+	aStream << objectClass asString << ' --> ' << allocatedObject class asString << ' --> '
 	<< timestamp nanoSecond asString
 ]
 
