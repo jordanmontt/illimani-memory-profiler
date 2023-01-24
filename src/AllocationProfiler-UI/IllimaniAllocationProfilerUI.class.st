@@ -5,10 +5,37 @@ Class {
 		'notebookPresenter',
 		'objectAllocationProfiler',
 		'refreshButton',
-		'toolbarPresenter'
+		'toolbarPresenter',
+		'allocatedObjectsPerSecondPresenter',
+		'allocatedObjectsPerSecondPerClass',
+		'codeEvaluator',
+		'statsAndEvaluatorPresenter',
+		'topClassesPresenter',
+		'topMethodsPresenter'
 	],
 	#category : #'AllocationProfiler-UI'
 }
+
+{ #category : #'accessing - lazy' }
+IllimaniAllocationProfilerUI >> allocatedObjectsPerSecondPerClass [
+
+	allocatedObjectsPerSecondPerClass ifNil: [ self initializeAllocatedObjectsPerSecondPerClass ].
+	^ allocatedObjectsPerSecondPerClass
+]
+
+{ #category : #'accessing - lazy' }
+IllimaniAllocationProfilerUI >> allocatedObjectsPerSecondPresenter [
+
+	allocatedObjectsPerSecondPresenter ifNil: [ self initializeAllocatedObjectsPerSecond ].
+	^ allocatedObjectsPerSecondPresenter
+]
+
+{ #category : #'accessing - lazy' }
+IllimaniAllocationProfilerUI >> codeEvaluator [
+
+	codeEvaluator ifNil: [ self initializeCodeEvaluator ].
+	^ codeEvaluator
+]
 
 { #category : #initialization }
 IllimaniAllocationProfilerUI >> connectPresenters [
@@ -35,90 +62,83 @@ IllimaniAllocationProfilerUI >> defaultLayout [
 		ifNotEmpty: [ self layoutWhenThereIsData ]
 ]
 
-{ #category : #initialization }
-IllimaniAllocationProfilerUI >> initialize [
-
-	objectAllocationProfiler := IllimaniAllocationProfiler new.
-	super initialize
-]
-
-{ #category : #'initialization - custom presenters' }
+{ #category : #'initialization - lazy presenters' }
 IllimaniAllocationProfilerUI >> initializeAllocatedObjectsPerSecond [
 
-	^ SpRoassalPresenter new
+	allocatedObjectsPerSecondPresenter := SpRoassalPresenter new
 		canvas: (AllocationVisualizations new
 			statsModel: objectAllocationProfiler stats;
 			allocatedObjectsPerSecondLineChartCanvas);
 		yourself
 ]
 
-{ #category : #'initialization - custom presenters' }
+{ #category : #'initialization - lazy presenters' }
 IllimaniAllocationProfilerUI >> initializeAllocatedObjectsPerSecondPerClass [
 
-	^ SpRoassalPresenter new
+	allocatedObjectsPerSecondPerClass := SpRoassalPresenter new
 		canvas: (AllocationVisualizations new
 			statsModel: objectAllocationProfiler stats;
 			allocatedObjectsPerSecondPerClassLineChartCanvas);
 		yourself
 ]
 
-{ #category : #'initialization - custom presenters' }
-IllimaniAllocationProfilerUI >> initializeGeneralStats [
+{ #category : #'initialization - lazy presenters' }
+IllimaniAllocationProfilerUI >> initializeCodeEvaluator [
 
-	^ (AllocationStatisticsPresenter on: objectAllocationProfiler stats)
-		  beEvaluatorForObject: objectAllocationProfiler;
-		  totalProfiledTimeBlock: [ objectAllocationProfiler totalProfiledTime ];
-		  yourself
+	codeEvaluator := self newCode
+		text: 'self objectAllocations';
+		beForObject: objectAllocationProfiler;
+		yourself
 ]
 
-{ #category : #'initialization - custom presenters' }
+{ #category : #'initialization - lazy presenters' }
 IllimaniAllocationProfilerUI >> initializeNotebook [
 
-	notebookPresenter := self newNotebook.
-	notebookPresenter
-		addPageTitle: 'General Stats' provider: [ self initializeGeneralStats ];
+	notebookPresenter := self newNotebook
+		addPageTitle: 'General Stats' provider: [ self statsAndEvaluatorPresenter ];
 		addPageTitle: 'Allocated Objects per Second'
-		provider: [ self initializeAllocatedObjectsPerSecond ];
+		provider: [ self allocatedObjectsPerSecondPresenter ];
 		addPageTitle: 'Allocated Objects per Second per Class'
-		provider: [ self initializeAllocatedObjectsPerSecondPerClass ];
-		addPageTitle: 'Top Allocator Classes' provider: [ self initializeTopClassesPresenter ];
-		addPageTitle: 'Top Allocator Methods' provider: [ self initializeTopMethodsPresenter ]
+		provider: [ self allocatedObjectsPerSecondPerClass ];
+		addPageTitle: 'Top Allocator Classes' provider: [ self topClassesPresenter ];
+		addPageTitle: 'Top Allocator Methods' provider: [ self topMethodsPresenter ];
+		addPageTitle: 'Code Evaluator' provider: [ self codeEvaluator ];
+		yourself
 ]
 
 { #category : #initialization }
 IllimaniAllocationProfilerUI >> initializePresenters [
 
-	self initializeNotebook.
 	self initializeToolbar
 ]
 
-{ #category : #'initialization - custom presenters' }
+{ #category : #initialization }
 IllimaniAllocationProfilerUI >> initializeToolbar [
 
 	refreshButton := self newToolbarButton
-		                 label: 'Refresh views';
-		                 icon: (self iconNamed: #smallUpdate);
-		                 yourself.
+		label: 'Refresh views';
+		icon: (self iconNamed: #smallUpdate);
+		yourself.
 	toolbarPresenter := self newToolbar
-		                    beBoth;
-		                    addItemLeft: refreshButton;
-		                    yourself
+		beBoth;
+		addItemLeft: refreshButton;
+		yourself
 ]
 
-{ #category : #'initialization - custom presenters' }
+{ #category : #'initialization - lazy presenters' }
 IllimaniAllocationProfilerUI >> initializeTopClassesPresenter [
 
-	^ SpRoassalPresenter new
+	topClassesPresenter := SpRoassalPresenter new
 		canvas: (AllocationVisualizations new
 			statsModel: objectAllocationProfiler stats;
 			topClassesThatAllocateObjectsBarChartCanvas);
 		yourself
 ]
 
-{ #category : #'initialization - custom presenters' }
+{ #category : #'initialization - lazy presenters' }
 IllimaniAllocationProfilerUI >> initializeTopMethodsPresenter [
 
-	^ SpRoassalPresenter new
+	topMethodsPresenter := SpRoassalPresenter new
 		canvas: (AllocationVisualizations new
 			statsModel: objectAllocationProfiler stats;
 			topMethodsThatAllocateObjectsBarChartCanvas);
@@ -134,11 +154,30 @@ IllimaniAllocationProfilerUI >> initializeWindow: aWindowPresenter [
 ]
 
 { #category : #layout }
+IllimaniAllocationProfilerUI >> layoutWhenThereIsAProfiler [
+
+	| layoutToReturn |
+	(objectAllocationProfiler isProfilingStarted and: [
+		 objectAllocationProfiler isProfilingFinished not ]) ifTrue: [
+		layoutToReturn := self layoutWhenThereIsNotDataWithMessage: 'Still profiling' ].
+
+	(objectAllocationProfiler isProfilingFinished and: [
+		 objectAllocationProfiler objectAllocations isEmpty ]) ifTrue: [
+		layoutToReturn := self layoutWhenThereIsNotDataWithMessage: 'Profiling finished without any allocations. No allocations were produced during this profiling' ].
+
+	(objectAllocationProfiler isProfilingFinished and: [
+		 objectAllocationProfiler objectAllocations isNotEmpty ]) ifTrue: [
+		layoutToReturn := self layoutWhenThereIsData ].
+
+	^ layoutToReturn
+]
+
+{ #category : #layout }
 IllimaniAllocationProfilerUI >> layoutWhenThereIsData [
 
 	^ SpBoxLayout newTopToBottom
 		  add: self controlButtonsLayout expand: false;
-		  add: notebookPresenter;
+		  add: self notebookPresenter;
 		  yourself
 ]
 
@@ -155,8 +194,36 @@ IllimaniAllocationProfilerUI >> layoutWhenThereIsNotDataWithMessage: aString [
 		  yourself
 ]
 
+{ #category : #'accessing - lazy' }
+IllimaniAllocationProfilerUI >> notebookPresenter [
+
+	notebookPresenter ifNil: [ self initializeNotebook ].
+	^ notebookPresenter
+]
+
 { #category : #accessing }
 IllimaniAllocationProfilerUI >> objectAllocationProfiler: aProfiler [
 
 	objectAllocationProfiler := aProfiler
+]
+
+{ #category : #'accessing - lazy' }
+IllimaniAllocationProfilerUI >> statsAndEvaluatorPresenter [
+
+	statsAndEvaluatorPresenter ifNil: [ self initializeStatsAndEvaluatorPresenter ].
+	^ statsAndEvaluatorPresenter
+]
+
+{ #category : #'accessing - lazy' }
+IllimaniAllocationProfilerUI >> topClassesPresenter [
+
+	topClassesPresenter ifNil: [ self initializeTopClassesPresenter ].
+	^ topClassesPresenter
+]
+
+{ #category : #'accessing - lazy' }
+IllimaniAllocationProfilerUI >> topMethodsPresenter [
+
+	topMethodsPresenter ifNil: [ self initializeTopMethodsPresenter ].
+	^ topMethodsPresenter
 ]

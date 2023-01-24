@@ -33,7 +33,7 @@ AllocationStatistics >> allocations: aCollection [
 { #category : #statistics }
 AllocationStatistics >> allocationsByClasses [
 
-	^ self occurrencesBy: [ :e | e objectClass ]
+	^ self occurrencesBy: [ :e | e allocatorClass ]
 ]
 
 { #category : #statistics }
@@ -46,7 +46,7 @@ AllocationStatistics >> allocationsByMethods [
 AllocationStatistics >> groupedAllocatingClasses [
 
 	| classesWithTheirAllocations topClassesByNumberOfAllocations |
-	classesWithTheirAllocations := allocations groupedBy: [ :holder | holder objectClass ].
+	classesWithTheirAllocations := allocations groupedBy: [ :holder | holder allocatorClass ].
 
 	topClassesByNumberOfAllocations := classesWithTheirAllocations keys sorted: [ :key1 :key2 |
 		(classesWithTheirAllocations at: key1) size > (classesWithTheirAllocations at: key2) size ].
@@ -65,7 +65,7 @@ AllocationStatistics >> groupedNAllocatingClasses: n [
 { #category : #statistics }
 AllocationStatistics >> numberOfClasses [
 
-	^ (allocations collect: [ :e | e objectClass ]) asSet size
+	^ (allocations collect: [ :e | e allocatorClass ]) asSet size
 ]
 
 { #category : #statistics }

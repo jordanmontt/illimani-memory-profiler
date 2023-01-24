@@ -6,17 +6,10 @@ Class {
 	#superclass : #SpPresenter,
 	#instVars : [
 		'statsModel',
-		'codeEvaluator',
 		'totalProfiledTimeLabel'
 	],
 	#category : #'AllocationProfiler-UI'
 }
-
-{ #category : #api }
-AllocationStatisticsPresenter >> beEvaluatorForObject: anObject [
-
-	codeEvaluator beForObject: anObject
-]
 
 { #category : #default }
 AllocationStatisticsPresenter >> convertTimeToAReadableString: aBlock [
@@ -38,20 +31,14 @@ AllocationStatisticsPresenter >> convertTimestampToSecondsString: aDateAndTime [
 { #category : #layout }
 AllocationStatisticsPresenter >> defaultLayout [
 
-	^ SpPanedLayout newTopToBottom
-		  positionOfSlider: 0.7;
+	^ SpBoxLayout newTopToBottom
 		  add: self statsGridLayout;
-		  add: codeEvaluator;
 		  yourself
 ]
 
 { #category : #initialization }
 AllocationStatisticsPresenter >> initializePresenters [
 
-	codeEvaluator := self newCode
-		withoutLineNumbers;
-		text: 'self objectAllocations';
-		yourself.
 	totalProfiledTimeLabel := self newLabel
 ]
 

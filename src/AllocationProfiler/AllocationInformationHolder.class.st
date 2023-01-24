@@ -8,8 +8,8 @@ Class {
 		'context',
 		'timestamp',
 		'allocatedObject',
-		'fullMethodName',
-		'objectClass'
+		'allocatorClass',
+		'allocatorMethodName'
 	],
 	#category : #AllocationProfiler
 }
@@ -46,6 +46,24 @@ AllocationInformationHolder >> allocatedObject: anObject [
 ]
 
 { #category : #accessing }
+AllocationInformationHolder >> allocatorClass [
+
+	^ allocatorClass
+]
+
+{ #category : #accessing }
+AllocationInformationHolder >> allocatorClass: anObject [
+
+	allocatorClass := anObject
+]
+
+{ #category : #accessing }
+AllocationInformationHolder >> allocatorMethodName: anObject [
+
+	allocatorMethodName := anObject
+]
+
+{ #category : #accessing }
 AllocationInformationHolder >> context [
 
 	^ context
@@ -60,31 +78,13 @@ AllocationInformationHolder >> context: anObject [
 { #category : #accessing }
 AllocationInformationHolder >> fullMethodName [
 
-	^ fullMethodName
-]
-
-{ #category : #accessing }
-AllocationInformationHolder >> fullMethodName: anObject [
-
-	fullMethodName := anObject
-]
-
-{ #category : #accessing }
-AllocationInformationHolder >> objectClass [
-
-	^ objectClass
-]
-
-{ #category : #accessing }
-AllocationInformationHolder >> objectClass: anObject [
-
-	objectClass := anObject
+	^ allocatorMethodName
 ]
 
 { #category : #printing }
 AllocationInformationHolder >> printOn: aStream [
 
-	aStream << objectClass asString << ' --> ' << allocatedObject class asString << ' --> '
+	aStream << allocatorClass asString << ' --> ' << allocatedObject class asString << ' --> '
 	<< timestamp nanoSecond asString
 ]
 

@@ -18,12 +18,6 @@ Class {
 	#category : #AllocationProfiler
 }
 
-{ #category : #accessing }
-IllimaniAllocationProfiler class >> defaultProfilerHandlerClass [
-
-	^ MpMegaAllocationProfilerHandler
-]
-
 { #category : #api }
 IllimaniAllocationProfiler class >> profileFor: seconds [
 
@@ -45,12 +39,24 @@ IllimaniAllocationProfiler >> beginningOfProfilingTime [
 	^ beginningOfProfilingTime
 ]
 
+{ #category : #api }
+IllimaniAllocationProfiler >> captureAllObjects [
+
+	profilerHandler captureAllObjects
+]
+
 { #category : #evaluating }
 IllimaniAllocationProfiler >> cleanProfilingData [
 
 	profilerHandler cleanAllocations.
 	beginningOfProfilingTime := nil.
 	endOfProfilingTime := nil
+]
+
+{ #category : #api }
+IllimaniAllocationProfiler >> copyExecutionStack [
+
+	profilerHandler copyExecutionStack
 ]
 
 { #category : #accessing }
@@ -63,29 +69,33 @@ IllimaniAllocationProfiler >> endOfProfilingTime [
 IllimaniAllocationProfiler >> initialize [
 
 	super initialize.
-	profilerHandler := self class defaultProfilerHandlerClass new.
-	self installMethodProxies
+	profilerHandler := IllimaniProfilerMpHandler new.
+	self initializeMethodProxies
 ]
 
-{ #category : #api }
-IllimaniAllocationProfiler >> installMethodProxies [
+{ #category : #evaluating }
+IllimaniAllocationProfiler >> initializeMethodProxies [
 
 	proxyBasicNew := MpMethodProxy onMethod: Behavior >> #basicNew handler: profilerHandler.
 	proxyBasicNewKeyword := MpMethodProxy onMethod: Behavior >> #basicNew: handler: profilerHandler
+]
+
+{ #category : #testing }
+IllimaniAllocationProfiler >> isProfilingFinished [
+
+	^ endOfProfilingTime isNil not
+]
+
+{ #category : #testing }
+IllimaniAllocationProfiler >> isProfilingStarted [
+
+	^ beginningOfProfilingTime isNil not
 ]
 
 { #category : #accessing }
 IllimaniAllocationProfiler >> objectAllocations [
 
 	^ profilerHandler objectAllocations
-]
-
-{ #category : #'instance creation' }
-IllimaniAllocationProfiler >> open [
-
-	^ IllimaniAllocationProfilerUI new
-		  objectAllocationProfiler: self;
-		  open
 ]
 
 { #category : #api }
@@ -111,14 +121,7 @@ IllimaniAllocationProfiler >> profilerHandler [
 	^ profilerHandler
 ]
 
-{ #category : #accessing }
-IllimaniAllocationProfiler >> profilerHandler: anObjectAllocationProfilerHandler [
-
-	profilerHandler := anObjectAllocationProfilerHandler.
-	self installMethodProxies
-]
-
-{ #category : #api }
+{ #category : #evaluating }
 IllimaniAllocationProfiler >> startProfiling [
 
 	self cleanProfilingData.
@@ -133,7 +136,7 @@ IllimaniAllocationProfiler >> stats [
 	^ AllocationStatistics allocations: profilerHandler objectAllocations
 ]
 
-{ #category : #api }
+{ #category : #evaluating }
 IllimaniAllocationProfiler >> stopProfiling [
 
 	proxyBasicNew uninstall.
