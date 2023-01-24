@@ -4,36 +4,16 @@ Class {
 	#instVars : [
 		'notebookPresenter',
 		'objectAllocationProfiler',
-		'startButton',
-		'stopButton',
-		'isItProfiling',
 		'refreshButton',
-		'toolbarPresenter',
-		'profilerHandlerDropListPresenter'
+		'toolbarPresenter'
 	],
 	#category : #'AllocationProfiler-UI'
 }
 
-{ #category : #'instance creation' }
-IllimaniAllocationProfilerUI class >> open [
-
-	<script>
-	^ self new open
-]
-
 { #category : #initialization }
 IllimaniAllocationProfilerUI >> connectPresenters [
 
-	startButton action: [
-		objectAllocationProfiler startProfiling.
-		self toggleStartStopButtons ].
-	stopButton action: [
-		objectAllocationProfiler stopProfiling.
-		self toggleStartStopButtons ].
-	refreshButton action: [ self layout: self defaultLayout ].
-
-	profilerHandlerDropListPresenter whenSelectedItemChangedDo: [ :aClass |
-		objectAllocationProfiler profilerHandler: aClass new ]
+	refreshButton action: [ self layout: self defaultLayout ]
 ]
 
 { #category : #layout }
@@ -42,20 +22,16 @@ IllimaniAllocationProfilerUI >> controlButtonsLayout [
 	^ SpBoxLayout newTopToBottom
 		  spacing: 5;
 		  add: toolbarPresenter;
-		  add: (SpBoxLayout newLeftToRight
-				   vAlignCenter;
-				   spacing: 5;
-				   add: 'Profile the allocation of: ' expand: false;
-				   add: profilerHandlerDropListPresenter;
-				   yourself);
 		  yourself
 ]
 
 { #category : #layout }
 IllimaniAllocationProfilerUI >> defaultLayout [
 
+	objectAllocationProfiler ifNil: [
+		^ self layoutWhenThereIsNotDataWithMessage: 'No Profiler backend set.' ].
 	^ objectAllocationProfiler objectAllocations
-		ifEmpty: [ self layoutWhenThereIsNotData ]
+		ifEmpty: [ self layoutWhenThereIsNotDataWithMessage: 'No data to display.' ]
 		ifNotEmpty: [ self layoutWhenThereIsData ]
 ]
 
@@ -63,7 +39,6 @@ IllimaniAllocationProfilerUI >> defaultLayout [
 IllimaniAllocationProfilerUI >> initialize [
 
 	objectAllocationProfiler := IllimaniAllocationProfiler new.
-	isItProfiling := false.
 	super initialize
 ]
 
@@ -90,7 +65,7 @@ IllimaniAllocationProfilerUI >> initializeAllocatedObjectsPerSecondPerClass [
 { #category : #'initialization - custom presenters' }
 IllimaniAllocationProfilerUI >> initializeGeneralStats [
 
-	^ (ObjectAllocationStatsPresenter on: objectAllocationProfiler stats)
+	^ (AllocationStatisticsPresenter on: objectAllocationProfiler stats)
 		  beEvaluatorForObject: objectAllocationProfiler;
 		  totalProfiledTimeBlock: [ objectAllocationProfiler totalProfiledTime ];
 		  yourself
@@ -114,40 +89,18 @@ IllimaniAllocationProfilerUI >> initializeNotebook [
 IllimaniAllocationProfilerUI >> initializePresenters [
 
 	self initializeNotebook.
-	self initializeToolbar.
-	self initializeProxyHandlerDropList
-]
-
-{ #category : #'initialization - custom presenters' }
-IllimaniAllocationProfilerUI >> initializeProxyHandlerDropList [
-
-	profilerHandlerDropListPresenter := self newDropList
-		items: (MpObjectAllocationProfilerHandler allSubclasses sorted: [ :a :b | a prettyName < b prettyName ]);
-		display: [ :aClass | aClass prettyName ];
-		selectItem: objectAllocationProfiler class defaultProfilerHandlerClass;
-		yourself
+	self initializeToolbar
 ]
 
 { #category : #'initialization - custom presenters' }
 IllimaniAllocationProfilerUI >> initializeToolbar [
 
-	startButton := self newToolbarButton
-		               label: 'Start Profiling';
-		               icon: (self iconNamed: #smallProfile);
-		               yourself.
-	stopButton := self newToolbarButton
-		              label: 'Stop Profiling';
-		              icon: (self iconNamed: #smallCancel);
-		              disable;
-		              yourself.
 	refreshButton := self newToolbarButton
 		                 label: 'Refresh views';
 		                 icon: (self iconNamed: #smallUpdate);
 		                 yourself.
 	toolbarPresenter := self newToolbar
 		                    beBoth;
-		                    addItemLeft: startButton;
-		                    addItemLeft: stopButton;
 		                    addItemLeft: refreshButton;
 		                    yourself
 ]
@@ -190,14 +143,14 @@ IllimaniAllocationProfilerUI >> layoutWhenThereIsData [
 ]
 
 { #category : #layout }
-IllimaniAllocationProfilerUI >> layoutWhenThereIsNotData [
+IllimaniAllocationProfilerUI >> layoutWhenThereIsNotDataWithMessage: aString [
 
 	^ SpBoxLayout newTopToBottom
 		  add: self controlButtonsLayout expand: false;
 		  add: (SpBoxLayout newTopToBottom
 				   vAlignCenter;
 				   hAlignCenter;
-				   add: 'No data to display.';
+				   add: aString;
 				   yourself);
 		  yourself
 ]
@@ -206,12 +159,4 @@ IllimaniAllocationProfilerUI >> layoutWhenThereIsNotData [
 IllimaniAllocationProfilerUI >> objectAllocationProfiler: aProfiler [
 
 	objectAllocationProfiler := aProfiler
-]
-
-{ #category : #actions }
-IllimaniAllocationProfilerUI >> toggleStartStopButtons [
-
-	isItProfiling := isItProfiling not.
-	startButton enabled: isItProfiling not.
-	stopButton enabled: isItProfiling
 ]

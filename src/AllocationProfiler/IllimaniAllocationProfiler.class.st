@@ -21,7 +21,7 @@ Class {
 { #category : #accessing }
 IllimaniAllocationProfiler class >> defaultProfilerHandlerClass [
 
-	^ MpColorAllocationProfilerHandler
+	^ MpMegaAllocationProfilerHandler
 ]
 
 { #category : #api }

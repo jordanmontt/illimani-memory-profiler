@@ -2,7 +2,7 @@
 I am a presenter class that shows basic statistics about the object allocations.
 "
 Class {
-	#name : #ObjectAllocationStatsPresenter,
+	#name : #AllocationStatisticsPresenter,
 	#superclass : #SpPresenter,
 	#instVars : [
 		'statsModel',
@@ -13,13 +13,13 @@ Class {
 }
 
 { #category : #api }
-ObjectAllocationStatsPresenter >> beEvaluatorForObject: anObject [
+AllocationStatisticsPresenter >> beEvaluatorForObject: anObject [
 
 	codeEvaluator beForObject: anObject
 ]
 
 { #category : #default }
-ObjectAllocationStatsPresenter >> convertTimeToAReadableString: aBlock [
+AllocationStatisticsPresenter >> convertTimeToAReadableString: aBlock [
 
 	| time |
 	time := [ self convertTimestampToSecondsString: aBlock value ]
@@ -29,14 +29,14 @@ ObjectAllocationStatsPresenter >> convertTimeToAReadableString: aBlock [
 ]
 
 { #category : #default }
-ObjectAllocationStatsPresenter >> convertTimestampToSecondsString: aDateAndTime [
+AllocationStatisticsPresenter >> convertTimestampToSecondsString: aDateAndTime [
 
 	^ ((aDateAndTime asNanoSeconds / (10 raisedTo: 9)) asFloat printShowingDecimalPlaces: 2)
 	  , ' seconds'
 ]
 
 { #category : #layout }
-ObjectAllocationStatsPresenter >> defaultLayout [
+AllocationStatisticsPresenter >> defaultLayout [
 
 	^ SpPanedLayout newTopToBottom
 		  positionOfSlider: 0.7;
@@ -46,7 +46,7 @@ ObjectAllocationStatsPresenter >> defaultLayout [
 ]
 
 { #category : #initialization }
-ObjectAllocationStatsPresenter >> initializePresenters [
+AllocationStatisticsPresenter >> initializePresenters [
 
 	codeEvaluator := self newCode
 		withoutLineNumbers;
@@ -56,25 +56,25 @@ ObjectAllocationStatsPresenter >> initializePresenters [
 ]
 
 { #category : #accessing }
-ObjectAllocationStatsPresenter >> numberOfClasses [
+AllocationStatisticsPresenter >> numberOfClasses [
 
 	^ statsModel numberOfClasses asString
 ]
 
 { #category : #accessing }
-ObjectAllocationStatsPresenter >> numberOfMethods [
+AllocationStatisticsPresenter >> numberOfMethods [
 
 	^ statsModel numberOfMethods asString
 ]
 
 { #category : #'accessing - model' }
-ObjectAllocationStatsPresenter >> setModelBeforeInitialization: aModel [
+AllocationStatisticsPresenter >> setModelBeforeInitialization: aModel [
 
 	statsModel := aModel
 ]
 
 { #category : #layout }
-ObjectAllocationStatsPresenter >> statsGridLayout [
+AllocationStatisticsPresenter >> statsGridLayout [
 
 	^ SpGridLayout new
 		  add: 'Total profiled time: ' at: 1 @ 1;
@@ -94,38 +94,38 @@ ObjectAllocationStatsPresenter >> statsGridLayout [
 ]
 
 { #category : #accessing }
-ObjectAllocationStatsPresenter >> timeDifferenceBetweenFirstAndLastAllocation [
+AllocationStatisticsPresenter >> timeDifferenceBetweenFirstAndLastAllocation [
 
 	^ self convertTimeToAReadableString: [
 		  statsModel timeDifferenceBetweenFirstAndLastAllocation ]
 ]
 
 { #category : #accessing }
-ObjectAllocationStatsPresenter >> totalAllocatedObjects [
+AllocationStatisticsPresenter >> totalAllocatedObjects [
 
 	^ statsModel totalAllocatedObjects asString
 ]
 
 { #category : #accessing }
-ObjectAllocationStatsPresenter >> totalProfiledTime [
+AllocationStatisticsPresenter >> totalProfiledTime [
 
 	^ totalProfiledTimeLabel
 ]
 
 { #category : #accessing }
-ObjectAllocationStatsPresenter >> totalProfiledTime: aTimeInSeconds [
+AllocationStatisticsPresenter >> totalProfiledTime: aTimeInSeconds [
 
 	totalProfiledTimeLabel label: (self convertTimestampToSecondsString: aTimeInSeconds)
 ]
 
 { #category : #accessing }
-ObjectAllocationStatsPresenter >> totalProfiledTimeBlock: aBlock [
+AllocationStatisticsPresenter >> totalProfiledTimeBlock: aBlock [
 
 	totalProfiledTimeLabel label: (self convertTimeToAReadableString: aBlock)
 ]
 
 { #category : #accessing }
-ObjectAllocationStatsPresenter >> totalUniqueAllocatedObjects [
+AllocationStatisticsPresenter >> totalUniqueAllocatedObjects [
 
 	^ statsModel totalUniqueAllocatedObjects asString
 ]
