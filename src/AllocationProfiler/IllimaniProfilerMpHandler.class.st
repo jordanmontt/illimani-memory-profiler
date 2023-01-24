@@ -1,7 +1,7 @@
 "
 I am a class that defines the logic to only registed an specific type of object. I am a subclass of MpHandler, which is required by the method proxy framework. I use the method proxy framework to capture the object allocations.
 
-You need to subclass me and define the method `classesToRegister` with a list of classes. Each time that a method is allocated, I will be called and if the object class is in the list of `classesToRegister` I will register the allocation.
+Please define my `classesToRegister` variable with the classes you want to capture or if you want to capture all use the message `captureAllObjects`
 "
 Class {
 	#name : #IllimaniProfilerMpHandler,

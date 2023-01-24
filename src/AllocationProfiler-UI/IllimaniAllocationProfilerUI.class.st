@@ -1,3 +1,6 @@
+"
+I am a user interface for my profiling. My implementation is independent from the one of my profiler.
+"
 Class {
 	#name : #IllimaniAllocationProfilerUI,
 	#superclass : #SpPresenter,
