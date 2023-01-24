@@ -18,10 +18,20 @@ ObjectAllocationStatsPresenter >> beEvaluatorForObject: anObject [
 	codeEvaluator beForObject: anObject
 ]
 
-{ #category : #accessing }
-ObjectAllocationStatsPresenter >> convertTimestampToSecondsString: aTimestamp [
+{ #category : #default }
+ObjectAllocationStatsPresenter >> convertTimeToAReadableString: aBlock [
 
-	^ ((aTimestamp asNanoSeconds / (10 raisedTo: 9)) asFloat printShowingDecimalPlaces: 2)
+	| time |
+	time := [ self convertTimestampToSecondsString: aBlock value ]
+		on: Exception
+		do: [ :e | 'No time available for the moment.' ].
+	^ time
+]
+
+{ #category : #default }
+ObjectAllocationStatsPresenter >> convertTimestampToSecondsString: aDateAndTime [
+
+	^ ((aDateAndTime asNanoSeconds / (10 raisedTo: 9)) asFloat printShowingDecimalPlaces: 2)
 	  , ' seconds'
 ]
 
@@ -86,9 +96,8 @@ ObjectAllocationStatsPresenter >> statsGridLayout [
 { #category : #accessing }
 ObjectAllocationStatsPresenter >> timeDifferenceBetweenFirstAndLastAllocation [
 
-	| time |
-	time := statsModel timeDifferenceBetweenFirstAndLastAllocation.
-	^ time ifNil: [ 'No time' ] ifNotNil: [ self convertTimestampToSecondsString: time ]
+	^ self convertTimeToAReadableString: [
+		  statsModel timeDifferenceBetweenFirstAndLastAllocation ]
 ]
 
 { #category : #accessing }
@@ -107,6 +116,12 @@ ObjectAllocationStatsPresenter >> totalProfiledTime [
 ObjectAllocationStatsPresenter >> totalProfiledTime: aTimeInSeconds [
 
 	totalProfiledTimeLabel label: (self convertTimestampToSecondsString: aTimeInSeconds)
+]
+
+{ #category : #accessing }
+ObjectAllocationStatsPresenter >> totalProfiledTimeBlock: aBlock [
+
+	totalProfiledTimeLabel label: (self convertTimeToAReadableString: aBlock)
 ]
 
 { #category : #accessing }

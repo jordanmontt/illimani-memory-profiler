@@ -87,7 +87,7 @@ AllocationStatistics >> occurrencesBy: aBlock [
 { #category : #statistics }
 AllocationStatistics >> timeDifferenceBetweenFirstAndLastAllocation [
 
-	^ allocations ifEmpty: [ nil ] ifNotEmpty: [ allocations last timestamp - allocations first timestamp ]
+	^ allocations last timestamp - allocations first timestamp
 ]
 
 { #category : #statistics }

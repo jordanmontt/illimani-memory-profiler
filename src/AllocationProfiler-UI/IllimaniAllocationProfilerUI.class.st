@@ -92,7 +92,7 @@ IllimaniAllocationProfilerUI >> initializeGeneralStats [
 
 	^ (ObjectAllocationStatsPresenter on: objectAllocationProfiler stats)
 		  beEvaluatorForObject: objectAllocationProfiler;
-		  totalProfiledTime: objectAllocationProfiler totalProfiledTime;
+		  totalProfiledTimeBlock: [ objectAllocationProfiler totalProfiledTime ];
 		  yourself
 ]
 
@@ -197,7 +197,7 @@ IllimaniAllocationProfilerUI >> layoutWhenThereIsNotData [
 		  add: (SpBoxLayout newTopToBottom
 				   vAlignCenter;
 				   hAlignCenter;
-				   add: 'No data to display. Start profiling and then click the refresh button.';
+				   add: 'No data to display.';
 				   yourself);
 		  yourself
 ]
