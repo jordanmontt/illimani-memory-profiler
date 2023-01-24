@@ -49,20 +49,20 @@ IllimaniProfilerMpHandler >> captureAllObjects [
 
 	captureAllObjects := true.
 	"It is necessary to put an empty array when wanting to capture all object allocations"
-	self classesToRegister: {  }
+	self classesToCapture: {  }
+]
+
+{ #category : #accessing }
+IllimaniProfilerMpHandler >> classesToCapture: aCollection [
+
+	classesToRegister := aCollection.
+	self initializeClassesToAvoidInContextSearch
 ]
 
 { #category : #accessing }
 IllimaniProfilerMpHandler >> classesToRegister [
 
 	^ classesToRegister
-]
-
-{ #category : #accessing }
-IllimaniProfilerMpHandler >> classesToRegister: aCollection [
-
-	classesToRegister := aCollection.
-	self initializeClassesToAvoidInContextSearch
 ]
 
 { #category : #api }

@@ -88,9 +88,9 @@ IllimaniAllocationProfiler >> captureAllObjects [
 ]
 
 { #category : #api }
-IllimaniAllocationProfiler >> classesToRegister: aCollection [
+IllimaniAllocationProfiler >> classesToCapture: aCollection [
 
-	profilerHandler classesToRegister: aCollection
+	profilerHandler classesToCapture: aCollection
 ]
 
 { #category : #evaluating }
