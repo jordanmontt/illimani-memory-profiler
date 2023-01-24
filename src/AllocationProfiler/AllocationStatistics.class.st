@@ -85,6 +85,12 @@ AllocationStatistics >> occurrencesBy: aBlock [
 ]
 
 { #category : #statistics }
+AllocationStatistics >> timeDifferenceBetweenFirstAndLastAllocation [
+
+	^ allocations ifEmpty: [ nil ] ifNotEmpty: [ allocations last timestamp - allocations first timestamp ]
+]
+
+{ #category : #statistics }
 AllocationStatistics >> topNAllocationsByClasses: n [
 
 	| allocationsOrderedByClass |
@@ -104,12 +110,6 @@ AllocationStatistics >> topNAllocationsByMethods: n [
 AllocationStatistics >> totalAllocatedObjects [
 
 	^ allocations size
-]
-
-{ #category : #statistics }
-AllocationStatistics >> totalProfiledTime [
-
-	^ allocations ifEmpty: [ nil ] ifNotEmpty: [ allocations last timestamp - allocations first timestamp ]
 ]
 
 { #category : #statistics }

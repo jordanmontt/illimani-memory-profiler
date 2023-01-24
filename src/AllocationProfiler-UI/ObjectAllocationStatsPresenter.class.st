@@ -6,7 +6,8 @@ Class {
 	#superclass : #SpPresenter,
 	#instVars : [
 		'statsModel',
-		'codeEvaluator'
+		'codeEvaluator',
+		'totalProfiledTimeLabel'
 	],
 	#category : #'AllocationProfiler-UI'
 }
@@ -15,6 +16,13 @@ Class {
 ObjectAllocationStatsPresenter >> beEvaluatorForObject: anObject [
 
 	codeEvaluator beForObject: anObject
+]
+
+{ #category : #accessing }
+ObjectAllocationStatsPresenter >> convertTimestampToSecondsString: aTimestamp [
+
+	^ ((aTimestamp asNanoSeconds / (10 raisedTo: 9)) asFloat printShowingDecimalPlaces: 2)
+	  , ' seconds'
 ]
 
 { #category : #layout }
@@ -33,7 +41,8 @@ ObjectAllocationStatsPresenter >> initializePresenters [
 	codeEvaluator := self newCode
 		withoutLineNumbers;
 		text: 'self objectAllocations';
-		yourself
+		yourself.
+	totalProfiledTimeLabel := self newLabel
 ]
 
 { #category : #accessing }
@@ -60,16 +69,26 @@ ObjectAllocationStatsPresenter >> statsGridLayout [
 	^ SpGridLayout new
 		  add: 'Total profiled time: ' at: 1 @ 1;
 		  add: self totalProfiledTime at: 2 @ 1 span: 2 @ 1;
-		  add: 'Classes that allocate objects: ' at: 1 @ 2;
-		  add: self numberOfClasses at: 2 @ 2 span: 2 @ 1;
-		  add: 'Methods that allocate objects: ' at: 1 @ 3;
-		  add: self numberOfMethods at: 2 @ 3 span: 2 @ 1;
-		  add: 'Total allocated objects: ' at: 1 @ 4;
-		  add: self totalAllocatedObjects at: 2 @ 4 span: 2 @ 1;
-		  add: 'Total unique allocated objects: ' at: 1 @ 5;
-		  add: self totalUniqueAllocatedObjects at: 2 @ 5 span: 2 @ 1;
+		  add: 'Time difference between first and last allocation: ' at: 1 @ 2;
+		  add: self timeDifferenceBetweenFirstAndLastAllocation at: 2 @ 2 span: 2 @ 1;
+		  add: 'Classes that allocate objects: ' at: 1 @ 3;
+		  add: self numberOfClasses at: 2 @ 3 span: 2 @ 1;
+		  add: 'Methods that allocate objects: ' at: 1 @ 4;
+		  add: self numberOfMethods at: 2 @ 4 span: 2 @ 1;
+		  add: 'Total allocated objects: ' at: 1 @ 5;
+		  add: self totalAllocatedObjects at: 2 @ 5 span: 2 @ 1;
+		  add: 'Total unique allocated objects: ' at: 1 @ 6;
+		  add: self totalUniqueAllocatedObjects at: 2 @ 6 span: 2 @ 1;
 		  beColumnNotHomogeneous;
 		  yourself
+]
+
+{ #category : #accessing }
+ObjectAllocationStatsPresenter >> timeDifferenceBetweenFirstAndLastAllocation [
+
+	| time |
+	time := statsModel timeDifferenceBetweenFirstAndLastAllocation.
+	^ time ifNil: [ 'No time' ] ifNotNil: [ self convertTimestampToSecondsString: time ]
 ]
 
 { #category : #accessing }
@@ -81,11 +100,13 @@ ObjectAllocationStatsPresenter >> totalAllocatedObjects [
 { #category : #accessing }
 ObjectAllocationStatsPresenter >> totalProfiledTime [
 
-	| time |
-	time := statsModel totalProfiledTime.
-	^ time
-		ifNil: [ 'No time' ]
-		ifNotNil: [ ((time asNanoSeconds / (10 raisedTo: 9)) asFloat printShowingDecimalPlaces: 2) , ' seconds' ]
+	^ totalProfiledTimeLabel
+]
+
+{ #category : #accessing }
+ObjectAllocationStatsPresenter >> totalProfiledTime: aTimeInSeconds [
+
+	totalProfiledTimeLabel label: (self convertTimestampToSecondsString: aTimeInSeconds)
 ]
 
 { #category : #accessing }

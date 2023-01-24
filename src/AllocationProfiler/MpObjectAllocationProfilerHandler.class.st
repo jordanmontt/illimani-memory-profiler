@@ -51,6 +51,12 @@ MpObjectAllocationProfilerHandler >> classesToRegister [
 ]
 
 { #category : #evaluating }
+MpObjectAllocationProfilerHandler >> cleanAllocations [
+
+	objectAllocations := OrderedCollection new
+]
+
+{ #category : #evaluating }
 MpObjectAllocationProfilerHandler >> contextThatAllocatesTheObject: aContext [
 
 	"(classToAvoid includes: aContext sender methodClass) ifFalse: [ 
