@@ -55,11 +55,9 @@ IllimaniAllocationProfilerUI >> controlButtonsLayout [
 { #category : #layout }
 IllimaniAllocationProfilerUI >> defaultLayout [
 
-	objectAllocationProfiler ifNil: [
-		^ self layoutWhenThereIsNotDataWithMessage: 'No Profiler backend set.' ].
-	^ objectAllocationProfiler objectAllocations
-		ifEmpty: [ self layoutWhenThereIsNotDataWithMessage: 'No data to display.' ]
-		ifNotEmpty: [ self layoutWhenThereIsData ]
+	^ (objectAllocationProfiler isNil or: [ objectAllocationProfiler isProfilingStarted not ])
+		  ifTrue: [ self layoutWhenThereIsNotDataWithMessage: 'Profiler not set or not it didn''t start to profile.' ]
+		  ifFalse: [ self layoutWhenThereIsAProfiler ]
 ]
 
 { #category : #'initialization - lazy presenters' }
@@ -110,6 +108,24 @@ IllimaniAllocationProfilerUI >> initializeNotebook [
 IllimaniAllocationProfilerUI >> initializePresenters [
 
 	self initializeToolbar
+]
+
+{ #category : #'initialization - lazy presenters' }
+IllimaniAllocationProfilerUI >> initializeStatsAndEvaluatorPresenter [
+
+	| statsAndEvaluatorLayout statsPresenter |
+	statsPresenter := (AllocationStatisticsPresenter on: objectAllocationProfiler stats)
+		totalProfiledTimeBlock: [ objectAllocationProfiler totalProfiledTime ];
+		yourself.
+	statsAndEvaluatorLayout := SpPanedLayout newTopToBottom
+		positionOfSlider: 0.7;
+		add: statsPresenter;
+		add: self codeEvaluator;
+		yourself.
+
+	statsAndEvaluatorPresenter := SpPresenter new
+		layout: statsAndEvaluatorLayout ;
+		yourself
 ]
 
 { #category : #initialization }
