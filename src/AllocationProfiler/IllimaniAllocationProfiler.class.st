@@ -13,17 +13,18 @@ Class {
 		'proxyBasicNewKeyword',
 		'profilerHandler',
 		'beginningOfProfilingTime',
-		'endOfProfilingTime'
+		'endOfProfilingTime',
+		'statisticsModel'
 	],
 	#category : #AllocationProfiler
 }
 
 { #category : #api }
-IllimaniAllocationProfiler class >> profileFor: seconds [
+IllimaniAllocationProfiler class >> profileFor: aDuration [
 
 	| profiler |
 	profiler := self new.
-	[ profiler profileFor: seconds ] fork.
+	[ profiler profileFor: aDuration ] fork.
 	^ profiler
 ]
 
@@ -43,6 +44,12 @@ IllimaniAllocationProfiler >> beginningOfProfilingTime [
 IllimaniAllocationProfiler >> captureAllObjects [
 
 	profilerHandler captureAllObjects
+]
+
+{ #category : #api }
+IllimaniAllocationProfiler >> classesToRegister: aCollection [
+
+	profilerHandler classesToRegister: aCollection
 ]
 
 { #category : #evaluating }
@@ -70,6 +77,7 @@ IllimaniAllocationProfiler >> initialize [
 
 	super initialize.
 	profilerHandler := IllimaniProfilerMpHandler new.
+	self initializeStatisticsModel.
 	self initializeMethodProxies
 ]
 
@@ -78,6 +86,12 @@ IllimaniAllocationProfiler >> initializeMethodProxies [
 
 	proxyBasicNew := MpMethodProxy onMethod: Behavior >> #basicNew handler: profilerHandler.
 	proxyBasicNewKeyword := MpMethodProxy onMethod: Behavior >> #basicNew: handler: profilerHandler
+]
+
+{ #category : #initialization }
+IllimaniAllocationProfiler >> initializeStatisticsModel [
+
+	statisticsModel := AllocationStatistics allocations: profilerHandler objectAllocations
 ]
 
 { #category : #testing }
@@ -99,12 +113,12 @@ IllimaniAllocationProfiler >> objectAllocations [
 ]
 
 { #category : #api }
-IllimaniAllocationProfiler >> profileFor: seconds [
+IllimaniAllocationProfiler >> profileFor: aDuration [
 	"Done with a fork because we don't want to block the ui thread since it allocates objects. "
 
 	self startProfiling.
 	[
-	(Delay forSeconds: seconds) wait.
+	(Delay forDuration: aDuration) wait.
 	self stopProfiling ] fork
 ]
 
@@ -133,7 +147,7 @@ IllimaniAllocationProfiler >> startProfiling [
 { #category : #accessing }
 IllimaniAllocationProfiler >> stats [
 
-	^ AllocationStatistics allocations: profilerHandler objectAllocations
+	^ statisticsModel
 ]
 
 { #category : #evaluating }
@@ -141,7 +155,8 @@ IllimaniAllocationProfiler >> stopProfiling [
 
 	proxyBasicNew uninstall.
 	proxyBasicNewKeyword uninstall.
-	endOfProfilingTime := DateAndTime now
+	endOfProfilingTime := DateAndTime now.
+	self initializeStatisticsModel
 ]
 
 { #category : #accessing }

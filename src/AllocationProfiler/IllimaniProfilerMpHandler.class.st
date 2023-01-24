@@ -47,7 +47,9 @@ IllimaniProfilerMpHandler >> allocationHolderForObject: returnValue [
 IllimaniProfilerMpHandler >> captureAllObjects [
 	"When this turned to true I will capture all the allocations of all the objects"
 
-	captureAllObjects := true
+	captureAllObjects := true.
+	"It is necessary to put an empty array when wanting to capture all object allocations"
+	self classesToRegister: {  }
 ]
 
 { #category : #accessing }
@@ -121,7 +123,7 @@ IllimaniProfilerMpHandler >> initialize [
 	super initialize.
 	self doNotCopyExecutionStack.
 	self doNotCaptureAllObjects.
-	classesToRegister := { Color }.
+	classesToRegister := { }.
 	objectAllocations := OrderedCollection new.
 	self initializeClassesToAvoidInContextSearch
 ]
