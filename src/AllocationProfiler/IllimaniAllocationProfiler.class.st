@@ -75,21 +75,6 @@ Class {
 	#category : #AllocationProfiler
 }
 
-{ #category : #api }
-IllimaniAllocationProfiler class >> profileFor: aDuration [
-
-	| profiler |
-	profiler := self new.
-	[ profiler profileFor: aDuration ] fork.
-	^ profiler
-]
-
-{ #category : #api }
-IllimaniAllocationProfiler class >> profileOn: aBlock [
-
-	^ self new profileOn: aBlock
-]
-
 { #category : #accessing }
 IllimaniAllocationProfiler >> beginningOfProfilingTime [
 
