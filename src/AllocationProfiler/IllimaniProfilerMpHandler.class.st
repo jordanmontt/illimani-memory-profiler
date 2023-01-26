@@ -36,8 +36,8 @@ IllimaniProfilerMpHandler >> allocationHolderForObject: returnValue [
 	copyExecutionStack ifTrue: [ allocationInformationHolder context: context copyStack ].
 
 	allocationInformationHolder
-		allocatorClass: context methodClass;
-		allocatorMethodName: context compiledCode method name;
+		allocatorClass: context receiver class;
+		allocatorMethodName: (context receiver class name asString , ' ' , context compiledCode method selector asString);
 		allocatedObject: returnValue;
 		timestamp: timeNow.
 	^ allocationInformationHolder
