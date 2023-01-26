@@ -17,16 +17,52 @@ Metacello new
   load.
 ```
 
+## Quick Getting Started
+
+Example 1:
+
+```st
+IllimaniAllocationProfiler new
+	classesToCapture: { Color };
+	profileFor: 3 seconds;
+	open
+```
+
+Example 2:
+
+```st
+IllimaniAllocationProfiler new
+	captureAllObjects;
+	copyExecutionStack;
+	profileOn: [ 1000 timesRepeat: [ SpPresenter new ] ];
+	open
+```
+
 ## How to use it
 
-Open the tool with the message `IllimaniAllocatorProfiler open`.
+To use this tool you need to set the classes that you want to capture or indicate that you want to capture all objects. You can do that with the messages `classesToCapture: aCollection` or `captureAllObjects`. It is also possible to copy the execution stack of *each* of the allocated objects with the message `copyExecutionStack`. Keep in mind that it there is a lot of allocations going on copying the stack can cause the image to grow rapidly and making the image slow.
 
-![](https://i.imgur.com/6uzowKd.gif)
+You can decide both to profile a given method block or just watching the activity of the image for some time.
+
+```st
+profiler profileOn: [ anObject performSomeAction ].
+
+profiler profileFor: 2 seconds
+```
+
+You can open the ui at any time with the message `open`
+
+```
+profiler open
+```
 
 ## Implementation
 
-Illimani relies on [method proxies](https://github.com/pharo-contributions/MethodProxies) library to capture the allocations. It is a top layer of method proxies that eases the use for the allocation capturing. The UI is completly independent of the profiler. It can be used without it. You will have access to all allocations and to some basic statistics.
+Illimani relies on [method proxies](https://github.com/pharo-contributions/MethodProxies) library to capture the allocations. It is a top layer of method proxies that eases the use for the allocation capturing. The UI is completly independent of the profiler. It can be used without it. You will have access to all allocations and to the same statistics.
 
-## How to profile your specific type of object
+This is a prototype version
 
-You need to create a sublclass of `MpObjectAllocationProfilerHandler` and define the instance side method `classesToRegister` with the class.es that you want to capture. This method should return an array. And you also need to define the class side method `prettyName` with a name of your preference. Then the tool will automatically add it.
+Observations:
+
+- I have see that for a lot of allocations the statistics and the roassal presenters take a lot of time to be calculated. It is need to improve this. But it is not blocking for releasing a first version.
+- When capturing all the object I saw that the class `Behavior` is by far the one that allocates the most objects. Do we need to take into account the sender instead?
