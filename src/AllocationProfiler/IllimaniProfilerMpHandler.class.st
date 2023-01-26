@@ -8,10 +8,10 @@ Class {
 	#superclass : #MpHandler,
 	#instVars : [
 		'objectAllocations',
-		'classesToRegister',
 		'classesToAvoidInTheContextSearch',
 		'captureAllObjects',
-		'copyExecutionStack'
+		'copyExecutionStack',
+		'classesToCapture'
 	],
 	#category : #AllocationProfiler
 }
@@ -53,16 +53,16 @@ IllimaniProfilerMpHandler >> captureAllObjects [
 ]
 
 { #category : #accessing }
-IllimaniProfilerMpHandler >> classesToCapture: aCollection [
+IllimaniProfilerMpHandler >> classesToCapture [
 
-	classesToRegister := aCollection.
-	self initializeClassesToAvoidInContextSearch
+	^ classesToCapture
 ]
 
 { #category : #accessing }
-IllimaniProfilerMpHandler >> classesToRegister [
+IllimaniProfilerMpHandler >> classesToCapture: aCollection [
 
-	^ classesToRegister
+	classesToCapture := aCollection.
+	self initializeClassesToAvoidInContextSearch
 ]
 
 { #category : #api }
@@ -123,7 +123,7 @@ IllimaniProfilerMpHandler >> initialize [
 	super initialize.
 	self doNotCopyExecutionStack.
 	self doNotCaptureAllObjects.
-	classesToRegister := { }.
+	classesToCapture := { }.
 	objectAllocations := OrderedCollection new.
 	self initializeClassesToAvoidInContextSearch
 ]
@@ -131,9 +131,9 @@ IllimaniProfilerMpHandler >> initialize [
 { #category : #initialization }
 IllimaniProfilerMpHandler >> initializeClassesToAvoidInContextSearch [
 
-	classesToAvoidInTheContextSearch := self defaultClassesToAvoidInTheContextSearch , classesToRegister.
+	classesToAvoidInTheContextSearch := self defaultClassesToAvoidInTheContextSearch , classesToCapture.
 	classesToAvoidInTheContextSearch := classesToAvoidInTheContextSearch ,
-		(classesToRegister collect: [ :aClass | aClass class ])
+		(classesToCapture collect: [ :aClass | aClass class ])
 ]
 
 { #category : #accessing }
@@ -145,5 +145,5 @@ IllimaniProfilerMpHandler >> objectAllocations [
 { #category : #testing }
 IllimaniProfilerMpHandler >> shouldICaptureTheObject: returnValue [
 
-	^ classesToRegister includes: returnValue class
+	^ classesToCapture includes: returnValue class
 ]
