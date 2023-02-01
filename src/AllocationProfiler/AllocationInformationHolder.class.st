@@ -10,7 +10,8 @@ Class {
 		'allocatedObject',
 		'allocatedObjectHash',
 		'allocatorClass',
-		'allocatorMethodName'
+		'allocatorMethodName',
+		'allocatedObjectClass'
 	],
 	#category : #AllocationProfiler
 }
@@ -44,6 +45,18 @@ AllocationInformationHolder >> allocatedObject [
 AllocationInformationHolder >> allocatedObject: anObject [
 
 	allocatedObject := anObject
+]
+
+{ #category : #accessing }
+AllocationInformationHolder >> allocatedObjectClass [
+
+	^ allocatedObjectClass
+]
+
+{ #category : #accessing }
+AllocationInformationHolder >> allocatedObjectClass: anObject [
+
+	allocatedObjectClass := anObject
 ]
 
 { #category : #accessing }
