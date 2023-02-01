@@ -138,13 +138,13 @@ IllimaniAllocationProfiler >> initializeStatisticsModel [
 { #category : #testing }
 IllimaniAllocationProfiler >> isProfilingFinished [
 
-	^ endOfProfilingTime isNil not
+	^ endOfProfilingTime isNotNil
 ]
 
 { #category : #testing }
 IllimaniAllocationProfiler >> isProfilingStarted [
 
-	^ beginningOfProfilingTime isNil not
+	^ beginningOfProfilingTime isNotNil
 ]
 
 { #category : #accessing }

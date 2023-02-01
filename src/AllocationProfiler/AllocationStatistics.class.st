@@ -113,7 +113,7 @@ AllocationStatistics >> totalAllocatedObjects [
 ]
 
 { #category : #statistics }
-AllocationStatistics >> totalUniqueAllocatedObjects [
+AllocationStatistics >> totalEqualAllocatedObjects [
 
 	^ (allocations collect: [ :a | a allocatedObject ]) asSet size
 ]

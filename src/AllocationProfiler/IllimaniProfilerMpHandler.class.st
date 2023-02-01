@@ -113,8 +113,8 @@ IllimaniProfilerMpHandler >> handleAllocationOfObject: newlyAllocatedObject [
 	allocationInformationHolder
 		allocatorClass: filteredContext receiver class;
 		allocatorMethodName: (filteredContext receiver class name asString , '>>#' , filteredContext compiledCode method selector asString);
-		"allocatedObjectHash: newlyAllocatedObject hash;"
-		allocatedObject: newlyAllocatedObject;
+		"allocatedObjectHash: newlyAllocatedObject hash;
+		allocatedObject: newlyAllocatedObject;"
 		timestamp: timeNow.
 
 	objectAllocations add: allocationInformationHolder

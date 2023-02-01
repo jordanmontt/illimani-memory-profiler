@@ -74,8 +74,8 @@ AllocationStatisticsPresenter >> statsGridLayout [
 		  add: self numberOfMethods at: 2 @ 4 span: 2 @ 1;
 		  add: 'Total allocated objects: ' at: 1 @ 5;
 		  add: self totalAllocatedObjects at: 2 @ 5 span: 2 @ 1;
-		  add: 'Total unique allocated objects: ' at: 1 @ 6;
-		  add: self totalUniqueAllocatedObjects at: 2 @ 6 span: 2 @ 1;
+		  add: 'Total equal allocated objects: ' at: 1 @ 6;
+		  add: self totalEqualAllocatedObjects at: 2 @ 6 span: 2 @ 1;
 		  beColumnNotHomogeneous;
 		  yourself
 ]
@@ -94,6 +94,12 @@ AllocationStatisticsPresenter >> totalAllocatedObjects [
 ]
 
 { #category : #accessing }
+AllocationStatisticsPresenter >> totalEqualAllocatedObjects [
+
+	^ statsModel totalEqualAllocatedObjects asString
+]
+
+{ #category : #accessing }
 AllocationStatisticsPresenter >> totalProfiledTime [
 
 	^ totalProfiledTimeLabel
@@ -109,10 +115,4 @@ AllocationStatisticsPresenter >> totalProfiledTime: aTimeInSeconds [
 AllocationStatisticsPresenter >> totalProfiledTimeBlock: aBlock [
 
 	totalProfiledTimeLabel label: (self convertTimeToAReadableString: aBlock)
-]
-
-{ #category : #accessing }
-AllocationStatisticsPresenter >> totalUniqueAllocatedObjects [
-
-	^ statsModel totalUniqueAllocatedObjects asString
 ]
