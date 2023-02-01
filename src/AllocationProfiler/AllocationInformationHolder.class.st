@@ -8,6 +8,7 @@ Class {
 		'context',
 		'timestamp',
 		'allocatedObject',
+		'allocatedObjectHash',
 		'allocatorClass',
 		'allocatorMethodName'
 	],
@@ -43,6 +44,18 @@ AllocationInformationHolder >> allocatedObject [
 AllocationInformationHolder >> allocatedObject: anObject [
 
 	allocatedObject := anObject
+]
+
+{ #category : #accessing }
+AllocationInformationHolder >> allocatedObjectHash [
+
+	^ allocatedObjectHash
+]
+
+{ #category : #accessing }
+AllocationInformationHolder >> allocatedObjectHash: anObject [
+
+	allocatedObjectHash := anObject
 ]
 
 { #category : #accessing }

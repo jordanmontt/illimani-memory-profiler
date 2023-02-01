@@ -20,27 +20,10 @@ Class {
 IllimaniProfilerMpHandler >> afterExecutionWithReceiver: receiver arguments: arguments returnValue: returnValue [
 
 	captureAllObjects
-		ifTrue: [ objectAllocations add: (self allocationHolderForObject: returnValue) ]
+		ifTrue: [ self handleAllocationOfObject: returnValue ]
 		ifFalse: [ (self shouldICaptureTheObject: returnValue)
-			ifTrue: [ objectAllocations add: (self allocationHolderForObject: returnValue) ] ].
+			ifTrue: [ self handleAllocationOfObject: returnValue ] ].
 	^ returnValue
-]
-
-{ #category : #evaluating }
-IllimaniProfilerMpHandler >> allocationHolderForObject: returnValue [
-
-	| context timeNow allocationInformationHolder |
-	timeNow := DateAndTime now.
-	allocationInformationHolder := AllocationInformationHolder new.
-	context := self contextThatAllocatedTheObject: thisContext.
-	copyExecutionStack ifTrue: [ allocationInformationHolder context: context copyStack ].
-
-	allocationInformationHolder
-		allocatorClass: context receiver class;
-		allocatorMethodName: (context receiver class name asString , ' ' , context compiledCode method selector asString);
-		allocatedObject: returnValue;
-		timestamp: timeNow.
-	^ allocationInformationHolder
 ]
 
 { #category : #api }
@@ -61,8 +44,7 @@ IllimaniProfilerMpHandler >> classesToCapture [
 { #category : #accessing }
 IllimaniProfilerMpHandler >> classesToCapture: aCollection [
 
-	classesToCapture := aCollection.
-	self initializeClassesToAvoidInContextSearch
+	classesToCapture := aCollection
 ]
 
 { #category : #api }
@@ -72,12 +54,15 @@ IllimaniProfilerMpHandler >> cleanAllocations [
 ]
 
 { #category : #evaluating }
-IllimaniProfilerMpHandler >> contextThatAllocatedTheObject: aContext [
+IllimaniProfilerMpHandler >> contextThatAllocatedTheObject: aContext forClass: aClass [
 
 	| sender |
 	sender := aContext sender.
-	[ classesToAvoidInTheContextSearch includes: sender methodClass ] whileTrue: [
-		sender := sender sender ].
+	[
+	sender receiver class = aClass or: [
+		sender receiver class = aClass class or: [
+			classesToAvoidInTheContextSearch includes: sender receiver class ] ] ]
+		whileTrue: [ sender := sender sender ].
 	^ sender
 ]
 
@@ -96,7 +81,6 @@ IllimaniProfilerMpHandler >> defaultClassesToAvoidInTheContextSearch [
 
 	^{
 		IllimaniProfilerMpHandler.
-		self class.
 		MpMethodProxy.
 		BlockClosure.
 		FullBlockClosure.
@@ -117,6 +101,25 @@ IllimaniProfilerMpHandler >> doNotCopyExecutionStack [
 	copyExecutionStack := false
 ]
 
+{ #category : #evaluating }
+IllimaniProfilerMpHandler >> handleAllocationOfObject: newlyAllocatedObject [
+
+	| filteredContext timeNow allocationInformationHolder |
+	timeNow := DateAndTime now.
+	allocationInformationHolder := AllocationInformationHolder new.
+	filteredContext := self contextThatAllocatedTheObject: thisContext forClass: newlyAllocatedObject class.
+	copyExecutionStack ifTrue: [ allocationInformationHolder context: filteredContext copyStack ].
+
+	allocationInformationHolder
+		allocatorClass: filteredContext receiver class;
+		allocatorMethodName: (filteredContext receiver class name asString , '>>#' , filteredContext compiledCode method selector asString);
+		"allocatedObjectHash: newlyAllocatedObject hash;"
+		allocatedObject: newlyAllocatedObject;
+		timestamp: timeNow.
+
+	objectAllocations add: allocationInformationHolder
+]
+
 { #category : #initialization }
 IllimaniProfilerMpHandler >> initialize [
 
@@ -131,9 +134,8 @@ IllimaniProfilerMpHandler >> initialize [
 { #category : #initialization }
 IllimaniProfilerMpHandler >> initializeClassesToAvoidInContextSearch [
 
-	classesToAvoidInTheContextSearch := self defaultClassesToAvoidInTheContextSearch , classesToCapture.
-	classesToAvoidInTheContextSearch := classesToAvoidInTheContextSearch ,
-		(classesToCapture collect: [ :aClass | aClass class ])
+	classesToAvoidInTheContextSearch := self defaultClassesToAvoidInTheContextSearch ,
+		(self defaultClassesToAvoidInTheContextSearch collect: [ :aClass | aClass class ])
 ]
 
 { #category : #accessing }
