@@ -14,7 +14,8 @@ Class {
 		'codeEvaluator',
 		'statsAndEvaluatorPresenter',
 		'topClassesPresenter',
-		'topMethodsPresenter'
+		'topMethodsPresenter',
+		'heatMapPresenter'
 	],
 	#category : #'AllocationProfiler-UI'
 }
@@ -63,6 +64,13 @@ IllimaniAllocationProfilerUI >> defaultLayout [
 		  ifFalse: [ self layoutWhenThereIsAProfiler ]
 ]
 
+{ #category : #'accessing - lazy' }
+IllimaniAllocationProfilerUI >> heatMapPresenter [
+
+	heatMapPresenter ifNil: [ self initializeHeatMapPresenter ].
+	^ heatMapPresenter
+]
+
 { #category : #'initialization - lazy presenters' }
 IllimaniAllocationProfilerUI >> initializeAllocatedObjectsPerSecond [
 
@@ -93,6 +101,16 @@ IllimaniAllocationProfilerUI >> initializeCodeEvaluator [
 ]
 
 { #category : #'initialization - lazy presenters' }
+IllimaniAllocationProfilerUI >> initializeHeatMapPresenter [
+
+	heatMapPresenter := SpRoassalPresenter new
+		canvas: (AllocationVisualizations new
+			statsModel: objectAllocationProfiler stats;
+			dependencyStructuralMatrixHeatMapCanvas);
+		yourself
+]
+
+{ #category : #'initialization - lazy presenters' }
 IllimaniAllocationProfilerUI >> initializeNotebook [
 
 	notebookPresenter := self newNotebook
@@ -103,6 +121,7 @@ IllimaniAllocationProfilerUI >> initializeNotebook [
 		provider: [ self allocatedObjectsPerSecondPerClass ];
 		addPageTitle: 'Top Allocator Classes' provider: [ self topClassesPresenter ];
 		addPageTitle: 'Top Allocator Methods' provider: [ self topMethodsPresenter ];
+		addPageTitle: 'Heat Map' provider: [ self heatMapPresenter ];
 		addPageTitle: 'Code Evaluator' provider: [ self codeEvaluator ];
 		yourself
 ]
