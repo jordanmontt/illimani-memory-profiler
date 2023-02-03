@@ -13,7 +13,7 @@ Class {
 		'allocatorMethodName',
 		'allocatedObjectClass'
 	],
-	#category : #AllocationProfiler
+	#category : #'AllocationProfiler-Data-Structures'
 }
 
 { #category : #'instance creation' }

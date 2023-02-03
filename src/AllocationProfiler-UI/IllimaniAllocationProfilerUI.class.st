@@ -67,7 +67,7 @@ IllimaniAllocationProfilerUI >> defaultLayout [
 { #category : #'accessing - lazy' }
 IllimaniAllocationProfilerUI >> heatMapPresenter [
 
-	heatMapPresenter ifNil: [ self initializeHeatMapPresenter ].
+	heatMapPresenter ifNil: [ self initializeHeatmapPresenter ].
 	^ heatMapPresenter
 ]
 
@@ -101,12 +101,12 @@ IllimaniAllocationProfilerUI >> initializeCodeEvaluator [
 ]
 
 { #category : #'initialization - lazy presenters' }
-IllimaniAllocationProfilerUI >> initializeHeatMapPresenter [
+IllimaniAllocationProfilerUI >> initializeHeatmapPresenter [
 
 	heatMapPresenter := SpRoassalPresenter new
 		canvas: (AllocationVisualizations new
 			statsModel: objectAllocationProfiler stats;
-			dependencyStructuralMatrixHeatMapCanvas);
+			heatmapAllocatorAllocatedCanvas);
 		yourself
 ]
 
@@ -115,14 +115,14 @@ IllimaniAllocationProfilerUI >> initializeNotebook [
 
 	notebookPresenter := self newNotebook
 		addPageTitle: 'General Stats' provider: [ self statsAndEvaluatorPresenter ];
-		addPageTitle: 'Allocated Objects per Second'
+		addPageTitle: 'Allocations per Second'
 		provider: [ self allocatedObjectsPerSecondPresenter ];
-		addPageTitle: 'Allocated Objects per Second per Class'
+		addPageTitle: 'Allocations per Second per Class'
 		provider: [ self allocatedObjectsPerSecondPerClass ];
 		addPageTitle: 'Top Allocator Classes' provider: [ self topClassesPresenter ];
 		addPageTitle: 'Top Allocator Methods' provider: [ self topMethodsPresenter ];
-		addPageTitle: 'Heat Map' provider: [ self heatMapPresenter ];
-		addPageTitle: 'Code Evaluator' provider: [ self codeEvaluator ];
+		addPageTitle: 'Heatmap' provider: [ self heatMapPresenter ];
+		addPageTitle: 'Evaluator' provider: [ self codeEvaluator ];
 		yourself
 ]
 

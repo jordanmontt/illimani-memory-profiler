@@ -72,7 +72,7 @@ Class {
 		'endOfProfilingTime',
 		'statisticsModel'
 	],
-	#category : #AllocationProfiler
+	#category : #'AllocationProfiler-Profiler'
 }
 
 { #category : #accessing }

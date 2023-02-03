@@ -7,7 +7,7 @@ Class {
 	#instVars : [
 		'allocations'
 	],
-	#category : #AllocationProfiler
+	#category : #'AllocationProfiler-Statistics-Model'
 }
 
 { #category : #accessing }
@@ -43,7 +43,7 @@ AllocationStatistics >> allocationsByMethods [
 ]
 
 { #category : #statistics }
-AllocationStatistics >> groupedAllocatingClasses [
+AllocationStatistics >> groupedAndSortedAllocatingClasses [
 
 	| classesWithTheirAllocations topClassesByNumberOfAllocations |
 	classesWithTheirAllocations := allocations groupedBy: [ :holder | holder allocatorClass ].
@@ -55,10 +55,10 @@ AllocationStatistics >> groupedAllocatingClasses [
 ]
 
 { #category : #statistics }
-AllocationStatistics >> groupedNAllocatingClasses: n [
+AllocationStatistics >> groupedAndSortedNAllocatingClasses: n [
 
 	| classesWithTheirAllocations |
-	classesWithTheirAllocations := self groupedAllocatingClasses.
+	classesWithTheirAllocations := self groupedAndSortedAllocatingClasses.
 	^ classesWithTheirAllocations first: (n min: classesWithTheirAllocations size)
 ]
 
@@ -96,6 +96,21 @@ AllocationStatistics >> occurrencesBy: aBlock [
 AllocationStatistics >> timeDifferenceBetweenFirstAndLastAllocation [
 
 	^ allocations last timestamp - allocations first timestamp
+]
+
+{ #category : #statistics }
+AllocationStatistics >> topAllocatorsWithAllOfTheirAllocations: n [
+
+	| dict |
+	dict := Dictionary new.
+	allocations do: [ :allocationHolder |
+		| allocatedClass |
+		allocatedClass := allocationHolder allocatedObjectClass.
+		dict at: allocationHolder allocatorClass
+			ifPresent: [ :subDictionary | subDictionary increaseAllocationsFor: allocatedClass ]
+			ifAbsentPut: [ RenameMePleaseAfter newFor: allocatedClass ] ].
+	^ (dict associations sorted: [ :a :b |
+		   a value totalAllocations > b value totalAllocations ]) first: n
 ]
 
 { #category : #statistics }

@@ -13,7 +13,7 @@ Class {
 		'copyExecutionStack',
 		'classesToCapture'
 	],
-	#category : #AllocationProfiler
+	#category : #'AllocationProfiler-Profiler'
 }
 
 { #category : #evaluating }

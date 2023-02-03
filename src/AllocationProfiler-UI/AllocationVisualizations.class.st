@@ -38,7 +38,7 @@ AllocationVisualizations >> allocatedObjectsPerSecondLineChartCanvas [
 AllocationVisualizations >> allocatedObjectsPerSecondPerClassLineChartCanvas [
 
 	| chart linePlot topClassesByNumberOfAllocations legend |
-	topClassesByNumberOfAllocations := statsModel groupedNAllocatingClasses: numberOfTopClasses.
+	topClassesByNumberOfAllocations := statsModel groupedAndSortedNAllocatingClasses: numberOfTopClasses.
 	chart := RSChart new.
 	legend := RSLegend new.
 	legend container: chart canvas.
@@ -52,13 +52,6 @@ AllocationVisualizations >> allocatedObjectsPerSecondPerClassLineChartCanvas [
 	chart build.
 	legend build.
 	^ chart canvas
-]
-
-{ #category : #visualizations }
-AllocationVisualizations >> computeColorFor: aNumber scale: scale [
-	^ aNumber isZero
-		ifTrue: [ Color veryVeryLightGray ]
-		ifFalse: [ scale scale: aNumber ]
 ]
 
 { #category : #'chart construction' }
@@ -88,31 +81,12 @@ AllocationVisualizations >> createLinePlotForAllocations: someAllocations [
 ]
 
 { #category : #visualizations }
-AllocationVisualizations >> dependencyStructuralMatrixHeatMapCanvas [
-	| dsm data scale numbers |
-	dsm := RSDSM new.
-	data := statsModel mock.
-	numbers := data flatCollect: [ :tuple| tuple value collect: #value ].
-	"{ Color green alphaMixed: 0.3 with: Color white }"
-	scale := NSScale linear
-		domain: {numbers min. numbers max};
-		clamp: true;
-		range: { Color colorFrom: '#B3FFB3'. Color colorFrom: '#004C00'}.
-	"y values are allocator classes"
-	dsm objectsY: (data collect: #key).
-	"x values are allocated classes"
-	dsm objectsX: (data flatCollect: [:tuple| tuple value collect: #key ] as: Set).
-	dsm setShouldFeedY.
-	dsm dependency: #dependentClasses.
-	dsm color: [:tuple | self computeColorFor: (self numberFor: tuple in: data) scale: scale ].
-	dsm rotation: 90.
-	dsm shape @ (RSPopup new text: [:tuple |
-		tuple key asString, ' allocated ',
-		(self numberFor: tuple in: data) asString, ' instances of ',
-		tuple value asString
-		   ]).
-	dsm build.
-	^ dsm canvas
+AllocationVisualizations >> heatmapAllocatorAllocatedCanvas [
+
+	^ HeatmapAllocatorAllocatedPresenter new
+		data: (statsModel topAllocatorsWithAllOfTheirAllocations: numberOfTopClasses);
+		build;
+		canvas
 ]
 
 { #category : #initialization }
@@ -121,17 +95,6 @@ AllocationVisualizations >> initialize [
 	super initialize.
 	numberOfTopClasses := 10.
 	numberOfTopMethods := 10
-]
-
-{ #category : #visualizations }
-AllocationVisualizations >> numberFor: tuple in: data [
-	| allocatorClass allocatedClass obj |
-	allocatorClass := tuple key.
-	allocatedClass := tuple value.
-	obj := data detect: [ :each | each key = allocatorClass ].
-	^ obj value detect: [ :assoc | assoc key = allocatedClass ]
-		ifFound: [ :assoc | assoc value ]
-		ifNone: [ 0 ]
 ]
 
 { #category : #accessing }
