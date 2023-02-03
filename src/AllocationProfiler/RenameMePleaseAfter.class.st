@@ -30,8 +30,8 @@ RenameMePleaseAfter >> allocationsOf: aClass [
 RenameMePleaseAfter >> increaseAllocationsFor: allocatedClass [
 
 	allocations at: allocatedClass
-		ifPresent: [ :counter | allocations at: allocatedClass put: counter + 1 ]
-		ifAbsentPut: [ 1 ]
+		update: [ :counter | counter + 1 ]
+		initial: [ 1 ]
 ]
 
 { #category : #initialization }
