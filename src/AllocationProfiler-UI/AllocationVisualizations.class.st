@@ -83,7 +83,7 @@ AllocationVisualizations >> createLinePlotForAllocations: someAllocations [
 { #category : #visualizations }
 AllocationVisualizations >> heatmapAllocatorAllocatedCanvas [
 
-	^ HeatmapAllocatorAllocatedPresenter new
+	^ HeatmapAllocatorAllocated new
 		data: (statsModel topAllocatorsWithAllOfTheirAllocations: numberOfTopClasses);
 		build;
 		canvas
