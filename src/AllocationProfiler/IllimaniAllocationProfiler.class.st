@@ -70,7 +70,10 @@ Class {
 		'profilerHandler',
 		'beginningOfProfilingTime',
 		'endOfProfilingTime',
-		'statisticsModel'
+		'statisticsModel',
+		'incrementalGCCount',
+		'fullGCCount',
+		'totalGCTime'
 	],
 	#category : #'AllocationProfiler-Profiler'
 }
@@ -98,7 +101,10 @@ IllimaniAllocationProfiler >> cleanProfilingData [
 
 	profilerHandler cleanAllocations.
 	beginningOfProfilingTime := nil.
-	endOfProfilingTime := nil
+	endOfProfilingTime := nil.
+	incrementalGCCount := nil.
+	fullGCCount := nil.
+	totalGCTime := nil
 ]
 
 { #category : #api }
@@ -111,6 +117,18 @@ IllimaniAllocationProfiler >> copyExecutionStack [
 IllimaniAllocationProfiler >> endOfProfilingTime [
 
 	^ endOfProfilingTime
+]
+
+{ #category : #accessing }
+IllimaniAllocationProfiler >> fullGCCount [
+
+	^ fullGCCount
+]
+
+{ #category : #accessing }
+IllimaniAllocationProfiler >> incrementalGCCount [
+
+	^ incrementalGCCount
 ]
 
 { #category : #initialization }
@@ -182,7 +200,11 @@ IllimaniAllocationProfiler >> startProfiling [
 	self cleanProfilingData.
 	beginningOfProfilingTime := DateAndTime now.
 	proxyBasicNew install.
-	proxyBasicNewKeyword install
+	proxyBasicNewKeyword install.
+
+	incrementalGCCount := Smalltalk vm incrementalGCCount.
+	fullGCCount := Smalltalk vm fullGCCount.
+	totalGCTime := Duration milliSeconds: Smalltalk vm totalGCTime
 ]
 
 { #category : #accessing }
@@ -197,7 +219,17 @@ IllimaniAllocationProfiler >> stopProfiling [
 	proxyBasicNew uninstall.
 	proxyBasicNewKeyword uninstall.
 	endOfProfilingTime := DateAndTime now.
+	incrementalGCCount := Smalltalk vm incrementalGCCount - incrementalGCCount.
+	fullGCCount := Smalltalk vm fullGCCount - fullGCCount.
+	totalGCTime := (Duration milliSeconds: Smalltalk vm totalGCTime) - totalGCTime.
+
 	self initializeStatisticsModel
+]
+
+{ #category : #accessing }
+IllimaniAllocationProfiler >> totalGCTime [
+
+	^ totalGCTime
 ]
 
 { #category : #accessing }

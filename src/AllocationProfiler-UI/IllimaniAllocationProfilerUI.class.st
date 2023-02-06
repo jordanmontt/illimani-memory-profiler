@@ -15,7 +15,7 @@ Class {
 		'statsAndEvaluatorPresenter',
 		'topClassesPresenter',
 		'topMethodsPresenter',
-		'heatMapPresenter'
+		'heatmapPresenter'
 	],
 	#category : #'AllocationProfiler-UI'
 }
@@ -67,8 +67,8 @@ IllimaniAllocationProfilerUI >> defaultLayout [
 { #category : #'accessing - lazy' }
 IllimaniAllocationProfilerUI >> heatMapPresenter [
 
-	heatMapPresenter ifNil: [ self initializeHeatmapPresenter ].
-	^ heatMapPresenter
+	heatmapPresenter ifNil: [ self initializeHeatmapPresenter ].
+	^ heatmapPresenter
 ]
 
 { #category : #'initialization - lazy presenters' }
@@ -103,7 +103,7 @@ IllimaniAllocationProfilerUI >> initializeCodeEvaluator [
 { #category : #'initialization - lazy presenters' }
 IllimaniAllocationProfilerUI >> initializeHeatmapPresenter [
 
-	heatMapPresenter := SpRoassalPresenter new
+	heatmapPresenter := SpRoassalPresenter new
 		canvas: (AllocationVisualizations new
 			statsModel: objectAllocationProfiler stats;
 			heatmapAllocatorAllocatedCanvas);
@@ -136,9 +136,8 @@ IllimaniAllocationProfilerUI >> initializePresenters [
 IllimaniAllocationProfilerUI >> initializeStatsAndEvaluatorPresenter [
 
 	| statsAndEvaluatorLayout statsPresenter |
-	statsPresenter := (AllocationStatisticsPresenter on: objectAllocationProfiler stats)
-		totalProfiledTimeBlock: [ objectAllocationProfiler totalProfiledTime ];
-		yourself.
+	statsPresenter := AllocationStatisticsPresenter on: objectAllocationProfiler.
+		
 	statsAndEvaluatorLayout := SpPanedLayout newTopToBottom
 		positionOfSlider: 0.7;
 		add: statsPresenter;
@@ -248,7 +247,7 @@ IllimaniAllocationProfilerUI >> objectAllocationProfiler: aProfiler [
 { #category : #actions }
 IllimaniAllocationProfilerUI >> refresh [
 
-	notebookPresenter := allocatedObjectsPerSecondPresenter := allocatedObjectsPerSecondPerClass := codeEvaluator := statsAndEvaluatorPresenter := topClassesPresenter := topMethodsPresenter := heatMapPresenter := nil.
+	notebookPresenter := allocatedObjectsPerSecondPresenter := allocatedObjectsPerSecondPerClass := codeEvaluator := statsAndEvaluatorPresenter := topClassesPresenter := topMethodsPresenter := heatmapPresenter := nil.
 	^ self layout: self defaultLayout
 ]
 

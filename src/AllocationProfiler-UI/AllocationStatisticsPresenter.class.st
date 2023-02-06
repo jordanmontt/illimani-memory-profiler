@@ -5,8 +5,7 @@ Class {
 	#name : #AllocationStatisticsPresenter,
 	#superclass : #SpPresenter,
 	#instVars : [
-		'statsModel',
-		'totalProfiledTimeLabel'
+		'model'
 	],
 	#category : #'AllocationProfiler-UI'
 }
@@ -36,83 +35,91 @@ AllocationStatisticsPresenter >> defaultLayout [
 		  yourself
 ]
 
-{ #category : #initialization }
-AllocationStatisticsPresenter >> initializePresenters [
+{ #category : #accessing }
+AllocationStatisticsPresenter >> fullGCCount [
 
-	totalProfiledTimeLabel := self newLabel
+	^ model fullGCCount asString
+]
+
+{ #category : #accessing }
+AllocationStatisticsPresenter >> incrementalGCCount [
+
+	^ model incrementalGCCount asString
 ]
 
 { #category : #accessing }
 AllocationStatisticsPresenter >> numberOfClasses [
 
-	^ statsModel numberOfClasses asString
+	^ model stats numberOfClasses asString
 ]
 
 { #category : #accessing }
 AllocationStatisticsPresenter >> numberOfMethods [
 
-	^ statsModel numberOfMethods asString
+	^ model stats numberOfMethods asString
 ]
 
 { #category : #'accessing - model' }
 AllocationStatisticsPresenter >> setModelBeforeInitialization: aModel [
 
-	statsModel := aModel
+	model := aModel
 ]
 
 { #category : #layout }
 AllocationStatisticsPresenter >> statsGridLayout [
 
-	^ SpGridLayout new
-		  add: 'Total profiled time: ' at: 1 @ 1;
-		  add: self totalProfiledTime at: 2 @ 1 span: 2 @ 1;
-		  add: 'Time difference between first and last allocation: ' at: 1 @ 2;
-		  add: self timeDifferenceBetweenFirstAndLastAllocation at: 2 @ 2 span: 2 @ 1;
-		  add: 'Classes that allocate objects: ' at: 1 @ 3;
-		  add: self numberOfClasses at: 2 @ 3 span: 2 @ 1;
-		  add: 'Methods that allocate objects: ' at: 1 @ 4;
-		  add: self numberOfMethods at: 2 @ 4 span: 2 @ 1;
-		  add: 'Total allocated objects: ' at: 1 @ 5;
-		  add: self totalAllocatedObjects at: 2 @ 5 span: 2 @ 1;
-		  add: 'Total equal allocated objects: ' at: 1 @ 6;
-		  add: self totalEqualAllocatedObjects at: 2 @ 6 span: 2 @ 1;
+	| layoutElements statsGridLayout |
+
+
+	layoutElements := { 'Total profiled time: ' -> self totalProfiledTime .
+		'Time difference between first and last allocation: ' -> self timeDifferenceBetweenFirstAndLastAllocation .
+		'Classes that allocate objects: ' -> self numberOfClasses .
+		'Methods that allocate objects: ' -> self numberOfMethods .
+		'Total allocated objects: ' -> self totalAllocatedObjects .
+		'Total equal allocated objects: ' -> self totalEqualAllocatedObjects .
+		'Total GC time during profiling' -> self totalGCTime.
+		'Incremental GC performed during profiling' -> self incrementalGCCount.
+		'Full GC performed during profiling' -> self fullGCCount }.
+
+	statsGridLayout := SpGridLayout new
 		  beColumnNotHomogeneous;
-		  yourself
+		  yourself.
+
+	layoutElements doWithIndex: [ :assoc :index |
+		statsGridLayout
+			add: assoc key at: 1 @ index;
+			add: assoc value at: 2 @ index "span: 2 @ 1" ].
+
+	^ statsGridLayout
 ]
 
 { #category : #accessing }
 AllocationStatisticsPresenter >> timeDifferenceBetweenFirstAndLastAllocation [
 
 	^ self convertTimeToAReadableString: [
-		  statsModel timeDifferenceBetweenFirstAndLastAllocation ]
+		  model stats timeDifferenceBetweenFirstAndLastAllocation ]
 ]
 
 { #category : #accessing }
 AllocationStatisticsPresenter >> totalAllocatedObjects [
 
-	^ statsModel totalAllocatedObjects asString
+	^ model stats totalAllocatedObjects asString
 ]
 
 { #category : #accessing }
 AllocationStatisticsPresenter >> totalEqualAllocatedObjects [
 
-	^ statsModel totalEqualAllocatedObjects asString
+	^ model stats totalEqualAllocatedObjects asString
+]
+
+{ #category : #accessing }
+AllocationStatisticsPresenter >> totalGCTime [
+
+	^ self convertTimestampToSecondsString: model totalGCTime
 ]
 
 { #category : #accessing }
 AllocationStatisticsPresenter >> totalProfiledTime [
 
-	^ totalProfiledTimeLabel
-]
-
-{ #category : #accessing }
-AllocationStatisticsPresenter >> totalProfiledTime: aTimeInSeconds [
-
-	totalProfiledTimeLabel label: (self convertTimestampToSecondsString: aTimeInSeconds)
-]
-
-{ #category : #accessing }
-AllocationStatisticsPresenter >> totalProfiledTimeBlock: aBlock [
-
-	totalProfiledTimeLabel label: (self convertTimeToAReadableString: aBlock)
+	^ self convertTimestampToSecondsString: model totalProfiledTime
 ]
