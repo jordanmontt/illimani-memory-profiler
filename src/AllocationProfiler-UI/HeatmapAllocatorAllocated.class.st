@@ -57,20 +57,20 @@ HeatmapAllocatorAllocated >> initialize [
 { #category : #hooks }
 HeatmapAllocatorAllocated >> initializeColorMultilinearScale [
 
-	| numberOfAllocationsSorted |
-	numberOfAllocationsSorted := (data flatCollect: [ :tuple | tuple value eachAllocationsTotal ])
-		sorted: [ :a :b | a < b ].
-
-	range :=  { "We dive the allocations into 5 equal parts. First the smallest and at the end the biggest"
+	| numberOfAllocationsSorted maxRange |
+	numberOfAllocationsSorted := data flatCollect: [ :tuple | tuple value eachAllocationsTotal ].
+	maxRange := numberOfAllocationsSorted max.
+	range := {
 		0.
-		numberOfAllocationsSorted first.
-		(numberOfAllocationsSorted at: (numberOfAllocationsSorted size / 3) asInteger).
-		(numberOfAllocationsSorted at: (numberOfAllocationsSorted size * 2 / 3) asInteger).
-		numberOfAllocationsSorted last }.
+		(maxRange / 4) asInteger.
+		(maxRange / 2) asInteger.
+		(maxRange * 3 / 4) asInteger.
+		maxRange }.
 	scale := NSScale linear
 		clamp: true;
 		domain: range;
-		range: colorPaletteList
+		range: colorPaletteList;
+		yourself
 ]
 
 { #category : #hooks }
@@ -135,18 +135,48 @@ HeatmapAllocatorAllocated >> renderIn: aCanvas [
 { #category : #hooks }
 HeatmapAllocatorAllocated >> renderLegend: aCanvas [
 
-	| legend |
-	legend := RSLegend new.
-	legend
-		text: range first asString withBoxColor: colorPaletteList first;
-		text: range second asString , '-' , (range third - 1) asString
-		withBoxColor: colorPaletteList second;
-		text: range third asString , '-' , (range fourth - 1) asString
-		withBoxColor: colorPaletteList third;
-		text: range fourth asString , '-' , (range fifth - 1) asString
-		withBoxColor: colorPaletteList fourth;
-		text: range fifth asString withBoxColor: colorPaletteList fifth.
+	| box percentages paint legend boxScale lastColumn |
+	lastColumn := (self columnAt: objectsX size) asGroup.
+	box := RSBox new.
+	box extent: lastColumn extent.
 
-	legend container: aCanvas.
-	legend build
+	percentages := 0 to: 1 count: colorPaletteList size.
+	paint := LinearGradientPaint fromArray:
+		         (percentages with: colorPaletteList
+			          collect: [ :per :color | per asFloat -> color ]).
+
+	paint start: box baseRectangle topLeft.
+	paint stop: box baseRectangle bottomLeft.
+	box paint: paint.
+	box border: (RSBorder new color: 'black').
+	legend := RSGroup new.
+	legend add: box.
+	boxScale := NSScale linear range: {
+			            box baseRectangle topRight.
+			            box baseRectangle bottomRight }.
+	percentages with: range do: [ :per :value |
+		| line label point |
+		point := boxScale scale: per.
+		line := RSLine new
+			        startPoint: point;
+			        endPoint: point + (5 @ 0);
+			        color: 'black';
+			        yourself.
+		label := RSLabel new
+			         text: value;
+			         color: 'black';
+			         fontSize: 6;
+			         yourself.
+		label position: point + (7 @ 0) + (label width / 2 @ 0).
+		legend
+			add: line;
+			add: label ].
+	legend := legend asShape.
+	RSLocation new
+		outer;
+		middle;
+		right;
+		offset: 20 @ 0;
+		move: legend on: lastColumn.
+	aCanvas add: legend
 ]
