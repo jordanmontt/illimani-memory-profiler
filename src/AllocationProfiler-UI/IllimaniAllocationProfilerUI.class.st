@@ -44,7 +44,7 @@ IllimaniAllocationProfilerUI >> codeEvaluator [
 { #category : #initialization }
 IllimaniAllocationProfilerUI >> connectPresenters [
 
-	refreshButton action: [ self layout: self defaultLayout ]
+	refreshButton action: [ self refresh ]
 ]
 
 { #category : #layout }
@@ -214,9 +214,9 @@ IllimaniAllocationProfilerUI >> layoutWhenThereIsAProfiler [
 IllimaniAllocationProfilerUI >> layoutWhenThereIsData [
 
 	^ SpBoxLayout newTopToBottom
-		  add: self controlButtonsLayout expand: false;
-		  add: self notebookPresenter;
-		  yourself
+		add: self controlButtonsLayout expand: false;
+		add: self notebookPresenter;
+		yourself
 ]
 
 { #category : #layout }
@@ -243,6 +243,13 @@ IllimaniAllocationProfilerUI >> notebookPresenter [
 IllimaniAllocationProfilerUI >> objectAllocationProfiler: aProfiler [
 
 	objectAllocationProfiler := aProfiler
+]
+
+{ #category : #actions }
+IllimaniAllocationProfilerUI >> refresh [
+
+	notebookPresenter := allocatedObjectsPerSecondPresenter := allocatedObjectsPerSecondPerClass := codeEvaluator := statsAndEvaluatorPresenter := topClassesPresenter := topMethodsPresenter := heatMapPresenter := nil.
+	^ self layout: self defaultLayout
 ]
 
 { #category : #'accessing - lazy' }

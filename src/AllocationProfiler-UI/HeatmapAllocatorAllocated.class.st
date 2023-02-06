@@ -6,7 +6,9 @@ Class {
 	#superclass : #RSDSM,
 	#instVars : [
 		'scale',
-		'data'
+		'data',
+		'colorPaletteList',
+		'range'
 	],
 	#category : #'AllocationProfiler-UI'
 }
@@ -43,7 +45,13 @@ HeatmapAllocatorAllocated >> data: someData [
 HeatmapAllocatorAllocated >> initialize [
 
 	super initialize.
-	self setShouldFeedY
+	self setShouldFeedY.
+	colorPaletteList :=  {
+		"beige" (Color fromHexString: 'FFFFFD').
+		"yellow" (Color fromHexString: 'f4ff76').
+		"orange" (Color fromHexString: 'ff9000').
+		"red" (Color fromHexString: 'cc0000').
+		Color black }
 ]
 
 { #category : #hooks }
@@ -53,19 +61,16 @@ HeatmapAllocatorAllocated >> initializeColorMultilinearScale [
 	numberOfAllocationsSorted := (data flatCollect: [ :tuple | tuple value eachAllocationsTotal ])
 		sorted: [ :a :b | a < b ].
 
+	range :=  { "We dive the allocations into 5 equal parts. First the smallest and at the end the biggest"
+		0.
+		numberOfAllocationsSorted first.
+		(numberOfAllocationsSorted at: (numberOfAllocationsSorted size / 3) asInteger).
+		(numberOfAllocationsSorted at: (numberOfAllocationsSorted size * 2 / 3) asInteger).
+		numberOfAllocationsSorted last }.
 	scale := NSScale linear
 		clamp: true;
-		domain: { "We dive the allocations into 5 equal parts. First the smallest and at the end the biggest"
-			0.
-			numberOfAllocationsSorted first.
-			(numberOfAllocationsSorted at: (numberOfAllocationsSorted size / 3) asInteger).
-			(numberOfAllocationsSorted at: (numberOfAllocationsSorted size * 2 / 3) asInteger).
-			numberOfAllocationsSorted last };
-		range: { "beige" Color fromHexString: 'FFFFFD'.
-			"yellow" Color fromHexString: 'f4ff76'.
-			"orange" Color fromHexString: 'ff9000'.
-			"red" Color fromHexString: 'cc0000'.
-			Color black }
+		domain: range;
+		range: colorPaletteList
 ]
 
 { #category : #hooks }
@@ -122,5 +127,26 @@ HeatmapAllocatorAllocated >> renderIn: aCanvas [
 	aCanvas add: labelY.
 
 	labelX := self labelX.
-	aCanvas add: labelX
+	aCanvas add: labelX.
+
+	self renderLegend: aCanvas
+]
+
+{ #category : #hooks }
+HeatmapAllocatorAllocated >> renderLegend: aCanvas [
+
+	| legend |
+	legend := RSLegend new.
+	legend
+		text: range first asString withBoxColor: colorPaletteList first;
+		text: range second asString , '-' , (range third - 1) asString
+		withBoxColor: colorPaletteList second;
+		text: range third asString , '-' , (range fourth - 1) asString
+		withBoxColor: colorPaletteList third;
+		text: range fourth asString , '-' , (range fifth - 1) asString
+		withBoxColor: colorPaletteList fourth;
+		text: range fifth asString withBoxColor: colorPaletteList fifth.
+
+	legend container: aCanvas.
+	legend build
 ]
