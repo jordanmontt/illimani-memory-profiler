@@ -14,27 +14,24 @@ Class {
 { #category : #hooks }
 HeatmapAllocatorAllocated >> computeColor: aTuple [
 
-	"| aNumber |
-	aNumber := self numberFor: aTuple.
-	^ aNumber isZero ifTrue: [ Color veryVeryLightGray ]
-		  ifFalse: [ scale scale: aNumber ]"
 	^ scale scale: (self numberFor: aTuple)
+	"| aNumber |
+	""code for getting fixed colors and not scaleting them""
+	aNumber := self numberFor: aTuple.
+	aNumber = 0 ifTrue: [ ^ scale range first ].
+	aNumber < scale domain second ifTrue: [ ^ scale range second ].
+	aNumber < scale domain third ifTrue: [ ^ scale range third ].
+	aNumber < scale domain fourth ifTrue: [ ^ scale range fourth ].
+	^ scale range fifth"
 ]
 
 { #category : #hooks }
 HeatmapAllocatorAllocated >> data: someData [
 
-	| numbers |
 	data := someData.
-	numbers := data collect: [ :tuple | tuple value totalAllocations ].
-	"{ Color green alphaMixed: 0.2 with: Color white }"
-	scale := NSScale linear
-		domain: { 0 . numbers max };
-		clamp: true;
-		range: {Color fromHexString: 'ADD8E6' . Color red }.
+	self initializeColorMultilinearScale.
 
 	self objectsY: (data collect: #key).
-	"x values are allocated classes"
 	self objectsX: (data flatCollect: [ :tuple | tuple value allocations keys ] as: Set).
 
 	self shape @ (RSPopup new text: [ :tuple |
@@ -47,6 +44,62 @@ HeatmapAllocatorAllocated >> initialize [
 
 	super initialize.
 	self setShouldFeedY
+]
+
+{ #category : #hooks }
+HeatmapAllocatorAllocated >> initializeColorMultilinearScale [
+
+	| numberOfAllocationsSorted |
+	numberOfAllocationsSorted := (data flatCollect: [ :tuple | tuple value eachAllocationsTotal ])
+		sorted: [ :a :b | a < b ].
+
+	scale := NSScale linear
+		clamp: true;
+		domain: { "We dive the allocations into 5 equal parts. First the smallest and at the end the biggest"
+			0.
+			numberOfAllocationsSorted first.
+			(numberOfAllocationsSorted at: (numberOfAllocationsSorted size / 3) asInteger).
+			(numberOfAllocationsSorted at: (numberOfAllocationsSorted size * 2 / 3) asInteger).
+			numberOfAllocationsSorted last };
+		range: { "beige" Color fromHexString: 'FFFFFD'.
+			"yellow" Color fromHexString: 'f4ff76'.
+			"orange" Color fromHexString: 'ff9000'.
+			"red" Color fromHexString: 'cc0000'.
+			Color black }
+]
+
+{ #category : #hooks }
+HeatmapAllocatorAllocated >> labelX [
+
+	| labelX |
+	labelX := RSLabel new
+		fontSize: 15;
+		color: Color black;
+		text: 'Allocated';
+		yourself.
+	RSLocation new
+		bottom;
+		outer;
+		move: labelX on: (self rowAt: objectsY size) asGroup.
+	^ labelX
+]
+
+{ #category : #hooks }
+HeatmapAllocatorAllocated >> labelY [
+
+	| labelY |
+	labelY := RSLabel new
+		fontSize: 15;
+		color: Color black;
+		rotateByDegrees: -90;
+		text: 'Top Allocators';
+		yourself.
+	RSLocation new
+		outer;
+		left;
+		middle;
+		move: labelY on: labelsY asGroup.
+	^ labelY
 ]
 
 { #category : #hooks }
@@ -64,27 +117,10 @@ HeatmapAllocatorAllocated >> renderIn: aCanvas [
 
 	| labelY labelX |
 	super renderIn: aCanvas.
-	labelY := RSLabel new
-		          fontSize: 15;
-		          color: Color black;
-		          rotateByDegrees: -90;
-		          text: 'Top Allocators';
-		          yourself.
-	RSLocation new
-		outer;
-		left;
-		middle;
-		move: labelY on: labelsY asGroup.
+
+	labelY := self labelY.
 	aCanvas add: labelY.
 
-	labelX := RSLabel new
-		          fontSize: 15;
-		          color: Color black;
-		          text: 'Allocated';
-		          yourself.
-	RSLocation new
-		bottom;
-		outer;
-		move: labelX on: (self rowAt: objectsY size) asGroup.
+	labelX := self labelX.
 	aCanvas add: labelX
 ]

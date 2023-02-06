@@ -108,7 +108,7 @@ AllocationStatistics >> topAllocatorsWithAllOfTheirAllocations: n [
 		allocatedClass := allocationHolder allocatedObjectClass.
 		dict at: allocationHolder allocatorClass
 			ifPresent: [ :subDictionary | subDictionary increaseAllocationsFor: allocatedClass ]
-			ifAbsentPut: [ RenameMePleaseAfter newFor: allocatedClass ] ].
+			ifAbsentPut: [ ClassAllocationsDataStructure newFor: allocatedClass ] ].
 	^ (dict associations sorted: [ :a :b |
 		   a value totalAllocations > b value totalAllocations ]) first: n
 ]

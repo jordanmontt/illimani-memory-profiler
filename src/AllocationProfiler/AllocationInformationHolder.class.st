@@ -1,5 +1,5 @@
 "
-I am an object that hols the information that was was captured by the method proxies
+I am a class that holds the information that was was captured by the method proxies. Like the class of the allocated object, who allocated that object, the timestamp, etc.
 "
 Class {
 	#name : #AllocationInformationHolder,
