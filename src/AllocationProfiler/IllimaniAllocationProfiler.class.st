@@ -78,7 +78,7 @@ Class {
 	#category : #'AllocationProfiler-Profiler'
 }
 
-{ #category : #accessing }
+{ #category : #'accessing - statistics' }
 IllimaniAllocationProfiler >> beginningOfProfilingTime [
 
 	^ beginningOfProfilingTime
@@ -113,19 +113,19 @@ IllimaniAllocationProfiler >> copyExecutionStack [
 	profilerHandler copyExecutionStack
 ]
 
-{ #category : #accessing }
+{ #category : #'accessing - statistics' }
 IllimaniAllocationProfiler >> endOfProfilingTime [
 
 	^ endOfProfilingTime
 ]
 
-{ #category : #accessing }
+{ #category : #'accessing - statistics' }
 IllimaniAllocationProfiler >> fullGCCount [
 
 	^ fullGCCount
 ]
 
-{ #category : #accessing }
+{ #category : #'accessing - statistics' }
 IllimaniAllocationProfiler >> incrementalGCCount [
 
 	^ incrementalGCCount
@@ -226,13 +226,13 @@ IllimaniAllocationProfiler >> stopProfiling [
 	self initializeStatisticsModel
 ]
 
-{ #category : #accessing }
+{ #category : #'accessing - statistics' }
 IllimaniAllocationProfiler >> totalGCTime [
 
 	^ totalGCTime
 ]
 
-{ #category : #accessing }
+{ #category : #'accessing - statistics' }
 IllimaniAllocationProfiler >> totalProfiledTime [
 
 	^ endOfProfilingTime - beginningOfProfilingTime

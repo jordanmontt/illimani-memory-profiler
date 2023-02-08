@@ -114,7 +114,7 @@ IllimaniAllocationProfilerUI >> initializeHeatmapPresenter [
 IllimaniAllocationProfilerUI >> initializeNotebook [
 
 	notebookPresenter := self newNotebook
-		addPageTitle: 'General Stats' provider: [ self statsAndEvaluatorPresenter ];
+		addPageTitle: 'Statistics' provider: [ self statsAndEvaluatorPresenter ];
 		addPageTitle: 'Allocations per Second'
 		provider: [ self allocatedObjectsPerSecondPresenter ];
 		addPageTitle: 'Allocations per Second per Class'
