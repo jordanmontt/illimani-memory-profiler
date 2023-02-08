@@ -24,6 +24,7 @@ Example 1:
 ```st
 IllimaniAllocationProfiler new
 	classesToCapture: { Color };
+	classesToIgnore: { ByteString . ByteArray };
 	profileFor: 3 seconds;
 	open
 ```
@@ -33,9 +34,25 @@ Example 2:
 ```st
 IllimaniAllocationProfiler new
 	captureAllObjects;
+	classesToIgnore: { ByteString . ByteArray };
 	copyExecutionStack;
 	profileOn: [ 1000 timesRepeat: [ SpPresenter new ] ];
 	open
+```
+
+Example 3, capturing all but Morphic
+
+```st
+morphicPackages := RPackageOrganizer default packages select: [ :package | package name includesSubstring: 'morphic' caseSensitive: false  ].
+morphicClasses := morphicPackages flatCollect: #classes as: Set.
+
+profiler := IllimaniAllocationProfiler new
+	captureAllObjects;
+	classesToIgnore: morphicClasses;
+	profileFor: 5 seconds;
+	yourself.
+	
+profiler open
 ```
 
 ## How to use it
@@ -47,13 +64,19 @@ You can decide both to profile a given method block or just watching the activit
 ```st
 profiler profileOn: [ anObject performSomeAction ].
 
-profiler profileFor: 2 seconds
+profiler profileFor: 2 seconds.
 ```
 
 You can open the ui at any time with the message `open`
 
+```st
+profiler open.
 ```
-profiler open
+
+If you want to capture all the allocations of objects and ignore some of them, you can use 
+
+```st
+profiler classesToIgnore: { ByteString . ByteArray }.
 ```
 
 ## Implementation
@@ -64,5 +87,4 @@ This is a prototype version
 
 Observations:
 
-- I have see that for a lot of allocations the statistics and the roassal presenters take a lot of time to be calculated. It is need to improve this. But it is not blocking for releasing a first version.
-- When capturing all the object I saw that the class `Behavior` is by far the one that allocates the most objects. Do we need to take into account the sender instead?
+- Profile the profiler :p for big arrays the presenters and the visualizations take a long time to open
