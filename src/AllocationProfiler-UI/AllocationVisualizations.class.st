@@ -30,6 +30,7 @@ AllocationVisualizations >> allocatedObjectsPerSecondLineChartCanvas [
 	chart := RSChart new.
 	chart add: linePlot.
 	self tuneChartForLinePlot: chart.
+	self addLabelsX: 'Seconds' y: 'Allocated Objects' forChart: chart.
 	chart build.
 	^ chart canvas
 ]
@@ -48,6 +49,7 @@ AllocationVisualizations >> allocatedObjectsPerSecondPerClassLineChartCanvas [
 		legend text: aPair key name withBoxColor: linePlot computeColor ].
 
 	self tuneChartForLinePlot: chart.
+	self addLabelsX: 'Seconds' y: 'Allocator Classes' forChart: chart.
 	self tuneLegend: legend.
 	chart build.
 	legend build.
@@ -110,7 +112,7 @@ AllocationVisualizations >> topClassesThatAllocateObjectsBarChartCanvas [
 	allocatedObjects := (statsModel topNAllocationsByClasses: numberOfTopClasses) reversed.
 
 	chart := self createBarChartForAllocations: allocatedObjects.
-	self addLabelsX: 'Allocated Objects' y: 'Classes' forChart: chart.
+	self addLabelsX: 'Allocated Objects' y: 'Allocator Classes' forChart: chart.
 	chart build.
 	^ chart canvas
 ]
@@ -122,7 +124,7 @@ AllocationVisualizations >> topMethodsThatAllocateObjectsBarChartCanvas [
 	allocatedObjects := (statsModel topNAllocationsByMethods: numberOfTopMethods) reversed.
 
 	chart := self createBarChartForAllocations: allocatedObjects.
-	self addLabelsX: 'Allocated Objects' y: 'Methods' forChart: chart.
+	self addLabelsX: 'Allocated Objects' y: 'Allocator Methods' forChart: chart.
 	chart build.
 	^ chart canvas
 ]
@@ -147,8 +149,7 @@ AllocationVisualizations >> tuneChartForLinePlot: chart [
 		"Divide by 10^9 because the time is in nanoseconds"
 		labelConversion: [ :number | (number / (10 raisedTo: 9)) asFloat ];
 		yourself).
-	chart add: RSVerticalTick new.
-	self addLabelsX: 'Seconds' y: 'Allocated Objects' forChart: chart
+	chart add: RSVerticalTick new
 ]
 
 { #category : #'chart construction' }
