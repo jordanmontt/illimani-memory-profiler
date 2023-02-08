@@ -96,6 +96,12 @@ IllimaniAllocationProfiler >> classesToCapture: aCollection [
 	profilerHandler classesToCapture: aCollection
 ]
 
+{ #category : #api }
+IllimaniAllocationProfiler >> classesToIgnore: aCollection [
+
+	profilerHandler classesToIgnore: aCollection
+]
+
 { #category : #evaluating }
 IllimaniAllocationProfiler >> cleanProfilingData [
 

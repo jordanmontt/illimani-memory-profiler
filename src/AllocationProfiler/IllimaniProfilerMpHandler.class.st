@@ -11,7 +11,8 @@ Class {
 		'classesToAvoidInTheContextSearch',
 		'captureAllObjects',
 		'copyExecutionStack',
-		'classesToCapture'
+		'classesToCapture',
+		'classesToIgnore'
 	],
 	#category : #'AllocationProfiler-Profiler'
 }
@@ -19,11 +20,13 @@ Class {
 { #category : #evaluating }
 IllimaniProfilerMpHandler >> afterExecutionWithReceiver: receiver arguments: arguments returnValue: returnValue [
 
-	captureAllObjects
+	"captureAllObjects
 		ifTrue: [ self handleAllocationOfObject: returnValue ]
 		ifFalse: [ (self shouldICaptureTheObject: returnValue)
 			ifTrue: [ self handleAllocationOfObject: returnValue ] ].
-	^ returnValue
+	^ returnValue"
+	 (self shouldICaptureTheObject: returnValue) ifTrue: [ self handleAllocationOfObject: returnValue ].
+		^ returnValue
 ]
 
 { #category : #api }
@@ -45,6 +48,12 @@ IllimaniProfilerMpHandler >> classesToCapture [
 IllimaniProfilerMpHandler >> classesToCapture: aCollection [
 
 	classesToCapture := aCollection
+]
+
+{ #category : #accessing }
+IllimaniProfilerMpHandler >> classesToIgnore: aCollection [
+
+	classesToIgnore := aCollection
 ]
 
 { #category : #api }
@@ -128,6 +137,7 @@ IllimaniProfilerMpHandler >> initialize [
 	self doNotCopyExecutionStack.
 	self doNotCaptureAllObjects.
 	classesToCapture := { }.
+	classesToIgnore := { }.
 	objectAllocations := OrderedCollection new.
 	self initializeClassesToAvoidInContextSearch
 ]
@@ -148,5 +158,6 @@ IllimaniProfilerMpHandler >> objectAllocations [
 { #category : #testing }
 IllimaniProfilerMpHandler >> shouldICaptureTheObject: returnValue [
 
-	^ classesToCapture includes: returnValue class
+	^ (captureAllObjects or: [ classesToCapture includes: returnValue class ]) and: [
+		  (classesToIgnore includes: returnValue class) not ]
 ]
