@@ -100,7 +100,12 @@ AllocationStatisticsPresenter >> totalAllocatedObjects [
 { #category : #accessing }
 AllocationStatisticsPresenter >> totalEqualAllocatedObjects [
 
-	^ model stats totalEqualAllocatedObjects asString
+	| totalEqualAllocatedObjects |
+	totalEqualAllocatedObjects := model stats totalEqualAllocatedObjects.
+
+	^ totalEqualAllocatedObjects = 1
+		ifTrue: [ '-' ]
+		ifFalse: [ totalEqualAllocatedObjects asString ]
 ]
 
 { #category : #accessing }

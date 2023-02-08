@@ -137,6 +137,8 @@ AllocationStatistics >> totalAllocatedObjects [
 
 { #category : #statistics }
 AllocationStatistics >> totalEqualAllocatedObjects [
+	"This only makes sense if you kept the allocated objects in the profiler. If not, you will
+	end up with a set with nil"
 
 	^ (allocations collect: [ :a | a allocatedObject ]) asSet size
 ]
