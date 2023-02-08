@@ -30,11 +30,16 @@ HeatmapAllocatorAllocated >> computeColor: aTuple [
 { #category : #hooks }
 HeatmapAllocatorAllocated >> data: someData [
 
+	| allocatedSortedClasses |
 	data := someData.
 	self initializeColorMultilinearScale.
 
 	self objectsY: (data collect: #key).
-	self objectsX: (data flatCollect: [ :tuple | tuple value allocations keys ] as: Set).
+	allocatedSortedClasses := ((data flatCollect: [ :tuple | tuple value allocations associations ])
+		sorted: [ :a :b | a value > b value])
+			 collect: [:e | e key].
+	allocatedSortedClasses := allocatedSortedClasses asOrderedCollection removeDuplicates.
+	self objectsX: allocatedSortedClasses.
 
 	self shape @ (RSPopup new text: [ :tuple |
 		 tuple key asString , ' allocated ' , (self numberFor: tuple) asString

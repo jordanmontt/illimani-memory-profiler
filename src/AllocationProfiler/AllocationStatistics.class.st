@@ -55,14 +55,6 @@ AllocationStatistics >> groupedAndSortedAllocatingClasses [
 ]
 
 { #category : #statistics }
-AllocationStatistics >> groupedAndSortedNAllocatingClasses: n [
-
-	| classesWithTheirAllocations |
-	classesWithTheirAllocations := self groupedAndSortedAllocatingClasses.
-	^ classesWithTheirAllocations first: (n min: classesWithTheirAllocations size)
-]
-
-{ #category : #statistics }
 AllocationStatistics >> mock [
 	^ {
 	Array ->{ Rectangle->10. Color->15. }.
@@ -111,6 +103,14 @@ AllocationStatistics >> topAllocatorsWithAllOfTheirAllocations: n [
 			ifAbsentPut: [ ClassAllocationsDataStructure newFor: allocatedClass ] ].
 	^ (dict associations sorted: [ :a :b |
 		   a value totalAllocations > b value totalAllocations ]) first: n
+]
+
+{ #category : #statistics }
+AllocationStatistics >> topGroupedAndSortedAllocatingClasses: n [
+
+	| classesWithTheirAllocations |
+	classesWithTheirAllocations := self groupedAndSortedAllocatingClasses.
+	^ classesWithTheirAllocations first: (n min: classesWithTheirAllocations size)
 ]
 
 { #category : #statistics }

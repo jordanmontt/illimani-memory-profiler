@@ -15,7 +15,9 @@ Class {
 		'statsAndEvaluatorPresenter',
 		'topClassesPresenter',
 		'topMethodsPresenter',
-		'heatmapPresenter'
+		'heatmapPresenter',
+		'topCalculationsNumberInputPresenter',
+		'topCalculationsNumber'
 	],
 	#category : #'AllocationProfiler-UI'
 }
@@ -44,7 +46,9 @@ IllimaniAllocationProfilerUI >> codeEvaluator [
 { #category : #initialization }
 IllimaniAllocationProfilerUI >> connectPresenters [
 
-	refreshButton action: [ self refresh ]
+	refreshButton action: [ self refresh ].
+	topCalculationsNumberInputPresenter whenNumberChangedDo: [ :newValue |
+		topCalculationsNumber := newValue ]
 ]
 
 { #category : #layout }
@@ -52,7 +56,12 @@ IllimaniAllocationProfilerUI >> controlButtonsLayout [
 
 	^ SpBoxLayout newTopToBottom
 		  spacing: 5;
-		  add: toolbarPresenter;
+		  add: toolbarPresenter expand: false;
+		  add: (SpBoxLayout newLeftToRight
+				   spacing: 5;
+				   add: 'Show visualizations for the top:' expand: false;
+				   add: topCalculationsNumberInputPresenter width: 50;
+				   yourself);
 		  yourself
 ]
 
@@ -76,7 +85,8 @@ IllimaniAllocationProfilerUI >> initializeAllocatedObjectsPerSecond [
 
 	allocatedObjectsPerSecondPresenter := SpRoassalPresenter new
 		canvas: (AllocationVisualizations new
-			statsModel: objectAllocationProfiler stats;
+			model: objectAllocationProfiler;
+			topCalculationsNumber: topCalculationsNumber;
 			allocatedObjectsPerSecondLineChartCanvas);
 		yourself
 ]
@@ -86,7 +96,8 @@ IllimaniAllocationProfilerUI >> initializeAllocatedObjectsPerSecondPerClass [
 
 	allocatedObjectsPerSecondPerClass := SpRoassalPresenter new
 		canvas: (AllocationVisualizations new
-			statsModel: objectAllocationProfiler stats;
+			model: objectAllocationProfiler;
+			topCalculationsNumber: topCalculationsNumber;
 			allocatedObjectsPerSecondPerClassLineChartCanvas);
 		yourself
 ]
@@ -105,7 +116,8 @@ IllimaniAllocationProfilerUI >> initializeHeatmapPresenter [
 
 	heatmapPresenter := SpRoassalPresenter new
 		canvas: (AllocationVisualizations new
-			statsModel: objectAllocationProfiler stats;
+			model: objectAllocationProfiler;
+			topCalculationsNumber: topCalculationsNumber;
 			heatmapAllocatorAllocatedCanvas);
 		yourself
 ]
@@ -129,7 +141,9 @@ IllimaniAllocationProfilerUI >> initializeNotebook [
 { #category : #initialization }
 IllimaniAllocationProfilerUI >> initializePresenters [
 
-	self initializeToolbar
+	topCalculationsNumber := 10.
+	self initializeToolbar.
+	self initializeTopCalculationsPresenter
 ]
 
 { #category : #'initialization - lazy presenters' }
@@ -137,7 +151,7 @@ IllimaniAllocationProfilerUI >> initializeStatsAndEvaluatorPresenter [
 
 	| statsAndEvaluatorLayout statsPresenter |
 	statsPresenter := AllocationStatisticsPresenter on: objectAllocationProfiler.
-		
+
 	statsAndEvaluatorLayout := SpPanedLayout newTopToBottom
 		positionOfSlider: 0.7;
 		add: statsPresenter;
@@ -162,12 +176,22 @@ IllimaniAllocationProfilerUI >> initializeToolbar [
 		yourself
 ]
 
+{ #category : #initialization }
+IllimaniAllocationProfilerUI >> initializeTopCalculationsPresenter [
+
+	topCalculationsNumberInputPresenter := self newNumberInput
+		number: topCalculationsNumber;
+		minimum: 1;
+		yourself
+]
+
 { #category : #'initialization - lazy presenters' }
 IllimaniAllocationProfilerUI >> initializeTopClassesPresenter [
 
 	topClassesPresenter := SpRoassalPresenter new
 		canvas: (AllocationVisualizations new
-			statsModel: objectAllocationProfiler stats;
+			model: objectAllocationProfiler;
+			topCalculationsNumber: topCalculationsNumber;
 			topClassesThatAllocateObjectsBarChartCanvas);
 		yourself
 ]
@@ -177,7 +201,8 @@ IllimaniAllocationProfilerUI >> initializeTopMethodsPresenter [
 
 	topMethodsPresenter := SpRoassalPresenter new
 		canvas: (AllocationVisualizations new
-			statsModel: objectAllocationProfiler stats;
+			model: objectAllocationProfiler;
+			topCalculationsNumber: topCalculationsNumber;
 			topMethodsThatAllocateObjectsBarChartCanvas);
 		yourself
 ]

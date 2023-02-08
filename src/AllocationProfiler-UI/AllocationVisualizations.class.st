@@ -5,12 +5,19 @@ Class {
 	#name : #AllocationVisualizations,
 	#superclass : #Object,
 	#instVars : [
-		'statsModel',
-		'numberOfTopClasses',
-		'numberOfTopMethods'
+		'topCalculationsNumber',
+		'model'
 	],
 	#category : #'AllocationProfiler-UI'
 }
+
+{ #category : #'instance creation' }
+AllocationVisualizations class >> on: aModel [
+
+	^ self new
+		  model: aModel;
+		  yourself
+]
 
 { #category : #'chart construction' }
 AllocationVisualizations >> addLabelsX: xText y: yText forChart: chart [
@@ -26,7 +33,7 @@ AllocationVisualizations >> addLabelsX: xText y: yText forChart: chart [
 AllocationVisualizations >> allocatedObjectsPerSecondLineChartCanvas [
 
 	| chart linePlot |
-	linePlot := self createLinePlotForAllocations: statsModel allocations.
+	linePlot := self createLinePlotForAllocations: model objectAllocations.
 	chart := RSChart new.
 	chart add: linePlot.
 	self tuneChartForLinePlot: chart.
@@ -39,7 +46,7 @@ AllocationVisualizations >> allocatedObjectsPerSecondLineChartCanvas [
 AllocationVisualizations >> allocatedObjectsPerSecondPerClassLineChartCanvas [
 
 	| chart linePlot topClassesByNumberOfAllocations legend |
-	topClassesByNumberOfAllocations := statsModel groupedAndSortedNAllocatingClasses: numberOfTopClasses.
+	topClassesByNumberOfAllocations := model stats topGroupedAndSortedAllocatingClasses: topCalculationsNumber.
 	chart := RSChart new.
 	legend := RSLegend new.
 	legend container: chart canvas.
@@ -50,7 +57,16 @@ AllocationVisualizations >> allocatedObjectsPerSecondPerClassLineChartCanvas [
 
 	self tuneChartForLinePlot: chart.
 	self addLabelsX: 'Seconds' y: 'Allocator Classes' forChart: chart.
-	self tuneLegend: legend.
+
+	legend location
+		middle;
+		right.
+	legend legendDo: [ :l |
+		l
+			borderColor: 'black';
+			scaleBy: 0.5;
+			padding: 10 ].
+
 	chart build.
 	legend build.
 	^ chart canvas
@@ -86,30 +102,28 @@ AllocationVisualizations >> createLinePlotForAllocations: someAllocations [
 AllocationVisualizations >> heatmapAllocatorAllocatedCanvas [
 
 	^ HeatmapAllocatorAllocated new
-		data: (statsModel topAllocatorsWithAllOfTheirAllocations: numberOfTopClasses);
+		data: (model stats topAllocatorsWithAllOfTheirAllocations: topCalculationsNumber);
 		build;
 		canvas
 ]
 
-{ #category : #initialization }
-AllocationVisualizations >> initialize [
+{ #category : #accessing }
+AllocationVisualizations >> model: aModel [
 
-	super initialize.
-	numberOfTopClasses := 10.
-	numberOfTopMethods := 10
+	model := aModel
 ]
 
 { #category : #accessing }
-AllocationVisualizations >> statsModel: aModel [
+AllocationVisualizations >> topCalculationsNumber: aNumber [
 
-	statsModel := aModel
+	topCalculationsNumber := aNumber
 ]
 
 { #category : #visualizations }
 AllocationVisualizations >> topClassesThatAllocateObjectsBarChartCanvas [
 
 	| chart allocatedObjects |
-	allocatedObjects := (statsModel topNAllocationsByClasses: numberOfTopClasses) reversed.
+	allocatedObjects := (model stats topNAllocationsByClasses: topCalculationsNumber) reversed.
 
 	chart := self createBarChartForAllocations: allocatedObjects.
 	self addLabelsX: 'Allocated Objects' y: 'Allocator Classes' forChart: chart.
@@ -121,7 +135,7 @@ AllocationVisualizations >> topClassesThatAllocateObjectsBarChartCanvas [
 AllocationVisualizations >> topMethodsThatAllocateObjectsBarChartCanvas [
 
 	| chart allocatedObjects |
-	allocatedObjects := (statsModel topNAllocationsByMethods: numberOfTopMethods) reversed.
+	allocatedObjects := (model stats topNAllocationsByMethods: topCalculationsNumber) reversed.
 
 	chart := self createBarChartForAllocations: allocatedObjects.
 	self addLabelsX: 'Allocated Objects' y: 'Allocator Methods' forChart: chart.
@@ -150,17 +164,4 @@ AllocationVisualizations >> tuneChartForLinePlot: chart [
 		labelConversion: [ :number | (number / (10 raisedTo: 9)) asFloat ];
 		yourself).
 	chart add: RSVerticalTick new
-]
-
-{ #category : #'chart construction' }
-AllocationVisualizations >> tuneLegend: legend [
-
-	legend location
-		middle;
-		right.
-	legend legendDo: [ :l | 
-		l
-			borderColor: 'black';
-			scaleBy: 0.5;
-			padding: 10 ]
 ]
