@@ -67,6 +67,13 @@ profiler profileOn: [ anObject performSomeAction ].
 profiler profileFor: 2 seconds.
 ```
 
+For starting the stoping the profiling manually. This can be useful if you don't know how long your program will run.
+
+```st
+profiler startProfiling.
+profiler stopProfiling.
+```
+
 You can open the ui at any time with the message `open`
 
 ```st
