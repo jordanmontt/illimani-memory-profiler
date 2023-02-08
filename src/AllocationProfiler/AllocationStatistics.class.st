@@ -55,14 +55,6 @@ AllocationStatistics >> groupedAndSortedAllocatingClasses [
 ]
 
 { #category : #statistics }
-AllocationStatistics >> mock [
-	^ {
-	Array ->{ Rectangle->10. Color->15. }.
-	ByteArray ->{ Rectangle->5. SmallInteger -> 17. }.
-	SpPresenter ->{ Rectangle->19. Color->17. SmallInteger ->2 }. }
-]
-
-{ #category : #statistics }
 AllocationStatistics >> numberOfClasses [
 
 	^ (allocations collect: [ :e | e allocatorClass ]) asSet size
