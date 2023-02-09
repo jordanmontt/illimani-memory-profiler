@@ -69,7 +69,7 @@ IllimaniAllocationProfilerUI >> controlButtonsLayout [
 IllimaniAllocationProfilerUI >> defaultLayout [
 
 	^ (objectAllocationProfiler isNil or: [ objectAllocationProfiler isProfilingStarted not ])
-		  ifTrue: [ self layoutWhenThereIsNotDataWithMessage: 'Profiler not set or not it didn''t start to profile.' ]
+		  ifTrue: [ self layoutWhenThereIsNotDataWithMessage: 'Profiler backend not set or not it didn''t start to profile.' ]
 		  ifFalse: [ self layoutWhenThereIsAProfiler ]
 ]
 
