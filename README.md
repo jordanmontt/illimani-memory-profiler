@@ -19,28 +19,26 @@ Metacello new
 
 ## Quick Getting Started
 
-Example 1:
-
-```st
-IllimaniAllocationProfiler new
-	classesToCapture: { Color };
-	classesToIgnore: { ByteString . ByteArray };
-	profileFor: 3 seconds;
-	open
-```
-
-Example 2:
+Start Playing:
 
 ```st
 IllimaniAllocationProfiler new
 	captureAllObjects;
-	classesToIgnore: { ByteString . ByteArray };
-	copyExecutionStack;
-	profileOn: [ 1000 timesRepeat: [ SpPresenter new ] ];
+	profileFor: 5 seconds;
 	open
 ```
 
-Example 3, capturing all but Morphic
+Example 1:
+
+```st
+IllimaniAllocationProfiler new
+	classesToCapture: { ByteString . Array . String . OrderedCollection . ByteArray };
+	copyExecutionStack;
+	profileOn: [ 10000 timesRepeat: [ SpPresenter new ] ];
+	open
+```
+
+Example 2, capturing all but Morphic
 
 ```st
 morphicPackages := RPackageOrganizer default packages select: [ :package | package name includesSubstring: 'morphic' caseSensitive: false  ].
