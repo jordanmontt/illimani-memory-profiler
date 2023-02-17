@@ -22,7 +22,8 @@ Metacello new
 Start Playing:
 
 ```st
-IllimaniAllocationProfiler new
+profiler := IllimaniAllocationProfiler new.
+profiler
 	captureAllObjects;
 	profileFor: 5 seconds;
 	open
