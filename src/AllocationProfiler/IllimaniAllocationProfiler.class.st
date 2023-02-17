@@ -73,10 +73,23 @@ Class {
 		'statisticsModel',
 		'incrementalGCCount',
 		'fullGCCount',
-		'totalGCTime'
+		'totalGCTime',
+		'announcer'
 	],
 	#category : #'AllocationProfiler-Profiler'
 }
+
+{ #category : #announcements }
+IllimaniAllocationProfiler >> announceProfilerStopedProfiling [
+
+	self announcer announce: IllimaniStopedProfilingAnnouncement new
+]
+
+{ #category : #announcements }
+IllimaniAllocationProfiler >> announcer [
+
+	^ announcer ifNil: [ announcer := IllimaniAnnouncer uniqueInstance ]
+]
 
 { #category : #'accessing - statistics' }
 IllimaniAllocationProfiler >> beginningOfProfilingTime [
@@ -229,7 +242,8 @@ IllimaniAllocationProfiler >> stopProfiling [
 	fullGCCount := Smalltalk vm fullGCCount - fullGCCount.
 	totalGCTime := (Duration milliSeconds: Smalltalk vm totalGCTime) - totalGCTime.
 
-	self initializeStatisticsModel
+	self initializeStatisticsModel.
+	self announceProfilerStopedProfiling
 ]
 
 { #category : #'accessing - statistics' }

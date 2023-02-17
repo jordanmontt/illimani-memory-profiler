@@ -143,7 +143,8 @@ IllimaniAllocationProfilerUI >> initializePresenters [
 
 	topCalculationsNumber := 10.
 	self initializeToolbar.
-	self initializeTopCalculationsPresenter
+	self initializeTopCalculationsPresenter.
+	self respondToAnnouncement
 ]
 
 { #category : #'initialization - lazy presenters' }
@@ -273,7 +274,14 @@ IllimaniAllocationProfilerUI >> objectAllocationProfiler: aProfiler [
 IllimaniAllocationProfilerUI >> refresh [
 
 	notebookPresenter := allocatedObjectsPerSecondPresenter := allocatedObjectsPerSecondPerClass := codeEvaluator := statsAndEvaluatorPresenter := topClassesPresenter := topMethodsPresenter := heatmapPresenter := nil.
+
 	^ self layout: self defaultLayout
+]
+
+{ #category : #announcements }
+IllimaniAllocationProfilerUI >> respondToAnnouncement [
+
+	 IllimaniAnnouncer uniqueInstance when: IllimaniStopedProfilingAnnouncement do: [ self refresh ]
 ]
 
 { #category : #'accessing - lazy' }
