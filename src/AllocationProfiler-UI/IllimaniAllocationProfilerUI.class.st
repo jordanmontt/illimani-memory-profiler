@@ -12,31 +12,32 @@ Class {
 		'allocatedObjectsPerSecondPresenter',
 		'allocatedObjectsPerSecondPerClass',
 		'codeEvaluator',
-		'statsAndEvaluatorPresenter',
 		'topClassesPresenter',
 		'topMethodsPresenter',
 		'heatmapPresenter',
 		'topCalculationsNumberInputPresenter',
-		'topCalculationsNumber'
+		'topCalculationsNumber',
+		'topAllocatorsPresenter',
+		'summaryAndEvaluatorPresenter'
 	],
 	#category : #'AllocationProfiler-UI'
 }
 
-{ #category : #'accessing - lazy' }
+{ #category : #'accessing - lazy presenters' }
 IllimaniAllocationProfilerUI >> allocatedObjectsPerSecondPerClass [
 
 	allocatedObjectsPerSecondPerClass ifNil: [ self initializeAllocatedObjectsPerSecondPerClass ].
 	^ allocatedObjectsPerSecondPerClass
 ]
 
-{ #category : #'accessing - lazy' }
+{ #category : #'accessing - lazy presenters' }
 IllimaniAllocationProfilerUI >> allocatedObjectsPerSecondPresenter [
 
 	allocatedObjectsPerSecondPresenter ifNil: [ self initializeAllocatedObjectsPerSecond ].
 	^ allocatedObjectsPerSecondPresenter
 ]
 
-{ #category : #'accessing - lazy' }
+{ #category : #'accessing - lazy presenters' }
 IllimaniAllocationProfilerUI >> codeEvaluator [
 
 	codeEvaluator ifNil: [ self initializeCodeEvaluator ].
@@ -73,7 +74,7 @@ IllimaniAllocationProfilerUI >> defaultLayout [
 		  ifFalse: [ self layoutWhenThereIsAProfiler ]
 ]
 
-{ #category : #'accessing - lazy' }
+{ #category : #'accessing - lazy presenters' }
 IllimaniAllocationProfilerUI >> heatMapPresenter [
 
 	heatmapPresenter ifNil: [ self initializeHeatmapPresenter ].
@@ -126,14 +127,14 @@ IllimaniAllocationProfilerUI >> initializeHeatmapPresenter [
 IllimaniAllocationProfilerUI >> initializeNotebook [
 
 	notebookPresenter := self newNotebook
-		addPageTitle: 'Statistics' provider: [ self statsAndEvaluatorPresenter ];
+		addPageTitle: 'Summary' provider: [ self summaryAndEvaluatorPresenter ];
+		addPageTitle: 'Heatmap' provider: [ self heatMapPresenter ];
+			addPageTitle: 'Allocations per Second per Class'
+		provider: [ self allocatedObjectsPerSecondPerClass ];
 		addPageTitle: 'Allocations per Second'
 		provider: [ self allocatedObjectsPerSecondPresenter ];
-		addPageTitle: 'Allocations per Second per Class'
-		provider: [ self allocatedObjectsPerSecondPerClass ];
-		addPageTitle: 'Top Allocator Classes' provider: [ self topClassesPresenter ];
-		addPageTitle: 'Top Allocator Methods' provider: [ self topMethodsPresenter ];
-		addPageTitle: 'Heatmap' provider: [ self heatMapPresenter ];
+		addPageTitle: 'Top Allocators' provider: [self topAllocatorsPresenter ];
+
 		addPageTitle: 'Evaluator' provider: [ self codeEvaluator ];
 		yourself
 ]
@@ -148,10 +149,10 @@ IllimaniAllocationProfilerUI >> initializePresenters [
 ]
 
 { #category : #'initialization - lazy presenters' }
-IllimaniAllocationProfilerUI >> initializeStatsAndEvaluatorPresenter [
+IllimaniAllocationProfilerUI >> initializeSummaryAndEvaluatorPresenter [
 
 	| statsAndEvaluatorLayout statsPresenter |
-	statsPresenter := AllocationStatisticsPresenter on: objectAllocationProfiler.
+	statsPresenter := AllocationSummaryPresenter on: objectAllocationProfiler.
 
 	statsAndEvaluatorLayout := SpPanedLayout newTopToBottom
 		positionOfSlider: 0.7;
@@ -159,7 +160,7 @@ IllimaniAllocationProfilerUI >> initializeStatsAndEvaluatorPresenter [
 		add: self codeEvaluator;
 		yourself.
 
-	statsAndEvaluatorPresenter := SpPresenter new
+	summaryAndEvaluatorPresenter := SpPresenter new
 		layout: statsAndEvaluatorLayout ;
 		yourself
 ]
@@ -177,34 +178,24 @@ IllimaniAllocationProfilerUI >> initializeToolbar [
 		yourself
 ]
 
+{ #category : #'initialization - lazy presenters' }
+IllimaniAllocationProfilerUI >> initializeTopAllocatorsPresenter [
+
+	topAllocatorsPresenter := self newPresenter
+		layout: (SpBoxLayout newLeftToRight
+			spacing: 5;
+			add: self topAllocatorClassesPresenter;
+			add: self topAllocatorMethodsPresenter;
+			yourself);
+		yourself
+]
+
 { #category : #initialization }
 IllimaniAllocationProfilerUI >> initializeTopCalculationsPresenter [
 
 	topCalculationsNumberInputPresenter := self newNumberInput
 		number: topCalculationsNumber;
 		minimum: 1;
-		yourself
-]
-
-{ #category : #'initialization - lazy presenters' }
-IllimaniAllocationProfilerUI >> initializeTopClassesPresenter [
-
-	topClassesPresenter := SpRoassalPresenter new
-		canvas: (AllocationVisualizations new
-			model: objectAllocationProfiler;
-			topCalculationsNumber: topCalculationsNumber;
-			topClassesThatAllocateObjectsBarChartCanvas);
-		yourself
-]
-
-{ #category : #'initialization - lazy presenters' }
-IllimaniAllocationProfilerUI >> initializeTopMethodsPresenter [
-
-	topMethodsPresenter := SpRoassalPresenter new
-		canvas: (AllocationVisualizations new
-			model: objectAllocationProfiler;
-			topCalculationsNumber: topCalculationsNumber;
-			topMethodsThatAllocateObjectsBarChartCanvas);
 		yourself
 ]
 
@@ -257,7 +248,7 @@ IllimaniAllocationProfilerUI >> layoutWhenThereIsNotDataWithMessage: aString [
 		  yourself
 ]
 
-{ #category : #'accessing - lazy' }
+{ #category : #'accessing - lazy presenters' }
 IllimaniAllocationProfilerUI >> notebookPresenter [
 
 	notebookPresenter ifNil: [ self initializeNotebook ].
@@ -273,7 +264,7 @@ IllimaniAllocationProfilerUI >> objectAllocationProfiler: aProfiler [
 { #category : #actions }
 IllimaniAllocationProfilerUI >> refresh [
 
-	notebookPresenter := allocatedObjectsPerSecondPresenter := allocatedObjectsPerSecondPerClass := codeEvaluator := statsAndEvaluatorPresenter := topClassesPresenter := topMethodsPresenter := heatmapPresenter := nil.
+	notebookPresenter := allocatedObjectsPerSecondPresenter := allocatedObjectsPerSecondPerClass := codeEvaluator := summaryAndEvaluatorPresenter := topClassesPresenter := topMethodsPresenter := heatmapPresenter := nil.
 
 	^ self layout: self defaultLayout
 ]
@@ -284,23 +275,38 @@ IllimaniAllocationProfilerUI >> respondToAnnouncement [
 	 IllimaniAnnouncer uniqueInstance when: IllimaniStopedProfilingAnnouncement do: [ self refresh ]
 ]
 
-{ #category : #'accessing - lazy' }
-IllimaniAllocationProfilerUI >> statsAndEvaluatorPresenter [
+{ #category : #'accessing - lazy presenters' }
+IllimaniAllocationProfilerUI >> summaryAndEvaluatorPresenter [
 
-	statsAndEvaluatorPresenter ifNil: [ self initializeStatsAndEvaluatorPresenter ].
-	^ statsAndEvaluatorPresenter
+	summaryAndEvaluatorPresenter ifNil: [ self initializeSummaryAndEvaluatorPresenter ].
+	^ summaryAndEvaluatorPresenter
 ]
 
-{ #category : #'accessing - lazy' }
-IllimaniAllocationProfilerUI >> topClassesPresenter [
+{ #category : #'accessing - presenters' }
+IllimaniAllocationProfilerUI >> topAllocatorClassesPresenter [
 
-	topClassesPresenter ifNil: [ self initializeTopClassesPresenter ].
-	^ topClassesPresenter
+	^ SpRoassalPresenter new
+		canvas: (AllocationVisualizations new
+			model: objectAllocationProfiler;
+			topCalculationsNumber: topCalculationsNumber;
+			topAllocatorClassesBarChartCanvas);
+		yourself
 ]
 
-{ #category : #'accessing - lazy' }
-IllimaniAllocationProfilerUI >> topMethodsPresenter [
+{ #category : #'accessing - presenters' }
+IllimaniAllocationProfilerUI >> topAllocatorMethodsPresenter [
 
-	topMethodsPresenter ifNil: [ self initializeTopMethodsPresenter ].
-	^ topMethodsPresenter
+	^ SpRoassalPresenter new
+		canvas: (AllocationVisualizations new
+			model: objectAllocationProfiler;
+			topCalculationsNumber: topCalculationsNumber;
+			topAllocatorMethodsBarChartCanvas);
+		yourself
+]
+
+{ #category : #'accessing - lazy presenters' }
+IllimaniAllocationProfilerUI >> topAllocatorsPresenter [
+
+	topAllocatorsPresenter ifNil: [ self initializeTopAllocatorsPresenter ].
+	^ topAllocatorsPresenter
 ]

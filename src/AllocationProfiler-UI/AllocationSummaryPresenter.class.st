@@ -2,7 +2,7 @@
 I am a presenter class that shows basic statistics about the object allocations.
 "
 Class {
-	#name : #AllocationStatisticsPresenter,
+	#name : #AllocationSummaryPresenter,
 	#superclass : #SpPresenter,
 	#instVars : [
 		'model'
@@ -11,7 +11,7 @@ Class {
 }
 
 { #category : #layout }
-AllocationStatisticsPresenter >> buildGridLayoutFor: layoutAssociations title: aTitle [
+AllocationSummaryPresenter >> buildGridLayoutFor: layoutAssociations title: aTitle [
 
 	| aGridLayout |
 	aGridLayout := SpGridLayout new
@@ -30,7 +30,7 @@ AllocationStatisticsPresenter >> buildGridLayoutFor: layoutAssociations title: a
 ]
 
 { #category : #layout }
-AllocationStatisticsPresenter >> defaultLayout [
+AllocationSummaryPresenter >> defaultLayout [
 
 	| gcLayoutElements generalStatsLayoutElements generalStatsLayout gcLayout |
 	generalStatsLayoutElements := {
@@ -55,50 +55,50 @@ AllocationStatisticsPresenter >> defaultLayout [
 ]
 
 { #category : #accessing }
-AllocationStatisticsPresenter >> fullGCCount [
+AllocationSummaryPresenter >> fullGCCount [
 
 	^ model fullGCCount asString
 ]
 
 { #category : #accessing }
-AllocationStatisticsPresenter >> incrementalGCCount [
+AllocationSummaryPresenter >> incrementalGCCount [
 
 	^ model incrementalGCCount asString
 ]
 
 { #category : #accessing }
-AllocationStatisticsPresenter >> numberOfClasses [
+AllocationSummaryPresenter >> numberOfClasses [
 
 	^ model stats numberOfClasses asString
 ]
 
 { #category : #accessing }
-AllocationStatisticsPresenter >> numberOfMethods [
+AllocationSummaryPresenter >> numberOfMethods [
 
 	^ model stats numberOfMethods asString
 ]
 
 { #category : #'accessing - model' }
-AllocationStatisticsPresenter >> setModelBeforeInitialization: aModel [
+AllocationSummaryPresenter >> setModelBeforeInitialization: aModel [
 
 	model := aModel
 ]
 
 { #category : #accessing }
-AllocationStatisticsPresenter >> timeDifferenceBetweenFirstAndLastAllocation [
+AllocationSummaryPresenter >> timeDifferenceBetweenFirstAndLastAllocation [
 
 	^ model stats timeDifferenceBetweenFirstAndLastAllocation asDuration
 		  humanReadableStringWithOnlySeconds
 ]
 
 { #category : #accessing }
-AllocationStatisticsPresenter >> totalAllocatedObjects [
+AllocationSummaryPresenter >> totalAllocatedObjects [
 
 	^ model stats totalAllocatedObjects asString
 ]
 
 { #category : #accessing }
-AllocationStatisticsPresenter >> totalEqualAllocatedObjects [
+AllocationSummaryPresenter >> totalEqualAllocatedObjects [
 
 	| totalEqualAllocatedObjects |
 	totalEqualAllocatedObjects := model stats totalEqualAllocatedObjects.
@@ -109,13 +109,13 @@ AllocationStatisticsPresenter >> totalEqualAllocatedObjects [
 ]
 
 { #category : #accessing }
-AllocationStatisticsPresenter >> totalGCTime [
+AllocationSummaryPresenter >> totalGCTime [
 
 	^ model totalGCTime asDuration humanReadableStringWithOnlySeconds
 ]
 
 { #category : #accessing }
-AllocationStatisticsPresenter >> totalProfiledTime [
+AllocationSummaryPresenter >> totalProfiledTime [
 
 	^ model totalProfiledTime asDuration humanReadableStringWithOnlySeconds
 ]

@@ -113,14 +113,8 @@ AllocationVisualizations >> model: aModel [
 	model := aModel
 ]
 
-{ #category : #accessing }
-AllocationVisualizations >> topCalculationsNumber: aNumber [
-
-	topCalculationsNumber := aNumber
-]
-
 { #category : #visualizations }
-AllocationVisualizations >> topClassesThatAllocateObjectsBarChartCanvas [
+AllocationVisualizations >> topAllocatorClassesBarChartCanvas [
 
 	| chart allocatedObjects |
 	allocatedObjects := (model stats topNAllocationsByClasses: topCalculationsNumber) reversed.
@@ -132,7 +126,7 @@ AllocationVisualizations >> topClassesThatAllocateObjectsBarChartCanvas [
 ]
 
 { #category : #visualizations }
-AllocationVisualizations >> topMethodsThatAllocateObjectsBarChartCanvas [
+AllocationVisualizations >> topAllocatorMethodsBarChartCanvas [
 
 	| chart allocatedObjects |
 	allocatedObjects := (model stats topNAllocationsByMethods: topCalculationsNumber) reversed.
@@ -141,6 +135,12 @@ AllocationVisualizations >> topMethodsThatAllocateObjectsBarChartCanvas [
 	self addLabelsX: 'Allocated Objects' y: 'Allocator Methods' forChart: chart.
 	chart build.
 	^ chart canvas
+]
+
+{ #category : #accessing }
+AllocationVisualizations >> topCalculationsNumber: aNumber [
+
+	topCalculationsNumber := aNumber
 ]
 
 { #category : #'chart construction' }
