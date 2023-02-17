@@ -10,7 +10,7 @@ Class {
 		'colorPaletteList',
 		'range'
 	],
-	#category : #'AllocationProfiler-UI'
+	#category : #'AllocationProfiler-UI-Widgets - Advanced'
 }
 
 { #category : #hooks }

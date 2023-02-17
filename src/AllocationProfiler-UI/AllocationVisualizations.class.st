@@ -8,7 +8,7 @@ Class {
 		'topCalculationsNumber',
 		'model'
 	],
-	#category : #'AllocationProfiler-UI'
+	#category : #'AllocationProfiler-UI-Visualizations'
 }
 
 { #category : #'instance creation' }
@@ -29,7 +29,7 @@ AllocationVisualizations >> addLabelsX: xText y: yText forChart: chart [
 		color: Color black.
 ]
 
-{ #category : #visualizations }
+{ #category : #'api - visualizations' }
 AllocationVisualizations >> allocatedObjectsPerSecondLineChartCanvas [
 
 	| chart linePlot |
@@ -37,12 +37,12 @@ AllocationVisualizations >> allocatedObjectsPerSecondLineChartCanvas [
 	chart := RSChart new.
 	chart add: linePlot.
 	self tuneChartForLinePlot: chart.
-	self addLabelsX: 'Seconds' y: 'Allocated Objects' forChart: chart.
+	self addLabelsX: 'Seconds' y: 'Total Allocated Objects' forChart: chart.
 	chart build.
 	^ chart canvas
 ]
 
-{ #category : #visualizations }
+{ #category : #'api - visualizations' }
 AllocationVisualizations >> allocatedObjectsPerSecondPerClassLineChartCanvas [
 
 	| chart linePlot topClassesByNumberOfAllocations legend |
@@ -98,7 +98,7 @@ AllocationVisualizations >> createLinePlotForAllocations: someAllocations [
 	^ linePlot
 ]
 
-{ #category : #visualizations }
+{ #category : #'api - visualizations' }
 AllocationVisualizations >> heatmapAllocatorAllocatedCanvas [
 
 	^ HeatmapAllocatorAllocated new
@@ -113,7 +113,7 @@ AllocationVisualizations >> model: aModel [
 	model := aModel
 ]
 
-{ #category : #visualizations }
+{ #category : #'api - visualizations' }
 AllocationVisualizations >> topAllocatorClassesBarChartCanvas [
 
 	| chart allocatedObjects |
@@ -125,7 +125,7 @@ AllocationVisualizations >> topAllocatorClassesBarChartCanvas [
 	^ chart canvas
 ]
 
-{ #category : #visualizations }
+{ #category : #'api - visualizations' }
 AllocationVisualizations >> topAllocatorMethodsBarChartCanvas [
 
 	| chart allocatedObjects |

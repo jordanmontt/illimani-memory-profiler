@@ -12,15 +12,13 @@ Class {
 		'allocatedObjectsPerSecondPresenter',
 		'allocatedObjectsPerSecondPerClass',
 		'codeEvaluator',
-		'topClassesPresenter',
-		'topMethodsPresenter',
 		'heatmapPresenter',
 		'topCalculationsNumberInputPresenter',
 		'topCalculationsNumber',
 		'topAllocatorsPresenter',
 		'summaryAndEvaluatorPresenter'
 	],
-	#category : #'AllocationProfiler-UI'
+	#category : #'AllocationProfiler-UI-Main Presenter'
 }
 
 { #category : #'accessing - lazy presenters' }
@@ -149,6 +147,15 @@ IllimaniAllocationProfilerUI >> initializePresenters [
 ]
 
 { #category : #'initialization - lazy presenters' }
+IllimaniAllocationProfilerUI >> initializeRoassalPresenters [
+
+	self initializeAllocatedObjectsPerSecond.
+	self initializeAllocatedObjectsPerSecondPerClass.
+	self initializeHeatmapPresenter.
+	self initializeTopAllocatorsPresenter
+]
+
+{ #category : #'initialization - lazy presenters' }
 IllimaniAllocationProfilerUI >> initializeSummaryAndEvaluatorPresenter [
 
 	| statsAndEvaluatorLayout statsPresenter |
@@ -181,13 +188,13 @@ IllimaniAllocationProfilerUI >> initializeToolbar [
 { #category : #'initialization - lazy presenters' }
 IllimaniAllocationProfilerUI >> initializeTopAllocatorsPresenter [
 
-	topAllocatorsPresenter := self newPresenter
-		layout: (SpBoxLayout newLeftToRight
-			spacing: 5;
-			add: self topAllocatorClassesPresenter;
-			add: self topAllocatorMethodsPresenter;
-			yourself);
-		yourself
+	topAllocatorsPresenter := self instantiate:
+		(AlternatorPresenter new
+			presenterOne: self topAllocatorClassesPresenter;
+			presenterOneName: 'Classes';
+			presenterTwo: self topAllocatorMethodsPresenter;
+			presenterTwoName: 'Methods';
+			yourself)
 ]
 
 { #category : #initialization }
@@ -264,9 +271,8 @@ IllimaniAllocationProfilerUI >> objectAllocationProfiler: aProfiler [
 { #category : #actions }
 IllimaniAllocationProfilerUI >> refresh [
 
-	notebookPresenter := allocatedObjectsPerSecondPresenter := allocatedObjectsPerSecondPerClass := codeEvaluator := summaryAndEvaluatorPresenter := topClassesPresenter := topMethodsPresenter := heatmapPresenter := nil.
-
-	^ self layout: self defaultLayout
+	self initializeRoassalPresenters.
+	self layout: self defaultLayout
 ]
 
 { #category : #announcements }

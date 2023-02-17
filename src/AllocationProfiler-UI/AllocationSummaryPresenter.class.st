@@ -7,7 +7,7 @@ Class {
 	#instVars : [
 		'model'
 	],
-	#category : #'AllocationProfiler-UI'
+	#category : #'AllocationProfiler-UI-Widgets'
 }
 
 { #category : #layout }
