@@ -53,5 +53,5 @@ ClassAllocationsDataStructure >> initialize [
 { #category : #initialization }
 ClassAllocationsDataStructure >> totalAllocations [
 
-	^ allocations sum: [ :each | each yourself ]
+	^ allocations sum
 ]

@@ -76,7 +76,7 @@ AllocationStatistics >> occurrencesBy: aBlock [
 	^ sortedAllocatedObjects sorted: [ :a :b | a value > b value ]
 ]
 
-{ #category : #statistics }
+{ #category : #'statistics - time' }
 AllocationStatistics >> timeDifferenceBetweenFirstAndLastAllocation [
 
 	^ allocations last timestamp - allocations first timestamp

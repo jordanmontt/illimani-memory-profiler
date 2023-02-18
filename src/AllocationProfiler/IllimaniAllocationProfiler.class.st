@@ -155,7 +155,7 @@ IllimaniAllocationProfiler >> initialize [
 
 	super initialize.
 	profilerHandler := IllimaniProfilerMpHandler new.
-	self initializeStatisticsModel.
+	statisticsModel := AllocationStatistics allocations: profilerHandler objectAllocations.
 	self initializeMethodProxies
 ]
 
@@ -164,12 +164,6 @@ IllimaniAllocationProfiler >> initializeMethodProxies [
 
 	proxyBasicNew := MpMethodProxy onMethod: Behavior >> #basicNew handler: profilerHandler.
 	proxyBasicNewKeyword := MpMethodProxy onMethod: Behavior >> #basicNew: handler: profilerHandler
-]
-
-{ #category : #initialization }
-IllimaniAllocationProfiler >> initializeStatisticsModel [
-
-	statisticsModel := AllocationStatistics allocations: profilerHandler objectAllocations
 ]
 
 { #category : #testing }
@@ -242,7 +236,7 @@ IllimaniAllocationProfiler >> stopProfiling [
 	fullGCCount := Smalltalk vm fullGCCount - fullGCCount.
 	totalGCTime := (Duration milliSeconds: Smalltalk vm totalGCTime) - totalGCTime.
 
-	self initializeStatisticsModel.
+	statisticsModel allocations: profilerHandler objectAllocations.
 	self announceProfilerStopedProfiling
 ]
 

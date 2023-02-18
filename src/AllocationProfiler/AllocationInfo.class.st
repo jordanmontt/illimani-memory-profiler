@@ -2,7 +2,7 @@
 I am a class that holds the information that was was captured by the method proxies. Like the class of the allocated object, who allocated that object, the timestamp, etc.
 "
 Class {
-	#name : #AllocationInformationHolder,
+	#name : #AllocationInfo,
 	#superclass : #Object,
 	#instVars : [
 		'context',
@@ -17,7 +17,7 @@ Class {
 }
 
 { #category : #'instance creation' }
-AllocationInformationHolder class >> allocatedObject: objectCreated [
+AllocationInfo class >> allocatedObject: objectCreated [
 
 	^ self new
 		allocatedObject: objectCreated;
@@ -26,7 +26,7 @@ AllocationInformationHolder class >> allocatedObject: objectCreated [
 ]
 
 { #category : #'instance creation' }
-AllocationInformationHolder class >> context: aContext allocatedObject: objectCreated [
+AllocationInfo class >> context: aContext allocatedObject: objectCreated [
 
 	^ self new
 		context: aContext;
@@ -36,92 +36,91 @@ AllocationInformationHolder class >> context: aContext allocatedObject: objectCr
 ]
 
 { #category : #accessing }
-AllocationInformationHolder >> allocatedObject [
+AllocationInfo >> allocatedObject [
 
 	^ allocatedObject
 ]
 
 { #category : #accessing }
-AllocationInformationHolder >> allocatedObject: anObject [
+AllocationInfo >> allocatedObject: anObject [
 
 	allocatedObject := anObject
 ]
 
 { #category : #accessing }
-AllocationInformationHolder >> allocatedObjectClass [
+AllocationInfo >> allocatedObjectClass [
 
 	^ allocatedObjectClass
 ]
 
 { #category : #accessing }
-AllocationInformationHolder >> allocatedObjectClass: anObject [
+AllocationInfo >> allocatedObjectClass: anObject [
 
 	allocatedObjectClass := anObject
 ]
 
 { #category : #accessing }
-AllocationInformationHolder >> allocatedObjectHash [
+AllocationInfo >> allocatedObjectHash [
 
 	^ allocatedObjectHash
 ]
 
 { #category : #accessing }
-AllocationInformationHolder >> allocatedObjectHash: anObject [
+AllocationInfo >> allocatedObjectHash: anObject [
 
 	allocatedObjectHash := anObject
 ]
 
 { #category : #accessing }
-AllocationInformationHolder >> allocatorClass [
+AllocationInfo >> allocatorClass [
 
 	^ allocatorClass
 ]
 
 { #category : #accessing }
-AllocationInformationHolder >> allocatorClass: anObject [
+AllocationInfo >> allocatorClass: anObject [
 
 	allocatorClass := anObject
 ]
 
 { #category : #accessing }
-AllocationInformationHolder >> allocatorMethodName: anObject [
+AllocationInfo >> allocatorMethodName: anObject [
 
 	allocatorMethodName := anObject
 ]
 
 { #category : #accessing }
-AllocationInformationHolder >> context [
+AllocationInfo >> context [
 
 	^ context
 ]
 
 { #category : #accessing }
-AllocationInformationHolder >> context: anObject [
+AllocationInfo >> context: anObject [
 
 	context := anObject
 ]
 
 { #category : #accessing }
-AllocationInformationHolder >> fullMethodName [
+AllocationInfo >> fullMethodName [
 
 	^ allocatorMethodName
 ]
 
 { #category : #printing }
-AllocationInformationHolder >> printOn: aStream [
+AllocationInfo >> printOn: aStream [
 
-	aStream << allocatorClass asString << ' --> ' << allocatedObject class asString << ' --> '
-	<< timestamp nanoSecond asString
+	aStream << allocatorMethodName << ' -> ' << allocatedObject class asString
 ]
 
 { #category : #accessing }
-AllocationInformationHolder >> timestamp [
+AllocationInfo >> timestamp [
 
 	^ timestamp
 ]
 
 { #category : #accessing }
-AllocationInformationHolder >> timestamp: anObject [
+AllocationInfo >> timestamp: anObject [
 
 	timestamp := anObject
 ]

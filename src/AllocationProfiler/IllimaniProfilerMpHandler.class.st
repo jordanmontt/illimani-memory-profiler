@@ -115,7 +115,7 @@ IllimaniProfilerMpHandler >> handleAllocationOfObject: newlyAllocatedObject [
 
 	| filteredContext timeNow allocationInformationHolder |
 	timeNow := DateAndTime now.
-	allocationInformationHolder := AllocationInformationHolder new.
+	allocationInformationHolder := AllocationInfo new.
 	filteredContext := self contextThatAllocatedTheObject: thisContext forClass: newlyAllocatedObject class.
 	copyExecutionStack ifTrue: [ allocationInformationHolder context: filteredContext copyStack ].
 
