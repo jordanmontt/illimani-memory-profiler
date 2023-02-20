@@ -1,11 +1,14 @@
 "
-I am a basic model for the statistics.
+I am a model for calculating the statistics for the allocation profiler. My methods `allocationsByClass` and `allocationsByMethod` return the grouped and sorted allocations. Only access them by the accessors as they are lazy calculated 
 "
 Class {
 	#name : #AllocationStatistics,
 	#superclass : #Object,
 	#instVars : [
-		'allocations'
+		'rawAllocations',
+		'allocationNodesByClass',
+		'allocationNodesByMethod',
+		'didIWalk'
 	],
 	#category : #'AllocationProfiler-Statistics-Model'
 }
@@ -18,91 +21,57 @@ AllocationStatistics class >> allocations: someAllocations [
 		yourself
 ]
 
-{ #category : #accessing }
-AllocationStatistics >> allocations [
-
-	^ allocations
-]
-
-{ #category : #accessing }
-AllocationStatistics >> allocations: aCollection [
-
-	allocations := aCollection
-]
-
 { #category : #statistics }
 AllocationStatistics >> allocationsByClass [
 
-	^ self occurrencesBy: [ :e | e allocatorClass ]
+	didIWalk ifFalse: [ self walkAllocations ].
+	^ allocationNodesByClass sorted
 ]
 
 { #category : #statistics }
 AllocationStatistics >> allocationsByMethod [
 
-	^ self occurrencesBy: [ :e | e fullMethodName ]
+	didIWalk ifFalse: [ self walkAllocations ].
+	^ allocationNodesByMethod sorted
 ]
 
-{ #category : #statistics }
-AllocationStatistics >> groupedAndSortedAllocatingClasses [
+{ #category : #initialization }
+AllocationStatistics >> initialize [
 
-	| classesWithTheirAllocations topClassesByNumberOfAllocations |
-	classesWithTheirAllocations := allocations groupedBy: [ :holder | holder allocatorClass ].
-
-	topClassesByNumberOfAllocations := classesWithTheirAllocations keys sorted: [ :key1 :key2 |
-		(classesWithTheirAllocations at: key1) size > (classesWithTheirAllocations at: key2) size ].
-
-	^ topClassesByNumberOfAllocations collect: [ :each | each -> (classesWithTheirAllocations at: each) ]
+	super initialize.
+	allocationNodesByClass := AllocatorWithGroupedAllocationsCollection new.
+	allocationNodesByMethod := AllocatorWithGroupedAllocationsCollection new.
+	didIWalk := false
 ]
 
 { #category : #statistics }
 AllocationStatistics >> numberOfClasses [
 
-	^ (allocations collect: [ :e | e allocatorClass ]) asSet size
+	^ self allocationsByClass size
 ]
 
 { #category : #statistics }
 AllocationStatistics >> numberOfMethods [
 
-	^ (allocations collect: [ :e | e fullMethodName ]) asSet size
+	^ self allocationsByMethod size
 ]
 
-{ #category : #computations }
-AllocationStatistics >> occurrencesBy: aBlock [
+{ #category : #accessing }
+AllocationStatistics >> rawAllocations [
 
-	| sortedAllocatedObjects ocurrences |
-	sortedAllocatedObjects := OrderedCollection new.
-	ocurrences := Bag newFrom: (allocations collect: aBlock).
-	ocurrences doWithOccurrences: [ :key :value | sortedAllocatedObjects add: key -> value ].
-	^ sortedAllocatedObjects sorted: [ :a :b | a value > b value ]
+	^ rawAllocations
+]
+
+{ #category : #accessing }
+AllocationStatistics >> rawAllocations: anObject [
+
+	rawAllocations := anObject
 ]
 
 { #category : #'statistics - time' }
 AllocationStatistics >> timeDifferenceBetweenFirstAndLastAllocation [
 
-	^ allocations last timestamp - allocations first timestamp
-]
-
-{ #category : #statistics }
-AllocationStatistics >> topAllocatorsWithAllOfTheirAllocations: n [
-
-	| dict |
-	dict := Dictionary new.
-	allocations do: [ :allocationHolder |
-		| allocatedClass |
-		allocatedClass := allocationHolder allocatedObjectClass.
-		dict at: allocationHolder allocatorClass
-			ifPresent: [ :subDictionary | subDictionary increaseAllocationsFor: allocatedClass ]
-			ifAbsentPut: [ ClassAllocationsDataStructure newFor: allocatedClass ] ].
-	^ (dict associations sorted: [ :a :b |
-		   a value totalAllocations > b value totalAllocations ]) first: n
-]
-
-{ #category : #statistics }
-AllocationStatistics >> topGroupedAndSortedAllocatingClasses: n [
-
-	| classesWithTheirAllocations |
-	classesWithTheirAllocations := self groupedAndSortedAllocatingClasses.
-	^ classesWithTheirAllocations first: (n min: classesWithTheirAllocations size)
+	^ rawAllocations last timestamp - rawAllocations first timestamp
 ]
 
 { #category : #statistics }
@@ -124,7 +93,7 @@ AllocationStatistics >> topNAllocationsByMethod: n [
 { #category : #statistics }
 AllocationStatistics >> totalAllocatedObjects [
 
-	^ allocations size
+	^ rawAllocations size
 ]
 
 { #category : #statistics }
@@ -132,5 +101,19 @@ AllocationStatistics >> totalEqualAllocatedObjects [
 	"This only makes sense if you kept the allocated objects in the profiler. If not, you will
 	end up with a set with nil"
 
-	^ (allocations collect: [ :a | a allocatedObject ]) asSet size
+	^ (rawAllocations collect: [ :a | a allocatedObject ] as: Set) size
+]
+
+{ #category : #calculating }
+AllocationStatistics >> walkAllocations [
+
+	rawAllocations do: [ :allocationHolder |
+		allocationNodesByClass
+			updateAllocationForAllocator: allocationHolder allocatorClass
+			allocation: allocationHolder.
+		allocationNodesByMethod
+			updateAllocationForAllocator: allocationHolder fullMethodName
+			allocation: allocationHolder ].
+
+	didIWalk := true
 ]
