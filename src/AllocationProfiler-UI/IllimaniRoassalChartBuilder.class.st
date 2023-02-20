@@ -112,7 +112,7 @@ IllimaniRoassalChartBuilder >> createLinePlotForAllocations: someAllocations [
 { #category : #'api - heatmap' }
 IllimaniRoassalChartBuilder >> heatmapAllocatorAllocatedCanvasByClass [
 
-	^ HeatmapAllocatorAllocated new
+	^ IllimaniHeatmapRoassalBuilder new
 		data: (model stats topNAllocationsByClass: topCalculationsNumber);
 		build;
 		canvas
@@ -121,7 +121,7 @@ IllimaniRoassalChartBuilder >> heatmapAllocatorAllocatedCanvasByClass [
 { #category : #'api - heatmap' }
 IllimaniRoassalChartBuilder >> heatmapAllocatorAllocatedCanvasByMethod [
 
-	^ HeatmapAllocatorAllocated new
+	^ IllimaniHeatmapRoassalBuilder new
 		data: (model stats topNAllocationsByMethod: topCalculationsNumber);
 		build;
 		canvas

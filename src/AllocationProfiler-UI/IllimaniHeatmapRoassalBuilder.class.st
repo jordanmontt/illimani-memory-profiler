@@ -2,7 +2,7 @@
 I am a subclass of Roassal RSDSM presenter. I am a subclass because I define specific behavior for coloring the matrix and calculating the labels
 "
 Class {
-	#name : #HeatmapAllocatorAllocated,
+	#name : #IllimaniHeatmapRoassalBuilder,
 	#superclass : #RSDSM,
 	#instVars : [
 		'scale',
@@ -14,7 +14,7 @@ Class {
 }
 
 { #category : #hooks }
-HeatmapAllocatorAllocated >> computeColor: aTuple [
+IllimaniHeatmapRoassalBuilder >> computeColor: aTuple [
 
 	^ scale scale: (self numberFor: aTuple)
 	"| aNumber |
@@ -28,7 +28,7 @@ HeatmapAllocatorAllocated >> computeColor: aTuple [
 ]
 
 { #category : #hooks }
-HeatmapAllocatorAllocated >> data: someData [
+IllimaniHeatmapRoassalBuilder >> data: someData [
 
 	| allocatedSortedClasses |
 	data := someData.
@@ -46,7 +46,7 @@ HeatmapAllocatorAllocated >> data: someData [
 ]
 
 { #category : #initialization }
-HeatmapAllocatorAllocated >> initialize [
+IllimaniHeatmapRoassalBuilder >> initialize [
 
 	super initialize.
 	self setShouldFeedY.
@@ -59,7 +59,7 @@ HeatmapAllocatorAllocated >> initialize [
 ]
 
 { #category : #hooks }
-HeatmapAllocatorAllocated >> initializeColorMultilinearScale [
+IllimaniHeatmapRoassalBuilder >> initializeColorMultilinearScale [
 
 	| maxRange |
 	maxRange := (data collect: [ :tuple | tuple value totalAllocations ]) max.
@@ -77,7 +77,7 @@ HeatmapAllocatorAllocated >> initializeColorMultilinearScale [
 ]
 
 { #category : #hooks }
-HeatmapAllocatorAllocated >> labelX [
+IllimaniHeatmapRoassalBuilder >> labelX [
 
 	| labelX |
 	labelX := RSLabel new
@@ -93,7 +93,7 @@ HeatmapAllocatorAllocated >> labelX [
 ]
 
 { #category : #hooks }
-HeatmapAllocatorAllocated >> labelY [
+IllimaniHeatmapRoassalBuilder >> labelY [
 
 	| labelY |
 	labelY := RSLabel new
@@ -111,7 +111,7 @@ HeatmapAllocatorAllocated >> labelY [
 ]
 
 { #category : #hooks }
-HeatmapAllocatorAllocated >> numberFor: tuple [
+IllimaniHeatmapRoassalBuilder >> numberFor: tuple [
 
 	| allocatorClass allocatedClass index |
 	allocatorClass := tuple key.
@@ -121,7 +121,7 @@ HeatmapAllocatorAllocated >> numberFor: tuple [
 ]
 
 { #category : #hooks }
-HeatmapAllocatorAllocated >> renderIn: aCanvas [
+IllimaniHeatmapRoassalBuilder >> renderIn: aCanvas [
 
 	| labelY labelX |
 	super renderIn: aCanvas.
@@ -136,7 +136,7 @@ HeatmapAllocatorAllocated >> renderIn: aCanvas [
 ]
 
 { #category : #hooks }
-HeatmapAllocatorAllocated >> renderLegend: aCanvas [
+IllimaniHeatmapRoassalBuilder >> renderLegend: aCanvas [
 
 	| box percentages paint legend boxScale lastColumn |
 	lastColumn := (self columnAt: objectsX size) asGroup.
