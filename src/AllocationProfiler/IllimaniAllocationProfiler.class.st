@@ -73,8 +73,7 @@ Class {
 		'statisticsModel',
 		'incrementalGCCount',
 		'fullGCCount',
-		'totalGCTime',
-		'announcer'
+		'totalGCTime'
 	],
 	#category : #'AllocationProfiler-Profiler'
 }
@@ -149,7 +148,7 @@ IllimaniAllocationProfiler >> initialize [
 
 	super initialize.
 	profilerHandler := IllimaniProfilerMpHandler new.
-	statisticsModel := AllocationStatistics allocations: profilerHandler objectAllocations.
+	statisticsModel := AllocationStatistics new rawAllocations: profilerHandler objectAllocations.
 	self initializeMethodProxies
 ]
 
@@ -230,7 +229,7 @@ IllimaniAllocationProfiler >> stopProfiling [
 	fullGCCount := Smalltalk vm fullGCCount - fullGCCount.
 	totalGCTime := (Duration milliSeconds: Smalltalk vm totalGCTime) - totalGCTime.
 
-	statisticsModel allocations: profilerHandler objectAllocations.
+	statisticsModel rawAllocations: profilerHandler objectAllocations.
 	self announceProfilerStopedProfiling
 ]
 
