@@ -22,6 +22,16 @@ AllocationStatisticsTest >> setUp [
 ]
 
 { #category : #tests }
+AllocationStatisticsTest >> testAllocationsByClassHasExactTheSameObjects [
+
+	| col1 col2 |
+	"This test is to see if that created data structure that is used for the stats containts exactly the same allocations as the originals"
+	col1 := statsModel allocationsByClass first groupedAllocations flatCollect: #value.
+	col2 := fixture groupedAndSortedByClassAllocations first value flatCollect: #value.
+	self assertCollection: col2 includesAll: col2
+]
+
+{ #category : #tests }
 AllocationStatisticsTest >> testAllocationsByClassMatchesTotalAllocations [
 
 	self assert: statsModel allocationsByClass first totalAllocations

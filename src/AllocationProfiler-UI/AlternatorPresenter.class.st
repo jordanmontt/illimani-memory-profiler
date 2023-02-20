@@ -16,6 +16,18 @@ Class {
 	#category : #'AllocationProfiler-UI-Widgets'
 }
 
+{ #category : #api }
+AlternatorPresenter >> beForPresenterOne [
+
+	isForPresenterOne := true
+]
+
+{ #category : #api }
+AlternatorPresenter >> beForPresenterTwo [
+
+	isForPresenterOne := false
+]
+
 { #category : #initialization }
 AlternatorPresenter >> connectPresenters [
 
@@ -55,14 +67,22 @@ AlternatorPresenter >> initializePresenters [
 { #category : #accessing }
 AlternatorPresenter >> labelForToggleButton [
 
-	^ isForPresenterOne ifTrue: [ 'Switch to ' , self presenterOneName ]
-		  ifFalse: [ 'Switch to ', self presenterTwoName  ]
+	^ isForPresenterOne ifTrue: [ 'Switch to ' , self presenterTwoName ]
+		  ifFalse: [ 'Switch to ', self presenterOneName  ]
 ]
 
 { #category : #accessing }
 AlternatorPresenter >> presenterOne: aPresenter [
 
 	presenterOne := aPresenter.
+	isForPresenterOne ifTrue: [ activePresenter := presenterOne ]
+]
+
+{ #category : #accessing }
+AlternatorPresenter >> presenterOne: aPresenter withName: aName [
+
+	presenterOne := aPresenter.
+	presenterOneName := aName.
 	isForPresenterOne ifTrue: [ activePresenter := presenterOne ]
 ]
 
@@ -83,6 +103,14 @@ AlternatorPresenter >> presenterOneName: aString [
 AlternatorPresenter >> presenterTwo: aPresenter [
 
 	presenterTwo := aPresenter.
+	isForPresenterOne ifFalse: [ activePresenter := presenterTwo ]
+]
+
+{ #category : #accessing }
+AlternatorPresenter >> presenterTwo: aPresenter withName: aName [
+
+	presenterTwo := aPresenter.
+	presenterTwoName := aName.
 	isForPresenterOne ifFalse: [ activePresenter := presenterTwo ]
 ]
 

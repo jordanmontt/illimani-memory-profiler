@@ -9,24 +9,38 @@ Class {
 		'refreshButton',
 		'toolbarPresenter',
 		'allocatedObjectsPerSecondPresenter',
-		'allocatedObjectsPerSecondPerClass',
 		'codeEvaluator',
 		'heatmapPresenter',
 		'topCalculationsNumberInputPresenter',
 		'topCalculationsNumber',
-		'topAllocatorsPresenter',
 		'summaryAndEvaluatorPresenter',
-		'listPresenter',
-		'profiler'
+		'profiler',
+		'memoryTablePresenter',
+		'allocationsPerSecondPerAllocatorPresenter'
 	],
 	#category : #'AllocationProfiler-UI-Main Presenter'
 }
 
-{ #category : #'accessing - lazy presenters' }
-IllimaniAllocationProfilerUI >> allocatedObjectsPerSecondPerClass [
+{ #category : #accessing }
+IllimaniAllocationProfilerUI >> allocatedObjectsPerSecondPerClassPresenter [
 
-	allocatedObjectsPerSecondPerClass ifNil: [ self initializeAllocatedObjectsPerSecondPerClass ].
-	^ allocatedObjectsPerSecondPerClass
+	^ SpRoassalPresenter new
+		canvas: (IllimaniRoassalChartBuilder new
+			model: profiler;
+			topCalculationsNumber: topCalculationsNumber;
+			allocatedObjectsPerSecondPerClassLineChartCanvas);
+		yourself
+]
+
+{ #category : #accessing }
+IllimaniAllocationProfilerUI >> allocatedObjectsPerSecondPerMethodPresenter [
+
+	^ SpRoassalPresenter new
+		canvas: (IllimaniRoassalChartBuilder new
+			model: profiler;
+			topCalculationsNumber: topCalculationsNumber;
+			allocatedObjectsPerSecondPerMethodLineChartCanvas);
+		yourself
 ]
 
 { #category : #'accessing - lazy presenters' }
@@ -34,6 +48,13 @@ IllimaniAllocationProfilerUI >> allocatedObjectsPerSecondPresenter [
 
 	allocatedObjectsPerSecondPresenter ifNil: [ self initializeAllocatedObjectsPerSecond ].
 	^ allocatedObjectsPerSecondPresenter
+]
+
+{ #category : #'accessing - lazy presenters' }
+IllimaniAllocationProfilerUI >> allocationsPerSecondPerAllocatorPresenter [
+
+	allocationsPerSecondPerAllocatorPresenter ifNil: [ self initializeAllocationsPerSecondPerAllocator ].
+	^ allocationsPerSecondPerAllocatorPresenter
 ]
 
 { #category : #'accessing - lazy presenters' }
@@ -92,14 +113,12 @@ IllimaniAllocationProfilerUI >> initializeAllocatedObjectsPerSecond [
 ]
 
 { #category : #'initialization - lazy presenters' }
-IllimaniAllocationProfilerUI >> initializeAllocatedObjectsPerSecondPerClass [
+IllimaniAllocationProfilerUI >> initializeAllocationsPerSecondPerAllocator [
 
-	allocatedObjectsPerSecondPerClass := SpRoassalPresenter new
-		canvas: (IllimaniRoassalChartBuilder new
-			model: profiler;
-			topCalculationsNumber: topCalculationsNumber;
-			allocatedObjectsPerSecondPerClassLineChartCanvas);
-		yourself
+	allocationsPerSecondPerAllocatorPresenter := AlternatorPresenter new
+		  presenterOne: self allocatedObjectsPerSecondPerClassPresenter withName: 'Classes';
+		  presenterTwo: self allocatedObjectsPerSecondPerMethodPresenter withName: 'Methods';
+		  yourself
 ]
 
 { #category : #'initialization - lazy presenters' }
@@ -114,31 +133,46 @@ IllimaniAllocationProfilerUI >> initializeCodeEvaluator [
 { #category : #'initialization - lazy presenters' }
 IllimaniAllocationProfilerUI >> initializeHeatmapPresenter [
 
-	heatmapPresenter := self instantiate: SpRoassalPresenter.
-	heatmapPresenter canvas: (IllimaniRoassalChartBuilder new
+	| roassalPresenterByClass roassalPresenterByMethod |
+	roassalPresenterByClass := self instantiate: SpRoassalPresenter.
+	roassalPresenterByClass canvas: (IllimaniRoassalChartBuilder new
 			 model: profiler;
 			 topCalculationsNumber: topCalculationsNumber;
-			 heatmapAllocatorAllocatedCanvas)
+			 heatmapAllocatorAllocatedCanvasByClass).
+	roassalPresenterByMethod := self instantiate: SpRoassalPresenter.
+	roassalPresenterByMethod canvas: (IllimaniRoassalChartBuilder new
+			 model: profiler;
+			 topCalculationsNumber: topCalculationsNumber;
+			 heatmapAllocatorAllocatedCanvasByMethod).
+
+	heatmapPresenter :=( self instantiate: AlternatorPresenter)
+		presenterOne: roassalPresenterByClass withName: 'Classes';
+		presenterTwo: roassalPresenterByMethod  withName: 'Methods';
+		yourself
 ]
 
 { #category : #'initialization - lazy presenters' }
-IllimaniAllocationProfilerUI >> initializeListstes [
+IllimaniAllocationProfilerUI >> initializeMemoryTablePresenter [
 
-	^ listPresenter := SebasSebasPresenter owner: self on: profiler
+	memoryTablePresenter := AlternatorPresenter new
+		presenterOne: (TableMemoryInformationPresenter owner: self on: profiler stats allocationsByClass)
+		withName: 'Classes';
+		presenterTwo: (TableMemoryInformationPresenter owner: self on: profiler stats allocationsByMethod)
+		withName: 'Methods';
+		yourself
 ]
 
 { #category : #'initialization - lazy presenters' }
 IllimaniAllocationProfilerUI >> initializeNotebook [
 
 	notebookPresenter := self newNotebook
-		addPageTitle: 'sfsf' provider: [ self initializeListstes  ];
 		addPageTitle: 'Summary' provider: [ self summaryAndEvaluatorPresenter ];
+		addPageTitle: 'Memory' provider: [ self memoryTablePresenter  ];
 		addPageTitle: 'Heatmap' provider: [ self heatMapPresenter ];
-		addPageTitle: 'Allocations per Second per Class'
-		provider: [ self allocatedObjectsPerSecondPerClass ];
-		addPageTitle: 'Allocations per Second'
+		addPageTitle: 'Allocations per Second Total'
 		provider: [ self allocatedObjectsPerSecondPresenter ];
-		addPageTitle: 'Top Allocators' provider: [self topAllocatorsPresenter ];
+		addPageTitle: 'Allocations per Second per Allocator'
+		provider: [ self allocationsPerSecondPerAllocatorPresenter ];
 
 		addPageTitle: 'Evaluator' provider: [ self codeEvaluator ];
 		yourself
@@ -149,7 +183,7 @@ IllimaniAllocationProfilerUI >> initializePresenters [
 
 	topCalculationsNumber := 10.
 	self initializeToolbar.
-	self initializeTopCalculationsPresenter.
+	self initializeTopCalculationsInputPresenter.
 	self respondToAnnouncement
 ]
 
@@ -157,9 +191,8 @@ IllimaniAllocationProfilerUI >> initializePresenters [
 IllimaniAllocationProfilerUI >> initializeRoassalPresenters [
 
 	self initializeAllocatedObjectsPerSecond.
-	self initializeAllocatedObjectsPerSecondPerClass.
-	self initializeHeatmapPresenter.
-	self initializeTopAllocatorsPresenter
+	self initializeAllocationsPerSecondPerAllocator.
+	self initializeHeatmapPresenter
 ]
 
 { #category : #'initialization - lazy presenters' }
@@ -192,20 +225,8 @@ IllimaniAllocationProfilerUI >> initializeToolbar [
 		yourself
 ]
 
-{ #category : #'initialization - lazy presenters' }
-IllimaniAllocationProfilerUI >> initializeTopAllocatorsPresenter [
-
-	topAllocatorsPresenter := self instantiate:
-		(AlternatorPresenter new
-			presenterOne: self topAllocatorClassesPresenter;
-			presenterOneName: 'Classes';
-			presenterTwo: self topAllocatorMethodsPresenter;
-			presenterTwoName: 'Methods';
-			yourself)
-]
-
 { #category : #initialization }
-IllimaniAllocationProfilerUI >> initializeTopCalculationsPresenter [
+IllimaniAllocationProfilerUI >> initializeTopCalculationsInputPresenter [
 
 	topCalculationsNumberInputPresenter := self newNumberInput
 		number: topCalculationsNumber;
@@ -263,6 +284,13 @@ IllimaniAllocationProfilerUI >> layoutWhenThereIsNotDataWithMessage: aString [
 ]
 
 { #category : #'accessing - lazy presenters' }
+IllimaniAllocationProfilerUI >> memoryTablePresenter [
+
+	memoryTablePresenter ifNil: [ self initializeMemoryTablePresenter ].
+	^ memoryTablePresenter
+]
+
+{ #category : #'accessing - lazy presenters' }
 IllimaniAllocationProfilerUI >> notebookPresenter [
 
 	notebookPresenter ifNil: [ self initializeNotebook ].
@@ -293,33 +321,4 @@ IllimaniAllocationProfilerUI >> summaryAndEvaluatorPresenter [
 
 	summaryAndEvaluatorPresenter ifNil: [ self initializeSummaryAndEvaluatorPresenter ].
 	^ summaryAndEvaluatorPresenter
-]
-
-{ #category : #'accessing - presenters' }
-IllimaniAllocationProfilerUI >> topAllocatorClassesPresenter [
-
-	^ SpRoassalPresenter new
-		canvas: (IllimaniRoassalChartBuilder new
-			model: profiler;
-			topCalculationsNumber: topCalculationsNumber;
-			topAllocatorClassesBarChartCanvas);
-		yourself
-]
-
-{ #category : #'accessing - presenters' }
-IllimaniAllocationProfilerUI >> topAllocatorMethodsPresenter [
-
-	^ SpRoassalPresenter new
-		canvas: (IllimaniRoassalChartBuilder new
-			model: profiler;
-			topCalculationsNumber: topCalculationsNumber;
-			topAllocatorMethodsBarChartCanvas);
-		yourself
-]
-
-{ #category : #'accessing - lazy presenters' }
-IllimaniAllocationProfilerUI >> topAllocatorsPresenter [
-
-	topAllocatorsPresenter ifNil: [ self initializeTopAllocatorsPresenter ].
-	^ topAllocatorsPresenter
 ]

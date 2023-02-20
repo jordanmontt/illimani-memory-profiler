@@ -1,22 +1,25 @@
+"
+I am a table that shows the information of number of allocations and size in memory 
+"
 Class {
-	#name : #SebasSebasPresenter,
+	#name : #TableMemoryInformationPresenter,
 	#superclass : #SpPresenter,
 	#instVars : [
 		'tablePresenter',
-		'model',
-		'textInput'
+		'textInput',
+		'tableItems'
 	],
 	#category : #'AllocationProfiler-UI-Widgets'
 }
 
 { #category : #initialization }
-SebasSebasPresenter >> connectPresenters [
+TableMemoryInformationPresenter >> connectPresenters [
 
 	textInput whenTextChangedDo: [ :aText | self filterTable: aText ]
 ]
 
 { #category : #layout }
-SebasSebasPresenter >> defaultLayout [
+TableMemoryInformationPresenter >> defaultLayout [
 
 	^ SpBoxLayout newTopToBottom
 		  spacing: 5;
@@ -26,7 +29,7 @@ SebasSebasPresenter >> defaultLayout [
 ]
 
 { #category : #'accessing - model' }
-SebasSebasPresenter >> filterTable: aText [
+TableMemoryInformationPresenter >> filterTable: aText [
 
 	| newItems |
 	aText ifEmpty: [
@@ -38,7 +41,7 @@ SebasSebasPresenter >> filterTable: aText [
 ]
 
 { #category : #initialization }
-SebasSebasPresenter >> initializePresenters [
+TableMemoryInformationPresenter >> initializePresenters [
 
 	textInput := self newTextInput
 		             placeholder: 'Filter';
@@ -47,7 +50,7 @@ SebasSebasPresenter >> initializePresenters [
 	tablePresenter
 		addColumn: (SpIndexTableColumn new
 				 title: 'Index';
-				 " sortFunction: #yourself ascending;"width: 60;
+				 width: 60;
 				 yourself);
 		addColumn: (SpStringTableColumn new
 				 title: 'Allocator';
@@ -60,7 +63,7 @@ SebasSebasPresenter >> initializePresenters [
 				 sortFunction: #totalAllocations ascending;
 				 yourself);
 		addColumn: (SpStringTableColumn new
-				 title: 'Total size in memory in bytes';
+				 title: 'Total size in bytes';
 				 evaluated: [ :each | each totalSizeInBytes asString ];
 				 sortFunction: #totalSizeInBytes ascending;
 				 yourself);
@@ -68,13 +71,13 @@ SebasSebasPresenter >> initializePresenters [
 ]
 
 { #category : #'accessing - model' }
-SebasSebasPresenter >> setModelBeforeInitialization: aProfiler [
+TableMemoryInformationPresenter >> setModelBeforeInitialization: someTableItems [
 
-	model := aProfiler
+	tableItems := someTableItems
 ]
 
 { #category : #'accessing - model' }
-SebasSebasPresenter >> tableItems [
+TableMemoryInformationPresenter >> tableItems [
 
-	^ model stats allocationsByClass
+	^ tableItems
 ]

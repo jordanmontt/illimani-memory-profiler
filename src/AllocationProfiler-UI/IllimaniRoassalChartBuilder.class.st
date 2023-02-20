@@ -55,9 +55,39 @@ IllimaniRoassalChartBuilder >> allocatedObjectsPerSecondPerClassLineChartCanvas 
 	| chart linePlot legend |
 	chart := RSChart new.
 	legend := RSLegend new
-		          container: chart canvas;
-		          yourself.
+		container: chart canvas;
+		yourself.
 	(model stats topNAllocationsByClass: topCalculationsNumber) do: [ :anAllocationNode |
+		linePlot := self createLinePlotForAllocations: anAllocationNode sortedGroupedAllocations.
+		chart add: linePlot.
+		legend text: anAllocationNode allocator asString withBoxColor: linePlot computeColor ].
+
+	self addTicksToLabel: chart.
+	self addLabelsX: 'Seconds' y: 'Allocators' forChart: chart.
+
+	legend location
+		middle;
+		right.
+	legend legendDo: [ :l |
+		l
+			borderColor: 'black';
+			scaleBy: 0.5;
+			padding: 10 ].
+
+	chart build.
+	legend build.
+	^ chart canvas
+]
+
+{ #category : #'api - line chart' }
+IllimaniRoassalChartBuilder >> allocatedObjectsPerSecondPerMethodLineChartCanvas [
+
+	| chart linePlot legend |
+	chart := RSChart new.
+	legend := RSLegend new
+		container: chart canvas;
+		yourself.
+	(model stats topNAllocationsByMethod: topCalculationsNumber) do: [ :anAllocationNode |
 		linePlot := self createLinePlotForAllocations: anAllocationNode sortedGroupedAllocations.
 		chart add: linePlot.
 		legend text: anAllocationNode allocator asString withBoxColor: linePlot computeColor ].
@@ -112,6 +142,24 @@ IllimaniRoassalChartBuilder >> heatmapAllocatorAllocatedCanvas [
 
 	^ HeatmapAllocatorAllocated new
 		data: (model stats topNAllocationsByClass: topCalculationsNumber);
+		build;
+		canvas
+]
+
+{ #category : #'api - heatmap' }
+IllimaniRoassalChartBuilder >> heatmapAllocatorAllocatedCanvasByClass [
+
+	^ HeatmapAllocatorAllocated new
+		data: (model stats topNAllocationsByClass: topCalculationsNumber);
+		build;
+		canvas
+]
+
+{ #category : #'api - heatmap' }
+IllimaniRoassalChartBuilder >> heatmapAllocatorAllocatedCanvasByMethod [
+
+	^ HeatmapAllocatorAllocated new
+		data: (model stats topNAllocationsByMethod: topCalculationsNumber);
 		build;
 		canvas
 ]
