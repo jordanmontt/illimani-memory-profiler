@@ -11,7 +11,8 @@ Class {
 		'allocatedObjectHash',
 		'allocatorClass',
 		'allocatorMethodName',
-		'allocatedObjectClass'
+		'allocatedObjectClass',
+		'totalSizeInBytes'
 	],
 	#category : #'AllocationProfiler-Data-Structures'
 }
@@ -123,4 +124,17 @@ AllocationInfoDTO >> timestamp [
 AllocationInfoDTO >> timestamp: anObject [
 
 	timestamp := anObject
+]
+
+{ #category : #accessing }
+AllocationInfoDTO >> totalSizeInBytes [
+	"Returns the total size in memory in bytes"
+
+	^ totalSizeInBytes
+]
+
+{ #category : #accessing }
+AllocationInfoDTO >> totalSizeInBytes: aNumber [
+
+	totalSizeInBytes := aNumber
 ]

@@ -12,7 +12,8 @@ Class {
 		'captureAllObjects',
 		'copyExecutionStack',
 		'classesToCapture',
-		'classesToIgnore'
+		'classesToIgnore',
+		'graphWalker'
 	],
 	#category : #'AllocationProfiler-Profiler'
 }
@@ -109,16 +110,18 @@ IllimaniProfilerMpHandler >> doNotCopyExecutionStack [
 { #category : #evaluating }
 IllimaniProfilerMpHandler >> handleAllocationOfObject: newlyAllocatedObject [
 
-	| filteredContext timeNow allocationInformationHolder |
+	| filteredContext timeNow allocationInformationHolder totalSizeInBytes |
 	timeNow := DateAndTime now.
 	allocationInformationHolder := AllocationInfoDTO new.
 	filteredContext := self contextThatAllocatedTheObject: thisContext forClass: newlyAllocatedObject class.
 	copyExecutionStack ifTrue: [ allocationInformationHolder context: filteredContext copyStack ].
+	totalSizeInBytes := (graphWalker rootObject: newlyAllocatedObject) totalSizeInBytes.
 
 	allocationInformationHolder
 		allocatorClass: filteredContext receiver class;
 		allocatorMethodName: (filteredContext receiver class name asString , '>>#' , filteredContext compiledCode method selector asString);
 		allocatedObjectClass: newlyAllocatedObject class;
+		totalSizeInBytes: totalSizeInBytes;
 		"allocatedObjectHash: newlyAllocatedObject hash;
 		allocatedObject: newlyAllocatedObject;"
 		timestamp: timeNow.
@@ -132,9 +135,10 @@ IllimaniProfilerMpHandler >> initialize [
 	super initialize.
 	self doNotCopyExecutionStack.
 	self doNotCaptureAllObjects.
-	classesToCapture := { }.
-	classesToIgnore := { }.
+	classesToCapture := {  }.
+	classesToIgnore := {  }.
 	objectAllocations := OrderedCollection new.
+	graphWalker := GraphSpaceStatistics new.
 	self initializeClassesToAvoidInContextSearch
 ]
 

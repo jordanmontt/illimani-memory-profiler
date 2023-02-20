@@ -7,7 +7,7 @@ Class {
 	#instVars : [
 		'allocator',
 		'groupedAllocations',
-		'totalMemorySize'
+		'totalSizeInBytes'
 	],
 	#category : #'AllocationProfiler-Statistics-Model'
 }
@@ -93,13 +93,7 @@ AllocatorWithGroupedAllocationsNode >> totalGroupedAllocations [
 ]
 
 { #category : #accessing }
-AllocatorWithGroupedAllocationsNode >> totalMemorySize [
+AllocatorWithGroupedAllocationsNode >> totalSizeInBytes [
 
-	^ totalMemorySize
-]
-
-{ #category : #accessing }
-AllocatorWithGroupedAllocationsNode >> totalMemorySize: anObject [
-
-	totalMemorySize := anObject
+	^ groupedAllocations sum: [ :e | e sum: [ :j | totalSizeInBytes ] ]
 ]

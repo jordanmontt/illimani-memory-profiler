@@ -6,7 +6,6 @@ Class {
 	#superclass : #SpPresenter,
 	#instVars : [
 		'notebookPresenter',
-		'objectAllocationProfiler',
 		'refreshButton',
 		'toolbarPresenter',
 		'allocatedObjectsPerSecondPresenter',
@@ -16,7 +15,9 @@ Class {
 		'topCalculationsNumberInputPresenter',
 		'topCalculationsNumber',
 		'topAllocatorsPresenter',
-		'summaryAndEvaluatorPresenter'
+		'summaryAndEvaluatorPresenter',
+		'listPresenter',
+		'profiler'
 	],
 	#category : #'AllocationProfiler-UI-Main Presenter'
 }
@@ -67,7 +68,7 @@ IllimaniAllocationProfilerUI >> controlButtonsLayout [
 { #category : #layout }
 IllimaniAllocationProfilerUI >> defaultLayout [
 
-	^ (objectAllocationProfiler isNil or: [ objectAllocationProfiler isProfilingStarted not ])
+	^ (profiler isNil or: [ profiler isProfilingStarted not ])
 		  ifTrue: [ self layoutWhenThereIsNotDataWithMessage: 'Profiler backend not set or not it didn''t start to profile.' ]
 		  ifFalse: [ self layoutWhenThereIsAProfiler ]
 ]
@@ -83,8 +84,8 @@ IllimaniAllocationProfilerUI >> heatMapPresenter [
 IllimaniAllocationProfilerUI >> initializeAllocatedObjectsPerSecond [
 
 	allocatedObjectsPerSecondPresenter := SpRoassalPresenter new
-		canvas: (AllocationVisualizations new
-			model: objectAllocationProfiler;
+		canvas: (IllimaniRoassalChartBuilder new
+			model: profiler;
 			topCalculationsNumber: topCalculationsNumber;
 			allocatedObjectsPerSecondLineChartCanvas);
 		yourself
@@ -94,8 +95,8 @@ IllimaniAllocationProfilerUI >> initializeAllocatedObjectsPerSecond [
 IllimaniAllocationProfilerUI >> initializeAllocatedObjectsPerSecondPerClass [
 
 	allocatedObjectsPerSecondPerClass := SpRoassalPresenter new
-		canvas: (AllocationVisualizations new
-			model: objectAllocationProfiler;
+		canvas: (IllimaniRoassalChartBuilder new
+			model: profiler;
 			topCalculationsNumber: topCalculationsNumber;
 			allocatedObjectsPerSecondPerClassLineChartCanvas);
 		yourself
@@ -106,28 +107,34 @@ IllimaniAllocationProfilerUI >> initializeCodeEvaluator [
 
 	codeEvaluator := self newCode
 		text: 'self objectAllocations';
-		beForObject: objectAllocationProfiler;
+		beForObject: profiler;
 		yourself
 ]
 
 { #category : #'initialization - lazy presenters' }
 IllimaniAllocationProfilerUI >> initializeHeatmapPresenter [
 
-	heatmapPresenter := SpRoassalPresenter new
-		canvas: (AllocationVisualizations new
-			model: objectAllocationProfiler;
-			topCalculationsNumber: topCalculationsNumber;
-			heatmapAllocatorAllocatedCanvas);
-		yourself
+	heatmapPresenter := self instantiate: SpRoassalPresenter.
+	heatmapPresenter canvas: (IllimaniRoassalChartBuilder new
+			 model: profiler;
+			 topCalculationsNumber: topCalculationsNumber;
+			 heatmapAllocatorAllocatedCanvas)
+]
+
+{ #category : #'initialization - lazy presenters' }
+IllimaniAllocationProfilerUI >> initializeListstes [
+
+	^ listPresenter := SebasSebasPresenter owner: self on: profiler
 ]
 
 { #category : #'initialization - lazy presenters' }
 IllimaniAllocationProfilerUI >> initializeNotebook [
 
 	notebookPresenter := self newNotebook
+		addPageTitle: 'sfsf' provider: [ self initializeListstes  ];
 		addPageTitle: 'Summary' provider: [ self summaryAndEvaluatorPresenter ];
 		addPageTitle: 'Heatmap' provider: [ self heatMapPresenter ];
-			addPageTitle: 'Allocations per Second per Class'
+		addPageTitle: 'Allocations per Second per Class'
 		provider: [ self allocatedObjectsPerSecondPerClass ];
 		addPageTitle: 'Allocations per Second'
 		provider: [ self allocatedObjectsPerSecondPresenter ];
@@ -159,7 +166,7 @@ IllimaniAllocationProfilerUI >> initializeRoassalPresenters [
 IllimaniAllocationProfilerUI >> initializeSummaryAndEvaluatorPresenter [
 
 	| statsAndEvaluatorLayout statsPresenter |
-	statsPresenter := AllocationSummaryPresenter on: objectAllocationProfiler.
+	statsPresenter := AllocationSummaryPresenter on: profiler.
 
 	statsAndEvaluatorLayout := SpPanedLayout newTopToBottom
 		positionOfSlider: 0.7;
@@ -218,16 +225,16 @@ IllimaniAllocationProfilerUI >> initializeWindow: aWindowPresenter [
 IllimaniAllocationProfilerUI >> layoutWhenThereIsAProfiler [
 
 	| layoutToReturn |
-	(objectAllocationProfiler isProfilingStarted and: [
-		 objectAllocationProfiler isProfilingFinished not ]) ifTrue: [
+	(profiler isProfilingStarted and: [
+		 profiler isProfilingFinished not ]) ifTrue: [
 		layoutToReturn := self layoutWhenThereIsNotDataWithMessage: 'Still profiling' ].
 
-	(objectAllocationProfiler isProfilingFinished and: [
-		 objectAllocationProfiler objectAllocations isEmpty ]) ifTrue: [
+	(profiler isProfilingFinished and: [
+		 profiler objectAllocations isEmpty ]) ifTrue: [
 		layoutToReturn := self layoutWhenThereIsNotDataWithMessage: 'Profiling finished without any allocations. No allocations were produced during this profiling' ].
 
-	(objectAllocationProfiler isProfilingFinished and: [
-		 objectAllocationProfiler objectAllocations isNotEmpty ]) ifTrue: [
+	(profiler isProfilingFinished and: [
+		 profiler objectAllocations isNotEmpty ]) ifTrue: [
 		layoutToReturn := self layoutWhenThereIsData ].
 
 	^ layoutToReturn
@@ -265,7 +272,7 @@ IllimaniAllocationProfilerUI >> notebookPresenter [
 { #category : #accessing }
 IllimaniAllocationProfilerUI >> objectAllocationProfiler: aProfiler [
 
-	objectAllocationProfiler := aProfiler
+	profiler := aProfiler
 ]
 
 { #category : #actions }
@@ -292,8 +299,8 @@ IllimaniAllocationProfilerUI >> summaryAndEvaluatorPresenter [
 IllimaniAllocationProfilerUI >> topAllocatorClassesPresenter [
 
 	^ SpRoassalPresenter new
-		canvas: (AllocationVisualizations new
-			model: objectAllocationProfiler;
+		canvas: (IllimaniRoassalChartBuilder new
+			model: profiler;
 			topCalculationsNumber: topCalculationsNumber;
 			topAllocatorClassesBarChartCanvas);
 		yourself
@@ -303,8 +310,8 @@ IllimaniAllocationProfilerUI >> topAllocatorClassesPresenter [
 IllimaniAllocationProfilerUI >> topAllocatorMethodsPresenter [
 
 	^ SpRoassalPresenter new
-		canvas: (AllocationVisualizations new
-			model: objectAllocationProfiler;
+		canvas: (IllimaniRoassalChartBuilder new
+			model: profiler;
 			topCalculationsNumber: topCalculationsNumber;
 			topAllocatorMethodsBarChartCanvas);
 		yourself
