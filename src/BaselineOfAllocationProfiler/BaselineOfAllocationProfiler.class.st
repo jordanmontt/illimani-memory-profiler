@@ -15,10 +15,12 @@ BaselineOfAllocationProfiler >> baseline: spec [
 		"External dependencies"
 		spec baseline: 'MethodProxies'
 			with: [ spec repository: 'github://pharo-contributions/MethodProxies/src' ].
+		spec baseline: 'SpaceAndTime'
+			with: [ spec repository: 'github://jordanmontt/spaceAndTime/src' ].
 
-		spec package: 'AllocationProfiler' with: [ spec requires: #( 'MethodProxies' ) ].
+		spec package: 'AllocationProfiler' with: [ spec requires: #( 'MethodProxies' 'SpaceAndTime' ) ].
 		spec package: 'AllocationProfiler-Tests' with: [ spec requires: #( 'AllocationProfiler' ) ].
 		spec package: 'AllocationProfiler-UI' with: [ spec requires: #( 'AllocationProfiler' ) ].
 
-		spec group: 'default' with: #( 'AllocationProfiler' 'AllocationProfiler-UI' ) ]
+		spec group: 'default' with: #( 'AllocationProfiler' 'AllocationProfiler-UI' 'AllocationProfiler-Tests' ) ]
 ]
