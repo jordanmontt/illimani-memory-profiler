@@ -148,7 +148,6 @@ IllimaniAllocationProfiler >> initialize [
 
 	super initialize.
 	profilerHandler := IllimaniProfilerMpHandler new.
-	statisticsModel := AllocationStatistics new rawAllocations: profilerHandler objectAllocations.
 	self initializeMethodProxies
 ]
 
@@ -229,7 +228,7 @@ IllimaniAllocationProfiler >> stopProfiling [
 	fullGCCount := Smalltalk vm fullGCCount - fullGCCount.
 	totalGCTime := (Duration milliSeconds: Smalltalk vm totalGCTime) - totalGCTime.
 
-	statisticsModel rawAllocations: profilerHandler objectAllocations.
+	statisticsModel := AllocationStatistics new rawAllocations: profilerHandler objectAllocations.
 	self announceProfilerStopedProfiling
 ]
 
