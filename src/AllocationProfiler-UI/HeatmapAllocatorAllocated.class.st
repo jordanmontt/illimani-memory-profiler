@@ -34,10 +34,9 @@ HeatmapAllocatorAllocated >> data: someData [
 	data := someData.
 	self initializeColorMultilinearScale.
 
-	self objectsY: (data collect: #key).
-	allocatedSortedClasses := ((data flatCollect: [ :tuple | tuple value allocations associations ])
-		sorted: [ :a :b | a value > b value])
-			 collect: [:e | e key].
+	self objectsY: (data collect: #allocator).
+	allocatedSortedClasses := (data flatCollect: [ :aNode | aNode sortedGroupedAllocations ])
+		                          collect: [ :e | e allocatedObjectClass ].
 	allocatedSortedClasses := allocatedSortedClasses asOrderedCollection removeDuplicates.
 	self objectsX: allocatedSortedClasses.
 
@@ -62,20 +61,19 @@ HeatmapAllocatorAllocated >> initialize [
 { #category : #hooks }
 HeatmapAllocatorAllocated >> initializeColorMultilinearScale [
 
-	| numberOfAllocationsSorted maxRange |
-	numberOfAllocationsSorted := data flatCollect: [ :tuple | tuple value eachAllocationsTotal ].
-	maxRange := numberOfAllocationsSorted max.
+	| maxRange |
+	maxRange := (data collect: [ :tuple | tuple value totalAllocations ]) max.
 	range := {
-		0.
-		(maxRange / 4) asInteger.
-		(maxRange / 2) asInteger.
-		(maxRange * 3 / 4) asInteger.
-		maxRange }.
+		         0.
+		         (maxRange / 4) asInteger.
+		         (maxRange / 2) asInteger.
+		         (maxRange * 3 / 4) asInteger.
+		         maxRange }.
 	scale := NSScale linear
-		clamp: true;
-		domain: range;
-		range: colorPaletteList;
-		yourself
+		         clamp: true;
+		         domain: range;
+		         range: colorPaletteList;
+		         yourself
 ]
 
 { #category : #hooks }
@@ -102,7 +100,7 @@ HeatmapAllocatorAllocated >> labelY [
 		fontSize: 15;
 		color: Color black;
 		rotateByDegrees: -90;
-		text: 'Top Allocators';
+		text: 'Allocators';
 		yourself.
 	RSLocation new
 		outer;
@@ -115,11 +113,11 @@ HeatmapAllocatorAllocated >> labelY [
 { #category : #hooks }
 HeatmapAllocatorAllocated >> numberFor: tuple [
 
-	| allocatorClass allocatedClass obj |
+	| allocatorClass allocatedClass index |
 	allocatorClass := tuple key.
 	allocatedClass := tuple value.
-	obj := data detect: [ :each | each key = allocatorClass ].
-	^ obj value allocationsOf: allocatedClass
+	index := data findFirst: [ :node | node allocator = allocatorClass ].
+	^ (data at: index) allocationsOf: allocatedClass
 ]
 
 { #category : #hooks }

@@ -5,6 +5,6 @@ AllocatorWithGroupedAllocationsCollection >> inspectorExtension [
 
 	<inspectorPresentationOrder: 0 title: 'Title'>
 	^ SpListPresenter new
-		  items: self sorted;
+		  items: self asOrderedCollection;
 		  yourself
 ]

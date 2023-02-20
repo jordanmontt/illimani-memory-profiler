@@ -45,18 +45,19 @@ AllocationVisualizations >> allocatedObjectsPerSecondLineChartCanvas [
 { #category : #'api - visualizations' }
 AllocationVisualizations >> allocatedObjectsPerSecondPerClassLineChartCanvas [
 
-	| chart linePlot topClassesByNumberOfAllocations legend |
-	topClassesByNumberOfAllocations := model stats topGroupedAndSortedAllocatingClasses: topCalculationsNumber.
+	| chart linePlot topNAllocationsByClass legend sortedByTime |
+	topNAllocationsByClass := model stats topNAllocationsByClass: topCalculationsNumber.
 	chart := RSChart new.
 	legend := RSLegend new.
 	legend container: chart canvas.
-	topClassesByNumberOfAllocations do: [ :aPair |
-		linePlot := self createLinePlotForAllocations: aPair value.
+	topNAllocationsByClass do: [ :anAllocationNode |
+		sortedByTime := anAllocationNode sortedGroupedAllocations sorted: [ :a :b | a timestamp < b timestamp ].
+		linePlot := self createLinePlotForAllocations: sortedByTime.
 		chart add: linePlot.
-		legend text: aPair key name withBoxColor: linePlot computeColor ].
+		legend text: anAllocationNode allocator asString withBoxColor: linePlot computeColor ].
 
 	self tuneChartForLinePlot: chart.
-	self addLabelsX: 'Seconds' y: 'Allocator Classes' forChart: chart.
+	self addLabelsX: 'Seconds' y: 'Allocators' forChart: chart.
 
 	legend location
 		middle;
@@ -78,9 +79,9 @@ AllocationVisualizations >> createBarChartForAllocations: allocatedObjects [
 	| chart barPlot indices |
 	chart := RSChart new.
 	indices := 1 to: allocatedObjects size.
-	barPlot := RSHorizontalBarPlot new x: (allocatedObjects collect: #value) y: indices.
+	barPlot := RSHorizontalBarPlot new x: (allocatedObjects collect: #totalAllocations) y: indices.
 	chart addPlot: barPlot.
-	self tuneBarChart: chart forNames: (allocatedObjects collect: #key).
+	self tuneBarChart: chart forNames: (allocatedObjects collect: #allocator).
 	^ chart
 ]
 
@@ -102,7 +103,7 @@ AllocationVisualizations >> createLinePlotForAllocations: someAllocations [
 AllocationVisualizations >> heatmapAllocatorAllocatedCanvas [
 
 	^ HeatmapAllocatorAllocated new
-		data: (model stats topAllocatorsWithAllOfTheirAllocations: topCalculationsNumber);
+		data: (model stats topNAllocationsByClass: topCalculationsNumber);
 		build;
 		canvas
 ]
@@ -117,7 +118,7 @@ AllocationVisualizations >> model: aModel [
 AllocationVisualizations >> topAllocatorClassesBarChartCanvas [
 
 	| chart allocatedObjects |
-	allocatedObjects := (model stats topNAllocationsByClass: topCalculationsNumber) reversed.
+	allocatedObjects := model stats topNAllocationsByClass: topCalculationsNumber.
 
 	chart := self createBarChartForAllocations: allocatedObjects.
 	self addLabelsX: 'Allocated Objects' y: 'Allocator Classes' forChart: chart.
@@ -129,7 +130,7 @@ AllocationVisualizations >> topAllocatorClassesBarChartCanvas [
 AllocationVisualizations >> topAllocatorMethodsBarChartCanvas [
 
 	| chart allocatedObjects |
-	allocatedObjects := (model stats topNAllocationsByMethod: topCalculationsNumber) reversed.
+	allocatedObjects := model stats topNAllocationsByMethod: topCalculationsNumber.
 
 	chart := self createBarChartForAllocations: allocatedObjects.
 	self addLabelsX: 'Allocated Objects' y: 'Allocator Methods' forChart: chart.

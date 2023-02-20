@@ -110,7 +110,7 @@ AllocationInfoDTO >> fullMethodName [
 { #category : #printing }
 AllocationInfoDTO >> printOn: aStream [
 
-	aStream << allocatorMethodName << ' -> ' << allocatedObjectClass asString
+	aStream << allocatorMethodName << ' allocated ' << allocatedObjectClass asString
 ]
 
 { #category : #accessing }

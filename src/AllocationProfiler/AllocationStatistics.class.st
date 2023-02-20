@@ -25,14 +25,14 @@ AllocationStatistics class >> allocations: someAllocations [
 AllocationStatistics >> allocationsByClass [
 
 	didIWalk ifFalse: [ self walkAllocations ].
-	^ allocationNodesByClass sorted
+	^ allocationNodesByClass sortedByTotalAllocations
 ]
 
 { #category : #statistics }
 AllocationStatistics >> allocationsByMethod [
 
 	didIWalk ifFalse: [ self walkAllocations ].
-	^ allocationNodesByMethod sorted
+	^ allocationNodesByMethod sortedByTotalAllocations
 ]
 
 { #category : #initialization }

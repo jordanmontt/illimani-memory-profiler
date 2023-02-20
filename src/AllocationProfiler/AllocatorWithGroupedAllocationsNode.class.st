@@ -15,7 +15,7 @@ Class {
 { #category : #api }
 AllocatorWithGroupedAllocationsNode >> allocationsOf: aClass [
 
-	^ groupedAllocations at: aClass ifAbsent: [ 0 ]
+	^ groupedAllocations at: aClass ifPresent: [ :e | e size ] ifAbsent: [ 0 ]
 ]
 
 { #category : #accessing }
@@ -34,6 +34,12 @@ AllocatorWithGroupedAllocationsNode >> allocator: anObject [
 AllocatorWithGroupedAllocationsNode >> eachAllocationsTotal [
 
 	^ groupedAllocations values
+]
+
+{ #category : #accessing }
+AllocatorWithGroupedAllocationsNode >> groupedAllocations [
+
+	^ groupedAllocations
 ]
 
 { #category : #api }
@@ -64,13 +70,26 @@ AllocatorWithGroupedAllocationsNode >> printOn: aStream [
 { #category : #api }
 AllocatorWithGroupedAllocationsNode >> sortedGroupedAllocations [
 
-	^ groupedAllocations associations sorted: [ :a :b | a value size > b value size ]
+	^ (groupedAllocations values sorted: [ :a :b | a size > b size ]) flattened
+]
+
+{ #category : #api }
+AllocatorWithGroupedAllocationsNode >> sortedGroupedAllocationsAsAssociation [
+
+	^ (groupedAllocations associations sorted: [ :a :b | a value size > b value size ])
+		  flattened
 ]
 
 { #category : #api }
 AllocatorWithGroupedAllocationsNode >> totalAllocations [
 
 	^ groupedAllocations values inject: 0 into: [ :sum :collection | sum + collection size ]
+]
+
+{ #category : #api }
+AllocatorWithGroupedAllocationsNode >> totalGroupedAllocations [
+
+	^ groupedAllocations values collect: #size
 ]
 
 { #category : #accessing }

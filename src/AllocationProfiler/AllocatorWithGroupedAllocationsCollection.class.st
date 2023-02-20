@@ -5,30 +5,49 @@ Class {
 	#name : #AllocatorWithGroupedAllocationsCollection,
 	#superclass : #Object,
 	#instVars : [
-		'nodesTable',
-		'sortedNodes'
+		'sortedByTotalAllocationsNodes',
+		'groupedNodesDictionary'
 	],
 	#category : #'AllocationProfiler-Statistics-Model'
 }
+
+{ #category : #converting }
+AllocatorWithGroupedAllocationsCollection >> asOrderedCollection [
+
+	^ self sortedByTotalAllocations
+]
+
+{ #category : #accessing }
+AllocatorWithGroupedAllocationsCollection >> groupedNodesDictionary [
+
+	^ groupedNodesDictionary
+]
 
 { #category : #initialization }
 AllocatorWithGroupedAllocationsCollection >> initialize [
 
 	super initialize.
-	nodesTable := Dictionary new
+	groupedNodesDictionary := Dictionary new
 ]
 
 { #category : #api }
-AllocatorWithGroupedAllocationsCollection >> sorted [
+AllocatorWithGroupedAllocationsCollection >> sort [
 
-	^ sortedNodes ifNil: [
-		  sortedNodes := nodesTable sorted: [ :a :b | a value totalAllocations > b value totalAllocations ] ]
+	sortedByTotalAllocationsNodes := groupedNodesDictionary sorted: [ :a :b |
+		               a value totalAllocations > b value totalAllocations ]
+]
+
+{ #category : #api }
+AllocatorWithGroupedAllocationsCollection >> sortedByTotalAllocations [
+
+	sortedByTotalAllocationsNodes ifNil: [ self sort ].
+	^ sortedByTotalAllocationsNodes
 ]
 
 { #category : #accessing }
 AllocatorWithGroupedAllocationsCollection >> updateAllocationForAllocator: allocator allocation: anAllocationHolder [
 
-	nodesTable at: allocator
+	groupedNodesDictionary at: allocator
 		ifPresent: [ :subDictionary | subDictionary increaseAllocationsFor: anAllocationHolder ]
 		ifAbsentPut: [
 			AllocatorWithGroupedAllocationsNode new
