@@ -6,8 +6,7 @@ Class {
 	#superclass : #Object,
 	#instVars : [
 		'allocator',
-		'groupedAllocations',
-		'totalSizeInBytes'
+		'groupedAllocations'
 	],
 	#category : #'AllocationProfiler-Statistics-Model'
 }
@@ -95,5 +94,6 @@ AllocatorWithGroupedAllocationsNode >> totalGroupedAllocations [
 { #category : #accessing }
 AllocatorWithGroupedAllocationsNode >> totalSizeInBytes [
 
-	^ groupedAllocations sum: [ :e | e sum: [ :j | totalSizeInBytes ] ]
+	^ groupedAllocations inject: 0
+		  into: [ :sum :node | sum + (node sum: [ :e | e totalSizeInBytes ]) ]
 ]

@@ -2,24 +2,47 @@ Class {
 	#name : #SebasSebasPresenter,
 	#superclass : #SpPresenter,
 	#instVars : [
-		'listPresenter',
 		'tablePresenter',
-		'model'
+		'model',
+		'textInput'
 	],
 	#category : #'AllocationProfiler-UI-Widgets'
 }
+
+{ #category : #initialization }
+SebasSebasPresenter >> connectPresenters [
+
+	textInput whenTextChangedDo: [ :aText | self filterTable: aText ]
+]
 
 { #category : #layout }
 SebasSebasPresenter >> defaultLayout [
 
 	^ SpBoxLayout newTopToBottom
+		  spacing: 5;
 		  add: tablePresenter;
+		  add: textInput expand: false;
 		  yourself
+]
+
+{ #category : #'accessing - model' }
+SebasSebasPresenter >> filterTable: aText [
+
+	| newItems |
+	aText ifEmpty: [
+		tablePresenter items: self tableItems.
+		^ self ].
+	newItems := self tableItems select: [ :item |
+		            item allocator asString includesSubstring: aText caseSensitive: false ].
+	tablePresenter items: newItems
 ]
 
 { #category : #initialization }
 SebasSebasPresenter >> initializePresenters [
 
+	textInput := self newTextInput
+		             placeholder: 'Filter';
+		             yourself.
 	tablePresenter := self newTable.
 	tablePresenter
 		addColumn: (SpIndexTableColumn new
@@ -41,11 +64,17 @@ SebasSebasPresenter >> initializePresenters [
 				 evaluated: [ :each | each totalSizeInBytes asString ];
 				 sortFunction: #totalSizeInBytes ascending;
 				 yourself);
-		items: model stats allocationsByClass
+		items: self tableItems
 ]
 
 { #category : #'accessing - model' }
 SebasSebasPresenter >> setModelBeforeInitialization: aProfiler [
 
 	model := aProfiler
+]
+
+{ #category : #'accessing - model' }
+SebasSebasPresenter >> tableItems [
+
+	^ model stats allocationsByClass
 ]
