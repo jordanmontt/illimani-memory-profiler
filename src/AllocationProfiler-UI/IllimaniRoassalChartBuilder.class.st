@@ -52,42 +52,26 @@ IllimaniRoassalChartBuilder >> allocatedObjectsPerSecondLineChartCanvas [
 { #category : #'api - line chart' }
 IllimaniRoassalChartBuilder >> allocatedObjectsPerSecondPerClassLineChartCanvas [
 
-	| chart linePlot legend |
-	chart := RSChart new.
-	legend := RSLegend new
-		container: chart canvas;
-		yourself.
-	(model stats topNAllocationsByClass: topCalculationsNumber) do: [ :anAllocationNode |
-		linePlot := self createLinePlotForAllocations: anAllocationNode sortedGroupedAllocations.
-		chart add: linePlot.
-		legend text: anAllocationNode allocator asString withBoxColor: linePlot computeColor ].
-
-	self addTicksToLabel: chart.
-	self addLabelsX: 'Seconds' y: 'Allocators' forChart: chart.
-
-	legend location
-		middle;
-		right.
-	legend legendDo: [ :l |
-		l
-			borderColor: 'black';
-			scaleBy: 0.5;
-			padding: 10 ].
-
-	chart build.
-	legend build.
-	^ chart canvas
+	^ self constructPerSecondLineChart:
+		  (model stats topNAllocationsByClass: topCalculationsNumber)
 ]
 
 { #category : #'api - line chart' }
 IllimaniRoassalChartBuilder >> allocatedObjectsPerSecondPerMethodLineChartCanvas [
 
+	^ self constructPerSecondLineChart:
+		  (model stats topNAllocationsByMethod: topCalculationsNumber)
+]
+
+{ #category : #'chart construction' }
+IllimaniRoassalChartBuilder >> constructPerSecondLineChart: aCollection [
+
 	| chart linePlot legend |
 	chart := RSChart new.
 	legend := RSLegend new
-		container: chart canvas;
-		yourself.
-	(model stats topNAllocationsByMethod: topCalculationsNumber) do: [ :anAllocationNode |
+		          container: chart canvas;
+		          yourself.
+	aCollection do: [ :anAllocationNode |
 		linePlot := self createLinePlotForAllocations: anAllocationNode sortedGroupedAllocations.
 		chart add: linePlot.
 		legend text: anAllocationNode allocator asString withBoxColor: linePlot computeColor ].
@@ -107,18 +91,6 @@ IllimaniRoassalChartBuilder >> allocatedObjectsPerSecondPerMethodLineChartCanvas
 	chart build.
 	legend build.
 	^ chart canvas
-]
-
-{ #category : #'chart construction' }
-IllimaniRoassalChartBuilder >> createBarChartForAllocations: allocatedObjects [
-
-	| chart barPlot indices |
-	chart := RSChart new.
-	indices := 1 to: allocatedObjects size.
-	barPlot := RSHorizontalBarPlot new x: (allocatedObjects collect: #totalAllocations) y: indices.
-	chart addPlot: barPlot.
-	self tuneBarChart: chart forNames: (allocatedObjects collect: #allocator).
-	^ chart
 ]
 
 { #category : #'chart construction' }
@@ -135,15 +107,6 @@ IllimaniRoassalChartBuilder >> createLinePlotForAllocations: someAllocations [
 	indices := 1 to: times size.
 	linePlot := RSLinePlot new x: times y: indices.
 	^ linePlot
-]
-
-{ #category : #'api - heatmap' }
-IllimaniRoassalChartBuilder >> heatmapAllocatorAllocatedCanvas [
-
-	^ HeatmapAllocatorAllocated new
-		data: (model stats topNAllocationsByClass: topCalculationsNumber);
-		build;
-		canvas
 ]
 
 { #category : #'api - heatmap' }
@@ -170,45 +133,8 @@ IllimaniRoassalChartBuilder >> model: aModel [
 	model := aModel
 ]
 
-{ #category : #'api - bar chart' }
-IllimaniRoassalChartBuilder >> topAllocatorClassesBarChartCanvas [
-
-	| chart allocatedObjects |
-	allocatedObjects := model stats topNAllocationsByClass: topCalculationsNumber.
-
-	chart := self createBarChartForAllocations: allocatedObjects.
-	self addLabelsX: 'Allocated Objects' y: 'Allocator Classes' forChart: chart.
-	chart build.
-	^ chart canvas
-]
-
-{ #category : #'api - bar chart' }
-IllimaniRoassalChartBuilder >> topAllocatorMethodsBarChartCanvas [
-
-	| chart allocatedObjects |
-	allocatedObjects := model stats topNAllocationsByMethod: topCalculationsNumber.
-
-	chart := self createBarChartForAllocations: allocatedObjects.
-	self addLabelsX: 'Allocated Objects' y: 'Allocator Methods' forChart: chart.
-	chart build.
-	^ chart canvas
-]
-
 { #category : #accessing }
 IllimaniRoassalChartBuilder >> topCalculationsNumber: aNumber [
 
 	topCalculationsNumber := aNumber
-]
-
-{ #category : #'chart construction' }
-IllimaniRoassalChartBuilder >> tuneBarChart: chart forNames: allocatedObjectNames [
-
-	chart add: (RSHorizontalTick new
-			 useNiceLabel;
-			 yourself).
-	chart addDecoration: (RSVerticalTick new
-			 fromNames: allocatedObjectNames;
-			 yourself).
-
-	chart padding: 5
 ]
