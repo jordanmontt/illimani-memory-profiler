@@ -18,15 +18,6 @@ AllocatorWithGroupedAllocationsCollection >> initialize [
 	nodesTable := Dictionary new
 ]
 
-{ #category : #accessing }
-AllocatorWithGroupedAllocationsCollection >> inspectorExtension [
-
-	<inspectorPresentationOrder: 0 title: 'Title'>
-	^ SpListPresenter new
-		  items: self sorted;
-		  yourself
-]
-
 { #category : #api }
 AllocatorWithGroupedAllocationsCollection >> sorted [
 

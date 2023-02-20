@@ -20,13 +20,9 @@ Class {
 { #category : #evaluating }
 IllimaniProfilerMpHandler >> afterExecutionWithReceiver: receiver arguments: arguments returnValue: returnValue [
 
-	"captureAllObjects
-		ifTrue: [ self handleAllocationOfObject: returnValue ]
-		ifFalse: [ (self shouldICaptureTheObject: returnValue)
-			ifTrue: [ self handleAllocationOfObject: returnValue ] ].
-	^ returnValue"
-	 (self shouldICaptureTheObject: returnValue) ifTrue: [ self handleAllocationOfObject: returnValue ].
-		^ returnValue
+	(self shouldICaptureTheObject: returnValue) ifTrue: [
+		self handleAllocationOfObject: returnValue ].
+	^ returnValue
 ]
 
 { #category : #api }

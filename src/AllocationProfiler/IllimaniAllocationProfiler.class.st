@@ -82,13 +82,7 @@ Class {
 { #category : #announcements }
 IllimaniAllocationProfiler >> announceProfilerStopedProfiling [
 
-	self announcer announce: IllimaniStopedProfilingAnnouncement new
-]
-
-{ #category : #announcements }
-IllimaniAllocationProfiler >> announcer [
-
-	^ announcer ifNil: [ announcer := IllimaniAnnouncer uniqueInstance ]
+	IllimaniAnnouncer uniqueInstance announce: IllimaniStopedProfilingAnnouncement new
 ]
 
 { #category : #'accessing - statistics' }
@@ -220,7 +214,7 @@ IllimaniAllocationProfiler >> startProfiling [
 	totalGCTime := Duration milliSeconds: Smalltalk vm totalGCTime
 ]
 
-{ #category : #accessing }
+{ #category : #'accessing - statistics' }
 IllimaniAllocationProfiler >> stats [
 
 	^ statisticsModel
