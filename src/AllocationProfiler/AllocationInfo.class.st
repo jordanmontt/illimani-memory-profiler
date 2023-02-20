@@ -110,7 +110,7 @@ AllocationInfo >> fullMethodName [
 { #category : #printing }
 AllocationInfo >> printOn: aStream [
 
-	aStream << allocatorMethodName << ' -> ' << allocatedObject class asString
+	aStream << allocatorMethodName << ' -> ' << allocatedObjectClass asString
 ]
 
 { #category : #accessing }

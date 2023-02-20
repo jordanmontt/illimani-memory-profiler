@@ -117,7 +117,7 @@ AllocationVisualizations >> model: aModel [
 AllocationVisualizations >> topAllocatorClassesBarChartCanvas [
 
 	| chart allocatedObjects |
-	allocatedObjects := (model stats topNAllocationsByClasses: topCalculationsNumber) reversed.
+	allocatedObjects := (model stats topNAllocationsByClass: topCalculationsNumber) reversed.
 
 	chart := self createBarChartForAllocations: allocatedObjects.
 	self addLabelsX: 'Allocated Objects' y: 'Allocator Classes' forChart: chart.
@@ -129,7 +129,7 @@ AllocationVisualizations >> topAllocatorClassesBarChartCanvas [
 AllocationVisualizations >> topAllocatorMethodsBarChartCanvas [
 
 	| chart allocatedObjects |
-	allocatedObjects := (model stats topNAllocationsByMethods: topCalculationsNumber) reversed.
+	allocatedObjects := (model stats topNAllocationsByMethod: topCalculationsNumber) reversed.
 
 	chart := self createBarChartForAllocations: allocatedObjects.
 	self addLabelsX: 'Allocated Objects' y: 'Allocator Methods' forChart: chart.

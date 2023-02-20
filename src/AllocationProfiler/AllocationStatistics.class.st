@@ -31,13 +31,13 @@ AllocationStatistics >> allocations: aCollection [
 ]
 
 { #category : #statistics }
-AllocationStatistics >> allocationsByClasses [
+AllocationStatistics >> allocationsByClass [
 
 	^ self occurrencesBy: [ :e | e allocatorClass ]
 ]
 
 { #category : #statistics }
-AllocationStatistics >> allocationsByMethods [
+AllocationStatistics >> allocationsByMethod [
 
 	^ self occurrencesBy: [ :e | e fullMethodName ]
 ]
@@ -106,18 +106,18 @@ AllocationStatistics >> topGroupedAndSortedAllocatingClasses: n [
 ]
 
 { #category : #statistics }
-AllocationStatistics >> topNAllocationsByClasses: n [
+AllocationStatistics >> topNAllocationsByClass: n [
 
 	| allocationsOrderedByClass |
-	allocationsOrderedByClass := self allocationsByClasses.
+	allocationsOrderedByClass := self allocationsByClass.
 	^ allocationsOrderedByClass first: (n min: allocationsOrderedByClass size)
 ]
 
 { #category : #statistics }
-AllocationStatistics >> topNAllocationsByMethods: n [
+AllocationStatistics >> topNAllocationsByMethod: n [
 
 	| allocationsOrderedByMethod |
-	allocationsOrderedByMethod := self allocationsByMethods.
+	allocationsOrderedByMethod := self allocationsByMethod.
 	^ allocationsOrderedByMethod first: (n min: allocationsOrderedByMethod size)
 ]
 
