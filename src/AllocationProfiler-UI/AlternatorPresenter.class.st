@@ -82,7 +82,7 @@ AlternatorPresenter >> presenterOne: aPresenter [
 AlternatorPresenter >> presenterOne: aPresenter withName: aName [
 
 	presenterOne := aPresenter.
-	presenterOneName := aName.
+	self presenterOneName: aName.
 	isForPresenterOne ifTrue: [ activePresenter := presenterOne ]
 ]
 
@@ -110,7 +110,7 @@ AlternatorPresenter >> presenterTwo: aPresenter [
 AlternatorPresenter >> presenterTwo: aPresenter withName: aName [
 
 	presenterTwo := aPresenter.
-	presenterTwoName := aName.
+	self presenterTwoName: aName.
 	isForPresenterOne ifFalse: [ activePresenter := presenterTwo ]
 ]
 

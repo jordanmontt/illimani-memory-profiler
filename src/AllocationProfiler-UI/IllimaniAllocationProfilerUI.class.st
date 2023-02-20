@@ -125,7 +125,9 @@ IllimaniAllocationProfilerUI >> initializeAllocationsPerSecondPerAllocator [
 IllimaniAllocationProfilerUI >> initializeCodeEvaluator [
 
 	codeEvaluator := self newCode
-		text: 'self objectAllocations';
+		text: 'self objectAllocations.
+self stats allocationsByClass.
+self stats allocationsByMethod';
 		beForObject: profiler;
 		yourself
 ]
