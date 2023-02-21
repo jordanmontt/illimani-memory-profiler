@@ -54,15 +54,31 @@ profiler := IllimaniAllocationProfiler new
 profiler open
 ```
 
+## Quick Demo
+
+![b](https://user-images.githubusercontent.com/33934979/220324760-ead645dd-bb13-472a-a400-3df56afddf37.gif)
+
 ## How to use it
 
-To use this tool you need to set the classes that you want to capture or indicate that you want to capture all objects. You can do that with the messages `classesToCapture: aCollection` or `captureAllObjects`. It is also possible to copy the execution stack of *each* of the allocated objects with the message `copyExecutionStack`. Keep in mind that it there is a lot of allocations going on copying the stack can cause the image to grow rapidly and making the image slow.
+To use this profiler you need to specify which allocations you want to capture.
+For that, you need to set the classes, of the allocations, that you want to capture.
+You can capture all object allocations with the message `captureAllObjects` or you can only capture a collection of classes `classesToCapture: aCollection`.
+
+It is also possible to copy the execution stack of *each* of the allocated objects with the message.
+This is very useful when you to make analysis, for example indentify in which context the allocations were prodoced, etc.
+Keep in mind that with a lot of allocations, copying the stack can cause the image to grow in size rapidly and making it slow to use.
+
+```st
+profiler copyExecutionStack.
+```
 
 You can decide both to profile a given method block or just watching the activity of the image for some time.
 
 ```st
+"With this the profiler will block the ui and you will only capture the objects created by your code snippet"
 profiler profileOn: [ anObject performSomeAction ].
 
+"With this the profiler with not block the UI nor the image. So, you will capture all the allocations of the image"
 profiler profileFor: 2 seconds.
 ```
 
@@ -73,24 +89,39 @@ profiler startProfiling.
 profiler stopProfiling.
 ```
 
-You can open the ui at any time with the message `open`
+You can open the ui at any time with the message `open` (even if the profiler is still profiling)
 
 ```st
 profiler open.
 ```
 
-If you want to capture all the allocations of objects and ignore some of them, you can use 
+If you want to capture all the allocations of objects but ignoring some of them, you can use 
 
 ```st
 profiler classesToIgnore: { ByteString . ByteArray }.
 ```
 
+You can keep the allocated objects. This is useful is for example you want to know how many equal objects did you allocated.
+Note that this will affect the GC statistics since the GC will not be able to free memory since the objects are being referencered (!)
+
+```st
+profiler keepTheAllocatedObjects.
+```
+
+## Statistics
+
+Without the UI, because the profiler is independent from the UI, you can access to some statistics. See the protocol `accessing - statistics` in the profiler to see the methods. Also, the profiler has a statistics model that groups and sorts the allocation by class and by methods. For example check 'profiler stats allocationsByClass.'
+
+![Capture d’écran 2023-02-21 à 11 47 32](https://user-images.githubusercontent.com/33934979/220324316-9f42cf4a-6fac-4f5b-a995-70d64ba55938.png)
+
 ## Implementation
 
-Illimani relies on [method proxies](https://github.com/pharo-contributions/MethodProxies) library to capture the allocations. It is a top layer of method proxies that eases the use for the allocation capturing. The UI is completly independent of the profiler. It can be used without it. You will have access to all allocations and to the same statistics.
-
-This is a prototype version
+- Illimani uses [method proxies](https://github.com/pharo-contributions/MethodProxies) library to capture the allocations. It insert a proxy in `Behavior>>basicNew:` and `Behavior>>basicNew`.
+- Illimani also uses [space and time](https://github.com/tesonep/spaceAndTime) to calculate the total size in memory of an object.
+- It has an statistics model that helps with the calculations of allocations grouping them by classes and methods and sorting them by number of allocations. 
+- The UI is completly independent of the profiler. It can be used without it. You will have access to all allocations and to the same statistics.
 
 Observations:
 
 - Profile the profiler :p for big arrays the presenters and the visualizations take a long time to open
+- I now, it does not have enough tests. My inmidiate next tasks is to add good tests.
