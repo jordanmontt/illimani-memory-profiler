@@ -6,7 +6,6 @@ Class {
 	#superclass : #SpPresenter,
 	#instVars : [
 		'toggleChartButton',
-		'activePresenter',
 		'presenterTwo',
 		'presenterOne',
 		'isForPresenterOne',
@@ -15,6 +14,13 @@ Class {
 	],
 	#category : #'AllocationProfiler-UI-Widgets'
 }
+
+{ #category : #accessing }
+AlternatorPresenter >> activePresenter [
+
+	^ isForPresenterOne ifTrue: [ presenterOne ]
+		  ifFalse: [ presenterTwo ]
+]
 
 { #category : #api }
 AlternatorPresenter >> beForPresenterOne [
@@ -43,7 +49,7 @@ AlternatorPresenter >> defaultLayout [
 				   add: toggleChartButton;
 				   yourself)
 		  expand: false;
-		  add: activePresenter expand: true;
+		  add: self activePresenter expand: true;
 		  yourself
 ]
 
@@ -61,7 +67,8 @@ AlternatorPresenter >> initializePresenters [
 		label: self labelForToggleButton;
 		iconName: #glamorousOver;
 		yourself.
-	activePresenter := self newPresenter
+	presenterOne := self newPresenter.
+	presenterTwo := self newPresenter
 ]
 
 { #category : #accessing }
@@ -74,16 +81,14 @@ AlternatorPresenter >> labelForToggleButton [
 { #category : #accessing }
 AlternatorPresenter >> presenterOne: aPresenter [
 
-	presenterOne := aPresenter.
-	isForPresenterOne ifTrue: [ activePresenter := presenterOne ]
+	presenterOne := aPresenter
 ]
 
 { #category : #accessing }
 AlternatorPresenter >> presenterOne: aPresenter withName: aName [
 
 	presenterOne := aPresenter.
-	self presenterOneName: aName.
-	isForPresenterOne ifTrue: [ activePresenter := presenterOne ]
+	self presenterOneName: aName
 ]
 
 { #category : #accessing }
@@ -102,16 +107,14 @@ AlternatorPresenter >> presenterOneName: aString [
 { #category : #accessing }
 AlternatorPresenter >> presenterTwo: aPresenter [
 
-	presenterTwo := aPresenter.
-	isForPresenterOne ifFalse: [ activePresenter := presenterTwo ]
+	presenterTwo := aPresenter
 ]
 
 { #category : #accessing }
 AlternatorPresenter >> presenterTwo: aPresenter withName: aName [
 
 	presenterTwo := aPresenter.
-	self presenterTwoName: aName.
-	isForPresenterOne ifFalse: [ activePresenter := presenterTwo ]
+	self presenterTwoName: aName
 ]
 
 { #category : #accessing }
@@ -131,8 +134,6 @@ AlternatorPresenter >> presenterTwoName: aString [
 AlternatorPresenter >> switchActivePresenter [
 
 	isForPresenterOne := isForPresenterOne not.
-	activePresenter := isForPresenterOne ifTrue: [ presenterOne ]
-		                   ifFalse: [ presenterTwo ].
 	self updateButtonLabel.
 	self layout: self defaultLayout
 ]

@@ -170,6 +170,12 @@ IllimaniAllocationProfiler >> isProfilingStarted [
 	^ beginningOfProfilingTime isNotNil
 ]
 
+{ #category : #api }
+IllimaniAllocationProfiler >> keepTheAllocatedObjects [
+
+	profilerHandler keepTheAllocatedObjects
+]
+
 { #category : #accessing }
 IllimaniAllocationProfiler >> objectAllocations [
 

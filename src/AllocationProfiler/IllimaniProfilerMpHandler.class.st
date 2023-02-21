@@ -13,7 +13,8 @@ Class {
 		'copyExecutionStack',
 		'classesToCapture',
 		'classesToIgnore',
-		'graphWalker'
+		'graphWalker',
+		'keepTheAllocatedObjects'
 	],
 	#category : #'AllocationProfiler-Profiler'
 }
@@ -115,6 +116,7 @@ IllimaniProfilerMpHandler >> handleAllocationOfObject: newlyAllocatedObject [
 	allocationInformationHolder := AllocationInfoDTO new.
 	filteredContext := self contextThatAllocatedTheObject: thisContext forClass: newlyAllocatedObject class.
 	copyExecutionStack ifTrue: [ allocationInformationHolder context: filteredContext copyStack ].
+	keepTheAllocatedObjects ifTrue: [ allocationInformationHolder allocatedObject: newlyAllocatedObject "allocatedObjectHash: newlyAllocatedObject hash"].
 	totalSizeInBytes := (graphWalker rootObject: newlyAllocatedObject) totalSizeInBytes.
 
 	allocationInformationHolder
@@ -122,8 +124,6 @@ IllimaniProfilerMpHandler >> handleAllocationOfObject: newlyAllocatedObject [
 		allocatorMethodName: (filteredContext receiver class name asString , '>>#' , filteredContext compiledCode method selector asString);
 		allocatedObjectClass: newlyAllocatedObject class;
 		totalSizeInBytes: totalSizeInBytes;
-		"allocatedObjectHash: newlyAllocatedObject hash;
-		allocatedObject: newlyAllocatedObject;"
 		timestamp: timeNow.
 
 	objectAllocations add: allocationInformationHolder
@@ -135,6 +135,7 @@ IllimaniProfilerMpHandler >> initialize [
 	super initialize.
 	self doNotCopyExecutionStack.
 	self doNotCaptureAllObjects.
+	keepTheAllocatedObjects := false.
 	classesToCapture := {  }.
 	classesToIgnore := {  }.
 	objectAllocations := OrderedCollection new.
@@ -147,6 +148,17 @@ IllimaniProfilerMpHandler >> initializeClassesToAvoidInContextSearch [
 
 	classesToAvoidInTheContextSearch := self defaultClassesToAvoidInTheContextSearch ,
 		(self defaultClassesToAvoidInTheContextSearch collect: [ :aClass | aClass class ])
+]
+
+{ #category : #api }
+IllimaniProfilerMpHandler >> keepTheAllocatedObjects [
+	"When this turned to true I will copy all the allocated of all the objects"
+
+	"Keep in mind that with option turned on it will affect the GC.
+	All the allocated objects will be referenced, because we are keeping them.
+	So the GC because it will never discard any of the objects."
+
+	keepTheAllocatedObjects := true
 ]
 
 { #category : #accessing }
