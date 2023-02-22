@@ -18,8 +18,7 @@ Class {
 { #category : #accessing }
 AlternatorPresenter >> activePresenter [
 
-	^ isForPresenterOne ifTrue: [ presenterOne ]
-		  ifFalse: [ presenterTwo ]
+	^ isForPresenterOne ifTrue: [ presenterOne ] ifFalse: [ presenterTwo ]
 ]
 
 { #category : #api }
@@ -54,28 +53,33 @@ AlternatorPresenter >> defaultLayout [
 ]
 
 { #category : #initialization }
-AlternatorPresenter >> initialize [
-
-	isForPresenterOne := true.
-	super initialize
-]
-
-{ #category : #initialization }
 AlternatorPresenter >> initializePresenters [
+
+	self beForPresenterOne.
+
+	presenterOneName :=  'Presenter 1'.
+	presenterTwoName :=  'Presenter 2'.
+	presenterOne := self newNullPresenter.
+	presenterTwo := self newNullPresenter.
 
 	toggleChartButton := self newButton
 		label: self labelForToggleButton;
 		iconName: #glamorousOver;
-		yourself.
-	presenterOne := self newPresenter.
-	presenterTwo := self newPresenter
+		yourself
 ]
 
 { #category : #accessing }
 AlternatorPresenter >> labelForToggleButton [
 
-	^ isForPresenterOne ifTrue: [ 'Switch to ' , self presenterTwoName ]
-		  ifFalse: [ 'Switch to ', self presenterOneName  ]
+	^ isForPresenterOne
+		ifTrue: [ 'Switch to ' , presenterTwoName ]
+		ifFalse: [ 'Switch to ', presenterOneName  ]
+]
+
+{ #category : #accessing }
+AlternatorPresenter >> nonActivePresenter [
+
+	^ isForPresenterOne ifFalse: [ presenterOne ] ifTrue: [ presenterTwo ]
 ]
 
 { #category : #accessing }
@@ -94,7 +98,7 @@ AlternatorPresenter >> presenterOne: aPresenter withName: aName [
 { #category : #accessing }
 AlternatorPresenter >> presenterOneName [
 
-	^ presenterOneName ifNil: [ 'Presenter 1' ]
+	^ presenterOneName
 ]
 
 { #category : #accessing }
@@ -120,7 +124,7 @@ AlternatorPresenter >> presenterTwo: aPresenter withName: aName [
 { #category : #accessing }
 AlternatorPresenter >> presenterTwoName [
 
-	^ presenterTwoName ifNil: [ 'Presenter 2' ]
+	^ presenterTwoName
 ]
 
 { #category : #accessing }
@@ -135,7 +139,9 @@ AlternatorPresenter >> switchActivePresenter [
 
 	isForPresenterOne := isForPresenterOne not.
 	self updateButtonLabel.
-	self layout: self defaultLayout
+
+	"The non active presenter is the one that is currently in the layout"
+	self layout replace: self nonActivePresenter with: self activePresenter
 ]
 
 { #category : #actions }

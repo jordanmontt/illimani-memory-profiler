@@ -64,7 +64,7 @@ TableMemoryInformationPresenter >> initializePresenters [
 				 yourself);
 		addColumn: (SpStringTableColumn new
 				 title: 'Total size in bytes';
-				 evaluated: [ :each | each totalSizeInBytes asString ];
+				 evaluated: [ :each | each totalSizeInBytes humanReadableByteSizeString ];
 				 sortFunction: #totalSizeInBytes ascending;
 				 yourself);
 		items: self tableItems
