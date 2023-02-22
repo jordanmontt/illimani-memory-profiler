@@ -72,8 +72,8 @@ AlternatorPresenter >> initializePresenters [
 AlternatorPresenter >> labelForToggleButton [
 
 	^ isForPresenterOne
-		ifTrue: [ 'Switch to ' , presenterTwoName ]
-		ifFalse: [ 'Switch to ', presenterOneName  ]
+		ifTrue: [ 'Group by ' , presenterTwoName ]
+		ifFalse: [ 'Group by ', presenterOneName  ]
 ]
 
 { #category : #accessing }
@@ -82,23 +82,17 @@ AlternatorPresenter >> nonActivePresenter [
 	^ isForPresenterOne ifFalse: [ presenterOne ] ifTrue: [ presenterTwo ]
 ]
 
-{ #category : #accessing }
+{ #category : #'accessing - api' }
 AlternatorPresenter >> presenterOne: aPresenter [
 
 	presenterOne := aPresenter
 ]
 
-{ #category : #accessing }
+{ #category : #'accessing - api' }
 AlternatorPresenter >> presenterOne: aPresenter withName: aName [
 
-	presenterOne := aPresenter.
+	self presenterOne: aPresenter.
 	self presenterOneName: aName
-]
-
-{ #category : #accessing }
-AlternatorPresenter >> presenterOneName [
-
-	^ presenterOneName
 ]
 
 { #category : #accessing }
@@ -108,23 +102,17 @@ AlternatorPresenter >> presenterOneName: aString [
 	self updateButtonLabel
 ]
 
-{ #category : #accessing }
+{ #category : #'accessing - api' }
 AlternatorPresenter >> presenterTwo: aPresenter [
 
 	presenterTwo := aPresenter
 ]
 
-{ #category : #accessing }
+{ #category : #'accessing - api' }
 AlternatorPresenter >> presenterTwo: aPresenter withName: aName [
 
-	presenterTwo := aPresenter.
+	self presenterTwo: aPresenter.
 	self presenterTwoName: aName
-]
-
-{ #category : #accessing }
-AlternatorPresenter >> presenterTwoName [
-
-	^ presenterTwoName
 ]
 
 { #category : #accessing }

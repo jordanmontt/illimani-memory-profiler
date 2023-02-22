@@ -111,7 +111,10 @@ AllocationInfoDTO >> fullMethodName [
 { #category : #printing }
 AllocationInfoDTO >> printOn: aStream [
 
-	aStream << allocatorMethodName << ' allocated ' << allocatedObjectClass asString
+	aStream << allocatorMethodName << ' allocated a ' << allocatedObjectClass asString
+	<< ' that weights '.
+	totalSizeInBytes ifNil: [ aStream << ' - ' ]
+		ifNotNil: [ aStream << totalSizeInBytes humanReadableByteSizeString ]
 ]
 
 { #category : #accessing }

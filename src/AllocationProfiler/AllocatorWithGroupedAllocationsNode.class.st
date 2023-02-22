@@ -63,7 +63,7 @@ AllocatorWithGroupedAllocationsNode >> initialize [
 { #category : #printing }
 AllocatorWithGroupedAllocationsNode >> printOn: aStream [
 
-	aStream << allocator asString << ' allocated ' << self totalAllocations asString << ' instances'
+	aStream << allocator asString << ' allocated ' << self totalAllocations asString << ' instances that weight ' << self totalSizeInBytes humanReadableByteSizeString
 ]
 
 { #category : #api }
