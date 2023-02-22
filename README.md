@@ -15,10 +15,11 @@
 ## How to install it
 
 ```st
-Metacello new
-  baseline: 'AllocationProfiler';
-  repository: 'github://jordanmontt/illimani-memory-profiler:main';
-  load.
+EpMonitor disableDuring: [
+	Metacello new
+		baseline: 'AllocationProfiler';
+		repository: 'github://jordanmontt/illimani-memory-profiler:main';
+		load ].
 ```
 
 ## Quick Getting Started
