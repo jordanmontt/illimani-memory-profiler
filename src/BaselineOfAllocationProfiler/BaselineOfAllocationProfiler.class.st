@@ -13,7 +13,7 @@ BaselineOfAllocationProfiler >> baseline: spec [
 	<baseline>
 	spec for: #common do: [
 		"Packages"
-		spec package: 'AllocationProfiler' with: [ spec requires: #( 'Roassal3' 'MethodProxies' 'SpaceAndTime' ) ].
+		spec package: 'AllocationProfiler' with: [ spec requires: #( 'MethodProxies' 'SpaceAndTime' ) ].
 		spec package: 'AllocationProfiler-Tests' with: [ spec requires: #( 'AllocationProfiler' ) ].
 		spec package: 'AllocationProfiler-UI' with: [ spec requires: #( 'AllocationProfiler' ) ].
 
