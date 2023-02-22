@@ -61,7 +61,7 @@ profiler open
 
 ## Quick Demo
 
-![b](https://user-images.githubusercontent.com/33934979/220324760-ead645dd-bb13-472a-a400-3df56afddf37.gif)
+![a](https://user-images.githubusercontent.com/33934979/220641801-dac17879-d611-4f5a-9e28-9c1f35f398c4.gif)
 
 ## How to use it
 
@@ -117,7 +117,7 @@ profiler keepTheAllocatedObjects.
 
 Without the UI, because the profiler is independent from the UI, you can access to some statistics. See the protocol `accessing - statistics` in the profiler to see the methods. Also, the profiler has a statistics model that groups and sorts the allocation by class and by methods. For example check 'profiler stats allocationsByClass.'
 
-![Capture d’écran 2023-02-21 à 11 47 32](https://user-images.githubusercontent.com/33934979/220324316-9f42cf4a-6fac-4f5b-a995-70d64ba55938.png)
+![b](https://user-images.githubusercontent.com/33934979/220641933-fb5970d4-532f-4297-873c-f43b7d259c15.gif)
 
 ## Implementation
 
