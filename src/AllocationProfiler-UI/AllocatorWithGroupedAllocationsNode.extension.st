@@ -19,5 +19,16 @@ AllocatorWithGroupedAllocationsNode >> inspectorExtension: aBuilder [
 AllocatorWithGroupedAllocationsNode >> inspectorExtensionGroupedAllocations: aBuilder [
 
 	<inspectorPresentationOrder: 1 title: 'Grouped Allocations'>
-	^ groupedAllocations inspectionItems: aBuilder
+	| tablePresenter |
+	tablePresenter := aBuilder newTable.
+	tablePresenter
+		addColumn: (SpStringTableColumn
+			title: 'Key'
+			evaluated: [ :each | StObjectPrinter asTruncatedTextFrom: each key ]) beSortable;
+		addColumn: (SpStringTableColumn
+			title: 'Value'
+			evaluated: [ :each | each value size asString , ' instances' ]) beSortable;
+		items: (groupedAllocations associations collect: [ :e |
+			StInspectorAssociationNode hostObject: e ]).
+	^ tablePresenter
 ]
