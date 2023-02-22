@@ -89,9 +89,9 @@ IllimaniProfilerMpHandler >> defaultClassesToAvoidInTheContextSearch [
 	^{
 		IllimaniProfilerMpHandler.
 		MpMethodProxy.
-		BlockClosure.
+		"BlockClosure."
 		FullBlockClosure.
-		CompiledBlock }
+		"CompiledBlock" }
 ]
 
 { #category : #api }
