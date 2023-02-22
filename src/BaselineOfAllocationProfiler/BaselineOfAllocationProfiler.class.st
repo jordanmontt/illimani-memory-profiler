@@ -29,7 +29,7 @@ BaselineOfAllocationProfiler >> baseline: spec [
 				spec
 					baseline: 'Roassal3'
 					with: [ spec repository: 'github://ObjectProfile/Roassal3:v0.9.9m/src' ].
-				spec package: 'AllocationProfiler' with: [ spec includes: #('Roassal3') ] ].
+				spec package: 'AllocationProfiler-UI' with: [ spec requires: #('Roassal3') ] ].
 
 		"Groups"
 		spec group: 'default' with: #( 'core' 'tests' ).
