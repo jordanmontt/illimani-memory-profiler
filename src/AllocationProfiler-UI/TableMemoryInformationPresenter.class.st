@@ -59,7 +59,7 @@ TableMemoryInformationPresenter >> initializePresenters [
 				 yourself);
 		addColumn: (SpStringTableColumn new
 				 title: 'Total allocations';
-				 evaluated: [ :each | each totalAllocations asString ];
+				 evaluated: [ :each | each totalAllocations asStringWithCommas ];
 				 sortFunction: #totalAllocations ascending;
 				 yourself);
 		addColumn: (SpStringTableColumn new
