@@ -204,7 +204,7 @@ IllimaniAllocationProfilerUI >> initializeSummaryAndEvaluatorPresenter [
 	statsPresenter := AllocationSummaryPresenter on: profiler.
 
 	statsAndEvaluatorLayout := SpPanedLayout newTopToBottom
-		positionOfSlider: 0.7;
+		positionOfSlider: 0.75;
 		add: statsPresenter;
 		add: self codeEvaluator;
 		yourself.

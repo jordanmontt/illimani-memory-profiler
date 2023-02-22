@@ -23,54 +23,63 @@ AllocationStatisticsTestFixture >> allocationsOne [
 				 allocatorMethodName: #initializePresenters;
 				 timestamp: DateAndTime now;
 				 allocatedObjectClass: OrderedCollection;
+				 totalSizeInBytes: 16;
 				 yourself);
 		add: (AllocationInfoDTO new
 				 allocatorClass: Rectangle;
 				 allocatorMethodName: #initializePresenters;
 				 timestamp: DateAndTime now;
 				 allocatedObjectClass: OrderedCollection;
+				 totalSizeInBytes: 16;
 				 yourself);
 		add: (AllocationInfoDTO new
 				 allocatorClass: Rectangle;
 				 allocatorMethodName: #connectPresenters;
 				 timestamp: DateAndTime now;
 				 allocatedObjectClass: Dictionary;
+				 totalSizeInBytes: 16;
 				 yourself);
 		add: (AllocationInfoDTO new
 				 allocatorClass: Rectangle;
 				 allocatorMethodName: #connectPresenters;
 				 timestamp: DateAndTime now;
 				 allocatedObjectClass: ByteString;
+				 totalSizeInBytes: 32;
 				 yourself);
 		add: (AllocationInfoDTO new
 				 allocatorClass: Rectangle;
 				 allocatorMethodName: #connectPresenters;
 				 timestamp: DateAndTime now;
 				 allocatedObjectClass: ByteString;
+				 totalSizeInBytes: 48;
 				 yourself);
 		add: (AllocationInfoDTO new
 				 allocatorClass: Rectangle;
 				 allocatorMethodName: #defaultLayout;
 				 timestamp: DateAndTime now;
 				 allocatedObjectClass: ByteString;
+				 totalSizeInBytes: 100;
 				 yourself);
 		add: (AllocationInfoDTO new
 				 allocatorClass: Rectangle;
 				 allocatorMethodName: #defaultLayout;
 				 timestamp: DateAndTime now;
 				 allocatedObjectClass: ByteString;
+				 totalSizeInBytes: 55;
 				 yourself);
 		add: (AllocationInfoDTO new
 				 allocatorClass: Rectangle;
 				 allocatorMethodName: #defaultLayout;
 				 timestamp: DateAndTime now;
 				 allocatedObjectClass: Color;
+				 totalSizeInBytes: 60;
 				 yourself);
 		add: (AllocationInfoDTO new
 				 allocatorClass: Rectangle;
 				 allocatorMethodName: #defaultLayout;
 				 timestamp: DateAndTime now;
 				 allocatedObjectClass: Color;
+				 totalSizeInBytes: 16;
 				 yourself).
 	^ allocations
 ]
@@ -85,6 +94,7 @@ AllocationStatisticsTestFixture >> allocationsThree [
 			 allocatorMethodName: #sorted:;
 			 timestamp: DateAndTime now;
 			 allocatedObjectClass: ByteArray;
+			 totalSizeInBytes: 16;
 			 yourself).
 	^ allocations
 ]
@@ -100,30 +110,35 @@ AllocationStatisticsTestFixture >> allocationsTwo [
 				 allocatorMethodName: #add:;
 				 timestamp: DateAndTime now;
 				 allocatedObjectClass: ByteString;
+				 totalSizeInBytes: 16;
 				 yourself);
 		add: (AllocationInfoDTO new
 				 allocatorClass: OrderedCollection;
 				 allocatorMethodName: #add:;
 				 timestamp: DateAndTime now;
 				 allocatedObjectClass: ByteString;
+				 totalSizeInBytes: 16;
 				 yourself);
 		add: (AllocationInfoDTO new
 				 allocatorClass: OrderedCollection;
 				 allocatorMethodName: #add:;
 				 timestamp: DateAndTime now;
 				 allocatedObjectClass: ByteString;
+				 totalSizeInBytes: 32;
 				 yourself);
 		add: (AllocationInfoDTO new
 				 allocatorClass: OrderedCollection;
 				 allocatorMethodName: #add:;
 				 timestamp: DateAndTime now;
 				 allocatedObjectClass: ByteArray;
+				 totalSizeInBytes: 100;
 				 yourself);
 		add: (AllocationInfoDTO new
 				 allocatorClass: OrderedCollection;
 				 allocatorMethodName: #add:;
 				 timestamp: DateAndTime now;
 				 allocatedObjectClass: ByteArray;
+				 totalSizeInBytes: 16;
 				 yourself).
 	^ allocations
 ]

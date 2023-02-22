@@ -11,46 +11,43 @@ Class {
 }
 
 { #category : #layout }
-AllocationSummaryPresenter >> buildGridLayoutFor: layoutAssociations title: aTitle [
-
-	| aGridLayout |
-	aGridLayout := SpGridLayout new
-		  beColumnNotHomogeneous;
-		  yourself.
-
-	layoutAssociations doWithIndex: [ :assoc :index |
-		aGridLayout
-			add: assoc key at: 1 @ index;
-			add: assoc value at: 2 @ index span: 2 @ 1 ].
-
-	^ SpBoxLayout newTopToBottom
-		add: aTitle expand: false;
-		add: aGridLayout;
-		yourself
-]
-
-{ #category : #layout }
 AllocationSummaryPresenter >> defaultLayout [
 
-	| gcLayoutElements generalStatsLayoutElements generalStatsLayout gcLayout |
-	generalStatsLayoutElements := {
-		'Total profiled time: ' -> self totalProfiledTime .
-		'Time difference between first and last allocation: ' -> self timeDifferenceBetweenFirstAndLastAllocation .
-		'Classes that allocate objects:' -> self numberOfClasses .
-		'Methods that allocate objects:' -> self numberOfMethods .
-		'Total allocated objects:' -> self totalAllocatedObjects .
-		'Total equal allocated objects:' -> self totalEqualAllocatedObjects }.
-	generalStatsLayout := self buildGridLayoutFor: generalStatsLayoutElements title: 'General Statistics'.
+	| gcElements generalStatsElements tablePresenter tablePresenter2 |
+	generalStatsElements := {
+		'Total profiled time' -> self totalProfiledTime .
+		'Time difference between first and last allocation' -> self timeDifferenceBetweenFirstAndLastAllocation .
+		'Total allocated objects' -> self totalAllocatedObjects .
+		'Total equal allocated objects' -> self totalEqualAllocatedObjects .
+		'Total allocated memory' -> self totalAllocatedMemory .
+		'Classes that allocate objects' -> self numberOfClasses .
+		'Methods that allocate objects' -> self numberOfMethods .
+		 }.
 
-	gcLayoutElements := {
-		'Total GC time during profiling:' -> self totalGCTime.
-		'Incremental GC performed during profiling:' -> self incrementalGCCount.
-		'Full GC performed during profiling:' -> self fullGCCount }.
-	gcLayout := self buildGridLayoutFor: gcLayoutElements title: 'Garbage Collection Data'.
+	tablePresenter := self newTable.
+	tablePresenter
+		addColumn: (SpStringTableColumn title: 'Name' evaluated: #key);
+		addColumn: (SpStringTableColumn title: 'Value' evaluated: #value);
+		items: generalStatsElements;
+		beResizable.
+
+	gcElements := {
+		'Total GC time during profiling' -> self totalGCTime.
+		'Incremental GC performed during profiling' -> self incrementalGCCount.
+		'Full GC performed during profiling' -> self fullGCCount }.
+
+	tablePresenter2 := self newTable.
+	tablePresenter2
+		addColumn: (SpStringTableColumn title: 'Name' evaluated: #key);
+		addColumn: (SpStringTableColumn title: 'Value' evaluated: #value);
+		items: gcElements;
+		beResizable.
 
 	^ SpBoxLayout newTopToBottom
-		add: generalStatsLayout;
-		add: gcLayout;
+		add: 'General Statistics' expand: false;
+		add: tablePresenter;
+		add: 'Garbage Collection Data' expand: false;
+		add: tablePresenter2;
 		yourself
 ]
 
@@ -92,9 +89,15 @@ AllocationSummaryPresenter >> timeDifferenceBetweenFirstAndLastAllocation [
 ]
 
 { #category : #accessing }
+AllocationSummaryPresenter >> totalAllocatedMemory [
+
+	^ model stats totalAllocatedMemory humanReadableByteSizeString
+]
+
+{ #category : #accessing }
 AllocationSummaryPresenter >> totalAllocatedObjects [
 
-	^ model stats totalAllocatedObjects asString
+	^ model stats totalAllocatedObjects asStringWithCommas
 ]
 
 { #category : #accessing }
