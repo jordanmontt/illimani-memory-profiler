@@ -15,7 +15,10 @@ Class {
 { #category : #initialization }
 TableMemoryInformationPresenter >> connectPresenters [
 
-	textInput whenTextChangedDo: [ :aText | self filterTable: aText ]
+	textInput
+		whenTextChangedDo: [ :aText | self filterTable: aText ].
+	tablePresenter
+		whenSelectedDo: [ :item | item inspect ]
 ]
 
 { #category : #layout }
@@ -48,6 +51,8 @@ TableMemoryInformationPresenter >> initializePresenters [
 		             yourself.
 	tablePresenter := self newTable.
 	tablePresenter
+		alternateRowsColor;
+		activateOnDoubleClick;
 		addColumn: (SpIndexTableColumn new
 				 title: 'Index';
 				 width: 60;
