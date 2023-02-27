@@ -10,9 +10,10 @@ Class {
 		'allocatedObject',
 		'allocatedObjectHash',
 		'allocatorClass',
-		'allocatorMethodName',
 		'allocatedObjectClass',
-		'totalSizeInBytes'
+		'totalSizeInBytes',
+		'allocatorMethod',
+		'contextFingerprint'
 	],
 	#category : #'AllocationProfiler-Data-Structures'
 }
@@ -85,9 +86,9 @@ AllocationInfoDTO >> allocatorClass: anObject [
 ]
 
 { #category : #accessing }
-AllocationInfoDTO >> allocatorMethodName: anObject [
+AllocationInfoDTO >> allocatorMethod: aCompiledMethod [
 
-	allocatorMethodName := anObject
+	allocatorMethod := aCompiledMethod
 ]
 
 { #category : #accessing }
@@ -103,18 +104,45 @@ AllocationInfoDTO >> context: anObject [
 ]
 
 { #category : #accessing }
+AllocationInfoDTO >> contextFingerprint [
+
+	^ contextFingerprint
+]
+
+{ #category : #accessing }
+AllocationInfoDTO >> contextFingerprintAsString [
+
+	^ String streamContents: [ :stream |
+		  contextFingerprint pairsDo: [ :a :b |
+			  stream << b className << '>>#' << a asString << String cr ] ]
+]
+
+{ #category : #accessing }
 AllocationInfoDTO >> fullMethodName [
 
-	^ allocatorMethodName
+	^ allocatorMethod name
 ]
 
 { #category : #printing }
 AllocationInfoDTO >> printOn: aStream [
 
-	aStream << allocatorMethodName << ' allocated a ' << allocatedObjectClass asString
+	aStream << allocatorMethod name << ' allocated a ' << allocatedObjectClass asString
 	<< ' that weights '.
 	totalSizeInBytes ifNil: [ aStream << ' - ' ]
 		ifNotNil: [ aStream << totalSizeInBytes humanReadableByteSizeString ]
+]
+
+{ #category : #initialization }
+AllocationInfoDTO >> setContextFingerprintList: aContext [
+
+	| iterator |
+	contextFingerprint := OrderedCollection new.
+	iterator := aContext.
+	1 to: 10 do: [ :index |
+		contextFingerprint add: iterator compiledCode method selector.
+		contextFingerprint add: iterator receiver.
+		iterator := iterator sender.
+		iterator ifNil: [ ^ self ] ]
 ]
 
 { #category : #accessing }

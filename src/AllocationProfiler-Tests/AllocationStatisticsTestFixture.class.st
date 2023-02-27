@@ -20,63 +20,63 @@ AllocationStatisticsTestFixture >> allocationsOne [
 	allocations
 		add: (AllocationInfoDTO new
 				 allocatorClass: Rectangle;
-				 allocatorMethodName: #initializePresenters;
+				 allocatorMethod: Margin >> #asMargin;
 				 timestamp: DateAndTime now;
 				 allocatedObjectClass: OrderedCollection;
 				 totalSizeInBytes: 16;
 				 yourself);
 		add: (AllocationInfoDTO new
 				 allocatorClass: Rectangle;
-				 allocatorMethodName: #initializePresenters;
+				 allocatorMethod: Margin >> #asMargin;
 				 timestamp: DateAndTime now;
 				 allocatedObjectClass: OrderedCollection;
 				 totalSizeInBytes: 16;
 				 yourself);
 		add: (AllocationInfoDTO new
 				 allocatorClass: Rectangle;
-				 allocatorMethodName: #connectPresenters;
+				 allocatorMethod: Margin >> #asMargin;
 				 timestamp: DateAndTime now;
 				 allocatedObjectClass: Dictionary;
 				 totalSizeInBytes: 16;
 				 yourself);
 		add: (AllocationInfoDTO new
 				 allocatorClass: Rectangle;
-				 allocatorMethodName: #connectPresenters;
+				 allocatorMethod: Margin >> #asMargin;
 				 timestamp: DateAndTime now;
 				 allocatedObjectClass: ByteString;
 				 totalSizeInBytes: 32;
 				 yourself);
 		add: (AllocationInfoDTO new
 				 allocatorClass: Rectangle;
-				 allocatorMethodName: #connectPresenters;
+				 allocatorMethod: Margin >> #asMargin;
 				 timestamp: DateAndTime now;
 				 allocatedObjectClass: ByteString;
 				 totalSizeInBytes: 48;
 				 yourself);
 		add: (AllocationInfoDTO new
 				 allocatorClass: Rectangle;
-				 allocatorMethodName: #defaultLayout;
+				 allocatorMethod: Object >> #'->';
 				 timestamp: DateAndTime now;
 				 allocatedObjectClass: ByteString;
 				 totalSizeInBytes: 100;
 				 yourself);
 		add: (AllocationInfoDTO new
 				 allocatorClass: Rectangle;
-				 allocatorMethodName: #defaultLayout;
+				 allocatorMethod: Object >> #'->';
 				 timestamp: DateAndTime now;
 				 allocatedObjectClass: ByteString;
 				 totalSizeInBytes: 55;
 				 yourself);
 		add: (AllocationInfoDTO new
 				 allocatorClass: Rectangle;
-				 allocatorMethodName: #defaultLayout;
+				 allocatorMethod: Object >> #'->';
 				 timestamp: DateAndTime now;
 				 allocatedObjectClass: Color;
 				 totalSizeInBytes: 60;
 				 yourself);
 		add: (AllocationInfoDTO new
 				 allocatorClass: Rectangle;
-				 allocatorMethodName: #defaultLayout;
+				 allocatorMethod: Object >> #'->';
 				 timestamp: DateAndTime now;
 				 allocatedObjectClass: Color;
 				 totalSizeInBytes: 16;
@@ -91,7 +91,7 @@ AllocationStatisticsTestFixture >> allocationsThree [
 	allocations := OrderedCollection new.
 	allocations add: (AllocationInfoDTO new
 			 allocatorClass: String;
-			 allocatorMethodName: #sorted:;
+			 allocatorMethod: Collection>>#sorted:;
 			 timestamp: DateAndTime now;
 			 allocatedObjectClass: ByteArray;
 			 totalSizeInBytes: 16;
@@ -107,35 +107,35 @@ AllocationStatisticsTestFixture >> allocationsTwo [
 	allocations
 		add: (AllocationInfoDTO new
 				 allocatorClass: OrderedCollection;
-				 allocatorMethodName: #add:;
+				 allocatorMethod: ArrayedCollection>>#add:;
 				 timestamp: DateAndTime now;
 				 allocatedObjectClass: ByteString;
 				 totalSizeInBytes: 16;
 				 yourself);
 		add: (AllocationInfoDTO new
 				 allocatorClass: OrderedCollection;
-				 allocatorMethodName: #add:;
+				 allocatorMethod: ArrayedCollection>>#add:;
 				 timestamp: DateAndTime now;
 				 allocatedObjectClass: ByteString;
 				 totalSizeInBytes: 16;
 				 yourself);
 		add: (AllocationInfoDTO new
 				 allocatorClass: OrderedCollection;
-				 allocatorMethodName: #add:;
+				 allocatorMethod: ArrayedCollection>>#add:;
 				 timestamp: DateAndTime now;
 				 allocatedObjectClass: ByteString;
 				 totalSizeInBytes: 32;
 				 yourself);
 		add: (AllocationInfoDTO new
 				 allocatorClass: OrderedCollection;
-				 allocatorMethodName: #add:;
+				 allocatorMethod: ArrayedCollection>>#add:;
 				 timestamp: DateAndTime now;
 				 allocatedObjectClass: ByteArray;
 				 totalSizeInBytes: 100;
 				 yourself);
 		add: (AllocationInfoDTO new
 				 allocatorClass: OrderedCollection;
-				 allocatorMethodName: #add:;
+				 allocatorMethod: ArrayedCollection>>#add:;
 				 timestamp: DateAndTime now;
 				 allocatedObjectClass: ByteArray;
 				 totalSizeInBytes: 16;

@@ -131,6 +131,14 @@ IllimaniAllocationProfiler >> endOfProfilingTime [
 	^ endOfProfilingTime
 ]
 
+{ #category : #api }
+IllimaniAllocationProfiler >> forceUninstall [
+	"Waring, do not use unless you cannot start the profiler because you have the
+	MpCannotInstall exceptionp"
+
+	MpMethodProxy allInstances do: #uninstall
+]
+
 { #category : #'accessing - statistics' }
 IllimaniAllocationProfiler >> fullGCCount [
 

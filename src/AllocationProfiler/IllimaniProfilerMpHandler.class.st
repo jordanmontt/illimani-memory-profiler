@@ -60,19 +60,6 @@ IllimaniProfilerMpHandler >> cleanAllocations [
 	objectAllocations removeAll
 ]
 
-{ #category : #evaluating }
-IllimaniProfilerMpHandler >> contextThatAllocatedTheObject: aContext forClass: aClass [
-
-	| sender |
-	sender := aContext sender.
-	[
-	sender receiver class = aClass or: [
-		sender receiver class = aClass class or: [
-			classesToAvoidInTheContextSearch includes: sender receiver class ] ] ]
-		whileTrue: [ sender := sender sender ].
-	^ sender
-]
-
 { #category : #api }
 IllimaniProfilerMpHandler >> copyExecutionStack [
 	"When this is set to true, for each object allocationn the full execution stack from which
@@ -109,20 +96,34 @@ IllimaniProfilerMpHandler >> doNotCopyExecutionStack [
 ]
 
 { #category : #evaluating }
+IllimaniProfilerMpHandler >> filterContext: aContext ignoringClass: aClass [
+
+	| sender |
+	sender := aContext sender.
+	[
+	sender receiver class = aClass or: [
+		sender receiver class = aClass class or: [
+			classesToAvoidInTheContextSearch includes: sender receiver class ] ] ]
+		whileTrue: [ sender := sender sender ].
+	^ sender
+]
+
+{ #category : #evaluating }
 IllimaniProfilerMpHandler >> handleAllocationOfObject: newlyAllocatedObject [
 
 	| filteredContext timeNow allocationInformationHolder totalSizeInBytes |
 	timeNow := DateAndTime now.
 	allocationInformationHolder := AllocationInfoDTO new.
-	filteredContext := self contextThatAllocatedTheObject: thisContext forClass: newlyAllocatedObject class.
+	filteredContext := self filterContext: thisContext ignoringClass: newlyAllocatedObject class.
 	copyExecutionStack ifTrue: [ allocationInformationHolder context: filteredContext copyStack ].
 	keepTheAllocatedObjects ifTrue: [ allocationInformationHolder allocatedObject: newlyAllocatedObject "allocatedObjectHash: newlyAllocatedObject hash"].
 	totalSizeInBytes := (graphWalker rootObject: newlyAllocatedObject) totalSizeInBytes.
 
 	allocationInformationHolder
 		allocatorClass: filteredContext receiver class;
-		allocatorMethodName: (filteredContext receiver class name asString , '>>#' , filteredContext compiledCode method selector asString);
+		allocatorMethod: filteredContext compiledCode method;
 		allocatedObjectClass: newlyAllocatedObject class;
+		setContextFingerprintList: filteredContext;
 		totalSizeInBytes: totalSizeInBytes;
 		timestamp: timeNow.
 
