@@ -114,7 +114,7 @@ AllocationInfoDTO >> contextFingerprintAsString [
 
 	^ String streamContents: [ :stream |
 		  contextFingerprint pairsDo: [ :a :b |
-			  stream << b className << '>>#' << a asString << String cr ] ]
+			  stream << b className << '>>#' << a asString << ' <- ' ] ]
 ]
 
 { #category : #accessing }
