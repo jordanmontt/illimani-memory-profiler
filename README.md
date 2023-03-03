@@ -30,8 +30,9 @@ Start Playing:
 profiler := IllimaniAllocationProfiler new.
 profiler
 	captureAllObjects;
-	profileFor: 5 seconds;
-	open
+	profileFor: 5 seconds.
+	
+profiler open
 ```
 
 Example 1:
