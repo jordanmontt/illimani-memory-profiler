@@ -14,7 +14,7 @@
 
 ## How to install it
 
-```st
+```smalltalk
 EpMonitor disableDuring: [
 	Metacello new
 		baseline: 'AllocationProfiler';
