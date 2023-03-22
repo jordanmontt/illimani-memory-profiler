@@ -125,6 +125,12 @@ IllimaniAllocationProfiler >> copyExecutionStack [
 	profilerHandler copyExecutionStack
 ]
 
+{ #category : #api }
+IllimaniAllocationProfiler >> copyObjectHash [
+
+	profilerHandler copyObjectHash
+]
+
 { #category : #'accessing - statistics' }
 IllimaniAllocationProfiler >> endOfProfilingTime [
 
@@ -176,12 +182,6 @@ IllimaniAllocationProfiler >> isProfilingFinished [
 IllimaniAllocationProfiler >> isProfilingStarted [
 
 	^ beginningOfProfilingTime isNotNil
-]
-
-{ #category : #api }
-IllimaniAllocationProfiler >> keepTheAllocatedObjects [
-
-	profilerHandler keepTheAllocatedObjects
 ]
 
 { #category : #accessing }

@@ -14,7 +14,7 @@ Class {
 		'classesToCapture',
 		'classesToIgnore',
 		'graphWalker',
-		'keepTheAllocatedObjects'
+		'copyObjectHash'
 	],
 	#category : #'AllocationProfiler-Profiler'
 }
@@ -70,6 +70,17 @@ IllimaniProfilerMpHandler >> copyExecutionStack [
 	copyExecutionStack := true
 ]
 
+{ #category : #api }
+IllimaniProfilerMpHandler >> copyObjectHash [
+	"When this turned to true I will ask for the hash for all the allocated objects"
+
+	"Keep in mind that if you send the message has to a no configurated object, it will raise
+	an exception. So activate this when you are sure that an object is configurated only
+	sending the message new."
+
+	copyObjectHash := true
+]
+
 { #category : #initialization }
 IllimaniProfilerMpHandler >> defaultClassesToAvoidInTheContextSearch [
 
@@ -116,7 +127,7 @@ IllimaniProfilerMpHandler >> handleAllocationOfObject: newlyAllocatedObject [
 	allocationInformationHolder := AllocationInfoDTO new.
 	filteredContext := self filterContext: thisContext ignoringClass: newlyAllocatedObject class.
 	copyExecutionStack ifTrue: [ allocationInformationHolder context: filteredContext copyStack ].
-	keepTheAllocatedObjects ifTrue: [ allocationInformationHolder allocatedObject: newlyAllocatedObject "allocatedObjectHash: newlyAllocatedObject hash"].
+	copyObjectHash ifTrue: [ allocationInformationHolder allocatedObjectHash: newlyAllocatedObject hash].
 	totalSizeInBytes := (graphWalker rootObject: newlyAllocatedObject) totalSizeInBytes.
 
 	allocationInformationHolder
@@ -136,7 +147,7 @@ IllimaniProfilerMpHandler >> initialize [
 	super initialize.
 	self doNotCopyExecutionStack.
 	self doNotCaptureAllObjects.
-	keepTheAllocatedObjects := false.
+	copyObjectHash := false.
 	classesToCapture := {  }.
 	classesToIgnore := {  }.
 	objectAllocations := OrderedCollection new.
@@ -149,17 +160,6 @@ IllimaniProfilerMpHandler >> initializeClassesToAvoidInContextSearch [
 
 	classesToAvoidInTheContextSearch := self defaultClassesToAvoidInTheContextSearch ,
 		(self defaultClassesToAvoidInTheContextSearch collect: [ :aClass | aClass class ])
-]
-
-{ #category : #api }
-IllimaniProfilerMpHandler >> keepTheAllocatedObjects [
-	"When this turned to true I will copy all the allocated of all the objects"
-
-	"Keep in mind that with option turned on it will affect the GC.
-	All the allocated objects will be referenced, because we are keeping them.
-	So the GC because it will never discard any of the objects."
-
-	keepTheAllocatedObjects := true
 ]
 
 { #category : #accessing }
