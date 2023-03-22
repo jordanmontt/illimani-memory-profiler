@@ -12,10 +12,23 @@ Class {
 		'allocatedObjectClass',
 		'totalSizeInBytes',
 		'allocatorMethod',
-		'contextFingerprint'
+		'contextFingerprint',
+		'allocatedObject'
 	],
 	#category : #'AllocationProfiler-Data-Structures'
 }
+
+{ #category : #accessing }
+AllocationInfoDTO >> allocatedObject [
+
+	^ allocatedObject
+]
+
+{ #category : #accessing }
+AllocationInfoDTO >> allocatedObject: anObj [
+
+	allocatedObject := anObj
+]
 
 { #category : #accessing }
 AllocationInfoDTO >> allocatedObjectClass [

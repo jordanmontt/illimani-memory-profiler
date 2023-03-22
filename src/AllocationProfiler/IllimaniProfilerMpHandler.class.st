@@ -14,7 +14,8 @@ Class {
 		'classesToCapture',
 		'classesToIgnore',
 		'graphWalker',
-		'copyObjectHash'
+		'copyObjectHash',
+		'keepReferencesToAllocatedObjects'
 	],
 	#category : #'AllocationProfiler-Profiler'
 }
@@ -126,8 +127,11 @@ IllimaniProfilerMpHandler >> handleAllocationOfObject: newlyAllocatedObject [
 	timeNow := DateAndTime now.
 	allocationInformationHolder := AllocationInfoDTO new.
 	filteredContext := self filterContext: thisContext ignoringClass: newlyAllocatedObject class.
+
 	copyExecutionStack ifTrue: [ allocationInformationHolder context: filteredContext copyStack ].
 	copyObjectHash ifTrue: [ allocationInformationHolder allocatedObjectHash: newlyAllocatedObject hash].
+	keepReferencesToAllocatedObjects ifTrue: [ allocationInformationHolder allocatedObject: newlyAllocatedObject ].
+
 	totalSizeInBytes := (graphWalker rootObject: newlyAllocatedObject) totalSizeInBytes.
 
 	allocationInformationHolder
@@ -148,6 +152,7 @@ IllimaniProfilerMpHandler >> initialize [
 	self doNotCopyExecutionStack.
 	self doNotCaptureAllObjects.
 	copyObjectHash := false.
+	keepReferencesToAllocatedObjects := false.
 	classesToCapture := {  }.
 	classesToIgnore := {  }.
 	objectAllocations := OrderedCollection new.
@@ -160,6 +165,17 @@ IllimaniProfilerMpHandler >> initializeClassesToAvoidInContextSearch [
 
 	classesToAvoidInTheContextSearch := self defaultClassesToAvoidInTheContextSearch ,
 		(self defaultClassesToAvoidInTheContextSearch collect: [ :aClass | aClass class ])
+]
+
+{ #category : #api }
+IllimaniProfilerMpHandler >> keepReferencesToAllocatedObjects [
+	"When this turned to true I will copy all the allocated of all the objects"
+
+	"Keep in mind that with option turned on it will affect the GC.
+	All the allocated objects will be referenced, because we are keeping them.
+	So the GC because it will never discard any of the objects."
+
+	keepReferencesToAllocatedObjects := true
 ]
 
 { #category : #accessing }

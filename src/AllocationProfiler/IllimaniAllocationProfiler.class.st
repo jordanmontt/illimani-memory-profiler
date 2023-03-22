@@ -184,6 +184,12 @@ IllimaniAllocationProfiler >> isProfilingStarted [
 	^ beginningOfProfilingTime isNotNil
 ]
 
+{ #category : #api }
+IllimaniAllocationProfiler >> keepReferencesToAllocatedObjects [
+
+	profilerHandler keepReferencesToAllocatedObjects
+]
+
 { #category : #accessing }
 IllimaniAllocationProfiler >> objectAllocations [
 

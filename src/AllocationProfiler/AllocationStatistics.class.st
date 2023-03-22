@@ -107,7 +107,7 @@ AllocationStatistics >> totalEqualAllocatedObjects [
 	"This only makes sense if you kept the allocated objects in the profiler. If not, you will
 	end up with a set with nil"
 
-	^ (rawAllocations collect: [ :a | a allocatedObjectHash ] as: Set) size
+	^ (rawAllocations collect: [ :a | a allocatedObject ] as: Set) size
 ]
 
 { #category : #calculating }
