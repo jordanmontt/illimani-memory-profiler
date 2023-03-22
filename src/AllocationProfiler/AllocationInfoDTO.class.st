@@ -7,7 +7,6 @@ Class {
 	#instVars : [
 		'context',
 		'timestamp',
-		'allocatedObject',
 		'allocatedObjectHash',
 		'allocatorClass',
 		'allocatedObjectClass',
@@ -17,37 +16,6 @@ Class {
 	],
 	#category : #'AllocationProfiler-Data-Structures'
 }
-
-{ #category : #'instance creation' }
-AllocationInfoDTO class >> allocatedObject: objectCreated [
-
-	^ self new
-		allocatedObject: objectCreated;
-		timestamp: DateAndTime now;
-		yourself
-]
-
-{ #category : #'instance creation' }
-AllocationInfoDTO class >> context: aContext allocatedObject: objectCreated [
-
-	^ self new
-		context: aContext;
-		allocatedObject: objectCreated;
-		timestamp: DateAndTime now;
-		yourself
-]
-
-{ #category : #accessing }
-AllocationInfoDTO >> allocatedObject [
-
-	^ allocatedObject
-]
-
-{ #category : #accessing }
-AllocationInfoDTO >> allocatedObject: anObject [
-
-	allocatedObject := anObject
-]
 
 { #category : #accessing }
 AllocationInfoDTO >> allocatedObjectClass [
