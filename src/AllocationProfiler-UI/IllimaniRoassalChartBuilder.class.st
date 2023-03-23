@@ -77,7 +77,7 @@ IllimaniRoassalChartBuilder >> constructPerSecondLineChart: aCollection [
 		legend text: anAllocationNode allocator asString withBoxColor: linePlot computeColor ].
 
 	self addTicksToLabel: chart.
-	self addLabelsX: 'Seconds' y: 'Allocators' forChart: chart.
+	self addLabelsX: 'Seconds' y: 'Allocations' forChart: chart.
 
 	legend location
 		middle;
