@@ -29,11 +29,14 @@ IllimaniRoassalChartBuilder >> addLabelsX: xText y: yText forChart: chart [
 { #category : #'chart construction' }
 IllimaniRoassalChartBuilder >> addTicksToLabel: chart [
 
-	chart add: (RSHorizontalTick new
-		"Divide by 10^9 because the time is in nanoseconds"
-		labelConversion: [ :number | (number / (10 raisedTo: 9)) asFloat ];
-		yourself).
-	chart add: RSVerticalTick new
+	chart
+		add: (RSHorizontalTick new
+			"Divide by 10^9 because the time is in nanoseconds"
+			labelConversion: [ :number | (number / (10 raisedTo: 9)) asFloat ];
+			yourself);
+		add: (RSVerticalTick new
+			labelConversion: [ :value | value asInteger asStringWithCommas ];
+			yourself)
 ]
 
 { #category : #'api - line chart' }
@@ -69,8 +72,8 @@ IllimaniRoassalChartBuilder >> constructPerSecondLineChart: aCollection [
 	| chart linePlot legend |
 	chart := RSChart new.
 	legend := RSLegend new
-		          container: chart canvas;
-		          yourself.
+		container: chart canvas;
+		yourself.
 	aCollection do: [ :anAllocationNode |
 		linePlot := self createLinePlotForAllocations: anAllocationNode sortedGroupedAllocations.
 		chart add: linePlot.
