@@ -7,7 +7,9 @@ Class {
 	#instVars : [
 		'tablePresenter',
 		'textInput',
-		'tableItems'
+		'tableItems',
+		'totalAllocations',
+		'totalSizeInBytes'
 	],
 	#category : #'AllocationProfiler-UI-Widgets'
 }
@@ -47,31 +49,43 @@ TableMemoryInformationPresenter >> filterTable: aText [
 TableMemoryInformationPresenter >> initializePresenters [
 
 	textInput := self newTextInput
-		             placeholder: 'Filter';
-		             yourself.
+		placeholder: 'Filter';
+		yourself.
 	tablePresenter := self newTable.
 	tablePresenter
 		alternateRowsColor;
 		activateOnDoubleClick;
 		addColumn: (SpIndexTableColumn new
-				 title: 'Index';
-				 width: 60;
-				 yourself);
+			title: 'Index';
+			width: 60;
+			yourself);
 		addColumn: (SpStringTableColumn new
-				 title: 'Allocator';
-				 evaluated: [ :each | StObjectPrinter asTruncatedTextFrom: each allocator ];
-				 sortFunction: #printString ascending;
-				 yourself);
+			title: 'Allocator';
+			evaluated: [ :each | StObjectPrinter asTruncatedTextFrom: each allocator ];
+			sortFunction: #printString ascending;
+			yourself);
 		addColumn: (SpStringTableColumn new
-				 title: 'Total allocations';
-				 evaluated: [ :each | each totalAllocations asStringWithCommas ];
-				 sortFunction: #totalAllocations ascending;
-				 yourself);
+			title: 'Total allocations';
+			evaluated: [ :each | each totalAllocations asStringWithCommas ];
+			sortFunction: #totalAllocations ascending;
+			yourself);
 		addColumn: (SpStringTableColumn new
-				 title: 'Total size in bytes';
-				 evaluated: [ :each | each totalSizeInBytes humanReadableByteSizeString ];
-				 sortFunction: #totalSizeInBytes ascending;
-				 yourself);
+			width: 60;
+			title: '%';
+			evaluated: [ :e |
+				(((e totalAllocations / self totalAllocations) * 100) asFloat printShowingDecimalPlaces: 2) , '%' ];
+			yourself);
+		addColumn: (SpStringTableColumn new
+			title: 'Total size in bytes';
+			evaluated: [ :each | each totalSizeInBytes humanReadableByteSizeString ];
+			sortFunction: #totalSizeInBytes ascending;
+			yourself);
+		addColumn: (SpStringTableColumn new
+			width: 60;
+			title: '%';
+			evaluated: [ :e |
+				(((e totalSizeInBytes / self totalSizeInBytes) * 100) asFloat printShowingDecimalPlaces: 2) , '%'];
+			yourself);
 		items: self tableItems
 ]
 
@@ -85,4 +99,16 @@ TableMemoryInformationPresenter >> setModelBeforeInitialization: someTableItems 
 TableMemoryInformationPresenter >> tableItems [
 
 	^ tableItems
+]
+
+{ #category : #accessing }
+TableMemoryInformationPresenter >> totalAllocations [
+
+	^ totalAllocations ifNil: [ totalAllocations := tableItems sum: [ :e | e totalAllocations ] ]
+]
+
+{ #category : #accessing }
+TableMemoryInformationPresenter >> totalSizeInBytes [
+
+	^ totalSizeInBytes ifNil: [ totalSizeInBytes := tableItems sum: [ :e | e totalSizeInBytes ] ]
 ]

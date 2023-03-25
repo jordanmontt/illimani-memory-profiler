@@ -45,6 +45,7 @@ AllocatedObjectsTablePresenter >> initializePresenters [
 		placeholder: 'Filter';
 		yourself.
 	tablePresenter := self newTable
+		alternateRowsColor;
 		addColumn: (SpIndexTableColumn new
 			title: 'Index';
 			beNotExpandable;
