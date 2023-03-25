@@ -16,7 +16,8 @@ Class {
 		'summaryAndEvaluatorPresenter',
 		'profiler',
 		'memoryTablePresenter',
-		'allocationsPerSecondPerAllocatorPresenter'
+		'allocationsPerSecondPerAllocatorPresenter',
+		'allocatedObjectsTablePresenter'
 	],
 	#category : #'AllocationProfiler-UI-Main Presenter'
 }
@@ -48,6 +49,13 @@ IllimaniAllocationProfilerUI >> allocatedObjectsPerSecondPresenter [
 
 	allocatedObjectsPerSecondPresenter ifNil: [ self initializeAllocatedObjectsPerSecond ].
 	^ allocatedObjectsPerSecondPresenter
+]
+
+{ #category : #'accessing - lazy presenters' }
+IllimaniAllocationProfilerUI >> allocatedObjectsTablePresenter [
+
+	allocatedObjectsTablePresenter ifNil: [ self initializeAllocatedObjectsTablePresenter ].
+	^ allocatedObjectsTablePresenter
 ]
 
 { #category : #'accessing - lazy presenters' }
@@ -113,6 +121,12 @@ IllimaniAllocationProfilerUI >> initializeAllocatedObjectsPerSecond [
 ]
 
 { #category : #'initialization - lazy presenters' }
+IllimaniAllocationProfilerUI >> initializeAllocatedObjectsTablePresenter [
+
+	allocatedObjectsTablePresenter := self instantiate: (AllocatedObjectsTablePresenter on: profiler objectAllocations)
+]
+
+{ #category : #'initialization - lazy presenters' }
 IllimaniAllocationProfilerUI >> initializeAllocationsPerSecondPerAllocator [
 
 	allocationsPerSecondPerAllocatorPresenter := AlternatorPresenter new
@@ -170,6 +184,7 @@ IllimaniAllocationProfilerUI >> initializeNotebook [
 	notebookPresenter := self newNotebook
 		addPageTitle: 'Summary' provider: [ self summaryAndEvaluatorPresenter ];
 		addPageTitle: 'Memory' provider: [ self memoryTablePresenter  ];
+		addPageTitle: 'Allocated Objects' provider: [ self allocatedObjectsTablePresenter ];
 		addPageTitle: 'Heatmap' provider: [ self heatMapPresenter ];
 		addPageTitle: 'Allocations per Second Total'
 		provider: [ self allocatedObjectsPerSecondPresenter ];
