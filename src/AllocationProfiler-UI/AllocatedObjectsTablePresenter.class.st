@@ -54,7 +54,7 @@ AllocatedObjectsTablePresenter >> initializePresenters [
 			evaluated: #value);
 		addColumn: (SpStringTableColumn
 			title: 'Allocations'
-			evaluated: #key);
+			evaluated: [ :e | e key asStringWithCommas ]);
 		addColumn: (SpStringTableColumn
 			title: '%'
 			evaluated: [:e |
