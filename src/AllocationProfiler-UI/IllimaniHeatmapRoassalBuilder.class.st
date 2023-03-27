@@ -35,10 +35,13 @@ IllimaniHeatmapRoassalBuilder >> data: someData [
 	self initializeColorMultilinearScale.
 
 	self objectsY: (data collect: #allocator).
-	allocatedSortedClasses := (data flatCollect: [ :aNode | aNode sortedGroupedAllocations ])
-		                          collect: [ :e | e allocatedObjectClass ].
-	allocatedSortedClasses := allocatedSortedClasses asOrderedCollection removeDuplicates.
-	self objectsX: allocatedSortedClasses.
+
+	allocatedSortedClasses := Dictionary new.
+	data do: [ :e | e groupedAllocations keysAndValuesDo: [ :k :v |
+		allocatedSortedClasses at: k update: [ :old | old + v size] initial: v size ] ].
+	allocatedSortedClasses := allocatedSortedClasses associations
+		sorted: [ :a :b | a value > b value ].
+	self objectsX: (allocatedSortedClasses collect: #key).
 
 	self shape @ (RSPopup new text: [ :tuple |
 		 tuple key asString , ' allocated ' , (self numberFor: tuple) asString
