@@ -36,7 +36,7 @@ IllimaniAllocationProfilerTest >> testProfileOnExample [
 	objectsToCapture := { ByteString. Array. String. OrderedCollection. ByteArray }.
 
 	illimani
-		classesToCapture: objectsToCapture;
+		objectsToCapture: objectsToCapture;
 		copyExecutionStack;
 		profileOn: [ 1000 timesRepeat: [ IllimaniAllocationProfiler new ] ].
 	
@@ -56,7 +56,7 @@ IllimaniAllocationProfilerTest >> testProfileOnExampleCapturingAllButMorphic [
 	illimani
 		captureAllObjects;
 		copyExecutionStack;
-		classesToIgnore: classesToIgnore;
+		ignoreAllocators: classesToIgnore;
 		profileOn: [ 1000 timesRepeat: [ IllimaniAllocationProfiler new ] ].
 
 	"Take one random allocation to check"

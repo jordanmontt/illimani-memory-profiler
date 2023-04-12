@@ -21,7 +21,7 @@ IllimaniProfilerMpHandlerTest >> setUp [
 { #category : #tests }
 IllimaniProfilerMpHandlerTest >> testShouldICaptureTheObject [
 
-	handler classesToCapture: { Color . Point }.
+	handler objectsToCapture: { Color . Point }.
 	self assert: (handler shouldICaptureTheObject: Point new).
 	self assert: (handler shouldICaptureTheObject: Color new)
 ]
@@ -30,7 +30,7 @@ IllimaniProfilerMpHandlerTest >> testShouldICaptureTheObject [
 IllimaniProfilerMpHandlerTest >> testShouldICaptureTheObjectCaptureAllObjects [
 
 	handler captureAllObjects.
-	handler classesToIgnore: { Point }.
+	handler ignoreAllocators: { Point }.
 	self deny: (handler shouldICaptureTheObject: Point new).
 	self assert: (handler shouldICaptureTheObject: Point).
 	self assert: (handler shouldICaptureTheObject: Color new).

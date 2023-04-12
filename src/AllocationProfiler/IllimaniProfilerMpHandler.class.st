@@ -11,11 +11,11 @@ Class {
 		'classesToAvoidInTheContextSearch',
 		'captureAllObjects',
 		'copyExecutionStack',
-		'classesToCapture',
-		'classesToIgnore',
 		'graphWalker',
-		'copyObjectHash',
-		'keepReferencesToAllocatedObjects'
+		'keepReferencesToAllocatedObjects',
+		'copyObjectIdentityHash',
+		'allocatorClassesToIgnore',
+		'objectClassesToCapture'
 	],
 	#category : #'AllocationProfiler-Profiler'
 }
@@ -34,25 +34,7 @@ IllimaniProfilerMpHandler >> captureAllObjects [
 
 	captureAllObjects := true.
 	"It is necessary to put an empty array when wanting to capture all object allocations"
-	self classesToCapture: {  }
-]
-
-{ #category : #accessing }
-IllimaniProfilerMpHandler >> classesToCapture [
-
-	^ classesToCapture
-]
-
-{ #category : #accessing }
-IllimaniProfilerMpHandler >> classesToCapture: aCollection [
-
-	classesToCapture := aCollection
-]
-
-{ #category : #accessing }
-IllimaniProfilerMpHandler >> classesToIgnore: aCollection [
-
-	classesToIgnore := aCollection
+	self objectsToCapture: {  }
 ]
 
 { #category : #api }
@@ -72,20 +54,20 @@ IllimaniProfilerMpHandler >> copyExecutionStack [
 ]
 
 { #category : #api }
-IllimaniProfilerMpHandler >> copyObjectHash [
+IllimaniProfilerMpHandler >> copyObjectIdentityHash [
 	"When this turned to true I will ask for the hash for all the allocated objects"
 
 	"Keep in mind that if you send the message has to a no configurated object, it will raise
 	an exception. So activate this when you are sure that an object is configurated only
 	sending the message new."
 
-	copyObjectHash := true
+	copyObjectIdentityHash := true
 ]
 
 { #category : #initialization }
 IllimaniProfilerMpHandler >> defaultClassesToAvoidInTheContextSearch [
 
-	^{
+	^ {
 		IllimaniProfilerMpHandler.
 		MpMethodProxy.
 		"BlockClosure."
@@ -129,7 +111,7 @@ IllimaniProfilerMpHandler >> handleAllocationOfObject: newlyAllocatedObject [
 	filteredContext := self filterContext: thisContext ignoringClass: newlyAllocatedObject class.
 
 	copyExecutionStack ifTrue: [ allocationInformationHolder context: filteredContext copyStack ].
-	copyObjectHash ifTrue: [ allocationInformationHolder allocatedObjectHash: newlyAllocatedObject hash].
+	copyObjectIdentityHash ifTrue: [ allocationInformationHolder allocatedObjectHash: newlyAllocatedObject hash].
 	keepReferencesToAllocatedObjects ifTrue: [ allocationInformationHolder allocatedObject: newlyAllocatedObject ].
 
 	totalSizeInBytes := (graphWalker rootObject: newlyAllocatedObject) totalSizeInBytes.
@@ -145,16 +127,22 @@ IllimaniProfilerMpHandler >> handleAllocationOfObject: newlyAllocatedObject [
 	objectAllocations add: allocationInformationHolder
 ]
 
+{ #category : #accessing }
+IllimaniProfilerMpHandler >> ignoreAllocators: aCollectionOfClasses [
+
+	allocatorClassesToIgnore := aCollectionOfClasses
+]
+
 { #category : #initialization }
 IllimaniProfilerMpHandler >> initialize [
 
 	super initialize.
 	self doNotCopyExecutionStack.
 	self doNotCaptureAllObjects.
-	copyObjectHash := false.
+	copyObjectIdentityHash := false.
 	keepReferencesToAllocatedObjects := false.
-	classesToCapture := {  }.
-	classesToIgnore := {  }.
+	objectClassesToCapture := {  }.
+	allocatorClassesToIgnore := {  }.
 	objectAllocations := OrderedCollection new.
 	graphWalker := GraphSpaceStatistics new.
 	self initializeClassesToAvoidInContextSearch
@@ -184,9 +172,21 @@ IllimaniProfilerMpHandler >> objectAllocations [
 	^ objectAllocations
 ]
 
+{ #category : #accessing }
+IllimaniProfilerMpHandler >> objectsToCapture [
+
+	^ objectClassesToCapture
+]
+
+{ #category : #accessing }
+IllimaniProfilerMpHandler >> objectsToCapture: aCollectionOfClasses [
+
+	objectClassesToCapture := aCollectionOfClasses
+]
+
 { #category : #testing }
 IllimaniProfilerMpHandler >> shouldICaptureTheObject: returnValue [
 
-	^ (captureAllObjects or: [ classesToCapture includes: returnValue class ]) and: [
-		  (classesToIgnore includes: returnValue class) not ]
+	^ (captureAllObjects or: [ objectClassesToCapture includes: returnValue class ]) and: [
+		  (allocatorClassesToIgnore includes: returnValue class) not ]
 ]
