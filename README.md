@@ -68,7 +68,7 @@ profiler open
 
 To use this profiler you need to specify which allocations you want to capture.
 For that, you need to set the classes, of the allocations, that you want to capture.
-You can capture all object allocations with the message `captureAllObjects` or you can only capture a collection of classes `classesToCapture: aCollection`.
+You can capture all object allocations with the message `captureAllObjects` or you can only capture a collection of classes `objectsToCapture: aCollection`.
 
 It is also possible to copy the execution stack of *each* of the allocated objects with the message.
 This is very useful when you to make analysis, for example indentify in which context the allocations were prodoced, etc.
@@ -104,7 +104,7 @@ profiler open.
 If you want to capture all the allocations of objects but ignoring some of them, you can use 
 
 ```st
-profiler classesToIgnore: { ByteString . ByteArray }.
+profiler ignoreAllocators: { ByteString . ByteArray }.
 ```
 
 You can keep the allocated objects. This is useful is for example you want to know how many equal objects did you allocated.
@@ -130,4 +130,3 @@ Without the UI, because the profiler is independent from the UI, you can access 
 Observations:
 
 - Profile the profiler :p for big arrays the presenters and the visualizations take a long time to open
-- I now, it does not have enough tests. My inmidiate next tasks is to add good tests.
