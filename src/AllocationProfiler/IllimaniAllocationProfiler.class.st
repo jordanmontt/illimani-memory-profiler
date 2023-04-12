@@ -73,7 +73,8 @@ Class {
 		'statisticsModel',
 		'incrementalGCCount',
 		'fullGCCount',
-		'totalGCTime'
+		'totalGCTime',
+		'proxyArrobas'
 	],
 	#category : #'AllocationProfiler-Profiler'
 }
@@ -169,7 +170,8 @@ IllimaniAllocationProfiler >> initialize [
 IllimaniAllocationProfiler >> initializeMethodProxies [
 
 	proxyBasicNew := MpMethodProxy onMethod: Behavior >> #basicNew handler: profilerHandler.
-	proxyBasicNewKeyword := MpMethodProxy onMethod: Behavior >> #basicNew: handler: profilerHandler
+	proxyBasicNewKeyword := MpMethodProxy onMethod: Behavior >> #basicNew: handler: profilerHandler.
+	proxyArrobas := MpMethodProxy onMethod: Number >> #@ handler: profilerHandler.
 ]
 
 { #category : #testing }
@@ -226,6 +228,7 @@ IllimaniAllocationProfiler >> startProfiling [
 	beginningOfProfilingTime := DateAndTime now.
 	proxyBasicNew install.
 	proxyBasicNewKeyword install.
+	proxyArrobas install.
 
 	incrementalGCCount := Smalltalk vm incrementalGCCount.
 	fullGCCount := Smalltalk vm fullGCCount.
@@ -243,6 +246,8 @@ IllimaniAllocationProfiler >> stopProfiling [
 
 	proxyBasicNew uninstall.
 	proxyBasicNewKeyword uninstall.
+	proxyArrobas uninstall.
+	
 	endOfProfilingTime := DateAndTime now.
 	incrementalGCCount := Smalltalk vm incrementalGCCount - incrementalGCCount.
 	fullGCCount := Smalltalk vm fullGCCount - fullGCCount.
