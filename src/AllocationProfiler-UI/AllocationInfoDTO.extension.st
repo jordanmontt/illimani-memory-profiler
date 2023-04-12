@@ -15,3 +15,10 @@ AllocationInfoDTO >> inspectorExtension: aBuilder [
 		beResizable.
 	^ tablePresenter
 ]
+
+{ #category : #'*AllocationProfiler-UI' }
+AllocationInfoDTO >> inspectorExtensionContextFingerprint: aBuilder [
+
+	<inspectorPresentationOrder: 1 title: 'Allocation Context Fingerprint'>
+	^ contextFingerprint inspectionFullString
+]
