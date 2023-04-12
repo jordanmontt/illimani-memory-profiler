@@ -97,18 +97,6 @@ IllimaniAllocationProfiler >> captureAllObjects [
 	profilerHandler captureAllObjects
 ]
 
-{ #category : #api }
-IllimaniAllocationProfiler >> classesToCapture: aCollection [
-
-	profilerHandler classesToCapture: aCollection
-]
-
-{ #category : #api }
-IllimaniAllocationProfiler >> classesToIgnore: aCollection [
-
-	profilerHandler classesToIgnore: aCollection
-]
-
 { #category : #evaluating }
 IllimaniAllocationProfiler >> cleanProfilingData [
 
@@ -127,9 +115,9 @@ IllimaniAllocationProfiler >> copyExecutionStack [
 ]
 
 { #category : #api }
-IllimaniAllocationProfiler >> copyObjectHash [
+IllimaniAllocationProfiler >> copyObjectIdentityHash [
 
-	profilerHandler copyObjectHash
+	profilerHandler copyObjectIdentityHash
 ]
 
 { #category : #'accessing - statistics' }
@@ -150,6 +138,12 @@ IllimaniAllocationProfiler >> forceUninstall [
 IllimaniAllocationProfiler >> fullGCCount [
 
 	^ fullGCCount
+]
+
+{ #category : #api }
+IllimaniAllocationProfiler >> ignoreAllocators: aCollectionOfClasses [
+
+	profilerHandler ignoreAllocators: aCollectionOfClasses
 ]
 
 { #category : #'accessing - statistics' }
@@ -196,6 +190,12 @@ IllimaniAllocationProfiler >> keepReferencesToAllocatedObjects [
 IllimaniAllocationProfiler >> objectAllocations [
 
 	^ profilerHandler objectAllocations
+]
+
+{ #category : #api }
+IllimaniAllocationProfiler >> objectsToCapture: aCollectionOfClasses [
+
+	profilerHandler objectsToCapture: aCollectionOfClasses
 ]
 
 { #category : #api }

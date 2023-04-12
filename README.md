@@ -39,7 +39,7 @@ Example 1:
 
 ```st
 IllimaniAllocationProfiler new
-	classesToCapture: { ByteString . Array . String . OrderedCollection . ByteArray };
+	objectsToCapture: { ByteString . Array . String . OrderedCollection . ByteArray };
 	copyExecutionStack;
 	profileOn: [ 10000 timesRepeat: [ SpPresenter new ] ];
 	open
@@ -53,7 +53,7 @@ morphicClasses := morphicPackages flatCollect: #classes as: Set.
 
 profiler := IllimaniAllocationProfiler new
 	captureAllObjects;
-	classesToIgnore: morphicClasses;
+	ignoreAllocators: morphicClasses;
 	profileFor: 5 seconds;
 	yourself.
 	
