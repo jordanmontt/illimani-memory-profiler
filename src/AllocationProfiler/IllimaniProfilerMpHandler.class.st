@@ -111,7 +111,7 @@ IllimaniProfilerMpHandler >> handleAllocationOfObject: newlyAllocatedObject [
 	filteredContext := self filterContext: thisContext ignoringClass: newlyAllocatedObject class.
 
 	copyExecutionStack ifTrue: [ allocationInformationHolder context: filteredContext copyStack ].
-	copyObjectIdentityHash ifTrue: [ allocationInformationHolder allocatedObjectHash: newlyAllocatedObject hash].
+	copyObjectIdentityHash ifTrue: [ allocationInformationHolder allocatedObjectIdentityHash: newlyAllocatedObject hash].
 	keepReferencesToAllocatedObjects ifTrue: [ allocationInformationHolder allocatedObject: newlyAllocatedObject ].
 
 	totalSizeInBytes := (graphWalker rootObject: newlyAllocatedObject) totalSizeInBytes.
@@ -120,7 +120,7 @@ IllimaniProfilerMpHandler >> handleAllocationOfObject: newlyAllocatedObject [
 		allocatorClass: filteredContext receiver class;
 		allocatorMethod: filteredContext compiledCode method;
 		allocatedObjectClass: newlyAllocatedObject class;
-		setContextFingerprintList: filteredContext;
+		contextFingerprint: filteredContext;
 		totalSizeInBytes: totalSizeInBytes;
 		timestamp: timeNow.
 

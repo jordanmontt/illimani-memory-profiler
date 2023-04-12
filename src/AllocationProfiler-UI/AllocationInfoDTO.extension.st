@@ -5,7 +5,7 @@ AllocationInfoDTO >> inspectorExtension: aBuilder [
 	<inspectorPresentationOrder: 0 title: 'Items'>
 
 	| tablePresenter elements items |
-	elements := { 'Allocated Object Class' -> allocatedObjectClass . 'Allocator Class' -> allocatorClass . 'Allocator Method' -> allocatorMethod . 'Total Size in Bytes' -> totalSizeInBytes . 'Timestamp' -> timestamp . 'Context' -> context . 'Allocated Object' -> allocatedObject . 'Allocated Object Hash' -> allocatedObjectHash }.
+	elements := { 'Allocated Object Class' -> allocatedObjectClass . 'Allocator Class' -> allocatorClass . 'Allocator Method' -> allocatorMethod . 'Total Size in Bytes' -> totalSizeInBytes . 'Timestamp' -> timestamp . 'Context' -> context . 'Allocated Object' -> allocatedObject . 'Allocated Object Identity Hash' -> allocatedObjectIdentityHash }.
 	items :=  (elements collect: [ :e | StInspectorAssociationNode hostObject: e ]).
 	tablePresenter := aBuilder newTable.
 	tablePresenter

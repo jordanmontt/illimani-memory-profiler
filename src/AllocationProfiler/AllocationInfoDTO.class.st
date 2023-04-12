@@ -4,13 +4,13 @@ Class {
 	#instVars : [
 		'context',
 		'timestamp',
-		'allocatedObjectHash',
 		'allocatorClass',
 		'allocatedObjectClass',
 		'totalSizeInBytes',
 		'allocatorMethod',
 		'contextFingerprint',
-		'allocatedObject'
+		'allocatedObject',
+		'allocatedObjectIdentityHash'
 	],
 	#category : #'AllocationProfiler-Data-Structures'
 }
@@ -40,15 +40,15 @@ AllocationInfoDTO >> allocatedObjectClass: anObject [
 ]
 
 { #category : #accessing }
-AllocationInfoDTO >> allocatedObjectHash [
+AllocationInfoDTO >> allocatedObjectIdentityHash [
 
-	^ allocatedObjectHash
+	^ allocatedObjectIdentityHash
 ]
 
 { #category : #accessing }
-AllocationInfoDTO >> allocatedObjectHash: anObject [
+AllocationInfoDTO >> allocatedObjectIdentityHash: anObject [
 
-	allocatedObjectHash := anObject
+	allocatedObjectIdentityHash := anObject
 ]
 
 { #category : #accessing }
@@ -88,17 +88,28 @@ AllocationInfoDTO >> contextFingerprint [
 ]
 
 { #category : #accessing }
-AllocationInfoDTO >> contextFingerprintAsString [
+AllocationInfoDTO >> contextFingerprint: aContext [
 
-	^ String streamContents: [ :stream |
-		  contextFingerprint pairsDo: [ :a :b |
-			  stream << b className << '>>#' << a asString << ' <- ' ] ]
+	contextFingerprint := self getContextFingerprintStream: aContext
 ]
 
 { #category : #accessing }
 AllocationInfoDTO >> fullMethodName [
 
 	^ allocatorMethod name
+]
+
+{ #category : #initialization }
+AllocationInfoDTO >> getContextFingerprintStream: aContext [
+
+	^ String streamContents: [ :stream |
+		| iterator |
+		iterator := aContext.
+		1 to: 10 do: [ :index |
+			iterator printOn: stream.
+			stream << String cr.
+			iterator := iterator sender.
+			iterator ifNil: [ ^ stream ] ] ]
 ]
 
 { #category : #printing }
@@ -108,19 +119,6 @@ AllocationInfoDTO >> printOn: aStream [
 	<< ' that weights '.
 	totalSizeInBytes ifNil: [ aStream << ' - ' ]
 		ifNotNil: [ aStream << totalSizeInBytes humanReadableByteSizeString ]
-]
-
-{ #category : #initialization }
-AllocationInfoDTO >> setContextFingerprintList: aContext [
-
-	| iterator |
-	contextFingerprint := OrderedCollection new.
-	iterator := aContext.
-	1 to: 10 do: [ :index |
-		contextFingerprint add: iterator compiledCode method selector.
-		contextFingerprint add: iterator receiver.
-		iterator := iterator sender.
-		iterator ifNil: [ ^ self ] ]
 ]
 
 { #category : #accessing }
