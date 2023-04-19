@@ -100,7 +100,7 @@ IllimaniAllocationProfiler >> captureAllObjects [
 { #category : #evaluating }
 IllimaniAllocationProfiler >> cleanProfilingData [
 
-	profilerHandler cleanAllocations.
+	profilerHandler clean.
 	beginningOfProfilingTime := nil.
 	endOfProfilingTime := nil.
 	incrementalGCCount := nil.
@@ -251,6 +251,11 @@ IllimaniAllocationProfiler >> stats [
 IllimaniAllocationProfiler >> stopProfiling [
 
 	self uninstallMethodProxies.
+	
+	"Force finalization of the objects. Don't do it if the references are there is no finalization."
+	Smalltalk garbageCollect.
+	"Run a second time because we use ephemerons. How the ephemerons are implemented thet are garbage collected the second run."
+	Smalltalk garbageCollect.
 	
 	endOfProfilingTime := DateAndTime now.
 	incrementalGCCount := Smalltalk vm incrementalGCCount - incrementalGCCount.

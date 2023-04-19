@@ -1,20 +1,23 @@
+"
+I am a finalizer that gest called when my model will be garbage collected. More information in the pharo project proposal page https://github.com/pharo-project/pheps/blob/main/phep-0003.md
+"
 Class {
 	#name : #IllimaniFinalizer,
 	#superclass : #Object,
 	#instVars : [
-		'dto'
+		'model'
 	],
 	#category : #IllimaniFinalization
 }
 
 { #category : #finalization }
-IllimaniFinalizer >> dto: obj [
+IllimaniFinalizer >> finalize [
 
-	dto := obj
+	model finalizationTimestamp: Time microsecondClockValue
 ]
 
 { #category : #finalization }
-IllimaniFinalizer >> finalize [
+IllimaniFinalizer >> model: anObject [
 
-	dto finalizationTimestamp: Time microsecondClockValue
+	model := anObject
 ]

@@ -126,6 +126,13 @@ AllocationInfoDTO >> getContextFingerprintStream: aContext [
 ]
 
 { #category : #printing }
+AllocationInfoDTO >> lifetimeAsString [
+
+	finalizationTimestamp ifNil: [ ^ '-' ].
+	^ (Duration microSeconds: finalizationTimestamp - timestamp) humanReadablePrintString
+]
+
+{ #category : #printing }
 AllocationInfoDTO >> printOn: aStream [
 
 	aStream << allocatorMethod name << ' allocated a ' << allocatedObjectClass asString
