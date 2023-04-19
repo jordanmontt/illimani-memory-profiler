@@ -168,6 +168,14 @@ IllimaniAllocationProfiler >> initializeMethodProxies [
 	proxyArrobas := MpMethodProxy onMethod: Number >> #@ handler: profilerHandler.
 ]
 
+{ #category : #evaluating }
+IllimaniAllocationProfiler >> installMethodProxies [
+
+	proxyBasicNew install.
+	proxyBasicNewKeyword install.
+	proxyArrobas install
+]
+
 { #category : #testing }
 IllimaniAllocationProfiler >> isProfilingFinished [
 
@@ -226,9 +234,7 @@ IllimaniAllocationProfiler >> startProfiling [
 
 	self cleanProfilingData.
 	beginningOfProfilingTime := DateAndTime now.
-	proxyBasicNew install.
-	proxyBasicNewKeyword install.
-	proxyArrobas install.
+	self installMethodProxies.
 
 	incrementalGCCount := Smalltalk vm incrementalGCCount.
 	fullGCCount := Smalltalk vm fullGCCount.
@@ -244,16 +250,15 @@ IllimaniAllocationProfiler >> stats [
 { #category : #evaluating }
 IllimaniAllocationProfiler >> stopProfiling [
 
-	proxyBasicNew uninstall.
-	proxyBasicNewKeyword uninstall.
-	proxyArrobas uninstall.
+	self uninstallMethodProxies.
 	
 	endOfProfilingTime := DateAndTime now.
 	incrementalGCCount := Smalltalk vm incrementalGCCount - incrementalGCCount.
 	fullGCCount := Smalltalk vm fullGCCount - fullGCCount.
 	totalGCTime := (Duration milliSeconds: Smalltalk vm totalGCTime) - totalGCTime.
-
-	statisticsModel := AllocationStatistics new rawAllocations: profilerHandler objectAllocations.
+	statisticsModel := AllocationStatistics new rawAllocations:
+		profilerHandler objectAllocations.
+		
 	self announceProfilerStopedProfiling
 ]
 
@@ -267,4 +272,12 @@ IllimaniAllocationProfiler >> totalGCTime [
 IllimaniAllocationProfiler >> totalProfiledTime [
 
 	^ endOfProfilingTime - beginningOfProfilingTime
+]
+
+{ #category : #evaluating }
+IllimaniAllocationProfiler >> uninstallMethodProxies [
+
+	proxyBasicNew uninstall.
+	proxyBasicNewKeyword uninstall.
+	proxyArrobas uninstall
 ]
