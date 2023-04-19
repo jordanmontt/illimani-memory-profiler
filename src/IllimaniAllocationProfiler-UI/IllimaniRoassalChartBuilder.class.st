@@ -30,10 +30,7 @@ IllimaniRoassalChartBuilder >> addLabelsX: xText y: yText forChart: chart [
 IllimaniRoassalChartBuilder >> addTicksToLabel: chart [
 
 	chart
-		add: (RSHorizontalTick new
-			"Divide by 10^9 because the time is in nanoseconds"
-			labelConversion: [ :number | (number / (10 raisedTo: 9)) asFloat ];
-			yourself);
+		add: RSHorizontalTick new;
 		add: (RSVerticalTick new
 			labelConversion: [ :value | value asInteger asStringWithCommas ];
 			yourself)
