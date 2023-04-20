@@ -126,10 +126,16 @@ AllocationInfoDTO >> getContextFingerprintStream: aContext [
 ]
 
 { #category : #printing }
+AllocationInfoDTO >> lifetimeAsDuration [
+
+	^ Duration microSeconds: finalizationTimestamp - timestamp
+]
+
+{ #category : #printing }
 AllocationInfoDTO >> lifetimeAsString [
 
 	finalizationTimestamp ifNil: [ ^ '-' ].
-	^ (Duration microSeconds: finalizationTimestamp - timestamp) humanReadablePrintString
+	^ self lifetimeAsDuration humanReadablePrintString
 ]
 
 { #category : #printing }
