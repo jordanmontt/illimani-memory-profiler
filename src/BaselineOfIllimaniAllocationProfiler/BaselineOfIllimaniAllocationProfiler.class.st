@@ -2,13 +2,13 @@
 I am a baseline
 "
 Class {
-	#name : #BaselineOfAllocationProfiler,
+	#name : #BaselineOfIllimaniAllocationProfiler,
 	#superclass : #BaselineOf,
 	#category : #BaselineOfIllimaniAllocationProfiler
 }
 
 { #category : #baselines }
-BaselineOfAllocationProfiler >> baseline: spec [
+BaselineOfIllimaniAllocationProfiler >> baseline: spec [
 
 	<baseline>
 	spec for: #common do: [
