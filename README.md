@@ -17,7 +17,7 @@
 ```smalltalk
 EpMonitor disableDuring: [
 	Metacello new
-		baseline: 'AllocationProfiler';
+		baseline: 'IllimaniAllocationProfiler';
 		repository: 'github://jordanmontt/illimani-memory-profiler:main';
 		load ].
 ```
