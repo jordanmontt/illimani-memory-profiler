@@ -35,7 +35,7 @@ IllimaniFinalizationProfiler >> forceFinalizationOfObjects [
 	| retries previousRegistrySize |
 	retries := 0.
 
-	[ retries < 10 and: [ finalizationRegistry isNotEmpty ] ] whileTrue: [
+	[ retries < 10 and: [ finalizationRegistry size > 0 ] ] whileTrue: [
 		'entered' traceCr.
 		previousRegistrySize := finalizationRegistry size.
 		Smalltalk garbageCollect.
