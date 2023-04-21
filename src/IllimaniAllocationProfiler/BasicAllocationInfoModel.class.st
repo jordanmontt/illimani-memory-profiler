@@ -5,7 +5,9 @@ Class {
 		'allocatedObjectClass',
 		'finalizationTimestamp',
 		'totalSizeInBytes',
-		'initializationTimestamp'
+		'initializationTimestamp',
+		'gcSpentTime',
+		'profiler'
 	],
 	#category : #'IllimaniAllocationProfiler-Data-Structures'
 }
@@ -36,6 +38,13 @@ BasicAllocationInfoModel >> finalizationTimestamp: anObject [
 	finalizationTimestamp := anObject
 ]
 
+{ #category : #finalization }
+BasicAllocationInfoModel >> finalize [
+
+	finalizationTimestamp := Time microsecondClockValue.
+	gcSpentTime := gcSpentTime - Smalltalk vm totalGCTime
+]
+
 { #category : #accessing }
 BasicAllocationInfoModel >> initializationTimestamp [
 	"In microseconds"
@@ -47,13 +56,14 @@ BasicAllocationInfoModel >> initializationTimestamp [
 BasicAllocationInfoModel >> initializationTimestamp: microsecondsAsInt [
 	"In microseconds"
 
+	gcSpentTime := Smalltalk vm totalGCTime.
 	initializationTimestamp := microsecondsAsInt
 ]
 
 { #category : #printing }
 BasicAllocationInfoModel >> lifetimeAsDuration [
 
-	^ Duration microSeconds: finalizationTimestamp - initializationTimestamp
+	^ Duration microSeconds: finalizationTimestamp - initializationTimestamp - gcSpentTime
 ]
 
 { #category : #printing }
@@ -61,6 +71,18 @@ BasicAllocationInfoModel >> lifetimeAsString [
 
 	finalizationTimestamp ifNil: [ ^ '-' ].
 	^ self lifetimeAsDuration humanReadablePrintString
+]
+
+{ #category : #accessing }
+BasicAllocationInfoModel >> profiler [
+
+	^ profiler
+]
+
+{ #category : #accessing }
+BasicAllocationInfoModel >> profiler: anObject [
+
+	profiler := anObject
 ]
 
 { #category : #accessing }

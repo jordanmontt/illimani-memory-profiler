@@ -64,6 +64,8 @@ IllimaniAllocationProfiler new
 Class {
 	#name : #IllimaniAllocationProfiler,
 	#superclass : #Object,
+	#traits : 'IllimaniTAllocatorWrapper',
+	#classTraits : 'IllimaniTAllocatorWrapper classTrait',
 	#instVars : [
 		'proxyBasicNew',
 		'proxyBasicNewKeyword',
@@ -157,23 +159,7 @@ IllimaniAllocationProfiler >> initialize [
 
 	super initialize.
 	profilerHandler := IllimaniProfilerMpHandler new.
-	self initializeMethodProxies
-]
-
-{ #category : #evaluating }
-IllimaniAllocationProfiler >> initializeMethodProxies [
-
-	proxyBasicNew := MpMethodProxy onMethod: Behavior >> #basicNew handler: profilerHandler.
-	proxyBasicNewKeyword := MpMethodProxy onMethod: Behavior >> #basicNew: handler: profilerHandler.
-	proxyArrobas := MpMethodProxy onMethod: Number >> #@ handler: profilerHandler.
-]
-
-{ #category : #evaluating }
-IllimaniAllocationProfiler >> installMethodProxies [
-
-	proxyBasicNew install.
-	proxyBasicNewKeyword install.
-	proxyArrobas install
+	self initializeMethodProxies: profilerHandler
 ]
 
 { #category : #testing }
@@ -204,23 +190,6 @@ IllimaniAllocationProfiler >> objectAllocations [
 IllimaniAllocationProfiler >> objectsToCapture: aCollectionOfClasses [
 
 	profilerHandler objectsToCapture: aCollectionOfClasses
-]
-
-{ #category : #api }
-IllimaniAllocationProfiler >> profileFor: aDuration [
-	"Done with a fork because we don't want to block the ui thread since it allocates objects. "
-
-	self startProfiling.
-	[
-	(Delay forDuration: aDuration) wait.
-	self stopProfiling ] fork
-]
-
-{ #category : #api }
-IllimaniAllocationProfiler >> profileOn: aBlock [
-
-	self startProfiling.
-	aBlock ensure: [ self stopProfiling ]
 ]
 
 { #category : #accessing }
@@ -277,12 +246,4 @@ IllimaniAllocationProfiler >> totalGCTime [
 IllimaniAllocationProfiler >> totalProfiledTime [
 
 	^ endOfProfilingTime - beginningOfProfilingTime
-]
-
-{ #category : #evaluating }
-IllimaniAllocationProfiler >> uninstallMethodProxies [
-
-	proxyBasicNew uninstall.
-	proxyBasicNewKeyword uninstall.
-	proxyArrobas uninstall
 ]
