@@ -3,7 +3,8 @@ Class {
 	#superclass : #MpHandler,
 	#instVars : [
 		'objectAllocations',
-		'profiler'
+		'profiler',
+		'graphWalker'
 	],
 	#category : #'IllimaniAllocationProfiler-Finalization'
 }
@@ -13,10 +14,11 @@ IllimaniFinalizationHandler >> afterExecutionWithReceiver: receiver arguments: a
 
 	| objectFinalizationModel |
 	objectFinalizationModel := BasicAllocationInfoModel new
-		                           allocatedObjectClass: newlyAllocatedObject class;
-		                           initializationTimestamp: Time microsecondClockValue;
-		                           profiler: profiler;
-		                           yourself.
+		"allocatedObjectClass: newlyAllocatedObject class;"
+		initializationTimestamp: Time microsecondClockValue;
+		totalSizeInBytes: (graphWalker rootObject: newlyAllocatedObject) totalSizeInBytes;
+		profiler: profiler;
+		yourself.
 	objectAllocations add: objectFinalizationModel.
 
 	"Finalization"
@@ -35,7 +37,8 @@ IllimaniFinalizationHandler >> clean [
 IllimaniFinalizationHandler >> initialize [
 
 	super initialize.
-	objectAllocations := OrderedCollection new
+	objectAllocations := OrderedCollection new.
+	graphWalker := GraphSpaceStatistics new
 ]
 
 { #category : #accessing }

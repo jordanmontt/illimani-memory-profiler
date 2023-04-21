@@ -7,43 +7,55 @@ Class {
 		'timeMeasurement',
 		'groupingBlock',
 		'x',
-		'y'
+		'y',
+		'yTransformingBlock'
 	],
 	#category : #'IllimaniAllocationProfiler-UI-Roassal'
 }
 
-{ #category : #'as yet unclassified' }
-IllimaniDistributionForFinalization >> data: someData [
-
-	data := someData
-]
-
-{ #category : #'as yet unclassified' }
-IllimaniDistributionForFinalization >> groupDataByAllocationsByDeciSeconds [
+{ #category : #api }
+IllimaniDistributionForFinalization >> applyGroupData [
 
 	| onlyFinalizedObjects dictionary |
-	self timeMeasurement: 'deci seconds'.
 	
 	onlyFinalizedObjects := data select: [ :e | e finalizationTimestamp isNotNil ].
 
-	groupedData := (onlyFinalizedObjects groupedBy: [ :e | groupingBlock value: e ])
-		               associations.
+	groupedData := (onlyFinalizedObjects groupedBy: [ :collection |
+		                groupingBlock value: collection ]) associations.
 	groupedData sort: [ :a :b | a key < b key ].
 
 	x := 0 to: groupedData last key asInteger.
 	dictionary := Dictionary newFrom: groupedData.
 	y := x collect: [ :index |
-		     dictionary at: index ifPresent: [ :collection | collection size ] ifAbsent: [ 0 ] ]
+		     dictionary at: index
+			     ifPresent: [ :collection | yTransformingBlock value: collection ]
+			     ifAbsent: [ 0 ] ]
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : #api }
+IllimaniDistributionForFinalization >> data: someData [
+
+	data := someData
+]
+
+{ #category : #initialization }
+IllimaniDistributionForFinalization >> groupingBlock: aBlock [
+
+	groupingBlock := aBlock
+]
+
+{ #category : #initialization }
 IllimaniDistributionForFinalization >> initialize [
 
 	super initialize.
-	groupingBlock := [ :e | e lifetimeAsDuration asDeciSeconds ceiling ]
+	groupingBlock := [ :allocationModel |
+	                 allocationModel lifetimeAsDuration asDeciSeconds ceiling ].
+	"yTransformingBlock := [ :collection | collection size ]."
+	yTransformingBlock := [ :collection | collection sum: #totalSizeInBytes ].
+	self timeMeasurement: 'deci seconds'
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : #api }
 IllimaniDistributionForFinalization >> palu1 [
 
 	| canvas plot onlyFinalizedObjects groupedData |
@@ -75,7 +87,7 @@ IllimaniDistributionForFinalization >> palu1 [
 	^ canvas
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : #api }
 IllimaniDistributionForFinalization >> palu2 [
 
 	| c p |
@@ -108,7 +120,7 @@ self associationsDo: [ :e | ((e key < 51)) ifTrue: [ data add: e]]."
 	^ c
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : #api }
 IllimaniDistributionForFinalization >> palu3 [
 
 	| canvas plot onlyFinalizedObjects groupedData |
@@ -143,7 +155,7 @@ IllimaniDistributionForFinalization >> palu3 [
 	^ canvas
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : #api }
 IllimaniDistributionForFinalization >> palu4 [
 
 	| chart plot marker90Percent marker10Percent markerColor |
@@ -161,7 +173,7 @@ IllimaniDistributionForFinalization >> palu4 [
 			 yourself).
 	chart addDecoration: (RSVerticalTick new
 			 numberOfTicks: 10;
-			 labelConversion: [ :e | e asInteger printString ];
+			 labelConversion: [ :e | e asInteger humanReadableByteSizeString ];
 			 yourself).
 	markerColor := Color fromHexString: '922724'.
 	chart addDecoration: (marker90Percent := RSXMarkerDecoration new
@@ -207,9 +219,15 @@ IllimaniDistributionForFinalization >> palu4 [
 	^ chart canvas
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : #api }
 IllimaniDistributionForFinalization >> timeMeasurement: aString [
 	"The string needs to be in lowercase"
 
 	timeMeasurement := aString
+]
+
+{ #category : #initialization }
+IllimaniDistributionForFinalization >> yTransformingBlock: aBlock [
+
+	yTransformingBlock := aBlock
 ]
