@@ -188,7 +188,7 @@ IllimaniDistributionForFinalization >> palu4 [
 	chart yLog.
 
 	chart xlabel: 'Lifetime in ' , timeMeasurement.
-	chart ylabel: 'Number of objects'.
+	chart ylabel: 'Memory'.
 	chart title: 'Palu4'.
 
 	chart build.
