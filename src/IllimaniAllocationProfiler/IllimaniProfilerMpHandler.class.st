@@ -116,13 +116,13 @@ IllimaniProfilerMpHandler >> handleAllocationOfObject: newlyAllocatedObject [
 	| filteredContext timeNow allocationInformationHolder |
 		
 	timeNow := Time microsecondClockValue.
-	allocationInformationHolder := AllocationInfoDTO new.
+	allocationInformationHolder := AllocationSiteInfoModel new.
 	filteredContext := self filterContext: thisContext ignoringClass: newlyAllocatedObject class.
 
 	"Finalization"
-	illimaniFinalizationRegistry
+	"illimaniFinalizationRegistry
 		add: newlyAllocatedObject
-		finalizer: (IllimaniFinalizer new model: allocationInformationHolder).
+		finalizer: (IllimaniFinalizer new model: allocationInformationHolder)."
 
 	copyExecutionStack ifTrue: [ allocationInformationHolder context: filteredContext copyStack ].
 	copyObjectHash ifTrue: [ allocationInformationHolder allocatedObjectHash: newlyAllocatedObject hash ].
@@ -134,7 +134,7 @@ IllimaniProfilerMpHandler >> handleAllocationOfObject: newlyAllocatedObject [
 		allocatedObjectClass: newlyAllocatedObject class;
 		contextFingerprint: filteredContext;
 		totalSizeInBytes: (graphWalker rootObject: newlyAllocatedObject) totalSizeInBytes;
-		timestamp: timeNow.
+		initializationTimestamp: timeNow.
 
 	objectAllocations add: allocationInformationHolder
 ]

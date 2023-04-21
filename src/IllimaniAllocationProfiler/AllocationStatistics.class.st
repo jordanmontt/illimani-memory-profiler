@@ -71,7 +71,7 @@ AllocationStatistics >> rawAllocations: anObject [
 { #category : #'statistics - time' }
 AllocationStatistics >> timeDifferenceBetweenFirstAndLastAllocation [
 
-	^ rawAllocations last timestamp - rawAllocations first timestamp
+	^ rawAllocations last initializationTimestamp - rawAllocations first initializationTimestamp
 ]
 
 { #category : #statistics }
