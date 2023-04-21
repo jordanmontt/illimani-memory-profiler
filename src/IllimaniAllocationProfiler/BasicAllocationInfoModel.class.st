@@ -61,9 +61,15 @@ BasicAllocationInfoModel >> initializationTimestamp: microsecondsAsInt [
 ]
 
 { #category : #printing }
+BasicAllocationInfoModel >> lifetime [
+
+	^ finalizationTimestamp - initializationTimestamp - gcSpentTime
+]
+
+{ #category : #printing }
 BasicAllocationInfoModel >> lifetimeAsDuration [
 
-	^ Duration microSeconds: finalizationTimestamp - initializationTimestamp - gcSpentTime
+	^ Duration microSeconds: self lifetime
 ]
 
 { #category : #printing }
