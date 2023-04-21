@@ -8,7 +8,7 @@ Class {
 		'gcProcess',
 		'finalizationRegistry'
 	],
-	#category : #IllimaniFinalization
+	#category : #'IllimaniAllocationProfiler-Finalization'
 }
 
 { #category : #api }

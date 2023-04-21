@@ -5,7 +5,7 @@ Class {
 		'objectAllocations',
 		'profiler'
 	],
-	#category : #IllimaniFinalization
+	#category : #'IllimaniAllocationProfiler-Finalization'
 }
 
 { #category : #evaluating }
