@@ -6,8 +6,7 @@ Class {
 	#instVars : [
 		'profilerHandler',
 		'gcProcess',
-		'finalizationRegistry',
-		'previousRegistrySize'
+		'finalizationRegistry'
 	],
 	#category : #IllimaniFinalization
 }
@@ -33,7 +32,7 @@ IllimaniFinalizationProfiler >> forceFinalizationOfObjects [
 	reaches 0. This can happen if someone is referencing an object, thus the object will never
 	die."
 
-	| retries |
+	| retries previousRegistrySize |
 	retries := 0.
 
 	[ retries < 10 and: [ finalizationRegistry isNotEmpty ] ] whileTrue: [
