@@ -2,7 +2,12 @@ Class {
 	#name : #IllimaniDistributionForFinalization,
 	#superclass : #Object,
 	#instVars : [
-		'data'
+		'data',
+		'groupedData',
+		'timeMeasurement',
+		'groupingBlock',
+		'x',
+		'y'
 	],
 	#category : #'IllimaniAllocationProfiler-UI-Roassal'
 }
@@ -11,6 +16,31 @@ Class {
 IllimaniDistributionForFinalization >> data: someData [
 
 	data := someData
+]
+
+{ #category : #'as yet unclassified' }
+IllimaniDistributionForFinalization >> groupDataByAllocationsByDeciSeconds [
+
+	| onlyFinalizedObjects dictionary |
+	self timeMeasurement: 'deci seconds'.
+	
+	onlyFinalizedObjects := data select: [ :e | e finalizationTimestamp isNotNil ].
+
+	groupedData := (onlyFinalizedObjects groupedBy: [ :e | groupingBlock value: e ])
+		               associations.
+	groupedData sort: [ :a :b | a key < b key ].
+
+	x := 0 to: groupedData last key asInteger.
+	dictionary := Dictionary newFrom: groupedData.
+	y := x collect: [ :index |
+		     dictionary at: index ifPresent: [ :collection | collection size ] ifAbsent: [ 0 ] ]
+]
+
+{ #category : #'as yet unclassified' }
+IllimaniDistributionForFinalization >> initialize [
+
+	super initialize.
+	groupingBlock := [ :e | e lifetimeAsDuration asDeciSeconds ceiling ]
 ]
 
 { #category : #'as yet unclassified' }
@@ -116,53 +146,70 @@ IllimaniDistributionForFinalization >> palu3 [
 { #category : #'as yet unclassified' }
 IllimaniDistributionForFinalization >> palu4 [
 
-	| canvas plot onlyFinalizedObjects groupedData x y line90 |
-	canvas := RSChart new.
-	onlyFinalizedObjects := data select: [ :e | e finalizationTimestamp isNotNil ].
-	"Grouped data by seconds"
-	groupedData := (onlyFinalizedObjects groupedBy: [ :e | e lifetimeAsDuration asDeciSeconds ceiling ]) associations.
-	
-	groupedData := groupedData sorted: [ :a :b | a key < b key ].
-	x := 0 to: groupedData last key asInteger. "#(0 1 2 3 ...)"
-	groupedData := Dictionary newFrom: groupedData.
-	y := x collect: [ :index | groupedData at: index
-		ifPresent: [ :collection | collection size ]
-		ifAbsent: [ 0 ] ].
+	| chart plot marker90Percent marker10Percent markerColor |
+	chart := RSChart new.
+
 	plot := RSLinePlot new
-		x: x
-		y: y.
+		        color: Color black;
+		        x: x y: y.
 
-	canvas addPlot: plot.
+	chart addPlot: plot.
 
-	canvas addDecoration: (RSHorizontalTick new
-			 numberOfTicks: 10;
-			 yourself).
-	canvas addDecoration: (RSVerticalTick new
+	chart addDecoration: (RSHorizontalTick new
 			 numberOfTicks: 10;
 			 labelConversion: [ :e | e asInteger printString ];
 			 yourself).
-	canvas addDecoration: (line90 := RSXMarkerDecoration new
-		value: [ 100 ]).
-		
+	chart addDecoration: (RSVerticalTick new
+			 numberOfTicks: 10;
+			 labelConversion: [ :e | e asInteger printString ];
+			 yourself).
+	markerColor := Color fromHexString: '922724'.
+	chart addDecoration: (marker90Percent := RSXMarkerDecoration new
+			                    sumUpTo: 0.9;
+			                    color: markerColor;
+			                    yourself).
+	chart addDecoration: (marker10Percent := RSXMarkerDecoration new
+			                    sumUpTo: 0.1;
+			                    color: markerColor;
+			                    yourself).
 
-	canvas yLog.
-	
-	canvas xlabel: 'Lifetime'.
-	canvas ylabel: 'Number of objects'.
-	canvas title: 'Palu4'.
+	chart yLog.
 
-	canvas build.
-	
-	line90 lines do: [ :line | | label |
+	chart xlabel: 'Lifetime in ' , timeMeasurement.
+	chart ylabel: 'Number of objects'.
+	chart title: 'Palu4'.
+
+	chart build.
+
+	marker90Percent lines do: [ :line |
+		| label |
 		label := RSLabel new
-			text: '90%';
-			fontSize: 10;
-			color: Color black;
-			yourself.
+			         text: '90%';
+			         color: markerColor;
+			         fontSize: 6;
+			         yourself.
 		RSLocation new
 			above;
 			move: label on: line.
-		canvas canvas add: label.
-		 ].
-	^ canvas canvas.
+		chart canvas add: label ].
+
+	marker10Percent lines do: [ :line |
+		| label |
+		label := RSLabel new
+			         text: '10%';
+			         color: markerColor;
+			         fontSize: 6;
+			         yourself.
+		RSLocation new
+			above;
+			move: label on: line.
+		chart canvas add: label ].
+	^ chart canvas
+]
+
+{ #category : #'as yet unclassified' }
+IllimaniDistributionForFinalization >> timeMeasurement: aString [
+	"The string needs to be in lowercase"
+
+	timeMeasurement := aString
 ]
