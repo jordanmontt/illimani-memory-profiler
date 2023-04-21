@@ -5,9 +5,6 @@ Class {
 	#classTraits : 'IllimaniTAllocatorWrapper classTrait',
 	#instVars : [
 		'profilerHandler',
-		'incrementalGCCount',
-		'fullGCCount',
-		'totalGCTime',
 		'gcProcess',
 		'finalizationRegistry',
 		'previousRegistrySize'
@@ -15,7 +12,7 @@ Class {
 	#category : #IllimaniFinalization
 }
 
-{ #category : #adding }
+{ #category : #api }
 IllimaniFinalizationProfiler >> addFinalizationFor: newlyAllocatedObject finalizer: objectFinalizationModel [
 
 	finalizationRegistry add: newlyAllocatedObject finalizer: objectFinalizationModel
@@ -24,10 +21,28 @@ IllimaniFinalizationProfiler >> addFinalizationFor: newlyAllocatedObject finaliz
 { #category : #profiling }
 IllimaniFinalizationProfiler >> cleanProfilingData [
 
-	profilerHandler clean.
-	incrementalGCCount := nil.
-	fullGCCount := nil.
-	totalGCTime := nil
+	profilerHandler clean
+]
+
+{ #category : #profiling }
+IllimaniFinalizationProfiler >> forceFinalizationOfObjects [
+	"Force finalization of the objects. This is because when an objects will be finalizated,
+	the ephemeron puts a strong reference to th object, thus, making it referenced. So we need
+	to run recursively the gc until there are no more objects in the finalization Registry.
+	The retry is a way to continue running some GC until if the finalization registry never
+	reaches 0. This can happen if someone is referencing an object, thus the object will never
+	die."
+
+	| retries |
+	retries := 0.
+
+	[ retries < 10 and: [ finalizationRegistry isNotEmpty ] ] whileTrue: [
+		'entered' traceCr.
+		previousRegistrySize := finalizationRegistry size.
+		Smalltalk garbageCollect.
+		50 milliSecond wait.
+		retries := previousRegistrySize = finalizationRegistry size ifTrue: [ retries + 1 ]
+			           ifFalse: [ 0 ] ]
 ]
 
 { #category : #initialization }
@@ -37,7 +52,6 @@ IllimaniFinalizationProfiler >> initialize [
 	finalizationRegistry := FinalizationRegistry new.
 	profilerHandler := IllimaniFinalizationHandler new
 		                   profiler: self;
-		                   finalizationRegistry: finalizationRegistry;
 		                   yourself.
 	self initializeMethodProxies: profilerHandler
 ]
@@ -48,10 +62,21 @@ IllimaniFinalizationProfiler >> isProfiling [
 	^ gcProcess isNotNil
 ]
 
-{ #category : #initialization }
+{ #category : #api }
 IllimaniFinalizationProfiler >> objectAllocations [
 
 	^ profilerHandler objectAllocations
+]
+
+{ #category : #profiling }
+IllimaniFinalizationProfiler >> startAndRunGCProcess [
+
+	gcProcess := [
+	             [ true ] whileTrue: [
+		             300 milliSeconds wait.
+		             Smalltalk garbageCollect ] ] newProcess.
+
+	gcProcess resume
 ]
 
 { #category : #profiling }
@@ -59,40 +84,28 @@ IllimaniFinalizationProfiler >> startProfiling [
 
 	self cleanProfilingData.
 
-	gcProcess := [
-	             [ true ] whileTrue: [
-		             300 milliSeconds wait.
-		             Smalltalk garbageCollect ] ] newProcess.
+	self initializeProfilingBasicStats.
 
 	self installMethodProxies.
-	gcProcess resume.
-
-	incrementalGCCount := Smalltalk vm incrementalGCCount.
-	fullGCCount := Smalltalk vm fullGCCount.
-	totalGCTime := Duration milliSeconds: Smalltalk vm totalGCTime
+	"Run a process that triggers the garbage collector. Using ephemerons we overload the GC
+	stress."
+	self startAndRunGCProcess
 ]
 
 { #category : #profiling }
 IllimaniFinalizationProfiler >> stopProfiling [
-
-	| retries |
+	
 	self uninstallMethodProxies.
+	
+	self terminateGCProcess.
+	self forceFinalizationOfObjects.
+
+	self updateStatsWhenFinishingProfiling
+]
+
+{ #category : #profiling }
+IllimaniFinalizationProfiler >> terminateGCProcess [
+
 	gcProcess terminate.
-	gcProcess := nil.
-
-	"Force finalization of the objects. Don't do it if the references are there is no
-	finalization."
-	retries := 0.
-
-	[ retries < 10 and: [ finalizationRegistry size > 0 ] ] whileTrue: [
-		'entered' traceCr.
-		previousRegistrySize := finalizationRegistry size.
-		Smalltalk garbageCollect.
-		50 milliSecond wait.
-		retries := previousRegistrySize = finalizationRegistry size ifTrue: [ retries + 1 ]
-			           ifFalse: [ 0 ] ].
-
-	incrementalGCCount := Smalltalk vm incrementalGCCount - incrementalGCCount.
-	fullGCCount := Smalltalk vm fullGCCount - fullGCCount.
-	totalGCTime := (Duration milliSeconds: Smalltalk vm totalGCTime) - totalGCTime
+	gcProcess := nil
 ]

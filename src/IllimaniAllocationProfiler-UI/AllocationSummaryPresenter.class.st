@@ -120,5 +120,5 @@ AllocationSummaryPresenter >> totalGCTime [
 { #category : #accessing }
 AllocationSummaryPresenter >> totalProfiledTime [
 
-	^ model totalProfiledTime asDuration humanReadableStringWithOnlySeconds
+	^ (Duration microSeconds: model totalProfiledTime) humanReadableStringWithOnlySeconds
 ]

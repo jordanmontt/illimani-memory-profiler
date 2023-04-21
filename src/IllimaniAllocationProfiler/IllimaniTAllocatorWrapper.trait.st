@@ -4,10 +4,47 @@ Trait {
 		'proxyBasicNew',
 		'proxyBasicNewKeyword',
 		'proxyArrobas',
-		'proxyArrayClass'
+		'proxyArrayClass',
+		'beginningOfProfilingTime',
+		'incrementalGCCount',
+		'fullGCCount',
+		'totalGCTime',
+		'endOfProfilingTime'
 	],
 	#category : #'IllimaniAllocationProfiler-Profiler'
 }
+
+{ #category : #'accessing - statistics' }
+IllimaniTAllocatorWrapper >> beginningOfProfilingTime [
+
+	^ beginningOfProfilingTime
+]
+
+{ #category : #'accessing - statistics' }
+IllimaniTAllocatorWrapper >> endOfProfilingTime [
+
+	^ endOfProfilingTime
+]
+
+{ #category : #api }
+IllimaniTAllocatorWrapper >> forceUninstall [
+	"Waring, do not use unless you cannot start the profiler because you have the
+	MpCannotInstall exceptionp"
+
+	MpMethodProxy allInstances do: #uninstall
+]
+
+{ #category : #'accessing - statistics' }
+IllimaniTAllocatorWrapper >> fullGCCount [
+
+	^ fullGCCount
+]
+
+{ #category : #'accessing - statistics' }
+IllimaniTAllocatorWrapper >> incrementalGCCount [
+
+	^ incrementalGCCount
+]
 
 { #category : #initialization }
 IllimaniTAllocatorWrapper >> initializeMethodProxies: aHandler [
@@ -18,13 +55,34 @@ IllimaniTAllocatorWrapper >> initializeMethodProxies: aHandler [
 	proxyArrayClass := MpMethodProxy onMethod: Array class >> #new: handler: aHandler
 ]
 
-{ #category : #evaluating }
+{ #category : #profiling }
+IllimaniTAllocatorWrapper >> initializeProfilingBasicStats [
+
+	beginningOfProfilingTime := Time microsecondClockValue.
+	incrementalGCCount := Smalltalk vm incrementalGCCount.
+	fullGCCount := Smalltalk vm fullGCCount.
+	totalGCTime := Duration milliSeconds: Smalltalk vm totalGCTime
+]
+
+{ #category : #profiling }
 IllimaniTAllocatorWrapper >> installMethodProxies [
 
 	proxyBasicNew install.
 	proxyBasicNewKeyword install.
 	proxyArrobas install.
 	proxyArrayClass install
+]
+
+{ #category : #testing }
+IllimaniTAllocatorWrapper >> isProfilingFinished [
+
+	^ endOfProfilingTime isNotNil
+]
+
+{ #category : #testing }
+IllimaniTAllocatorWrapper >> isProfilingStarted [
+
+	^ beginningOfProfilingTime isNotNil
 ]
 
 { #category : #api }
@@ -37,7 +95,7 @@ IllimaniTAllocatorWrapper >> profileFor: aDuration [
 	self stopProfiling ] fork
 ]
 
-{ #category : #evaluating }
+{ #category : #api }
 IllimaniTAllocatorWrapper >> profileOn: aBlock [
 
 	self startProfiling.
@@ -49,11 +107,32 @@ IllimaniTAllocatorWrapper >> profileOn: aBlock [
 	nil ] ensure: [ self stopProfiling ]
 ]
 
-{ #category : #evaluating }
+{ #category : #'accessing - statistics' }
+IllimaniTAllocatorWrapper >> totalGCTime [
+
+	^ totalGCTime
+]
+
+{ #category : #'accessing - statistics' }
+IllimaniTAllocatorWrapper >> totalProfiledTime [
+
+	^ endOfProfilingTime - beginningOfProfilingTime
+]
+
+{ #category : #profiling }
 IllimaniTAllocatorWrapper >> uninstallMethodProxies [
 
 	proxyBasicNew uninstall.
 	proxyBasicNewKeyword uninstall.
 	proxyArrobas uninstall.
 	proxyArrayClass uninstall
+]
+
+{ #category : #profiling }
+IllimaniTAllocatorWrapper >> updateStatsWhenFinishingProfiling [
+
+	endOfProfilingTime := Time microsecondClockValue.
+	incrementalGCCount := Smalltalk vm incrementalGCCount - incrementalGCCount.
+	fullGCCount := Smalltalk vm fullGCCount - fullGCCount.
+	totalGCTime := (Duration milliSeconds: Smalltalk vm totalGCTime) - totalGCTime
 ]
