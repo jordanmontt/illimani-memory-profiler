@@ -1,0 +1,107 @@
+Class {
+	#name : #AllocationSiteInfoModel,
+	#superclass : #BasicAllocationInfoModel,
+	#instVars : [
+		'context',
+		'allocatorClass',
+		'allocatorMethod',
+		'contextFingerprint',
+		'allocatedObject',
+		'allocatedObjectHash'
+	],
+	#category : #'IllimaniAllocationProfiler-Data-Structures'
+}
+
+{ #category : #accessing }
+AllocationSiteInfoModel >> allocatedObject [
+
+	^ allocatedObject
+]
+
+{ #category : #accessing }
+AllocationSiteInfoModel >> allocatedObject: anObj [
+
+	allocatedObject := anObj
+]
+
+{ #category : #accessing }
+AllocationSiteInfoModel >> allocatedObjectHash [
+
+	^ allocatedObjectHash
+]
+
+{ #category : #accessing }
+AllocationSiteInfoModel >> allocatedObjectHash: anObject [
+
+	allocatedObjectHash := anObject
+]
+
+{ #category : #accessing }
+AllocationSiteInfoModel >> allocatorClass [
+
+	^ allocatorClass
+]
+
+{ #category : #accessing }
+AllocationSiteInfoModel >> allocatorClass: anObject [
+
+	allocatorClass := anObject
+]
+
+{ #category : #accessing }
+AllocationSiteInfoModel >> allocatorMethod: aCompiledMethod [
+
+	allocatorMethod := aCompiledMethod
+]
+
+{ #category : #accessing }
+AllocationSiteInfoModel >> context [
+
+	^ context
+]
+
+{ #category : #accessing }
+AllocationSiteInfoModel >> context: anObject [
+
+	context := anObject
+]
+
+{ #category : #accessing }
+AllocationSiteInfoModel >> contextFingerprint [
+
+	^ contextFingerprint
+]
+
+{ #category : #accessing }
+AllocationSiteInfoModel >> contextFingerprint: aContext [
+
+	contextFingerprint := self getContextFingerprintStream: aContext
+]
+
+{ #category : #accessing }
+AllocationSiteInfoModel >> fullMethodName [
+
+	^ allocatorMethod name
+]
+
+{ #category : #initialization }
+AllocationSiteInfoModel >> getContextFingerprintStream: aContext [
+
+	^ String streamContents: [ :stream |
+		| iterator |
+		iterator := aContext.
+		1 to: 10 do: [ :index |
+			iterator printOn: stream.
+			stream << String cr.
+			iterator := iterator sender.
+			iterator ifNil: [ ^ stream ] ] ]
+]
+
+{ #category : #printing }
+AllocationSiteInfoModel >> printOn: aStream [
+
+	aStream << allocatorMethod name << ' allocated a ' << allocatedObjectClass asString
+	<< ' that weights '.
+	totalSizeInBytes ifNil: [ aStream << ' - ' ]
+		ifNotNil: [ aStream << totalSizeInBytes humanReadableByteSizeString ]
+]

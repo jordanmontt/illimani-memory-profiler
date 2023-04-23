@@ -14,6 +14,14 @@ IllimaniAllocationProfilerTest >> setUp [
 	illimani := IllimaniAllocationProfiler new
 ]
 
+{ #category : #running }
+IllimaniAllocationProfilerTest >> tearDown [
+
+	illimani forceUninstall.
+	illimani := nil.
+	super tearDown
+]
+
 { #category : #tests }
 IllimaniAllocationProfilerTest >> testProfileOn [
 

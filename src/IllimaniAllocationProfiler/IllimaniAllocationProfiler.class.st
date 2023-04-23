@@ -64,17 +64,11 @@ IllimaniAllocationProfiler new
 Class {
 	#name : #IllimaniAllocationProfiler,
 	#superclass : #Object,
+	#traits : 'IllimaniTAllocatorWrapper',
+	#classTraits : 'IllimaniTAllocatorWrapper classTrait',
 	#instVars : [
-		'proxyBasicNew',
-		'proxyBasicNewKeyword',
 		'profilerHandler',
-		'beginningOfProfilingTime',
-		'endOfProfilingTime',
-		'statisticsModel',
-		'incrementalGCCount',
-		'fullGCCount',
-		'totalGCTime',
-		'proxyArrobas'
+		'statisticsModel'
 	],
 	#category : #'IllimaniAllocationProfiler-Profiler'
 }
@@ -83,12 +77,6 @@ Class {
 IllimaniAllocationProfiler >> announceProfilerStopedProfiling [
 
 	IllimaniAnnouncer uniqueInstance announce: IllimaniStopedProfilingAnnouncement new
-]
-
-{ #category : #'accessing - statistics' }
-IllimaniAllocationProfiler >> beginningOfProfilingTime [
-
-	^ beginningOfProfilingTime
 ]
 
 { #category : #api }
@@ -100,12 +88,7 @@ IllimaniAllocationProfiler >> captureAllObjects [
 { #category : #evaluating }
 IllimaniAllocationProfiler >> cleanProfilingData [
 
-	profilerHandler clean.
-	beginningOfProfilingTime := nil.
-	endOfProfilingTime := nil.
-	incrementalGCCount := nil.
-	fullGCCount := nil.
-	totalGCTime := nil
+	profilerHandler clean
 ]
 
 { #category : #api }
@@ -120,36 +103,10 @@ IllimaniAllocationProfiler >> copyObjectIdentityHash [
 	profilerHandler copyObjectIdentityHash
 ]
 
-{ #category : #'accessing - statistics' }
-IllimaniAllocationProfiler >> endOfProfilingTime [
-
-	^ endOfProfilingTime
-]
-
-{ #category : #api }
-IllimaniAllocationProfiler >> forceUninstall [
-	"Waring, do not use unless you cannot start the profiler because you have the
-	MpCannotInstall exceptionp"
-
-	MpMethodProxy allInstances do: #uninstall
-]
-
-{ #category : #'accessing - statistics' }
-IllimaniAllocationProfiler >> fullGCCount [
-
-	^ fullGCCount
-]
-
 { #category : #api }
 IllimaniAllocationProfiler >> ignoreAllocators: aCollectionOfClasses [
 
 	profilerHandler ignoreAllocators: aCollectionOfClasses
-]
-
-{ #category : #'accessing - statistics' }
-IllimaniAllocationProfiler >> incrementalGCCount [
-
-	^ incrementalGCCount
 ]
 
 { #category : #initialization }
@@ -157,35 +114,7 @@ IllimaniAllocationProfiler >> initialize [
 
 	super initialize.
 	profilerHandler := IllimaniProfilerMpHandler new.
-	self initializeMethodProxies
-]
-
-{ #category : #evaluating }
-IllimaniAllocationProfiler >> initializeMethodProxies [
-
-	proxyBasicNew := MpMethodProxy onMethod: Behavior >> #basicNew handler: profilerHandler.
-	proxyBasicNewKeyword := MpMethodProxy onMethod: Behavior >> #basicNew: handler: profilerHandler.
-	proxyArrobas := MpMethodProxy onMethod: Number >> #@ handler: profilerHandler.
-]
-
-{ #category : #evaluating }
-IllimaniAllocationProfiler >> installMethodProxies [
-
-	proxyBasicNew install.
-	proxyBasicNewKeyword install.
-	proxyArrobas install
-]
-
-{ #category : #testing }
-IllimaniAllocationProfiler >> isProfilingFinished [
-
-	^ endOfProfilingTime isNotNil
-]
-
-{ #category : #testing }
-IllimaniAllocationProfiler >> isProfilingStarted [
-
-	^ beginningOfProfilingTime isNotNil
+	self initializeMethodProxies: profilerHandler
 ]
 
 { #category : #api }
@@ -206,23 +135,6 @@ IllimaniAllocationProfiler >> objectsToCapture: aCollectionOfClasses [
 	profilerHandler objectsToCapture: aCollectionOfClasses
 ]
 
-{ #category : #api }
-IllimaniAllocationProfiler >> profileFor: aDuration [
-	"Done with a fork because we don't want to block the ui thread since it allocates objects. "
-
-	self startProfiling.
-	[
-	(Delay forDuration: aDuration) wait.
-	self stopProfiling ] fork
-]
-
-{ #category : #api }
-IllimaniAllocationProfiler >> profileOn: aBlock [
-
-	self startProfiling.
-	aBlock ensure: [ self stopProfiling ]
-]
-
 { #category : #accessing }
 IllimaniAllocationProfiler >> profilerHandler [
 
@@ -233,12 +145,9 @@ IllimaniAllocationProfiler >> profilerHandler [
 IllimaniAllocationProfiler >> startProfiling [
 
 	self cleanProfilingData.
-	beginningOfProfilingTime := DateAndTime now.
 	self installMethodProxies.
 
-	incrementalGCCount := Smalltalk vm incrementalGCCount.
-	fullGCCount := Smalltalk vm fullGCCount.
-	totalGCTime := Duration milliSeconds: Smalltalk vm totalGCTime
+	self initializeProfilingBasicStats
 ]
 
 { #category : #'accessing - statistics' }
@@ -251,38 +160,11 @@ IllimaniAllocationProfiler >> stats [
 IllimaniAllocationProfiler >> stopProfiling [
 
 	self uninstallMethodProxies.
-	
-	"Force finalization of the objects. Don't do it if the references are there is no finalization."
-	Smalltalk garbageCollect.
-	"Run a second time because we use ephemerons. How the ephemerons are implemented thet are garbage collected the second run."
-	Smalltalk garbageCollect.
-	
-	endOfProfilingTime := DateAndTime now.
-	incrementalGCCount := Smalltalk vm incrementalGCCount - incrementalGCCount.
-	fullGCCount := Smalltalk vm fullGCCount - fullGCCount.
-	totalGCTime := (Duration milliSeconds: Smalltalk vm totalGCTime) - totalGCTime.
+
+	self updateStatsWhenFinishingProfiling.
+
 	statisticsModel := AllocationStatistics new rawAllocations:
-		profilerHandler objectAllocations.
-		
+		                   profilerHandler objectAllocations.
+
 	self announceProfilerStopedProfiling
-]
-
-{ #category : #'accessing - statistics' }
-IllimaniAllocationProfiler >> totalGCTime [
-
-	^ totalGCTime
-]
-
-{ #category : #'accessing - statistics' }
-IllimaniAllocationProfiler >> totalProfiledTime [
-
-	^ endOfProfilingTime - beginningOfProfilingTime
-]
-
-{ #category : #evaluating }
-IllimaniAllocationProfiler >> uninstallMethodProxies [
-
-	proxyBasicNew uninstall.
-	proxyBasicNewKeyword uninstall.
-	proxyArrobas uninstall
 ]

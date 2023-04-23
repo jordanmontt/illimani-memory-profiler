@@ -97,7 +97,7 @@ IllimaniRoassalChartBuilder >> constructPerSecondLineChart: aCollection [
 IllimaniRoassalChartBuilder >> createLinePlotForAllocations: someAllocations [
 
 	| times linePlot indices sortedByTime |
-	sortedByTime := someAllocations sorted: [ :a :b | a timestamp < b timestamp ].
+	sortedByTime := someAllocations sorted: [ :a :b | a initializationTimestamp < b initializationTimestamp ].
 
 	"Roassal does not accepts Duration"
 	times := sortedByTime collect: [ :each | each timestampAsSeconds ].

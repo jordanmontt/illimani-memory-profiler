@@ -18,66 +18,66 @@ AllocationStatisticsTestFixture >> allocationsOne [
 	| allocations |
 	allocations := OrderedCollection new.
 	allocations
-		add: (AllocationInfoDTO new
+		add: (AllocationSiteInfoModel new
 				 allocatorClass: Rectangle;
 				 allocatorMethod: Margin >> #asMargin;
-				 timestamp: DateAndTime now;
+				 initializationTimestamp: DateAndTime now;
 				 allocatedObjectClass: OrderedCollection;
 				 totalSizeInBytes: 16;
 				 yourself);
-		add: (AllocationInfoDTO new
+		add: (AllocationSiteInfoModel new
 				 allocatorClass: Rectangle;
 				 allocatorMethod: Margin >> #asMargin;
-				 timestamp: DateAndTime now;
+				 initializationTimestamp: DateAndTime now;
 				 allocatedObjectClass: OrderedCollection;
 				 totalSizeInBytes: 16;
 				 yourself);
-		add: (AllocationInfoDTO new
+		add: (AllocationSiteInfoModel new
 				 allocatorClass: Rectangle;
 				 allocatorMethod: Margin >> #asMargin;
-				 timestamp: DateAndTime now;
+				 initializationTimestamp: DateAndTime now;
 				 allocatedObjectClass: Dictionary;
 				 totalSizeInBytes: 16;
 				 yourself);
-		add: (AllocationInfoDTO new
+		add: (AllocationSiteInfoModel new
 				 allocatorClass: Rectangle;
 				 allocatorMethod: Margin >> #asMargin;
-				 timestamp: DateAndTime now;
+				 initializationTimestamp: DateAndTime now;
 				 allocatedObjectClass: ByteString;
 				 totalSizeInBytes: 32;
 				 yourself);
-		add: (AllocationInfoDTO new
+		add: (AllocationSiteInfoModel new
 				 allocatorClass: Rectangle;
 				 allocatorMethod: Margin >> #asMargin;
-				 timestamp: DateAndTime now;
+				 initializationTimestamp: DateAndTime now;
 				 allocatedObjectClass: ByteString;
 				 totalSizeInBytes: 48;
 				 yourself);
-		add: (AllocationInfoDTO new
+		add: (AllocationSiteInfoModel new
 				 allocatorClass: Rectangle;
 				 allocatorMethod: Object >> #'->';
-				 timestamp: DateAndTime now;
+				 initializationTimestamp: DateAndTime now;
 				 allocatedObjectClass: ByteString;
 				 totalSizeInBytes: 100;
 				 yourself);
-		add: (AllocationInfoDTO new
+		add: (AllocationSiteInfoModel new
 				 allocatorClass: Rectangle;
 				 allocatorMethod: Object >> #'->';
-				 timestamp: DateAndTime now;
+				 initializationTimestamp: DateAndTime now;
 				 allocatedObjectClass: ByteString;
 				 totalSizeInBytes: 55;
 				 yourself);
-		add: (AllocationInfoDTO new
+		add: (AllocationSiteInfoModel new
 				 allocatorClass: Rectangle;
 				 allocatorMethod: Object >> #'->';
-				 timestamp: DateAndTime now;
+				 initializationTimestamp: DateAndTime now;
 				 allocatedObjectClass: Color;
 				 totalSizeInBytes: 60;
 				 yourself);
-		add: (AllocationInfoDTO new
+		add: (AllocationSiteInfoModel new
 				 allocatorClass: Rectangle;
 				 allocatorMethod: Object >> #'->';
-				 timestamp: DateAndTime now;
+				 initializationTimestamp: DateAndTime now;
 				 allocatedObjectClass: Color;
 				 totalSizeInBytes: 16;
 				 yourself).
@@ -89,10 +89,10 @@ AllocationStatisticsTestFixture >> allocationsThree [
 
 	| allocations |
 	allocations := OrderedCollection new.
-	allocations add: (AllocationInfoDTO new
+	allocations add: (AllocationSiteInfoModel new
 			 allocatorClass: String;
 			 allocatorMethod: Collection>>#sorted:;
-			 timestamp: DateAndTime now;
+			 initializationTimestamp: Time microsecondClockValue;
 			 allocatedObjectClass: ByteArray;
 			 totalSizeInBytes: 16;
 			 yourself).
@@ -105,38 +105,38 @@ AllocationStatisticsTestFixture >> allocationsTwo [
 	| allocations |
 	allocations := OrderedCollection new.
 	allocations
-		add: (AllocationInfoDTO new
+		add: (AllocationSiteInfoModel new
 				 allocatorClass: OrderedCollection;
-				 allocatorMethod: ArrayedCollection>>#add:;
-				 timestamp: DateAndTime now;
+				 allocatorMethod: ArrayedCollection >> #add:;
+				 initializationTimestamp: Time microsecondClockValue;
 				 allocatedObjectClass: ByteString;
 				 totalSizeInBytes: 16;
 				 yourself);
-		add: (AllocationInfoDTO new
+		add: (AllocationSiteInfoModel new
 				 allocatorClass: OrderedCollection;
-				 allocatorMethod: ArrayedCollection>>#add:;
-				 timestamp: DateAndTime now;
+				 allocatorMethod: ArrayedCollection >> #add:;
+				 initializationTimestamp: Time microsecondClockValue;
 				 allocatedObjectClass: ByteString;
 				 totalSizeInBytes: 16;
 				 yourself);
-		add: (AllocationInfoDTO new
+		add: (AllocationSiteInfoModel new
 				 allocatorClass: OrderedCollection;
-				 allocatorMethod: ArrayedCollection>>#add:;
-				 timestamp: DateAndTime now;
+				 allocatorMethod: ArrayedCollection >> #add:;
+				 initializationTimestamp: Time microsecondClockValue;
 				 allocatedObjectClass: ByteString;
 				 totalSizeInBytes: 32;
 				 yourself);
-		add: (AllocationInfoDTO new
+		add: (AllocationSiteInfoModel new
 				 allocatorClass: OrderedCollection;
-				 allocatorMethod: ArrayedCollection>>#add:;
-				 timestamp: DateAndTime now;
+				 allocatorMethod: ArrayedCollection >> #add:;
+				 initializationTimestamp: Time microsecondClockValue;
 				 allocatedObjectClass: ByteArray;
 				 totalSizeInBytes: 100;
 				 yourself);
-		add: (AllocationInfoDTO new
+		add: (AllocationSiteInfoModel new
 				 allocatorClass: OrderedCollection;
-				 allocatorMethod: ArrayedCollection>>#add:;
-				 timestamp: DateAndTime now;
+				 allocatorMethod: ArrayedCollection >> #add:;
+				 initializationTimestamp: Time microsecondClockValue;
 				 allocatedObjectClass: ByteArray;
 				 totalSizeInBytes: 16;
 				 yourself).
