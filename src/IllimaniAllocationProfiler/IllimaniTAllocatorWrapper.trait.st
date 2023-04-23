@@ -14,7 +14,7 @@ Trait {
 		'totalGCTime',
 		'endOfProfilingTime'
 	],
-	#category : #'IllimaniAllocationProfiler-Profiler'
+	#category : #'IllimaniAllocationProfiler-Profiler Instrumentator'
 }
 
 { #category : #'accessing - statistics' }

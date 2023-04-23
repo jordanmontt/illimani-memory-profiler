@@ -6,7 +6,7 @@ Class {
 		'profiler',
 		'graphWalker'
 	],
-	#category : #'IllimaniAllocationProfiler-Finalization'
+	#category : #'IllimaniAllocationProfiler-Finalization Profiler'
 }
 
 { #category : #evaluating }

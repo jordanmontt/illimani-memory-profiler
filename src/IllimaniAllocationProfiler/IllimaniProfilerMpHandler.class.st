@@ -17,7 +17,7 @@ Class {
 		'objectClassesToCapture',
 		'copyObjectHash'
 	],
-	#category : #'IllimaniAllocationProfiler-Profiler'
+	#category : #'IllimaniAllocationProfiler-Allocation Sites Profiler'
 }
 
 { #category : #evaluating }

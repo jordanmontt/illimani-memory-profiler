@@ -11,7 +11,7 @@ Class {
 		'gcProcess',
 		'finalizationRegistry'
 	],
-	#category : #'IllimaniAllocationProfiler-Finalization'
+	#category : #'IllimaniAllocationProfiler-Finalization Profiler'
 }
 
 { #category : #api }
