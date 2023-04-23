@@ -68,7 +68,8 @@ Class {
 	#classTraits : 'IllimaniTAllocatorWrapper classTrait',
 	#instVars : [
 		'profilerHandler',
-		'statisticsModel'
+		'statisticsModel',
+		'illimaniAnnouncer'
 	],
 	#category : #'IllimaniAllocationProfiler-Profiler'
 }
@@ -76,7 +77,7 @@ Class {
 { #category : #announcements }
 IllimaniAllocationProfiler >> announceProfilerStopedProfiling [
 
-	IllimaniAnnouncer uniqueInstance announce: IllimaniStopedProfilingAnnouncement new
+	illimaniAnnouncer announce: IllimaniStopedProfilingAnnouncement new
 ]
 
 { #category : #api }
@@ -114,6 +115,7 @@ IllimaniAllocationProfiler >> initialize [
 
 	super initialize.
 	profilerHandler := IllimaniProfilerMpHandler new.
+	illimaniAnnouncer := IllimaniAnnouncer new.
 	self initializeMethodProxies: profilerHandler
 ]
 

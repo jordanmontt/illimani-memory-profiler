@@ -36,13 +36,14 @@ IllimaniFinalizationProfiler >> forceFinalizationOfObjects [
 	retries := 0.
 
 	"20 is the magic number"
-	[ retries < 20 "and: [ finalizationRegistry size > 0 ]" ] whileTrue: [
+	[ retries < 20 ] whileTrue: [
 		'entered' traceCr.
 		previousRegistrySize := finalizationRegistry size.
 		Smalltalk garbageCollect.
 		50 milliSecond wait.
-		retries := previousRegistrySize = finalizationRegistry size ifTrue: [ retries + 1 ]
-			           ifFalse: [ 0 ] ]
+		retries := previousRegistrySize = finalizationRegistry size
+			ifTrue: [ retries + 1 ]
+			ifFalse: [ 0 ] ]
 ]
 
 { #category : #initialization }

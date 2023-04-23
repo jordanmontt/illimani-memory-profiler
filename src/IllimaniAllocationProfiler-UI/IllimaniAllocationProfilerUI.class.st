@@ -17,7 +17,8 @@ Class {
 		'profiler',
 		'memoryTablePresenter',
 		'allocationsPerSecondPerAllocatorPresenter',
-		'allocatedObjectsTablePresenter'
+		'allocatedObjectsTablePresenter',
+		'illimaniAnnouncer'
 	],
 	#category : #'IllimaniAllocationProfiler-UI-Main Presenter'
 }
@@ -107,6 +108,12 @@ IllimaniAllocationProfilerUI >> heatMapPresenter [
 
 	heatmapPresenter ifNil: [ self initializeHeatmapPresenter ].
 	^ heatmapPresenter
+]
+
+{ #category : #accessing }
+IllimaniAllocationProfilerUI >> illimaniAnnouncer: aIllimaniAnnouncer [
+
+	illimaniAnnouncer := aIllimaniAnnouncer
 ]
 
 { #category : #'initialization - lazy presenters' }
@@ -330,7 +337,7 @@ IllimaniAllocationProfilerUI >> refresh [
 { #category : #announcements }
 IllimaniAllocationProfilerUI >> respondToAnnouncement [
 
-	 IllimaniAnnouncer uniqueInstance when: IllimaniStopedProfilingAnnouncement do: [ self refresh ]
+	 illimaniAnnouncer when: IllimaniStopedProfilingAnnouncement do: [ self refresh ]
 ]
 
 { #category : #'accessing - lazy presenters' }
