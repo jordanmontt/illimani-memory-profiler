@@ -8,7 +8,7 @@ Class {
 		'scale',
 		'data',
 		'colorPaletteList',
-		'range'
+		'dataDomain'
 	],
 	#category : #'IllimaniAllocationProfiler-UI-Widgets - Advanced'
 }
@@ -64,17 +64,17 @@ IllimaniHeatmapRoassalBuilder >> initialize [
 { #category : #hooks }
 IllimaniHeatmapRoassalBuilder >> initializeColorMultilinearScale [
 
-	| maxRange |
-	maxRange := (data collect: [ :tuple | tuple value totalAllocations ]) max.
-	range := {
+	| maxDataDomain |
+	maxDataDomain := (data collect: [ :tuple | tuple value totalAllocations ]) max.
+	dataDomain := {
 		         0.
-		         (maxRange / 4) asInteger.
-		         (maxRange / 2) asInteger.
-		         (maxRange * 3 / 4) asInteger.
-		         maxRange }.
+		         (maxDataDomain / 4) asInteger.
+		         (maxDataDomain / 2) asInteger.
+		         (maxDataDomain * 3 / 4) asInteger.
+		         maxDataDomain }.
 	scale := NSScale linear
 		         clamp: true;
-		         domain: range;
+		         domain: dataDomain;
 		         range: colorPaletteList;
 		         yourself
 ]
@@ -160,7 +160,7 @@ IllimaniHeatmapRoassalBuilder >> renderLegend: aCanvas [
 	boxScale := NSScale linear range: {
 			            box baseRectangle topRight.
 			            box baseRectangle bottomRight }.
-	percentages with: range do: [ :per :value |
+	percentages with: dataDomain do: [ :per :value |
 		| line label point |
 		point := boxScale scale: per.
 		line := RSLine new
