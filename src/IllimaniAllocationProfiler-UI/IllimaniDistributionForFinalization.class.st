@@ -49,13 +49,13 @@ IllimaniDistributionForFinalization >> initialize [
 
 	super initialize.
 	groupingBlock := [ :allocationModel |
-	                 allocationModel lifetimeAsDuration asDeciSeconds ceiling ].
+		allocationModel lifetimeAsDuration asDeciSeconds ceiling ].
 	"yTransformingBlock := [ :collection | collection size ]."
 	yTransformingBlock := [ :collection | collection sum: #totalSizeInBytes ].
 	self timeMeasurement: 'deci seconds'
 ]
 
-{ #category : #api }
+{ #category : #'old - visualizations' }
 IllimaniDistributionForFinalization >> palu1 [
 
 	| canvas plot onlyFinalizedObjects groupedData |
@@ -87,7 +87,7 @@ IllimaniDistributionForFinalization >> palu1 [
 	^ canvas
 ]
 
-{ #category : #api }
+{ #category : #'old - visualizations' }
 IllimaniDistributionForFinalization >> palu2 [
 
 	| c p |
@@ -120,7 +120,7 @@ self associationsDo: [ :e | ((e key < 51)) ifTrue: [ data add: e]]."
 	^ c
 ]
 
-{ #category : #api }
+{ #category : #'old - visualizations' }
 IllimaniDistributionForFinalization >> palu3 [
 
 	| canvas plot onlyFinalizedObjects groupedData |
