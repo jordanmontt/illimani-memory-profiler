@@ -15,8 +15,7 @@ Class {
 		'keepReferencesToAllocatedObjects',
 		'allocatorClassesToIgnore',
 		'objectClassesToCapture',
-		'copyObjectHash',
-		'illimaniFinalizationRegistry'
+		'copyObjectHash'
 	],
 	#category : #'IllimaniAllocationProfiler-Profiler'
 }
@@ -41,8 +40,7 @@ IllimaniProfilerMpHandler >> captureAllObjects [
 { #category : #api }
 IllimaniProfilerMpHandler >> clean [
 
-	self cleanAllocations.
-	illimaniFinalizationRegistry := FinalizationRegistry new.
+	self cleanAllocations
 ]
 
 { #category : #api }
@@ -119,11 +117,6 @@ IllimaniProfilerMpHandler >> handleAllocationOfObject: newlyAllocatedObject [
 	allocationInformationHolder := AllocationSiteInfoModel new.
 	filteredContext := self filterContext: thisContext ignoringClass: newlyAllocatedObject class.
 
-	"Finalization"
-	"illimaniFinalizationRegistry
-		add: newlyAllocatedObject
-		finalizer: (IllimaniFinalizer new model: allocationInformationHolder)."
-
 	copyExecutionStack ifTrue: [ allocationInformationHolder context: filteredContext copyStack ].
 	copyObjectHash ifTrue: [ allocationInformationHolder allocatedObjectHash: newlyAllocatedObject hash ].
 	keepReferencesToAllocatedObjects ifTrue: [ allocationInformationHolder allocatedObject: newlyAllocatedObject ].
@@ -157,7 +150,7 @@ IllimaniProfilerMpHandler >> initialize [
 	allocatorClassesToIgnore := {  }.
 	objectAllocations := OrderedCollection new.
 	graphWalker := GraphSpaceStatistics new.
-	illimaniFinalizationRegistry := FinalizationRegistry new.
+
 	self initializeClassesToAvoidInContextSearch
 ]
 

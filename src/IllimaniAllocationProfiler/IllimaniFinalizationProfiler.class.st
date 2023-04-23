@@ -1,3 +1,6 @@
+"
+I profile the Garbage Collector and provide information about the lifetime of objects.
+"
 Class {
 	#name : #IllimaniFinalizationProfiler,
 	#superclass : #Object,

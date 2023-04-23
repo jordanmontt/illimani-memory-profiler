@@ -1,3 +1,6 @@
+"
+I am a trait that contains the basic behavior to wrap and intercept the allocator methods of Pharo. I am used by the specific profilers
+"
 Trait {
 	#name : #IllimaniTAllocatorWrapper,
 	#instVars : [
