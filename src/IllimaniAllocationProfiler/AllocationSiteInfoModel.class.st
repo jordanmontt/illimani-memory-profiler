@@ -9,7 +9,7 @@ Class {
 		'allocatedObject',
 		'allocatedObjectHash'
 	],
-	#category : #'IllimaniAllocationProfiler-Data-Structures'
+	#category : #'IllimaniAllocationProfiler-Model'
 }
 
 { #category : #accessing }

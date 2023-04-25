@@ -6,10 +6,9 @@ Class {
 		'finalizationTimestamp',
 		'totalSizeInBytes',
 		'initializationTimestamp',
-		'gcSpentTime',
-		'profiler'
+		'gcSpentTime'
 	],
-	#category : #'IllimaniAllocationProfiler-Data-Structures'
+	#category : #'IllimaniAllocationProfiler-Model'
 }
 
 { #category : #accessing }
@@ -77,18 +76,6 @@ BasicAllocationInfoModel >> lifetimeAsString [
 
 	finalizationTimestamp ifNil: [ ^ '-' ].
 	^ self lifetimeAsDuration humanReadablePrintString
-]
-
-{ #category : #accessing }
-BasicAllocationInfoModel >> profiler [
-
-	^ profiler
-]
-
-{ #category : #accessing }
-BasicAllocationInfoModel >> profiler: anObject [
-
-	profiler := anObject
 ]
 
 { #category : #accessing }
