@@ -7,5 +7,6 @@ RSAbstractTick >> ticksData [
 	scaleToUse := self isHorizontalTick ifTrue: [ xScale ]
 		              ifFalse: [ yScale ].
 	rangeForDividing := scaleToUse range first to: scaleToUse range last
-		                    count: self configuration numberOfTicks
+		                    count: self configuration numberOfTicks.
+	^ rangeForDividing collect: [ :e | scaleToUse invert: e ]
 ]
