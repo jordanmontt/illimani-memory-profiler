@@ -126,7 +126,7 @@ IllimaniProfilerMpHandler >> handleAllocationOfObject: newlyAllocatedObject [
 		allocatorMethod: filteredContext compiledCode method;
 		allocatedObjectClass: newlyAllocatedObject class;
 		contextFingerprint: filteredContext;
-		totalSizeInBytes: (graphWalker rootObject: newlyAllocatedObject) totalSizeInBytes;
+		totalSizeInBytes: "(graphWalker rootObject: newlyAllocatedObject) totalSizeInBytes" newlyAllocatedObject sizeInMemory;
 		initializationTimestamp: timeNow.
 
 	objectAllocations add: allocationInformationHolder
