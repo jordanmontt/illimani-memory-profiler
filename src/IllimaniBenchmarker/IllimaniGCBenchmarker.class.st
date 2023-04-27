@@ -7,7 +7,8 @@ Class {
 		'timeGarbageCollectingInMilliseconds',
 		'growthHeadroom',
 		'shrinkThreshold',
-		'fullGCRatio'
+		'fullGCRatio',
+		'edenSize'
 	],
 	#category : #IllimaniBenchmarker
 }
@@ -37,15 +38,28 @@ IllimaniGCBenchmarker >> benchThreeGBDF [
 ]
 
 { #category : #accessing }
+IllimaniGCBenchmarker >> edenSize [
+
+	^ edenSize
+]
+
+{ #category : #accessing }
+IllimaniGCBenchmarker >> edenSize: anObject [
+
+	edenSize := anObject
+]
+
+{ #category : #accessing }
 IllimaniGCBenchmarker >> fullGCRatio [
 
 	^ fullGCRatio
 ]
 
-{ #category : #accessing }
-IllimaniGCBenchmarker >> fullGCRatio: anObject [
+{ #category : #'gc - tunning' }
+IllimaniGCBenchmarker >> fullGCRatio: anIntegerInBytes [
 
-	fullGCRatio := anObject
+	fullGCRatio := anIntegerInBytes.
+	Smalltalk vm parameterAt: 55 put: anIntegerInBytes
 ]
 
 { #category : #accessing }
@@ -66,10 +80,11 @@ IllimaniGCBenchmarker >> growthHeadroom [
 	^ growthHeadroom
 ]
 
-{ #category : #accessing }
-IllimaniGCBenchmarker >> growthHeadroom: anObject [
+{ #category : #'gc - tunning' }
+IllimaniGCBenchmarker >> growthHeadroom: anIntegerInBytes [
 
-	growthHeadroom := anObject
+	growthHeadroom := anIntegerInBytes.
+	Smalltalk vm parameterAt: 25 put: anIntegerInBytes
 ]
 
 { #category : #accessing }
@@ -90,10 +105,11 @@ IllimaniGCBenchmarker >> shrinkThreshold [
 	^ shrinkThreshold
 ]
 
-{ #category : #accessing }
-IllimaniGCBenchmarker >> shrinkThreshold: anObject [
+{ #category : #'gc - tunning' }
+IllimaniGCBenchmarker >> shrinkThreshold: anIntegerInBytes [
 
-	shrinkThreshold := anObject
+	shrinkThreshold := anIntegerInBytes.
+	Smalltalk vm parameterAt: 24 put: anIntegerInBytes
 ]
 
 { #category : #benchmarking }
@@ -111,12 +127,15 @@ IllimaniGCBenchmarker >> stopBench [
 	fullGCs := Smalltalk vm fullGCCount - fullGCs.
 	timeGarbageCollectingInMilliseconds := Smalltalk vm totalGCTime
 	                                       - timeGarbageCollectingInMilliseconds.
-	'incremental GCs: ' trace.
-	incrementalGCs trace.
-	' full GCs: ' trace.
-	fullGCs trace.
-	' time spent garbage collecting: ' trace.
-	timeGarbageCollectingInMilliseconds trace
+	'incremental GCs: ' trace. incrementalGCs trace.
+	' full GCs: ' trace. fullGCs trace.
+	' time spent garbage collecting: ' trace. timeGarbageCollectingInMilliseconds trace.
+	String cr trace.
+	
+	'eden size: ' trace. edenSize humanReadableByteSizeString trace.
+	' growth headroom: ' trace. growthHeadroom humanReadableByteSizeString trace.
+	' shrink threshold: ' trace. shrinkThreshold humanReadableByteSizeString trace.
+	' full gc ratio: ' trace . fullGCRatio humanReadableByteSizeString trace.
 ]
 
 { #category : #accessing }
