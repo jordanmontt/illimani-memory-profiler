@@ -4,7 +4,10 @@ Class {
 	#instVars : [
 		'incrementalGCs',
 		'fullGCs',
-		'timeGarbageCollectingInMilliseconds'
+		'timeGarbageCollectingInMilliseconds',
+		'growthHeadroom',
+		'shrinkThreshold',
+		'fullGCRatio'
 	],
 	#category : #IllimaniBenchmarker
 }
@@ -33,6 +36,66 @@ IllimaniGCBenchmarker >> benchThreeGBDF [
 	self stopBench
 ]
 
+{ #category : #accessing }
+IllimaniGCBenchmarker >> fullGCRatio [
+
+	^ fullGCRatio
+]
+
+{ #category : #accessing }
+IllimaniGCBenchmarker >> fullGCRatio: anObject [
+
+	fullGCRatio := anObject
+]
+
+{ #category : #accessing }
+IllimaniGCBenchmarker >> fullGCs [
+
+	^ fullGCs
+]
+
+{ #category : #accessing }
+IllimaniGCBenchmarker >> fullGCs: anObject [
+
+	fullGCs := anObject
+]
+
+{ #category : #accessing }
+IllimaniGCBenchmarker >> growthHeadroom [
+
+	^ growthHeadroom
+]
+
+{ #category : #accessing }
+IllimaniGCBenchmarker >> growthHeadroom: anObject [
+
+	growthHeadroom := anObject
+]
+
+{ #category : #accessing }
+IllimaniGCBenchmarker >> incrementalGCs [
+
+	^ incrementalGCs
+]
+
+{ #category : #accessing }
+IllimaniGCBenchmarker >> incrementalGCs: anObject [
+
+	incrementalGCs := anObject
+]
+
+{ #category : #accessing }
+IllimaniGCBenchmarker >> shrinkThreshold [
+
+	^ shrinkThreshold
+]
+
+{ #category : #accessing }
+IllimaniGCBenchmarker >> shrinkThreshold: anObject [
+
+	shrinkThreshold := anObject
+]
+
 { #category : #benchmarking }
 IllimaniGCBenchmarker >> startBench [
 
@@ -50,8 +113,20 @@ IllimaniGCBenchmarker >> stopBench [
 	                                       - timeGarbageCollectingInMilliseconds.
 	'incremental GCs: ' trace.
 	incrementalGCs trace.
-	'full GCs: ' trace.
+	' full GCs: ' trace.
 	fullGCs trace.
-	'time spent garbage collecting: ' trace.
+	' time spent garbage collecting: ' trace.
 	timeGarbageCollectingInMilliseconds trace
+]
+
+{ #category : #accessing }
+IllimaniGCBenchmarker >> timeGarbageCollectingInMilliseconds [
+
+	^ timeGarbageCollectingInMilliseconds
+]
+
+{ #category : #accessing }
+IllimaniGCBenchmarker >> timeGarbageCollectingInMilliseconds: anObject [
+
+	timeGarbageCollectingInMilliseconds := anObject
 ]
