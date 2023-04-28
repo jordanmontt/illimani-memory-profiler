@@ -4,24 +4,16 @@ Class {
 	#instVars : [
 		'incrementalGCs',
 		'fullGCs',
-		'timeGarbageCollectingInMilliseconds',
-		'growthHeadroom',
-		'shrinkThreshold',
-		'fullGCRatio',
-		'edenSize'
+		'timeGarbageCollectingInMilliseconds'
 	],
 	#category : #IllimaniBenchmarker
 }
 
 { #category : #benchmarking }
-IllimaniGCBenchmarker >> bench [
+IllimaniGCBenchmarker >> bench1GBDF [
+	"Loading a 1.6GB DataFrame"
 
-	self startBench.
-	self stopBench
-]
-
-{ #category : #benchmarking }
-IllimaniGCBenchmarker >> benchOneGBDF [
+	"https://www.kaggle.com/datasets/rahulbanerjee123/aws-product-length?resource=download"
 
 	self startBench.
 	DataFrame readFromCsv: '/Users/sebastian/Downloads/csv/train.csv' asFileReference.
@@ -29,7 +21,10 @@ IllimaniGCBenchmarker >> benchOneGBDF [
 ]
 
 { #category : #benchmarking }
-IllimaniGCBenchmarker >> benchThreeGBDF [
+IllimaniGCBenchmarker >> bench3GBDF [
+	"Loading a 3.11GB DataFrame"
+
+	"https://www.kaggle.com/datasets/antoninadolgorukova/proteinrna-vs-rna-spearman-correlation-data?select=Prot-RNA_corr_63gr.csv"
 
 	self startBench.
 	DataFrame readFromCsv:
@@ -37,28 +32,32 @@ IllimaniGCBenchmarker >> benchThreeGBDF [
 	self stopBench
 ]
 
-{ #category : #accessing }
-IllimaniGCBenchmarker >> edenSize [
+{ #category : #benchmarking }
+IllimaniGCBenchmarker >> bench500MBDF [
+	"Loading a 529 MB DataFrame"
 
-	^ edenSize
+	"https://www.kaggle.com/datasets/rahulbanerjee123/aws-product-length?resource=download"
+
+	self startBench.
+	DataFrame readFromCsv: '/Users/sebastian/Downloads/csv/test.csv' asFileReference.
+	self stopBench
 ]
 
 { #category : #accessing }
-IllimaniGCBenchmarker >> edenSize: anObject [
+IllimaniGCBenchmarker >> edenSize [
 
-	edenSize := anObject
+	^  Smalltalk vm parameterAt: 44
 ]
 
 { #category : #accessing }
 IllimaniGCBenchmarker >> fullGCRatio [
 
-	^ fullGCRatio
+	^ Smalltalk vm parameterAt: 55
 ]
 
 { #category : #'gc - tunning' }
 IllimaniGCBenchmarker >> fullGCRatio: anIntegerInBytes [
 
-	fullGCRatio := anIntegerInBytes.
 	Smalltalk vm parameterAt: 55 put: anIntegerInBytes
 ]
 
@@ -77,13 +76,12 @@ IllimaniGCBenchmarker >> fullGCs: anObject [
 { #category : #accessing }
 IllimaniGCBenchmarker >> growthHeadroom [
 
-	^ growthHeadroom
+	^ Smalltalk vm parameterAt: 25
 ]
 
 { #category : #'gc - tunning' }
 IllimaniGCBenchmarker >> growthHeadroom: anIntegerInBytes [
 
-	growthHeadroom := anIntegerInBytes.
 	Smalltalk vm parameterAt: 25 put: anIntegerInBytes
 ]
 
@@ -102,17 +100,16 @@ IllimaniGCBenchmarker >> incrementalGCs: anObject [
 { #category : #accessing }
 IllimaniGCBenchmarker >> shrinkThreshold [
 
-	^ shrinkThreshold
+	^ Smalltalk vm parameterAt: 24
 ]
 
 { #category : #'gc - tunning' }
 IllimaniGCBenchmarker >> shrinkThreshold: anIntegerInBytes [
 
-	shrinkThreshold := anIntegerInBytes.
 	Smalltalk vm parameterAt: 24 put: anIntegerInBytes
 ]
 
-{ #category : #benchmarking }
+{ #category : #actions }
 IllimaniGCBenchmarker >> startBench [
 
 	incrementalGCs := Smalltalk vm incrementalGCCount.
@@ -120,7 +117,7 @@ IllimaniGCBenchmarker >> startBench [
 	timeGarbageCollectingInMilliseconds := Smalltalk vm totalGCTime
 ]
 
-{ #category : #benchmarking }
+{ #category : #actions }
 IllimaniGCBenchmarker >> stopBench [
 
 	incrementalGCs := Smalltalk vm incrementalGCCount - incrementalGCs.
@@ -132,10 +129,10 @@ IllimaniGCBenchmarker >> stopBench [
 	' time spent garbage collecting: ' trace. timeGarbageCollectingInMilliseconds trace.
 	String cr trace.
 	
-	'eden size: ' trace. edenSize humanReadableByteSizeString trace.
-	' growth headroom: ' trace. growthHeadroom humanReadableByteSizeString trace.
-	' shrink threshold: ' trace. shrinkThreshold humanReadableByteSizeString trace.
-	' full gc ratio: ' trace . fullGCRatio humanReadableByteSizeString trace.
+	'eden size: ' trace. self edenSize humanReadableByteSizeString trace.
+	' growth headroom: ' trace. self growthHeadroom humanReadableByteSizeString trace.
+	' shrink threshold: ' trace. self shrinkThreshold humanReadableByteSizeString trace.
+	' full gc ratio: ' trace . self fullGCRatio humanReadableByteSizeString trace.
 ]
 
 { #category : #accessing }
