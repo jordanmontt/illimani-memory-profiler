@@ -43,6 +43,16 @@ IllimaniGCBenchmarker >> bench500MBDF [
 	self stopBench
 ]
 
+{ #category : #benchmarking }
+IllimaniGCBenchmarker >> benchMoose [
+	"Nicolas's model: 300MB"
+
+	self startBench.
+	FamixJavaModel new importFromMSEStream:
+		(FileLocator downloads / 'moose' / 'anonymousModel.mse') readStream.
+	self stopBench
+]
+
 { #category : #accessing }
 IllimaniGCBenchmarker >> edenSize [
 
