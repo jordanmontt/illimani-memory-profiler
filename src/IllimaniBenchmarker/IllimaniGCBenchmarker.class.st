@@ -132,7 +132,7 @@ IllimaniGCBenchmarker >> stopBench [
 	'eden size: ' trace. self edenSize humanReadableByteSizeString trace.
 	' growth headroom: ' trace. self growthHeadroom humanReadableByteSizeString trace.
 	' shrink threshold: ' trace. self shrinkThreshold humanReadableByteSizeString trace.
-	' full gc ratio: ' trace . self fullGCRatio humanReadableByteSizeString trace.
+	' full gc ratio: ' trace . self fullGCRatio trace.
 ]
 
 { #category : #accessing }
