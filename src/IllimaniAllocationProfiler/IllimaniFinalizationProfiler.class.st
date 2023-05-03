@@ -28,32 +28,21 @@ IllimaniFinalizationProfiler >> cleanProfilingData [
 
 { #category : #profiling }
 IllimaniFinalizationProfiler >> forceFinalizationOfObjects [
-	
-	| retries previousRegistrySize |
-	retries := 0.
 
 	"We force the finalization timestamp for the not yet finalized objects."
 	finalizationRegistry values do: #finalize.
 	"Then we stop referencing the finalization registry to not re-finalize the objects."
 	finalizationRegistry := nil.
 
-	"This is the old code. Comment on why on bottom"
-	
-	"Force finalization of the objects. This is because when an objects will be finalizated,
-	the ephemeron puts a strong reference to th object, thus, making it referenced. So we need
-	to run recursively the gc until there are no more objects in the finalization Registry.
-	The retry is a way to continue running some GC until if the finalization registry never
-	reaches 0. This can happen if someone is referencing an object, thus the object will never die."
-	
-	"20 is the magic number"
-	"[ retries < 20 ] whileTrue: [
-		'entered' traceCr.
-		previousRegistrySize := finalizationRegistry size.
+
+	"We let the GC run for N times to clean the not referenced objects. Because of the
+	implementation of ephemerons, they can have hard references between them so it is
+	necessary to run the GC several times  "
+
+	[
+	20 timesRepeat: [
 		Smalltalk garbageCollect.
-		50 milliSecond wait.
-		retries := previousRegistrySize = finalizationRegistry size
-			ifTrue: [ retries + 1 ]
-			ifFalse: [ 0 ] ]"
+		30 milliSecond wait ] ] fork
 ]
 
 { #category : #initialization }
