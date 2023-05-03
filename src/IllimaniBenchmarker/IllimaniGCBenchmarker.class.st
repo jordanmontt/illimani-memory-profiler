@@ -44,6 +44,14 @@ IllimaniGCBenchmarker >> bench500MBDF [
 ]
 
 { #category : #benchmarking }
+IllimaniGCBenchmarker >> bench: aBlock [
+
+	self startBench.
+	aBlock value.
+	self stopBench
+]
+
+{ #category : #benchmarking }
 IllimaniGCBenchmarker >> benchMoose [
 	"Nicolas's model: 300MB"
 
