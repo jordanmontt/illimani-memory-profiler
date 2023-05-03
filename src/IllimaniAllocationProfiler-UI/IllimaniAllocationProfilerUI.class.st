@@ -215,11 +215,23 @@ IllimaniAllocationProfilerUI >> initializeNotebook [
 { #category : #'initialization - lazy presenters' }
 IllimaniAllocationProfilerUI >> initializePalu4 [
 
-	^ IllimaniDistributionForFinalization new
-		  data: profiler objectAllocations;
-		  groupingBlock: [ :allocationModel | (Duration milliSeconds:allocationModel initializationTimestamp) asDeciSeconds ceiling ];
-		  applyGroupData;
-		  palu4
+	| groupedData averageScavengers minInizializationTime totalTime canvas |
+	totalTime := profiler objectAllocations last initializationTimestamp
+		- profiler objectAllocations first initializationTimestamp.
+	averageScavengers := (totalTime / profiler incrementalGCCount) asInteger.
+
+	minInizializationTime := profiler objectAllocations first initializationTimestamp.
+	groupedData := profiler objectAllocations groupedBy: [ :model |
+		model initializationTimestamp - minInizializationTime // averageScavengers ].
+
+	canvas := IllimaniDistributionForFinalization new
+		x: groupedData keys;
+		y: (groupedData collect: [ :collection | collection sum: #totalSizeInBytes ]) values;
+		yTitle: 'seconds';
+		palu4.
+	palu4 := SpRoassalPresenter new
+		canvas: canvas;
+		yourself
 ]
 
 { #category : #initialization }

@@ -62,7 +62,7 @@ IllimaniFinalizationProfiler >> isProfiling [
 	^ gcProcess isNotNil
 ]
 
-{ #category : #api }
+{ #category : #initialization }
 IllimaniFinalizationProfiler >> objectAllocations [
 
 	^ profilerHandler objectAllocations
