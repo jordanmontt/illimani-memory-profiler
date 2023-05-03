@@ -77,7 +77,7 @@ Class {
 { #category : #announcements }
 IllimaniAllocationProfiler >> announceProfilerStopedProfiling [
 
-	illimaniAnnouncer announce: IllimaniStopedProfilingAnnouncement new
+	illimaniAnnouncer announce: IllimaniStopedProfilingAnnouncement
 ]
 
 { #category : #api }
@@ -162,11 +162,9 @@ IllimaniAllocationProfiler >> stats [
 IllimaniAllocationProfiler >> stopProfiling [
 
 	self uninstallMethodProxies.
-
 	self updateStatsWhenFinishingProfiling.
-
-	statisticsModel := AllocationStatistics new rawAllocations:
-		                   profilerHandler objectAllocations.
-
+	statisticsModel := AllocationStatistics new
+		rawAllocations: profilerHandler objectAllocations;
+		yourself.
 	self announceProfilerStopedProfiling
 ]

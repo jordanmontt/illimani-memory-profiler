@@ -13,7 +13,6 @@ Class {
 		'copyExecutionStack',
 		'graphWalker',
 		'keepReferencesToAllocatedObjects',
-		'allocatorClassesToIgnore',
 		'objectClassesToCapture',
 		'copyObjectHash'
 	],
@@ -111,9 +110,8 @@ IllimaniProfilerMpHandler >> filterContext: aContext ignoringClass: aClass [
 { #category : #evaluating }
 IllimaniProfilerMpHandler >> handleAllocationOfObject: newlyAllocatedObject [
 
-	| filteredContext timeNow allocationInformationHolder |
-		
-	timeNow := Time microsecondClockValue.
+	| filteredContext  allocationInformationHolder |
+
 	allocationInformationHolder := AllocationSiteInfoModel new.
 	filteredContext := self filterContext: thisContext ignoringClass: newlyAllocatedObject class.
 
@@ -127,27 +125,20 @@ IllimaniProfilerMpHandler >> handleAllocationOfObject: newlyAllocatedObject [
 		allocatedObjectClass: newlyAllocatedObject class;
 		contextFingerprint: filteredContext;
 		totalSizeInBytes: "(graphWalker rootObject: newlyAllocatedObject) totalSizeInBytes" newlyAllocatedObject sizeInMemory;
-		initializationTimestamp: timeNow.
+		initializationTimestamp: Time microsecondClockValue.
 
 	objectAllocations add: allocationInformationHolder
-]
-
-{ #category : #accessing }
-IllimaniProfilerMpHandler >> ignoreAllocators: aCollectionOfClasses [
-
-	allocatorClassesToIgnore := aCollectionOfClasses
 ]
 
 { #category : #initialization }
 IllimaniProfilerMpHandler >> initialize [
 
 	super initialize.
-	self doNotCopyExecutionStack.
-	self doNotCaptureAllObjects.
+	copyExecutionStack := false.
+	captureAllObjects := false.
 	copyObjectHash := false.
 	keepReferencesToAllocatedObjects := false.
 	objectClassesToCapture := {  }.
-	allocatorClassesToIgnore := {  }.
 	objectAllocations := OrderedCollection new.
 	graphWalker := GraphSpaceStatistics new.
 
@@ -193,6 +184,5 @@ IllimaniProfilerMpHandler >> objectsToCapture: aCollectionOfClasses [
 { #category : #testing }
 IllimaniProfilerMpHandler >> shouldICaptureTheObject: returnValue [
 
-	^ (captureAllObjects or: [ objectClassesToCapture includes: returnValue class ]) and: [
-		  (allocatorClassesToIgnore includes: returnValue class) not ]
+	^ captureAllObjects | (objectClassesToCapture includes: returnValue class)
 ]

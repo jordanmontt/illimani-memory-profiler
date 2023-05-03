@@ -24,6 +24,14 @@ Class {
 }
 
 { #category : #accessing }
+IllimaniAllocationProfilerUI class >> illimaniAnnouncer: anIllimaniAnnouncer [
+
+	^ self basicNew
+		illimaniAnnouncer: anIllimaniAnnouncer;
+		initialize
+]
+
+{ #category : #accessing }
 IllimaniAllocationProfilerUI >> allocatedObjectsPerSecondPerClassPresenter [
 
 	^ SpRoassalPresenter new
@@ -337,7 +345,9 @@ IllimaniAllocationProfilerUI >> refresh [
 { #category : #announcements }
 IllimaniAllocationProfilerUI >> respondToAnnouncement [
 
-	 illimaniAnnouncer when: IllimaniStopedProfilingAnnouncement do: [ self refresh ]
+	illimaniAnnouncer when: IllimaniStopedProfilingAnnouncement
+		do: [ self refresh ]
+		for: self
 ]
 
 { #category : #'accessing - lazy presenters' }

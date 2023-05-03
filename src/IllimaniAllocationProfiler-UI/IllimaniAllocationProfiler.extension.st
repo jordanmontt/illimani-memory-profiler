@@ -3,8 +3,8 @@ Extension { #name : #IllimaniAllocationProfiler }
 { #category : #'*IllimaniAllocationProfiler-UI' }
 IllimaniAllocationProfiler >> open [
 
-	^ IllimaniAllocationProfilerUI new
-		  illimaniAnnouncer: illimaniAnnouncer;
+	^ (IllimaniAllocationProfilerUI illimaniAnnouncer: illimaniAnnouncer)
 		  objectAllocationProfiler: self;
-		  open
+		  open;
+		  yourself
 ]
