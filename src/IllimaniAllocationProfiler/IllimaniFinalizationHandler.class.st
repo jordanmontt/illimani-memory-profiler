@@ -14,10 +14,8 @@ IllimaniFinalizationHandler >> afterExecutionWithReceiver: receiver arguments: a
 
 	| objectFinalizationModel |
 	objectFinalizationModel := BasicAllocationInfoModel new
-		"allocatedObjectClass: newlyAllocatedObject class;"
+		allocatedObjectClass: newlyAllocatedObject class;
 		initializationTimestamp: Time microsecondClockValue;
-		"(graphWalker rootObject: newlyAllocatedObject) totalSizeInBytes;"
-		"not necessary to walk the whole object as we are only observing the allocation size."
 		totalSizeInBytes: newlyAllocatedObject sizeInMemory;
 		yourself.
 	objectAllocations add: objectFinalizationModel.
