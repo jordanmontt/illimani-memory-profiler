@@ -20,7 +20,7 @@ BaselineOfIllimaniAllocationProfiler >> baseline: spec [
 
 		"External dependencies"
 		spec baseline: 'MethodProxies'
-			with: [ spec repository: 'github://pharo-contributions/MethodProxies/src' ].
+			with: [ spec repository: 'github://pharo-contributions/MethodProxies:a3204024eba7fce4f92db7f521425d3d0d869afc/src' ].
 		spec baseline: 'SpaceAndTime'
 			with: [ spec repository: 'github://jordanmontt/spaceAndTime/src' ].
 
