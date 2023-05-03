@@ -18,7 +18,8 @@ Class {
 		'memoryTablePresenter',
 		'allocationsPerSecondPerAllocatorPresenter',
 		'allocatedObjectsTablePresenter',
-		'illimaniAnnouncer'
+		'illimaniAnnouncer',
+		'palu4'
 	],
 	#category : #'IllimaniAllocationProfiler-UI-Main Presenter'
 }
@@ -201,6 +202,7 @@ IllimaniAllocationProfilerUI >> initializeNotebook [
 		addPageTitle: 'Memory' provider: [ self memoryTablePresenter  ];
 		addPageTitle: 'Allocated Objects' provider: [ self allocatedObjectsTablePresenter ];
 		addPageTitle: 'Heatmap' provider: [ self heatMapPresenter ];
+		addPageTitle: 'Palu4' provider: [ self palu4 ];
 		addPageTitle: 'Allocations per Second Total'
 		provider: [ self allocatedObjectsPerSecondPresenter ];
 		addPageTitle: 'Allocations per Second per Allocator'
@@ -208,6 +210,16 @@ IllimaniAllocationProfilerUI >> initializeNotebook [
 
 		addPageTitle: 'Evaluator' provider: [ self codeEvaluator ];
 		yourself
+]
+
+{ #category : #'initialization - lazy presenters' }
+IllimaniAllocationProfilerUI >> initializePalu4 [
+
+	^ IllimaniDistributionForFinalization new
+		  data: profiler objectAllocations;
+		  groupingBlock: [ :allocationModel | (Duration milliSeconds:allocationModel initializationTimestamp) asDeciSeconds ceiling ];
+		  applyGroupData;
+		  palu4
 ]
 
 { #category : #initialization }
@@ -333,6 +345,13 @@ IllimaniAllocationProfilerUI >> notebookPresenter [
 IllimaniAllocationProfilerUI >> objectAllocationProfiler: aProfiler [
 
 	profiler := aProfiler
+]
+
+{ #category : #'accessing - lazy presenters' }
+IllimaniAllocationProfilerUI >> palu4 [
+
+	palu4 ifNil: [ self initializePalu4 ].
+	^ palu4
 ]
 
 { #category : #actions }

@@ -16,11 +16,11 @@ Class {
 { #category : #api }
 IllimaniDistributionForFinalization >> applyGroupData [
 
-	| onlyFinalizedObjects dictionary |
+	| "onlyFinalizedObjects" dictionary |
 	
-	onlyFinalizedObjects := data select: [ :e | e finalizationTimestamp isNotNil ].
+	"onlyFinalizedObjects := data select: [ :e | e finalizationTimestamp isNotNil ]."
 
-	groupedData := (onlyFinalizedObjects groupedBy: [ :collection |
+	groupedData := (data groupedBy: [ :collection |
 		                groupingBlock value: collection ]) associations.
 	groupedData sort: [ :a :b | a key < b key ].
 
