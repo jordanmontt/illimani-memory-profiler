@@ -21,10 +21,10 @@ IllimaniDistributionForFinalization >> addMarks: chart [
 			                    sumUpTo: 0.9;
 			                    color: markerColor;
 			                    yourself).
-	chart addDecoration: (marker10Percent := RSXMarkerDecoration new
+	"chart addDecoration: (marker10Percent := RSXMarkerDecoration new
 			                    sumUpTo: 0.1;
 			                    color: markerColor;
-			                    yourself).
+			                    yourself)."
 	marker90Percent lines do: [ :line |
 		| label |
 		label := RSLabel new
@@ -37,7 +37,7 @@ IllimaniDistributionForFinalization >> addMarks: chart [
 			move: label on: line.
 		chart canvas add: label ].
 
-	marker10Percent lines do: [ :line |
+"	marker10Percent lines do: [ :line |
 		| label |
 		label := RSLabel new
 			         text: '10%';
@@ -47,7 +47,7 @@ IllimaniDistributionForFinalization >> addMarks: chart [
 		RSLocation new
 			above;
 			move: label on: line.
-		chart canvas add: label ]
+		chart canvas add: label ]"
 ]
 
 { #category : #initialization }
@@ -63,7 +63,7 @@ IllimaniDistributionForFinalization >> initialize [
 { #category : #api }
 IllimaniDistributionForFinalization >> palu4 [
 
-	| chart plot |
+	| chart plot marker90Percent markerColor |
 	chart := RSChart new.
 
 	plot := RSLinePlot new
@@ -81,6 +81,12 @@ IllimaniDistributionForFinalization >> palu4 [
 			 labelConversion: [ :e | e asInteger humanReadableByteSizeString ];
 			 yourself).
 
+	"markerColor := Color fromHexString: '922724'.
+	chart addDecoration: (marker90Percent := RSXMarkerDecoration new
+		sumUpTo: 0.9;
+		color: markerColor;
+		yourself)."
+	
 	chart yLog.
 
 	chart xlabel:  xTitle.
@@ -88,6 +94,18 @@ IllimaniDistributionForFinalization >> palu4 [
 	chart title: title.
 
 	chart build.
+	
+	"marker90Percent lines do: [ :line |
+		| label |
+		label := RSLabel new
+			         text: '90%';
+			         color: markerColor;
+			         fontSize: 6;
+			         yourself.
+		RSLocation new
+			above;
+			move: label on: line.
+		chart canvas add: label ]."
 
 	^ chart canvas
 ]
