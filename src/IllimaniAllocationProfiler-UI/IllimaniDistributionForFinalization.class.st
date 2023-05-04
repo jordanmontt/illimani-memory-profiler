@@ -2,42 +2,21 @@ Class {
 	#name : #IllimaniDistributionForFinalization,
 	#superclass : #Object,
 	#instVars : [
-		'groupedData',
 		'x',
 		'y',
-		'yTitle'
+		'yTitle',
+		'xTitle',
+		'title'
 	],
 	#category : #'IllimaniAllocationProfiler-UI-Roassal'
 }
 
-{ #category : #initialization }
-IllimaniDistributionForFinalization >> initialize [
-
-	super initialize.
-	self yTitle: 'deci seconds'
-]
-
 { #category : #api }
-IllimaniDistributionForFinalization >> palu4 [
+IllimaniDistributionForFinalization >> addMarks: chart [
 
-	| chart plot marker90Percent marker10Percent markerColor |
-	chart := RSChart new.
-
-	plot := RSLinePlot new
-		        color: Color black;
-		        x: x y: y.
-
-	chart addPlot: plot.
-
-	chart addDecoration: (RSHorizontalTick new
-			 numberOfTicks: 10;
-			 labelConversion: [ :e | e asInteger printString ];
-			 yourself).
-	chart addDecoration: (RSVerticalTick new
-			 numberOfTicks: 10;
-			 labelConversion: [ :e | e asInteger humanReadableByteSizeString ];
-			 yourself).
+	| marker90Percent markerColor marker10Percent |
 	markerColor := Color fromHexString: '922724'.
+
 	chart addDecoration: (marker90Percent := RSXMarkerDecoration new
 			                    sumUpTo: 0.9;
 			                    color: markerColor;
@@ -46,15 +25,6 @@ IllimaniDistributionForFinalization >> palu4 [
 			                    sumUpTo: 0.1;
 			                    color: markerColor;
 			                    yourself).
-
-	chart yLog.
-
-	chart xlabel:  yTitle.
-	chart ylabel: 'Memory'.
-	chart title: 'Palu4'.
-
-	chart build.
-
 	marker90Percent lines do: [ :line |
 		| label |
 		label := RSLabel new
@@ -77,7 +47,48 @@ IllimaniDistributionForFinalization >> palu4 [
 		RSLocation new
 			above;
 			move: label on: line.
-		chart canvas add: label ].
+		chart canvas add: label ]
+]
+
+{ #category : #initialization }
+IllimaniDistributionForFinalization >> initialize [
+
+	super initialize.
+	self xTitle: 'Lifetime in seconds'.
+	self yTitle: 'Memory'.
+	title := 'Bench 500 MB capturing allocations'.
+	
+]
+
+{ #category : #api }
+IllimaniDistributionForFinalization >> palu4 [
+
+	| chart plot |
+	chart := RSChart new.
+
+	plot := RSLinePlot new
+		color: Color black;
+		x: x y: y.
+
+	chart addPlot: plot.
+
+	chart addDecoration: (RSHorizontalTick new
+			 numberOfTicks: 10;
+			 labelConversion: [ :e | e asInteger printString ];
+			 yourself).
+	chart addDecoration: (RSVerticalTick new
+			 numberOfTicks: 10;
+			 labelConversion: [ :e | e asInteger humanReadableByteSizeString ];
+			 yourself).
+
+	chart yLog.
+
+	chart xlabel:  xTitle.
+	chart ylabel: yTitle.
+	chart title: title.
+
+	chart build.
+
 	^ chart canvas
 ]
 
@@ -85,13 +96,25 @@ IllimaniDistributionForFinalization >> palu4 [
 IllimaniDistributionForFinalization >> timeMeasurement: aString [
 	"The string needs to be in lowercase"
 
-	yTitle := aString
+	xTitle := aString
+]
+
+{ #category : #api }
+IllimaniDistributionForFinalization >> title: aTitle [
+
+	title := aTitle
 ]
 
 { #category : #api }
 IllimaniDistributionForFinalization >> x: col [
 
 	x := col
+]
+
+{ #category : #api }
+IllimaniDistributionForFinalization >> xTitle: aTitle [
+
+	xTitle := aTitle
 ]
 
 { #category : #api }

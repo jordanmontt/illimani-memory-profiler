@@ -227,7 +227,7 @@ IllimaniAllocationProfilerUI >> initializePalu4 [
 	canvas := IllimaniDistributionForFinalization new
 		x: groupedData keys;
 		y: (groupedData collect: [ :collection | collection sum: #totalSizeInBytes ]) values;
-		yTitle: 'seconds';
+		xTitle: 'Scavenges';
 		palu4.
 	palu4 := SpRoassalPresenter new
 		canvas: canvas;

@@ -5,7 +5,7 @@ IllimaniFinalizationProfiler >> palu4 [
 
 	| groupingBlock yTransformingBlock groupedData x dictionary y |
 	groupingBlock := [ :allocationModel |
-	                 allocationModel lifetimeAsDuration asDeciSeconds ceiling ].
+	                 allocationModel lifetimeAsDuration asSeconds ].
 	"yTransformingBlock := [ :collection | collection size ]."
 	yTransformingBlock := [ :collection | collection sum: #totalSizeInBytes ].
 
@@ -21,7 +21,10 @@ IllimaniFinalizationProfiler >> palu4 [
 			     ifAbsent: [ 0 ] ].
 
 	^ IllimaniDistributionForFinalization new
-		  x: x;
-		  y: y;
-		  palu4
+		x: x;
+		y: y;
+		xTitle: 'Lifetime in seconds';
+		yTitle: 'Memory (log scale)';
+		title: 'Object''s lifetime Profile Loading a 500MB DataFrame';
+		palu4
 ]
