@@ -4,7 +4,8 @@ Class {
 	#instVars : [
 		'objectAllocations',
 		'profiler',
-		'graphWalker'
+		'graphWalker',
+		'counter'
 	],
 	#category : #'IllimaniAllocationProfiler-Finalization Profiler'
 }
@@ -12,17 +13,11 @@ Class {
 { #category : #evaluating }
 IllimaniFinalizationHandler >> afterExecutionWithReceiver: receiver arguments: arguments returnValue: newlyAllocatedObject [
 
-	| objectFinalizationModel |
-	objectFinalizationModel := BasicAllocationInfoModel new
-		allocatedObjectClass: newlyAllocatedObject class;
-		initializationTimestamp: Time microsecondClockValue;
-		totalSizeInBytes: newlyAllocatedObject sizeInMemory;
-		yourself.
-	objectAllocations add: objectFinalizationModel.
-
 	"Finalization"
-	profiler addFinalizationFor: newlyAllocatedObject finalizer: objectFinalizationModel.
+	"counter := counter + 1.
+	counter % 100 = 0 ifFalse: [ ^ newlyAllocatedObject ]."
 
+	self putEphemeron: newlyAllocatedObject.
 	^ newlyAllocatedObject
 ]
 
@@ -37,7 +32,8 @@ IllimaniFinalizationHandler >> initialize [
 
 	super initialize.
 	objectAllocations := OrderedCollection new.
-	graphWalker := GraphSpaceStatistics new
+	graphWalker := GraphSpaceStatistics new.
+	counter := 0
 ]
 
 { #category : #accessing }
@@ -50,4 +46,19 @@ IllimaniFinalizationHandler >> objectAllocations [
 IllimaniFinalizationHandler >> profiler: anIllimaniFinalizationProfiler [
 
 	profiler := anIllimaniFinalizationProfiler
+]
+
+{ #category : #evaluating }
+IllimaniFinalizationHandler >> putEphemeron: newlyAllocatedObject [
+
+	| objectFinalizationModel |
+	objectFinalizationModel := BasicAllocationInfoModel new
+		allocatedObjectClass: newlyAllocatedObject class;
+		initializationTimestamp: Time microsecondClockValue;
+		totalSizeInBytes: newlyAllocatedObject sizeInMemory;
+		yourself.
+	objectAllocations add: objectFinalizationModel.
+
+	"Finalization"
+	profiler addFinalizationFor: newlyAllocatedObject finalizer: objectFinalizationModel
 ]
