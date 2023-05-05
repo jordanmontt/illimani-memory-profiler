@@ -67,7 +67,7 @@ IllimaniDistributionForFinalization >> palu4 [
 	chart := RSChart new.
 
 	plot := RSLinePlot new
-		color: Color black;
+		color: (Color fromHexString: '#CD5C5C');
 		x: x y: y.
 
 	chart addPlot: plot.
