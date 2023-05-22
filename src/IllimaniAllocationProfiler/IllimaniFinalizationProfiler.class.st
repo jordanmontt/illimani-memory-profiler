@@ -23,17 +23,17 @@ IllimaniFinalizationProfiler >> addFinalizationFor: newlyAllocatedObject finaliz
 { #category : #profiling }
 IllimaniFinalizationProfiler >> cleanProfilingData [
 
-	profilerHandler clean
+	profilerHandler clean.
+	finalizationRegistry := FinalizationRegistry new
 ]
 
 { #category : #profiling }
 IllimaniFinalizationProfiler >> forceFinalizationOfObjects [
 
 	"We force the finalization timestamp for the not yet finalized objects."
-	finalizationRegistry values do: #finalize.
+	finalizationRegistry valuesDo: #finalize.
 	"Then we stop referencing the finalization registry to not re-finalize the objects."
-	finalizationRegistry := nil.
-
+	finalizationRegistry := FinalizationRegistry new.
 
 	"We let the GC run for N times to clean the not referenced objects. Because of the
 	implementation of ephemerons, they can have hard references between them so it is

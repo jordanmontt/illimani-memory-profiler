@@ -116,7 +116,7 @@ IllimaniAllocationProfiler >> initialize [
 	super initialize.
 	profilerHandler := IllimaniProfilerMpHandler new.
 	illimaniAnnouncer := IllimaniAnnouncer new.
-	self initializeMethodProxies: profilerHandler
+	self initializeMethodProxies: profilerHandler.
 ]
 
 { #category : #api }

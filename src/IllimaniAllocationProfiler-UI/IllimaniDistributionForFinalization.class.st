@@ -63,7 +63,7 @@ IllimaniDistributionForFinalization >> initialize [
 { #category : #api }
 IllimaniDistributionForFinalization >> palu4 [
 
-	| chart plot marker90Percent markerColor |
+	| chart plot markerColor marker |
 	chart := RSChart new.
 
 	plot := RSLinePlot new
@@ -78,16 +78,19 @@ IllimaniDistributionForFinalization >> palu4 [
 			 yourself).
 	chart addDecoration: (RSVerticalTick new
 			 numberOfTicks: 10;
-			 labelConversion: [ :e | e asInteger humanReadableByteSizeString ];
+			 labelConversion: [ :e | e asInteger humanReadableByteSizeString "asStringWithCommas"];
 			 yourself).
 
-	"markerColor := Color fromHexString: '922724'.
-	chart addDecoration: (marker90Percent := RSXMarkerDecoration new
-		sumUpTo: 0.9;
+	markerColor := Color blue.
+	chart addDecoration: (marker := RSXMarkerDecoration new
+		sumUpTo: 0.6"0.75";
 		color: markerColor;
-		yourself)."
-	
+		width: 0.6;
+		yourself). 
+
 	chart yLog.
+
+	chart minValueX: -1.
 
 	chart xlabel:  xTitle.
 	chart ylabel: yTitle.
@@ -95,17 +98,17 @@ IllimaniDistributionForFinalization >> palu4 [
 
 	chart build.
 	
-	"marker90Percent lines do: [ :line |
+	marker lines do: [ :line |
 		| label |
 		label := RSLabel new
-			         text: '90%';
+			         "text: '75%';" text: '60%';
 			         color: markerColor;
 			         fontSize: 6;
 			         yourself.
 		RSLocation new
 			above;
 			move: label on: line.
-		chart canvas add: label ]."
+		chart canvas add: label ].
 
 	^ chart canvas
 ]

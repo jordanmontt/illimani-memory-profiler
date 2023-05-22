@@ -15,7 +15,7 @@ IllimaniFinalizationHandler >> afterExecutionWithReceiver: receiver arguments: a
 
 	"Finalization"
 	"counter := counter + 1.
-	counter % 100 = 0 ifFalse: [ ^ newlyAllocatedObject ]."
+	counter % 2 = 0 ifFalse: [ ^ newlyAllocatedObject ]."
 
 	self putEphemeron: newlyAllocatedObject.
 	^ newlyAllocatedObject
@@ -24,7 +24,8 @@ IllimaniFinalizationHandler >> afterExecutionWithReceiver: receiver arguments: a
 { #category : #initialization }
 IllimaniFinalizationHandler >> clean [
 
-	objectAllocations removeAll
+	objectAllocations removeAll.
+	counter := 0
 ]
 
 { #category : #initialization }
