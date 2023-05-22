@@ -1,10 +1,8 @@
 Class {
 	#name : #IllimaniFinalizationHandler,
-	#superclass : #MpHandler,
+	#superclass : #IllimaniProfilerMpHandler,
 	#instVars : [
-		'objectAllocations',
 		'profiler',
-		'graphWalker',
 		'counter'
 	],
 	#category : #'IllimaniAllocationProfiler-Finalization Profiler'
@@ -25,6 +23,12 @@ IllimaniFinalizationHandler >> afterExecutionWithReceiver: receiver arguments: a
 IllimaniFinalizationHandler >> clean [
 
 	objectAllocations removeAll
+]
+
+{ #category : #initialization }
+IllimaniFinalizationHandler >> defaultClassesToAvoidInTheContextSearch [
+
+	^ super defaultClassesToAvoidInTheContextSearch, { self class }
 ]
 
 { #category : #initialization }
@@ -51,9 +55,13 @@ IllimaniFinalizationHandler >> profiler: anIllimaniFinalizationProfiler [
 { #category : #evaluating }
 IllimaniFinalizationHandler >> putEphemeron: newlyAllocatedObject [
 
-	| objectFinalizationModel |
-	objectFinalizationModel := BasicAllocationInfoModel new
+	| objectFinalizationModel filteredContext |
+	filteredContext := self filterContext: thisContext ignoringClass: newlyAllocatedObject class.
+	
+	objectFinalizationModel := AllocationSiteInfoModel new
 		allocatedObjectClass: newlyAllocatedObject class;
+		allocatorClass: filteredContext receiver class;
+		allocatorMethod: filteredContext compiledCode method;
 		initializationTimestamp: Time microsecondClockValue;
 		totalSizeInBytes: newlyAllocatedObject sizeInMemory;
 		yourself.
