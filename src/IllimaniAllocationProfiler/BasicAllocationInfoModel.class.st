@@ -59,19 +59,19 @@ BasicAllocationInfoModel >> initializationTimestamp: microsecondsAsInt [
 	initializationTimestamp := microsecondsAsInt
 ]
 
-{ #category : #printing }
+{ #category : #accessing }
 BasicAllocationInfoModel >> lifetime [
 
 	^ finalizationTimestamp - initializationTimestamp - gcSpentTime
 ]
 
-{ #category : #printing }
+{ #category : #accessing }
 BasicAllocationInfoModel >> lifetimeAsDuration [
 
 	^ Duration microSeconds: self lifetime
 ]
 
-{ #category : #printing }
+{ #category : #accessing }
 BasicAllocationInfoModel >> lifetimeAsString [
 
 	finalizationTimestamp ifNil: [ ^ '-' ].

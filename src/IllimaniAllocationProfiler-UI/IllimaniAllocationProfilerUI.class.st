@@ -19,7 +19,7 @@ Class {
 		'allocationsPerSecondPerAllocatorPresenter',
 		'allocatedObjectsTablePresenter',
 		'illimaniAnnouncer',
-		'palu4'
+		'densityChartRoassalPresenter'
 	],
 	#category : #'IllimaniAllocationProfiler-UI-Main Presenter'
 }
@@ -113,6 +113,13 @@ IllimaniAllocationProfilerUI >> defaultLayout [
 ]
 
 { #category : #'accessing - lazy presenters' }
+IllimaniAllocationProfilerUI >> densityChart [
+
+	densityChartRoassalPresenter ifNil: [ self initializeDensityChart ].
+	^ densityChartRoassalPresenter
+]
+
+{ #category : #'accessing - lazy presenters' }
 IllimaniAllocationProfilerUI >> heatMapPresenter [
 
 	heatmapPresenter ifNil: [ self initializeHeatmapPresenter ].
@@ -163,6 +170,35 @@ self stats allocationsByMethod';
 ]
 
 { #category : #'initialization - lazy presenters' }
+IllimaniAllocationProfilerUI >> initializeDensityChart [
+
+	| x dictionary y groupedByAllocationTime sortedData |
+	groupedByAllocationTime := (profiler objectAllocations groupedBy: [ :allocationModel |
+		                            (Duration microSeconds:
+			                             allocationModel initializationTimestamp) asSeconds ])
+		                           associations.
+	sortedData := groupedByAllocationTime sorted: [ :a :b | a key < b key ].
+	sortedData := sortedData collect: [ :e | e key - sortedData first key -> e value ].
+
+	x := 0 to: sortedData last key asInteger.
+	dictionary := Dictionary newFrom: sortedData.
+
+	y := x collect: [ :index |
+		     dictionary at: index
+			     ifPresent: [ :collection | collection sum: #totalSizeInBytes ]
+			     ifAbsent: [ 0 ] ].
+
+	densityChartRoassalPresenter := IllimaniDensityDistributionChart new
+		          x: x;
+		          y: y;
+		          yLog;
+		          xTitle: 'Initialization time in seconds';
+		          yTitle: 'Memory (log scale)';
+		          title: 'Object initialization density chart';
+		          densityChartPresenter.
+]
+
+{ #category : #'initialization - lazy presenters' }
 IllimaniAllocationProfilerUI >> initializeHeatmapPresenter [
 
 	| roassalPresenterByClass roassalPresenterByMethod |
@@ -202,35 +238,13 @@ IllimaniAllocationProfilerUI >> initializeNotebook [
 		addPageTitle: 'Memory' provider: [ self memoryTablePresenter  ];
 		addPageTitle: 'Allocated Objects' provider: [ self allocatedObjectsTablePresenter ];
 		addPageTitle: 'Heatmap' provider: [ self heatMapPresenter ];
-		addPageTitle: 'Palu4' provider: [ self palu4 ];
+		addPageTitle: 'Density' provider: [ self densityChart ];
 		addPageTitle: 'Allocations per Second Total'
 		provider: [ self allocatedObjectsPerSecondPresenter ];
 		addPageTitle: 'Allocations per Second per Allocator'
 		provider: [ self allocationsPerSecondPerAllocatorPresenter ];
 
 		addPageTitle: 'Evaluator' provider: [ self codeEvaluator ];
-		yourself
-]
-
-{ #category : #'initialization - lazy presenters' }
-IllimaniAllocationProfilerUI >> initializePalu4 [
-
-	| groupedData averageScavengers minInizializationTime totalTime canvas |
-	totalTime := profiler objectAllocations last initializationTimestamp
-		- profiler objectAllocations first initializationTimestamp.
-	averageScavengers := (totalTime / profiler incrementalGCCount) asInteger.
-
-	minInizializationTime := profiler objectAllocations first initializationTimestamp.
-	groupedData := profiler objectAllocations groupedBy: [ :model |
-		model initializationTimestamp - minInizializationTime // averageScavengers ].
-
-	canvas := IllimaniDistributionForFinalization new
-		x: groupedData keys;
-		y: (groupedData collect: [ :collection | collection sum: #totalSizeInBytes ]) values;
-		xTitle: 'Scavenges';
-		palu4.
-	palu4 := SpRoassalPresenter new
-		canvas: canvas;
 		yourself
 ]
 
@@ -357,13 +371,6 @@ IllimaniAllocationProfilerUI >> notebookPresenter [
 IllimaniAllocationProfilerUI >> objectAllocationProfiler: aProfiler [
 
 	profiler := aProfiler
-]
-
-{ #category : #'accessing - lazy presenters' }
-IllimaniAllocationProfilerUI >> palu4 [
-
-	palu4 ifNil: [ self initializePalu4 ].
-	^ palu4
 ]
 
 { #category : #actions }
