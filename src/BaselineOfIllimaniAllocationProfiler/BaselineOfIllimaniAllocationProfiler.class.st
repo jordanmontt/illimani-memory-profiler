@@ -16,7 +16,6 @@ BaselineOfIllimaniAllocationProfiler >> baseline: spec [
 		spec package: 'IllimaniAllocationProfiler' with: [ spec requires: #( 'MethodProxies' 'SpaceAndTime' ) ].
 		spec package: 'IllimaniAllocationProfiler-Tests' with: [ spec requires: #( 'IllimaniAllocationProfiler' ) ].
 		spec package: 'IllimaniAllocationProfiler-UI' with: [ spec requires: #( 'IllimaniAllocationProfiler' ) ].
-		spec package: 'IllimaniBenchmarker'.
 
 		"External dependencies"
 		spec baseline: 'MethodProxies'
@@ -35,6 +34,6 @@ BaselineOfIllimaniAllocationProfiler >> baseline: spec [
 
 		"Groups"
 		spec group: 'default' with: #( 'core' 'tests' ).
-		spec group: 'core' with: #( 'IllimaniAllocationProfiler' 'IllimaniAllocationProfiler-UI' 'IllimaniBenchmarker' ).
+		spec group: 'core' with: #( 'IllimaniAllocationProfiler' 'IllimaniAllocationProfiler-UI' ).
 		spec group: 'tests' with: #( 'IllimaniAllocationProfiler-Tests' ) ]
 ]
