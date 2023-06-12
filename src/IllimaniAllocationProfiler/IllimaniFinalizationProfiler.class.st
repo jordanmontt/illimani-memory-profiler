@@ -37,7 +37,7 @@ IllimaniFinalizationProfiler >> cleanProfilingData [
 IllimaniFinalizationProfiler >> forceFinalizationOfObjects [
 
 	"We force the finalization timestamp for the not yet finalized objects."
-	finalizationRegistry valuesDo: #finalize.
+	finalizationRegistry values do: #finalize.
 	"Then we stop referencing the finalization registry to not re-finalize the objects."
 	finalizationRegistry := FinalizationRegistry new.
 

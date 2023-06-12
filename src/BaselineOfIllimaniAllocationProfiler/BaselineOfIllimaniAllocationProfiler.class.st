@@ -24,7 +24,7 @@ BaselineOfIllimaniAllocationProfiler >> baseline: spec [
 		"spec baseline: 'SpaceAndTime'
 			with: [ spec repository: 'github://jordanmontt/spaceAndTime/src' ]."
 
-		"Pharo 10"
+		"Loading Roassal for Pharo 10"
 		spec
 			for: #'pharo10.x' do: [
 				spec
