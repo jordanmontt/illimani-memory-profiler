@@ -258,14 +258,6 @@ IllimaniAllocationProfilerUI >> initializePresenters [
 ]
 
 { #category : #'initialization - lazy presenters' }
-IllimaniAllocationProfilerUI >> initializeRoassalPresenters [
-
-	self initializeAllocatedObjectsPerSecond.
-	self initializeAllocationsPerSecondPerAllocator.
-	self initializeHeatmapPresenter
-]
-
-{ #category : #'initialization - lazy presenters' }
 IllimaniAllocationProfilerUI >> initializeSummaryAndEvaluatorPresenter [
 
 	| statsAndEvaluatorLayout statsPresenter |
@@ -368,7 +360,7 @@ IllimaniAllocationProfilerUI >> notebookPresenter [
 ]
 
 { #category : #accessing }
-IllimaniAllocationProfilerUI >> objectAllocationProfiler: aProfiler [
+IllimaniAllocationProfilerUI >> profiler: aProfiler [
 
 	profiler := aProfiler
 ]
@@ -376,8 +368,10 @@ IllimaniAllocationProfilerUI >> objectAllocationProfiler: aProfiler [
 { #category : #actions }
 IllimaniAllocationProfilerUI >> refresh [
 
-	self initializeRoassalPresenters.
-	self layout: self defaultLayout
+	self layout: self defaultLayout.
+	heatmapPresenter := nil.
+	allocationsPerSecondPerAllocatorPresenter := nil.
+	allocatedObjectsPerSecondPresenter := nil
 ]
 
 { #category : #announcements }

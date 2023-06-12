@@ -3,9 +3,9 @@ Class {
 	#superclass : #SpPresenter,
 	#instVars : [
 		'tablePresenter',
-		'model',
 		'totalAllocations',
-		'inputPresenter'
+		'inputPresenter',
+		'objectAllocations'
 	],
 	#category : #'IllimaniAllocationProfiler-UI-Widgets'
 }
@@ -31,9 +31,9 @@ AllocatedObjectsTablePresenter >> filterTable: aText [
 
 	| newItems |
 	aText ifEmpty: [
-		tablePresenter items: model.
+		tablePresenter items: objectAllocations.
 		^ self ].
-	newItems := model select: [ :item |
+	newItems := objectAllocations select: [ :item |
 		item value asString includesSubstring: aText caseSensitive: false ].
 	tablePresenter items: newItems
 ]
@@ -60,13 +60,13 @@ AllocatedObjectsTablePresenter >> initializePresenters [
 			title: '%'
 			evaluated: [:e |
 				(((e key / totalAllocations) * 100) asFloat printShowingDecimalPlaces: 2) , '%']);
-		items: model;
+		items: objectAllocations;
 		yourself
 ]
 
 { #category : #'accessing - model' }
 AllocatedObjectsTablePresenter >> setModelBeforeInitialization: aModel [
 
-	model := (aModel collect: #allocatedObjectClass as: Bag) sortedCounts.
-	totalAllocations := model sum: [ :a | a key ]
+	objectAllocations := (aModel collect: #allocatedObjectClass as: Bag) sortedCounts.
+	totalAllocations := objectAllocations sum: [ :a | a key ]
 ]

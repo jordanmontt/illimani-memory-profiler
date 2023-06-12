@@ -4,7 +4,7 @@ Extension { #name : #IllimaniAllocationProfiler }
 IllimaniAllocationProfiler >> open [
 
 	^ (IllimaniAllocationProfilerUI illimaniAnnouncer: illimaniAnnouncer)
-		  objectAllocationProfiler: self;
+		  profiler: self;
 		  open;
 		  yourself
 ]

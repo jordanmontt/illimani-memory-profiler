@@ -5,7 +5,7 @@ Class {
 	#name : #AllocationSummaryPresenter,
 	#superclass : #SpPresenter,
 	#instVars : [
-		'model'
+		'profiler'
 	],
 	#category : #'IllimaniAllocationProfiler-UI-Widgets'
 }
@@ -54,57 +54,57 @@ AllocationSummaryPresenter >> defaultLayout [
 { #category : #accessing }
 AllocationSummaryPresenter >> fullGCCount [
 
-	^ model fullGCCount asString
+	^ profiler fullGCCount asString
 ]
 
 { #category : #accessing }
 AllocationSummaryPresenter >> incrementalGCCount [
 
-	^ model incrementalGCCount asString
+	^ profiler incrementalGCCount asString
 ]
 
 { #category : #accessing }
 AllocationSummaryPresenter >> numberOfClasses [
 
-	^ model stats numberOfClasses asString
+	^ profiler stats numberOfClasses asString
 ]
 
 { #category : #accessing }
 AllocationSummaryPresenter >> numberOfMethods [
 
-	^ model stats numberOfMethods asString
+	^ profiler stats numberOfMethods asString
 ]
 
 { #category : #'accessing - model' }
 AllocationSummaryPresenter >> setModelBeforeInitialization: aModel [
 
-	model := aModel
+	profiler := aModel
 ]
 
 { #category : #accessing }
 AllocationSummaryPresenter >> timeDifferenceBetweenFirstAndLastAllocation [
 
-	^ (Duration microSeconds: model stats timeDifferenceBetweenFirstAndLastAllocation)
+	^ (Duration microSeconds: profiler stats timeDifferenceBetweenFirstAndLastAllocation)
 		  humanReadableStringWithOnlySeconds
 ]
 
 { #category : #accessing }
 AllocationSummaryPresenter >> totalAllocatedMemory [
 
-	^ model stats totalAllocatedMemory humanReadableByteSizeString
+	^ profiler stats totalAllocatedMemory humanReadableByteSizeString
 ]
 
 { #category : #accessing }
 AllocationSummaryPresenter >> totalAllocatedObjects [
 
-	^ model stats totalAllocatedObjects asStringWithCommas
+	^ profiler stats totalAllocatedObjects asStringWithCommas
 ]
 
 { #category : #accessing }
 AllocationSummaryPresenter >> totalEqualAllocatedObjects [
 
 	| totalEqualAllocatedObjects |
-	totalEqualAllocatedObjects := model stats totalEqualAllocatedObjects.
+	totalEqualAllocatedObjects := profiler stats totalEqualAllocatedObjects.
 
 	^ totalEqualAllocatedObjects = 1
 		ifTrue: [ '-' ]
@@ -114,11 +114,11 @@ AllocationSummaryPresenter >> totalEqualAllocatedObjects [
 { #category : #accessing }
 AllocationSummaryPresenter >> totalGCTime [
 
-	^ model totalGCTime asDuration humanReadableStringWithOnlySeconds
+	^ profiler totalGCTime asDuration humanReadableStringWithOnlySeconds
 ]
 
 { #category : #accessing }
 AllocationSummaryPresenter >> totalProfiledTime [
 
-	^ (Duration microSeconds: model totalProfiledTime) humanReadableStringWithOnlySeconds
+	^ (Duration microSeconds: profiler totalProfiledTime) humanReadableStringWithOnlySeconds
 ]
