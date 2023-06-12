@@ -11,20 +11,24 @@ Class {
 		'classesToAvoidInTheContextSearch',
 		'captureAllObjects',
 		'copyExecutionStack',
-		'graphWalker',
 		'keepReferencesToAllocatedObjects',
 		'objectClassesToCapture',
-		'copyObjectHash'
+		'copyObjectHash',
+		'samplingCounter'
 	],
 	#category : #'IllimaniAllocationProfiler-Allocation Sites Profiler'
 }
 
 { #category : #evaluating }
-IllimaniProfilerMpHandler >> afterExecutionWithReceiver: receiver arguments: arguments returnValue: returnValue [
+IllimaniProfilerMpHandler >> afterExecutionWithReceiver: receiver arguments: arguments returnValue: newlyAllocatedObject [
 
-	(self shouldICaptureTheObject: returnValue) ifTrue: [
-		self handleAllocationOfObject: returnValue ].
-	^ returnValue
+	"Sampling support"
+	"counter := counter + 1.
+	counter % 2 = 0 ifFalse: [ ^ newlyAllocatedObject ]."
+	
+	(self shouldICaptureTheObject: newlyAllocatedObject) ifTrue: [
+		self handleObjectAllocation: newlyAllocatedObject ].
+	^ newlyAllocatedObject
 ]
 
 { #category : #api }
@@ -39,13 +43,8 @@ IllimaniProfilerMpHandler >> captureAllObjects [
 { #category : #api }
 IllimaniProfilerMpHandler >> clean [
 
-	self cleanAllocations
-]
-
-{ #category : #api }
-IllimaniProfilerMpHandler >> cleanAllocations [
-
-	objectAllocations removeAll
+	objectAllocations removeAll.
+	samplingCounter := 0
 ]
 
 { #category : #api }
@@ -108,7 +107,7 @@ IllimaniProfilerMpHandler >> filterContext: aContext ignoringClass: aClass [
 ]
 
 { #category : #evaluating }
-IllimaniProfilerMpHandler >> handleAllocationOfObject: newlyAllocatedObject [
+IllimaniProfilerMpHandler >> handleObjectAllocation: newlyAllocatedObject [
 
 	| filteredContext  allocationInformationHolder |
 
@@ -124,7 +123,7 @@ IllimaniProfilerMpHandler >> handleAllocationOfObject: newlyAllocatedObject [
 		allocatorMethod: filteredContext compiledCode method;
 		allocatedObjectClass: newlyAllocatedObject class;
 		contextFingerprint: filteredContext;
-		totalSizeInBytes: "(graphWalker rootObject: newlyAllocatedObject) totalSizeInBytes" newlyAllocatedObject sizeInMemory;
+		totalSizeInBytes: newlyAllocatedObject sizeInMemory;
 		initializationTimestamp: Time microsecondClockValue.
 
 	objectAllocations add: allocationInformationHolder
@@ -139,8 +138,8 @@ IllimaniProfilerMpHandler >> initialize [
 	copyObjectHash := false.
 	keepReferencesToAllocatedObjects := false.
 	objectClassesToCapture := {  }.
+	samplingCounter := 0.
 	objectAllocations := OrderedCollection new.
-	graphWalker := GraphSpaceStatistics new.
 
 	self initializeClassesToAvoidInContextSearch
 ]
@@ -184,5 +183,5 @@ IllimaniProfilerMpHandler >> objectsToCapture: aCollectionOfClasses [
 { #category : #testing }
 IllimaniProfilerMpHandler >> shouldICaptureTheObject: returnValue [
 
-	^ captureAllObjects | (objectClassesToCapture includes: returnValue class)
+	^ captureAllObjects or: [ objectClassesToCapture includes: returnValue class ]
 ]

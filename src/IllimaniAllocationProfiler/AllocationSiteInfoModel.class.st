@@ -93,6 +93,8 @@ AllocationSiteInfoModel >> fullMethodName [
 { #category : #initialization }
 AllocationSiteInfoModel >> getContextFingerprintStream: aContext [
 
+	self flag: 'This is the first "naive" implementation of the context fingerprint'.
+
 	^ String streamContents: [ :stream |
 		| iterator |
 		iterator := aContext.

@@ -57,8 +57,8 @@ IllimaniFinalizationProfiler >> initialize [
 	super initialize.
 	finalizationRegistry := FinalizationRegistry new.
 	profilerHandler := IllimaniFinalizationHandler new
-		                   profiler: self;
-		                   yourself.
+		profiler: self;
+		yourself.
 	self initializeMethodProxies: profilerHandler
 ]
 
