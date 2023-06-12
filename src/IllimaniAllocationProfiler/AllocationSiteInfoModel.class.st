@@ -49,6 +49,12 @@ AllocationSiteInfoModel >> allocatorClass: anObject [
 ]
 
 { #category : #accessing }
+AllocationSiteInfoModel >> allocatorMethod [
+
+	^ allocatorMethod
+]
+
+{ #category : #accessing }
 AllocationSiteInfoModel >> allocatorMethod: aCompiledMethod [
 
 	allocatorMethod := aCompiledMethod
