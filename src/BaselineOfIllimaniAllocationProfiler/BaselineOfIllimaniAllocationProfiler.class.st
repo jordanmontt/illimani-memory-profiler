@@ -13,7 +13,7 @@ BaselineOfIllimaniAllocationProfiler >> baseline: spec [
 	<baseline>
 	spec for: #common do: [
 		"Packages"
-		spec package: 'IllimaniAllocationProfiler' with: [ spec requires: #( 'MethodProxies' 'SpaceAndTime' ) ].
+		spec package: 'IllimaniAllocationProfiler' with: [ spec requires: #( 'MethodProxies') ].
 		spec package: 'IllimaniAllocationProfiler-Tests' with: [ spec requires: #( 'IllimaniAllocationProfiler' ) ].
 		spec package: 'IllimaniAllocationProfiler-UI' with: [ spec requires: #( 'IllimaniAllocationProfiler' ) ].
 
