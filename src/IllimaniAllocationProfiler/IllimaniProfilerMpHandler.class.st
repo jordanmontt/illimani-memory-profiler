@@ -24,9 +24,9 @@ Class {
 { #category : #evaluating }
 IllimaniProfilerMpHandler >> afterExecutionWithReceiver: receiver arguments: arguments returnValue: newlyAllocatedObject [
 
-	"Sampling support"
-	"counter := counter + 1.
-	counter % 2 = 0 ifFalse: [ ^ newlyAllocatedObject ]."
+	"Sampling"
+	samplingCounter := samplingCounter + 1.
+	samplingCounter % samplingRate = 0 ifFalse: [ ^ newlyAllocatedObject ].
 	
 	(self shouldICaptureTheObject: newlyAllocatedObject) ifTrue: [
 		self handleObjectAllocation: newlyAllocatedObject ].
