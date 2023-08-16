@@ -37,7 +37,7 @@ IllimaniRoassalChartBuilder >> allocatedObjectsPerSecondLineChartCanvas [
 
 	| chart linePlot |
 	linePlot := self createLinePlotForAllocations: model objectAllocations.
-	chart := RSChart new.
+	chart := RSCompositeChart new.
 	chart add: linePlot.
 	self addTicksToLabel: chart.
 	self addLabelsX: 'Seconds' y: 'Total Allocated Objects' forChart: chart.
