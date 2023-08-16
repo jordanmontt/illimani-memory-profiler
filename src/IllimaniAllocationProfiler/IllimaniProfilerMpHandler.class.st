@@ -14,7 +14,8 @@ Class {
 		'keepReferencesToAllocatedObjects',
 		'objectClassesToCapture',
 		'copyObjectHash',
-		'samplingCounter'
+		'samplingCounter',
+		'objectClassesToIgnore'
 	],
 	#category : #'IllimaniAllocationProfiler-Allocation Sites Profiler'
 }
@@ -138,6 +139,7 @@ IllimaniProfilerMpHandler >> initialize [
 	copyObjectHash := false.
 	keepReferencesToAllocatedObjects := false.
 	objectClassesToCapture := {  }.
+	objectClassesToIgnore := {  }.
 	samplingCounter := 0.
 	objectAllocations := OrderedCollection new.
 
@@ -169,19 +171,20 @@ IllimaniProfilerMpHandler >> objectAllocations [
 ]
 
 { #category : #accessing }
-IllimaniProfilerMpHandler >> objectsToCapture [
-
-	^ objectClassesToCapture
-]
-
-{ #category : #accessing }
 IllimaniProfilerMpHandler >> objectsToCapture: aCollectionOfClasses [
 
 	objectClassesToCapture := aCollectionOfClasses
 ]
 
+{ #category : #accessing }
+IllimaniProfilerMpHandler >> objectsToIgnore: aCollectionOfClasses [
+
+	objectClassesToIgnore := aCollectionOfClasses
+]
+
 { #category : #testing }
 IllimaniProfilerMpHandler >> shouldICaptureTheObject: returnValue [
 
-	^ captureAllObjects or: [ objectClassesToCapture includes: returnValue class ]
+	^ (objectClassesToIgnore includes: returnValue class) not and: [
+		  captureAllObjects or: [ objectClassesToCapture includes: returnValue class ] ]
 ]

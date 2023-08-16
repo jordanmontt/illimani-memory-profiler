@@ -56,23 +56,42 @@ IllimaniAllocationProfilerTest >> testProfileOnExample [
 ]
 
 { #category : #tests }
-IllimaniAllocationProfilerTest >> testProfileOnExampleCapturingAllButMorphic [
-
-	| classesToIgnore |
-	classesToIgnore := { ByteString . Array. String . OrderedCollection. ByteArray }.
+IllimaniAllocationProfilerTest >> testProfileOnExampleCapturingAll [
 
 	illimani
 		captureAllObjects;
 		copyExecutionStack;
-		ignoreAllocators: classesToIgnore;
 		profileOn: [ 1000 timesRepeat: [ IllimaniAllocationProfiler new ] ].
+
+	"Take one random allocation to check"
+	self assert: illimani objectAllocations last context class equals: Context.
+
+	self assert: illimani objectAllocations size > 1000.
+	illimani objectAllocations do: [ :alloc |
+		"Stack was copied"
+		self assert: alloc context class equals: Context ]
+]
+
+{ #category : #tests }
+IllimaniAllocationProfilerTest >> testProfileOnExampleCapturingAllAndIgnoringClasses [
+
+	| allocatorClassesToIgnore |
+	allocatorClassesToIgnore := { ByteString . OrderedCollection . Point . Array }.
+
+	illimani
+		captureAllObjects;
+		copyExecutionStack;
+		objectsToIgnore: allocatorClassesToIgnore;
+		profileOn: [ 
+			allocatorClassesToIgnore do: [ :aClass | aClass new ].
+			1000 timesRepeat: [ IllimaniAllocationProfiler new ] ].
 
 	"Take one random allocation to check"
 	self assert: illimani objectAllocations last context class equals: Context.
 	
 	self assert: illimani objectAllocations size > 1000.
 	illimani objectAllocations do: [ :alloc |
-		self deny: (classesToIgnore includes: alloc allocatorClass).
+		self deny: (allocatorClassesToIgnore includes: alloc allocatedObjectClass).
 		"Stack was copied"
 		self assert: alloc context class equals: Context ]
 ]

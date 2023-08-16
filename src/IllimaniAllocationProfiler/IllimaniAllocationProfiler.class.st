@@ -104,12 +104,6 @@ IllimaniAllocationProfiler >> copyObjectIdentityHash [
 	profilerHandler copyObjectIdentityHash
 ]
 
-{ #category : #api }
-IllimaniAllocationProfiler >> ignoreAllocators: aCollectionOfClasses [
-
-	profilerHandler ignoreAllocators: aCollectionOfClasses
-]
-
 { #category : #initialization }
 IllimaniAllocationProfiler >> initialize [
 
@@ -135,6 +129,12 @@ IllimaniAllocationProfiler >> objectAllocations [
 IllimaniAllocationProfiler >> objectsToCapture: aCollectionOfClasses [
 
 	profilerHandler objectsToCapture: aCollectionOfClasses
+]
+
+{ #category : #api }
+IllimaniAllocationProfiler >> objectsToIgnore: aCollectionOfClasses [
+
+	profilerHandler objectsToIgnore: aCollectionOfClasses
 ]
 
 { #category : #accessing }
