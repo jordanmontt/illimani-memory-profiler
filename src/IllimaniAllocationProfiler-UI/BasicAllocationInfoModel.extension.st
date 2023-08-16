@@ -5,7 +5,7 @@ BasicAllocationInfoModel >> inspectableAssociations [
 
 	^ {
 		  ('Allocated Object Class' -> allocatedObjectClass).
-		  ('Total Size in Bytes' -> totalSizeInBytes).
+		  ('Total Memory Size' -> totalSizeInBytes humanReadableByteSizeString).
 		  ('Initialization timestamp' -> initializationTimestamp).
 		  ('Finalization timestamp' -> finalizationTimestamp).
 		  ('Object''s lifetime' -> self lifetimeAsString) }

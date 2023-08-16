@@ -1,9 +1,6 @@
 Class {
 	#name : #MpNullMethodProxy,
 	#superclass : #MpMethodProxy,
-	#pools : [
-		'MpMethodProxyPool'
-	],
 	#category : #'IllimaniAllocationProfiler-Profiler Instrumentator'
 }
 

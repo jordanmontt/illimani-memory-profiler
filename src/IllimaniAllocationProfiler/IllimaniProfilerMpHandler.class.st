@@ -15,7 +15,8 @@ Class {
 		'objectClassesToCapture',
 		'copyObjectHash',
 		'samplingCounter',
-		'objectClassesToIgnore'
+		'objectClassesToIgnore',
+		'samplingRate'
 	],
 	#category : #'IllimaniAllocationProfiler-Allocation Sites Profiler'
 }
@@ -73,11 +74,12 @@ IllimaniProfilerMpHandler >> copyObjectIdentityHash [
 IllimaniProfilerMpHandler >> defaultClassesToAvoidInTheContextSearch [
 
 	^ {
-		IllimaniProfilerMpHandler.
-		MpMethodProxy.
-		"BlockClosure."
-		FullBlockClosure.
-		"CompiledBlock" }
+		  Process.
+		  IllimaniProfilerMpHandler.
+		  MpMethodProxy.
+		  "BlockClosure."
+		  FullBlockClosure
+		  "CompiledBlock" }
 ]
 
 { #category : #api }
@@ -138,11 +140,14 @@ IllimaniProfilerMpHandler >> initialize [
 	captureAllObjects := false.
 	copyObjectHash := false.
 	keepReferencesToAllocatedObjects := false.
+	
 	objectClassesToCapture := {  }.
 	objectClassesToIgnore := {  }.
-	samplingCounter := 0.
 	objectAllocations := OrderedCollection new.
-
+	
+	samplingCounter := 0.
+	samplingRate := 1.
+	
 	self initializeClassesToAvoidInContextSearch
 ]
 
@@ -180,6 +185,13 @@ IllimaniProfilerMpHandler >> objectsToCapture: aCollectionOfClasses [
 IllimaniProfilerMpHandler >> objectsToIgnore: aCollectionOfClasses [
 
 	objectClassesToIgnore := aCollectionOfClasses
+]
+
+{ #category : #api }
+IllimaniProfilerMpHandler >> samplingRate: anInteger [
+	"The anInteger needs to be an integer number between 1 and 100.  "
+
+	samplingRate := (100 / anInteger) asInteger
 ]
 
 { #category : #testing }

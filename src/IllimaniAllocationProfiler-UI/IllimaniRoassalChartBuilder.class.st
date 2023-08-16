@@ -29,11 +29,7 @@ IllimaniRoassalChartBuilder >> addLabelsX: xText y: yText forChart: chart [
 { #category : #'chart construction' }
 IllimaniRoassalChartBuilder >> addTicksToLabel: chart [
 
-	chart
-		add: RSHorizontalTick new;
-		add: (RSVerticalTick new
-			labelConversion: [ :value | value asInteger asStringWithCommas ];
-			yourself)
+	chart verticalTick labelConversion: [ :value | value asInteger asStringWithCommas ]
 ]
 
 { #category : #'api - line chart' }
@@ -67,7 +63,7 @@ IllimaniRoassalChartBuilder >> allocatedObjectsPerSecondPerMethodLineChartCanvas
 IllimaniRoassalChartBuilder >> constructPerSecondLineChart: aCollection [
 
 	| chart linePlot legend |
-	chart := RSChart new.
+	chart := RSCompositeChart new.
 	legend := RSLegend new
 		container: chart canvas;
 		yourself.

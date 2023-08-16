@@ -194,7 +194,7 @@ IllimaniAllocationProfilerUI >> initializeDensityChart [
 		          yLog;
 		          xTitle: 'Initialization time in seconds';
 		          yTitle: 'Memory (log scale)';
-		          title: 'Object initialization density chart';
+		          title: 'Object lifetimes density';
 		          densityChartPresenter.
 ]
 

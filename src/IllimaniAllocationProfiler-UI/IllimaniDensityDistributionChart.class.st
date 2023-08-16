@@ -45,7 +45,7 @@ IllimaniDensityDistributionChart >> densityChartCanvas [
 	plot := RSLinePlot new
 		color: (Color fromHexString: '#CD5C5C');
 		x: x y: y.
-	chart addPlot: plot.
+	chart add: plot.
 	"markerColor := Color blue.
 	chart addDecoration: (marker := RSXMarkerDecoration new
 		sumUpTo: 0.6""0.75"";
@@ -53,9 +53,9 @@ IllimaniDensityDistributionChart >> densityChartCanvas [
 		width: 0.6;
 		yourself). "
 	
-	"self addTickDecorations."
+	self addTickDecorations.
 	
-	chart minValueX:  -1.
+	chart minChartValueX: -1.
 	self addChartTitles.
 	
 	chart build.
@@ -85,7 +85,7 @@ IllimaniDensityDistributionChart >> densityChartPresenter [
 IllimaniDensityDistributionChart >> initialize [
 
 	super initialize.
-	chart := RSChart new.
+	chart := RSCompositeChart new.
 
 	xTitle := ''.
 	yTitle := ''.
