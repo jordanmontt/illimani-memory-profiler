@@ -53,7 +53,7 @@ morphicClasses := morphicPackages flatCollect: #classes as: Set.
 
 profiler := IllimaniAllocationProfiler new
 	captureAllObjects;
-	ignoreAllocators: morphicClasses;
+	objectsToIgnore: morphicClasses;
 	profileFor: 5 seconds;
 	yourself.
 	
@@ -104,7 +104,7 @@ profiler open.
 If you want to capture all the allocations of objects but ignoring some of them, you can use 
 
 ```st
-profiler ignoreAllocators: { ByteString . ByteArray }.
+profiler objectsToIgnore: { ByteString . ByteArray }.
 ```
 
 You can keep the allocated objects. This is useful is for example you want to know how many equal objects did you allocated.
@@ -125,8 +125,4 @@ Without the UI, because the profiler is independent from the UI, you can access 
 - Illimani uses [method proxies](https://github.com/pharo-contributions/MethodProxies) library to capture the allocations. It insert a proxy in `Behavior>>basicNew:` and `Behavior>>basicNew`.
 - Illimani also uses [space and time](https://github.com/tesonep/spaceAndTime) to calculate the total size in memory of an object.
 - It has an statistics model that helps with the calculations of allocations grouping them by classes and methods and sorting them by number of allocations. 
-- The UI is completly independent of the profiler. It can be used without it. You will have access to all allocations and to the same statistics.
-
-Observations:
-
-- Profile the profiler :p for big arrays the presenters and the visualizations take a long time to open
+- The UI is independent of the profiler. It can be used without it. You will have access to all allocations and to the same statistics.
