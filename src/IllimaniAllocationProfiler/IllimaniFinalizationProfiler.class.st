@@ -74,6 +74,12 @@ IllimaniFinalizationProfiler >> objectAllocations [
 	^ profilerHandler objectAllocations
 ]
 
+{ #category : #api }
+IllimaniFinalizationProfiler >> samplingRate: anInteger [
+
+	profilerHandler samplingRate: anInteger
+]
+
 { #category : #profiling }
 IllimaniFinalizationProfiler >> startAndRunGCProcess [
 

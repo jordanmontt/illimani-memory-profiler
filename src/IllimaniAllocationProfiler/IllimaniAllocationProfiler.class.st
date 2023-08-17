@@ -143,6 +143,12 @@ IllimaniAllocationProfiler >> profilerHandler [
 	^ profilerHandler
 ]
 
+{ #category : #api }
+IllimaniAllocationProfiler >> samplingRate: anInteger [
+
+	profilerHandler samplingRate: anInteger
+]
+
 { #category : #evaluating }
 IllimaniAllocationProfiler >> startProfiling [
 

@@ -187,6 +187,11 @@ IllimaniProfilerMpHandler >> objectsToIgnore: aCollectionOfClasses [
 	objectClassesToIgnore := aCollectionOfClasses
 ]
 
+{ #category : #accessing }
+IllimaniProfilerMpHandler >> samplingRate [
+	^ samplingRate
+]
+
 { #category : #api }
 IllimaniProfilerMpHandler >> samplingRate: anInteger [
 	"The anInteger needs to be an integer number between 1 and 100.  "

@@ -85,13 +85,21 @@ IllimaniDensityDistributionChart >> densityChartPresenter [
 IllimaniDensityDistributionChart >> initialize [
 
 	super initialize.
-	chart := RSCompositeChart new.
+	chart := self initializeChart.
 
 	xTitle := ''.
 	yTitle := ''.
 	title := ''.
 	numberOfTicks := 10.
 	isMemoryChart := true
+]
+
+{ #category : #initialization }
+IllimaniDensityDistributionChart >> initializeChart [
+
+	^ RSCompositeChart new
+		  colors: NSScale google20;
+		  yourself
 ]
 
 { #category : #api }

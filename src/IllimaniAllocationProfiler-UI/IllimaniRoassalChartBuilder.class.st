@@ -37,7 +37,9 @@ IllimaniRoassalChartBuilder >> allocatedObjectsPerSecondLineChartCanvas [
 
 	| chart linePlot |
 	linePlot := self createLinePlotForAllocations: model objectAllocations.
-	chart := RSCompositeChart new.
+	
+	chart := self initializeChart.
+	
 	chart add: linePlot.
 	self addTicksToLabel: chart.
 	self addLabelsX: 'Seconds' y: 'Total Allocated Objects' forChart: chart.
@@ -63,7 +65,9 @@ IllimaniRoassalChartBuilder >> allocatedObjectsPerSecondPerMethodLineChartCanvas
 IllimaniRoassalChartBuilder >> constructPerSecondLineChart: aCollection [
 
 	| chart linePlot legend |
-	chart := RSCompositeChart new.
+
+	chart := self initializeChart.
+
 	legend := RSLegend new
 		container: chart canvas;
 		yourself.
@@ -121,6 +125,14 @@ IllimaniRoassalChartBuilder >> heatmapAllocatorAllocatedCanvasByMethod [
 		data: (model stats topNAllocationsByMethod: topCalculationsNumber);
 		build;
 		canvas
+]
+
+{ #category : #'api - line chart' }
+IllimaniRoassalChartBuilder >> initializeChart [
+
+	^ RSCompositeChart new
+		  colors: NSScale google20;
+		  yourself
 ]
 
 { #category : #accessing }

@@ -95,3 +95,21 @@ IllimaniAllocationProfilerTest >> testProfileOnExampleCapturingAllAndIgnoringCla
 		"Stack was copied"
 		self assert: alloc context class equals: Context ]
 ]
+
+{ #category : #tests }
+IllimaniAllocationProfilerTest >> testSamplingRate [
+
+	| allocatedByteSrings |
+	illimani
+		captureAllObjects;
+		samplingRate: 33;
+		profileOn: [ 90 timesRepeat: [ ByteString new ] ].
+
+	allocatedByteSrings := (illimani objectAllocations select:
+		[ :e | e allocatedObjectClass = ByteString ]) size.
+
+	"We are cheking in this range becase the profiler makes some allocations that are
+	necessary for the profiler to work, like Durations objects. So we cannot chack that the
+	allocations are exacty 1/3 of the total."
+	self assert: allocatedByteSrings >= 30 & allocatedByteSrings < 40
+]
