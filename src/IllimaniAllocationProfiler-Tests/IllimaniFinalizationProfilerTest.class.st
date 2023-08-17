@@ -2,7 +2,7 @@ Class {
 	#name : #IllimaniFinalizationProfilerTest,
 	#superclass : #TestCase,
 	#instVars : [
-		'illimani'
+		'finalizationProfiler'
 	],
 	#category : #'IllimaniAllocationProfiler-Tests-Profiler'
 }
@@ -11,21 +11,21 @@ Class {
 IllimaniFinalizationProfilerTest >> setUp [
 
 	super setUp.
-	illimani := IllimaniFinalizationProfiler new
+	finalizationProfiler := IllimaniFinalizationProfiler new
 ]
 
 { #category : #running }
 IllimaniFinalizationProfilerTest >> tearDown [
 
-	illimani forceUninstall.
-	illimani := nil.
+	finalizationProfiler forceUninstall.
+	finalizationProfiler := nil.
 	super tearDown
 ]
 
 { #category : #tests }
 IllimaniFinalizationProfilerTest >> testProfileOn [
 
-	illimani
+	finalizationProfiler
 		captureAllObjects;
 		profileOn: [ 10 timesRepeat: [ IllimaniFinalizationProfiler new ] ].
 	
@@ -34,7 +34,7 @@ IllimaniFinalizationProfilerTest >> testProfileOn [
 	necessary to run the GC several times  "
 	10 timesRepeat: [ Smalltalk garbageCollect ].
 
-	self assert: illimani objectAllocations size > 10
+	self assert: finalizationProfiler objectAllocations size > 10
 ]
 
 { #category : #tests }
@@ -44,7 +44,7 @@ IllimaniFinalizationProfilerTest >> testProfileOnFinalizesCorrectly [
 	
 	timeNow := Time microsecondClockValue.
 	
-	illimani
+	finalizationProfiler
 		captureAllObjects;
 		profileOn: [ 10 timesRepeat: [ IllimaniFinalizationProfiler new ] ].
 	
@@ -53,7 +53,7 @@ IllimaniFinalizationProfilerTest >> testProfileOnFinalizesCorrectly [
 	necessary to run the GC several times  "
 	10 timesRepeat: [ Smalltalk garbageCollect ].
 
-	illimani objectAllocations do: [ :alloc |
+	finalizationProfiler objectAllocations do: [ :alloc |
 		"Finalization time must be after timeNow variable"
 		self assert: alloc finalizationTimestamp > timeNow ]
 ]
@@ -62,7 +62,7 @@ IllimaniFinalizationProfilerTest >> testProfileOnFinalizesCorrectly [
 IllimaniFinalizationProfilerTest >> testSamplingRate [
 
 	| allocatedByteSrings |
-	illimani
+	finalizationProfiler
 		captureAllObjects;
 		samplingRate: 20;
 		profileOn: [ 20 timesRepeat: [ ByteString new ] ].
@@ -72,7 +72,7 @@ IllimaniFinalizationProfilerTest >> testSamplingRate [
 	necessary to run the GC several times  "
 	20 timesRepeat: [ Smalltalk garbageCollect ].
 
-	allocatedByteSrings := (illimani objectAllocations select:
+	allocatedByteSrings := (finalizationProfiler objectAllocations select:
 		[ :e | e allocatedObjectClass = ByteString ]) size.
 
 	"We are cheking in this range becase the profiler makes some allocations that are
