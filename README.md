@@ -127,7 +127,6 @@ profiler samplingRate: 33.
 
 Without the UI, because the profiler is independent from the UI, you can access to some statistics. See the protocol `accessing - statistics` in the profiler to see the methods. Also, the profiler has a statistics model that groups and sorts the allocation by class and by methods. For example check 'profiler stats allocationsByClass.'
 
-![b](https://user-images.githubusercontent.com/33934979/220641933-fb5970d4-532f-4297-873c-f43b7d259c15.gif)
 ![2](https://github.com/jordanmontt/illimani-memory-profiler/assets/33934979/80a71d78-7deb-494f-9c56-ed32cef29600)
 
 ## Implementation
