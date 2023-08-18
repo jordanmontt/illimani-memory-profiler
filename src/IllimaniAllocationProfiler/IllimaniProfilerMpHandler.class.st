@@ -45,8 +45,7 @@ IllimaniProfilerMpHandler >> captureAllObjects [
 { #category : #api }
 IllimaniProfilerMpHandler >> clean [
 
-	objectAllocations removeAll.
-	samplingCounter := 0
+	self initializeDefaultValues
 ]
 
 { #category : #api }
@@ -136,19 +135,8 @@ IllimaniProfilerMpHandler >> handleObjectAllocation: newlyAllocatedObject [
 IllimaniProfilerMpHandler >> initialize [
 
 	super initialize.
-	copyExecutionStack := false.
-	captureAllObjects := false.
-	copyObjectHash := false.
-	keepReferencesToAllocatedObjects := false.
-	
-	objectClassesToCapture := {  }.
-	objectClassesToIgnore := {  }.
-	objectAllocations := OrderedCollection new.
-	
-	samplingCounter := 0.
-	samplingRate := 1.
-	
-	self initializeClassesToAvoidInContextSearch
+
+	self initializeDefaultValues
 ]
 
 { #category : #initialization }
@@ -156,6 +144,26 @@ IllimaniProfilerMpHandler >> initializeClassesToAvoidInContextSearch [
 
 	classesToAvoidInTheContextSearch := self defaultClassesToAvoidInTheContextSearch ,
 		(self defaultClassesToAvoidInTheContextSearch collect: [ :aClass | aClass class ])
+]
+
+{ #category : #initialization }
+IllimaniProfilerMpHandler >> initializeDefaultValues [
+
+	copyExecutionStack := false.
+	captureAllObjects := false.
+	copyObjectHash := false.
+	keepReferencesToAllocatedObjects := false.
+
+	objectClassesToCapture := {  }.
+	objectClassesToIgnore := {  }.
+	objectAllocations := OrderedCollection new.
+
+	samplingCounter := 0.
+	samplingRate := 1.
+
+	"classesToAvoidInContextSearch"
+	classesToAvoidInTheContextSearch := self defaultClassesToAvoidInTheContextSearch
+	  , (self defaultClassesToAvoidInTheContextSearch collect: [ :aClass | aClass class ])
 ]
 
 { #category : #api }
