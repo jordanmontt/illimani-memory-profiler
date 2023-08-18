@@ -177,15 +177,41 @@ IllimaniProfilerMpHandler >> objectAllocations [
 ]
 
 { #category : #accessing }
+IllimaniProfilerMpHandler >> objectsToCapture [
+
+	^ objectClassesToCapture
+]
+
+{ #category : #accessing }
 IllimaniProfilerMpHandler >> objectsToCapture: aCollectionOfClasses [
 
 	objectClassesToCapture := aCollectionOfClasses
 ]
 
 { #category : #accessing }
+IllimaniProfilerMpHandler >> objectsToIgnore [
+
+	^ objectClassesToIgnore
+]
+
+{ #category : #accessing }
 IllimaniProfilerMpHandler >> objectsToIgnore: aCollectionOfClasses [
 
 	objectClassesToIgnore := aCollectionOfClasses
+]
+
+{ #category : #accessing }
+IllimaniProfilerMpHandler >> samplingConter: anInteger [
+	"This method is only for testing! As a user, you don't normally will need to use this
+	accessor"
+
+	samplingCounter := anInteger
+]
+
+{ #category : #accessing }
+IllimaniProfilerMpHandler >> samplingCounter [
+
+	^ samplingCounter
 ]
 
 { #category : #accessing }

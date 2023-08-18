@@ -58,6 +58,24 @@ IllimaniProfilerMpHandlerTest >> testCaptureAllObjectsAndIgnoringClasses [
 ]
 
 { #category : #tests }
+IllimaniProfilerMpHandlerTest >> testCleanProfilingData [
+
+	handler
+		objectsToCapture: { Color . Point };
+		objectsToIgnore: { ByteString };
+		samplingRate: 20;
+		samplingConter: 22.
+
+	handler cleanObjectAllocations.
+
+	self assert: handler objectAllocations isEmpty.
+	self assert: handler samplingRate closeTo: 100 / 20.
+	self assert: handler samplingCounter equals: 0.
+	self assertCollection: handler objectsToCapture hasSameElements: { Color . Point }.
+	self assertCollection: handler objectsToIgnore hasSameElements: { ByteString }
+]
+
+{ #category : #tests }
 IllimaniProfilerMpHandlerTest >> testObjectsToCapture [
 
 	handler objectsToCapture: { Color . Point }.
