@@ -89,7 +89,7 @@ IllimaniAllocationProfiler >> captureAllObjects [
 { #category : #evaluating }
 IllimaniAllocationProfiler >> cleanProfilingData [
 
-	profilerHandler clean
+	profilerHandler cleanObjectAllocations
 ]
 
 { #category : #api }

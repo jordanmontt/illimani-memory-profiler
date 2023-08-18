@@ -37,15 +37,14 @@ IllimaniProfilerMpHandler >> afterExecutionWithReceiver: receiver arguments: arg
 IllimaniProfilerMpHandler >> captureAllObjects [
 	"When this turned to true I will capture all the allocations of all the objects"
 
-	captureAllObjects := true.
-	"It is necessary to put an empty array when wanting to capture all object allocations"
-	self objectsToCapture: {  }
+	captureAllObjects := true
 ]
 
 { #category : #api }
-IllimaniProfilerMpHandler >> clean [
+IllimaniProfilerMpHandler >> cleanObjectAllocations [
 
-	self initializeDefaultValues
+	objectAllocations removeAll.
+	samplingCounter := 0
 ]
 
 { #category : #api }
@@ -136,19 +135,6 @@ IllimaniProfilerMpHandler >> initialize [
 
 	super initialize.
 
-	self initializeDefaultValues
-]
-
-{ #category : #initialization }
-IllimaniProfilerMpHandler >> initializeClassesToAvoidInContextSearch [
-
-	classesToAvoidInTheContextSearch := self defaultClassesToAvoidInTheContextSearch ,
-		(self defaultClassesToAvoidInTheContextSearch collect: [ :aClass | aClass class ])
-]
-
-{ #category : #initialization }
-IllimaniProfilerMpHandler >> initializeDefaultValues [
-
 	copyExecutionStack := false.
 	captureAllObjects := false.
 	copyObjectHash := false.
@@ -164,6 +150,13 @@ IllimaniProfilerMpHandler >> initializeDefaultValues [
 	"classesToAvoidInContextSearch"
 	classesToAvoidInTheContextSearch := self defaultClassesToAvoidInTheContextSearch
 	  , (self defaultClassesToAvoidInTheContextSearch collect: [ :aClass | aClass class ])
+]
+
+{ #category : #initialization }
+IllimaniProfilerMpHandler >> initializeClassesToAvoidInContextSearch [
+
+	classesToAvoidInTheContextSearch := self defaultClassesToAvoidInTheContextSearch ,
+		(self defaultClassesToAvoidInTheContextSearch collect: [ :aClass | aClass class ])
 ]
 
 { #category : #api }
@@ -210,6 +203,8 @@ IllimaniProfilerMpHandler >> samplingRate: anInteger [
 { #category : #testing }
 IllimaniProfilerMpHandler >> shouldICaptureTheObject: returnValue [
 
-	^ (objectClassesToIgnore includes: returnValue class) not and: [
-		  captureAllObjects or: [ objectClassesToCapture includes: returnValue class ] ]
+	"Objects to ignore have the priority"
+	(objectClassesToIgnore includes: returnValue class) ifTrue: [ ^ false ].
+	captureAllObjects ifTrue: [ ^ true ].
+	^ objectClassesToCapture includes: returnValue class
 ]

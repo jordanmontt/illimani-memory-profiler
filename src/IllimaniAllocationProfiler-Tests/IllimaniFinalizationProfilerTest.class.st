@@ -27,7 +27,7 @@ IllimaniFinalizationProfilerTest >> testProfileOn [
 
 	finalizationProfiler
 		captureAllObjects;
-		profileOn: [ 10 timesRepeat: [ Point x: 2 y: 2 ] ].
+		profileOn: [ 10 timesRepeat: [ IllimaniFinalizationProfiler new ] ].
 
 	"We let the GC run for N times to clean the not referenced objects. Because of the
 	implementation of ephemerons, they can have hard references between them so it is

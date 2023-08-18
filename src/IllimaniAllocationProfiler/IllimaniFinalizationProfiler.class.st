@@ -29,7 +29,7 @@ IllimaniFinalizationProfiler >> captureAllObjects [
 { #category : #profiling }
 IllimaniFinalizationProfiler >> cleanProfilingData [
 
-	profilerHandler clean.
+	profilerHandler cleanObjectAllocations.
 	finalizationRegistry := FinalizationRegistry new
 ]
 
