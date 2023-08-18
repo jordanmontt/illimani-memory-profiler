@@ -132,6 +132,5 @@ Without the UI, because the profiler is independent from the UI, you can access 
 ## Implementation
 
 - Illimani uses [method proxies](https://github.com/pharo-contributions/MethodProxies) library to capture the allocations. It insert a proxy in `Behavior>>basicNew:` and `Behavior>>basicNew`.
-- Illimani also uses [space and time](https://github.com/tesonep/spaceAndTime) to calculate the total size in memory of an object.
 - It has an statistics model that helps with the calculations of allocations grouping them by classes and methods and sorting them by number of allocations. 
 - The UI is independent of the profiler. It can be used without it. You will have access to all allocations and to the same statistics.
