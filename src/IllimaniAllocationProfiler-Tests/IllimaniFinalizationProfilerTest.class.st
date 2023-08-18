@@ -78,5 +78,5 @@ IllimaniFinalizationProfilerTest >> testSamplingRate [
 	"We are cheking in this range becase the profiler makes some allocations that are
 	necessary for the profiler to work, like Durations objects. So we cannot check that the
 	allocations are exacty 1/5 of the total."
-	self assert: (allocatedByteSrings >= 4) & (allocatedByteSrings < 11)
+	self assert: (allocatedByteSrings >= 4) & (allocatedByteSrings < 7)
 ]
