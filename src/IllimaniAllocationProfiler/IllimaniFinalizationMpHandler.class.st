@@ -1,5 +1,5 @@
 Class {
-	#name : #IllimaniFinalizationHandler,
+	#name : #IllimaniFinalizationMpHandler,
 	#superclass : #IllimaniProfilerMpHandler,
 	#instVars : [
 		'profiler'
@@ -8,13 +8,13 @@ Class {
 }
 
 { #category : #initialization }
-IllimaniFinalizationHandler >> defaultClassesToAvoidInTheContextSearch [
+IllimaniFinalizationMpHandler >> defaultClassesToAvoidInTheContextSearch [
 
 	^ super defaultClassesToAvoidInTheContextSearch, { self class }
 ]
 
 { #category : #evaluating }
-IllimaniFinalizationHandler >> handleObjectAllocation: newlyAllocatedObject [
+IllimaniFinalizationMpHandler >> handleObjectAllocation: newlyAllocatedObject [
 
 	| objectFinalizationModel filteredContext |
 	filteredContext := self filterContext: thisContext ignoringClass: newlyAllocatedObject class.
@@ -34,7 +34,7 @@ IllimaniFinalizationHandler >> handleObjectAllocation: newlyAllocatedObject [
 ]
 
 { #category : #accessing }
-IllimaniFinalizationHandler >> profiler: anIllimaniFinalizationProfiler [
+IllimaniFinalizationMpHandler >> profiler: anIllimaniFinalizationProfiler [
 
 	profiler := anIllimaniFinalizationProfiler
 ]
