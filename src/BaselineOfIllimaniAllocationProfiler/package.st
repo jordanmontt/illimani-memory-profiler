@@ -1,1 +1,1 @@
-Package { #name : #BaselineOfIllimaniAllocationProfiler }
+Package { #name : 'BaselineOfIllimaniAllocationProfiler' }
