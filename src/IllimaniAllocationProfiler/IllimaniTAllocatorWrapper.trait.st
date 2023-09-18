@@ -57,7 +57,7 @@ IllimaniTAllocatorWrapper >> initializeMethodProxies: aHandler [
 	proxyBasicNew := MpMethodProxy onMethod: Behavior >> #basicNew handler: aHandler.
 	proxyBasicNewKeyword := MpMethodProxy onMethod: Behavior >> #basicNew: handler: aHandler.
 
-	"Not wrappint the method Number>>#@ because is always by far the must allocator method and
+	"Not wrapping the method Number>>#@ because is always by far the must allocator method and
 	it pollutes the results."
 	proxyArrobas := MpNullMethodProxy onMethod: Number >> #@ handler: aHandler.
 
