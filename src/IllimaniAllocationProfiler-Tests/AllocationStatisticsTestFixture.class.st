@@ -2,17 +2,19 @@
 I am a fixture class to mock some allocations
 "
 Class {
-	#name : #AllocationStatisticsTestFixture,
-	#superclass : #Object,
+	#name : 'AllocationStatisticsTestFixture',
+	#superclass : 'Object',
 	#instVars : [
 		'groupedAndSortedByClassAllocations',
 		'groupedAndSortedByMethodAllocations',
 		'mockedAllocations'
 	],
-	#category : #'IllimaniAllocationProfiler-Tests-Statistics-Model'
+	#category : 'IllimaniAllocationProfiler-Tests-Statistics-Model',
+	#package : 'IllimaniAllocationProfiler-Tests',
+	#tag : 'Statistics-Model'
 }
 
-{ #category : #fixture }
+{ #category : 'fixture' }
 AllocationStatisticsTestFixture >> allocationsOne [
 
 	| allocations |
@@ -84,7 +86,7 @@ AllocationStatisticsTestFixture >> allocationsOne [
 	^ allocations
 ]
 
-{ #category : #fixture }
+{ #category : 'fixture' }
 AllocationStatisticsTestFixture >> allocationsThree [
 
 	| allocations |
@@ -99,7 +101,7 @@ AllocationStatisticsTestFixture >> allocationsThree [
 	^ allocations
 ]
 
-{ #category : #fixture }
+{ #category : 'fixture' }
 AllocationStatisticsTestFixture >> allocationsTwo [
 
 	| allocations |
@@ -143,7 +145,7 @@ AllocationStatisticsTestFixture >> allocationsTwo [
 	^ allocations
 ]
 
-{ #category : #fixture }
+{ #category : 'fixture' }
 AllocationStatisticsTestFixture >> groupAndSortByAllocatedObjectClassAllocations: someAllocations [
 
 	| groupedAllocations |
@@ -159,35 +161,35 @@ AllocationStatisticsTestFixture >> groupAndSortByAllocatedObjectClassAllocations
 	^ groupedAllocations associations sorted: [ :a :b | a value size > b value size ]
 ]
 
-{ #category : #fixture }
+{ #category : 'fixture' }
 AllocationStatisticsTestFixture >> groupedAndSortedByClassAllocations [
 
 	^ self groupedAndSortedByClassAllocationsOne , self groupedAndSortedByClassAllocationsTwo
 	  , self groupedAndSortedByClassAllocationsThree
 ]
 
-{ #category : #fixture }
+{ #category : 'fixture' }
 AllocationStatisticsTestFixture >> groupedAndSortedByClassAllocationsOne [
 
 	^ { (self allocationsOne first allocatorClass
 	   -> (self groupAndSortByAllocatedObjectClassAllocations: self allocationsOne)) }
 ]
 
-{ #category : #fixture }
+{ #category : 'fixture' }
 AllocationStatisticsTestFixture >> groupedAndSortedByClassAllocationsThree [
 
 	^ { (self allocationsThree first allocatorClass
 	   -> (self groupAndSortByAllocatedObjectClassAllocations: self allocationsThree)) }
 ]
 
-{ #category : #fixture }
+{ #category : 'fixture' }
 AllocationStatisticsTestFixture >> groupedAndSortedByClassAllocationsTwo [
 
 	^ { (self allocationsTwo first allocatorClass
 	   -> (self groupAndSortByAllocatedObjectClassAllocations: self allocationsTwo)) }
 ]
 
-{ #category : #fixture }
+{ #category : 'fixture' }
 AllocationStatisticsTestFixture >> groupedAndSortedByMethodAllocations [
 
 	| dict |
@@ -206,7 +208,7 @@ AllocationStatisticsTestFixture >> groupedAndSortedByMethodAllocations [
 		  e key -> (self groupAndSortByAllocatedObjectClassAllocations: e value) ]
 ]
 
-{ #category : #initialization }
+{ #category : 'initialization' }
 AllocationStatisticsTestFixture >> initialize [
 
 	super initialize.
@@ -215,7 +217,7 @@ AllocationStatisticsTestFixture >> initialize [
 	groupedAndSortedByMethodAllocations := self groupedAndSortedByMethodAllocations
 ]
 
-{ #category : #fixture }
+{ #category : 'fixture' }
 AllocationStatisticsTestFixture >> mockedAllocations [
 
 	^ mockedAllocations

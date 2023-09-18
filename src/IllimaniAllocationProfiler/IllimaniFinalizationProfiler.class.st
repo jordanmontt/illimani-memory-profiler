@@ -2,8 +2,8 @@
 I profile the Garbage Collector and provide information about the lifetime of objects.
 "
 Class {
-	#name : #IllimaniFinalizationProfiler,
-	#superclass : #Object,
+	#name : 'IllimaniFinalizationProfiler',
+	#superclass : 'Object',
 	#traits : 'IllimaniTAllocatorWrapper',
 	#classTraits : 'IllimaniTAllocatorWrapper classTrait',
 	#instVars : [
@@ -11,33 +11,36 @@ Class {
 		'gcProcess',
 		'finalizationRegistry'
 	],
-	#category : #'IllimaniAllocationProfiler-Finalization Profiler'
+	#category : 'IllimaniAllocationProfiler-Finalization Profiler',
+	#package : 'IllimaniAllocationProfiler',
+	#tag : 'Finalization Profiler'
 }
 
-{ #category : #api }
+{ #category : 'api' }
 IllimaniFinalizationProfiler >> addFinalizationFor: newlyAllocatedObject finalizer: objectFinalizationModel [
 
 	finalizationRegistry add: newlyAllocatedObject finalizer: objectFinalizationModel
 ]
 
-{ #category : #profiling }
+{ #category : 'profiling' }
 IllimaniFinalizationProfiler >> captureAllObjects [
 
 	profilerHandler captureAllObjects
 ]
 
-{ #category : #profiling }
+{ #category : 'profiling' }
 IllimaniFinalizationProfiler >> cleanProfilingData [
 
 	profilerHandler cleanObjectAllocations.
 	finalizationRegistry := FinalizationRegistry new
 ]
 
-{ #category : #profiling }
+{ #category : 'profiling' }
 IllimaniFinalizationProfiler >> forceFinalizationOfObjects [
 
 	"We force the finalization timestamp for the not yet finalized objects."
-	finalizationRegistry valuesDo: #finalize.
+	"finalizationRegistry valuesDo: #finalize."
+	finalizationRegistry finalizeAllEphemerons.
 	"Then we stop referencing the finalization registry to not re-finalize the objects."
 	finalizationRegistry := FinalizationRegistry new.
 
@@ -51,7 +54,7 @@ IllimaniFinalizationProfiler >> forceFinalizationOfObjects [
 		30 milliSecond wait ] ] fork
 ]
 
-{ #category : #initialization }
+{ #category : 'initialization' }
 IllimaniFinalizationProfiler >> initialize [
 
 	super initialize.
@@ -62,25 +65,25 @@ IllimaniFinalizationProfiler >> initialize [
 	self initializeMethodProxies: profilerHandler
 ]
 
-{ #category : #profiling }
+{ #category : 'profiling' }
 IllimaniFinalizationProfiler >> isProfiling [
 
 	^ gcProcess isNotNil
 ]
 
-{ #category : #initialization }
+{ #category : 'initialization' }
 IllimaniFinalizationProfiler >> objectAllocations [
 
 	^ profilerHandler objectAllocations
 ]
 
-{ #category : #api }
+{ #category : 'api' }
 IllimaniFinalizationProfiler >> samplingRate: anInteger [
 
 	profilerHandler samplingRate: anInteger
 ]
 
-{ #category : #profiling }
+{ #category : 'profiling' }
 IllimaniFinalizationProfiler >> startAndRunGCProcess [
 
 	gcProcess := [
@@ -91,7 +94,7 @@ IllimaniFinalizationProfiler >> startAndRunGCProcess [
 	gcProcess resume
 ]
 
-{ #category : #profiling }
+{ #category : 'profiling' }
 IllimaniFinalizationProfiler >> startProfiling [
 
 	self cleanProfilingData.
@@ -104,7 +107,7 @@ IllimaniFinalizationProfiler >> startProfiling [
 	self startAndRunGCProcess
 ]
 
-{ #category : #profiling }
+{ #category : 'profiling' }
 IllimaniFinalizationProfiler >> stopProfiling [
 	
 	self uninstallMethodProxies.
@@ -115,7 +118,7 @@ IllimaniFinalizationProfiler >> stopProfiling [
 	self updateStatsWhenFinishingProfiling
 ]
 
-{ #category : #profiling }
+{ #category : 'profiling' }
 IllimaniFinalizationProfiler >> terminateGCProcess [
 
 	gcProcess terminate.

@@ -1,6 +1,6 @@
 Class {
-	#name : #AllocationSiteInfoModel,
-	#superclass : #BasicAllocationInfoModel,
+	#name : 'AllocationSiteInfoModel',
+	#superclass : 'BasicAllocationInfoModel',
 	#instVars : [
 		'context',
 		'allocatorClass',
@@ -9,88 +9,90 @@ Class {
 		'allocatedObject',
 		'allocatedObjectHash'
 	],
-	#category : #'IllimaniAllocationProfiler-Model'
+	#category : 'IllimaniAllocationProfiler-Model',
+	#package : 'IllimaniAllocationProfiler',
+	#tag : 'Model'
 }
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 AllocationSiteInfoModel >> allocatedObject [
 
 	^ allocatedObject
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 AllocationSiteInfoModel >> allocatedObject: anObj [
 
 	allocatedObject := anObj
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 AllocationSiteInfoModel >> allocatedObjectHash [
 
 	^ allocatedObjectHash
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 AllocationSiteInfoModel >> allocatedObjectHash: anObject [
 
 	allocatedObjectHash := anObject
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 AllocationSiteInfoModel >> allocatorClass [
 
 	^ allocatorClass
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 AllocationSiteInfoModel >> allocatorClass: anObject [
 
 	allocatorClass := anObject
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 AllocationSiteInfoModel >> allocatorMethod [
 
 	^ allocatorMethod
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 AllocationSiteInfoModel >> allocatorMethod: aCompiledMethod [
 
 	allocatorMethod := aCompiledMethod
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 AllocationSiteInfoModel >> context [
 
 	^ context
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 AllocationSiteInfoModel >> context: anObject [
 
 	context := anObject
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 AllocationSiteInfoModel >> contextFingerprint [
 
 	^ contextFingerprint
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 AllocationSiteInfoModel >> contextFingerprint: aContext [
 
 	contextFingerprint := self getContextFingerprintStream: aContext
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 AllocationSiteInfoModel >> fullMethodName [
 
 	^ allocatorMethod name
 ]
 
-{ #category : #initialization }
+{ #category : 'initialization' }
 AllocationSiteInfoModel >> getContextFingerprintStream: aContext [
 
 	self flag: 'This is the first "naive" implementation of the context fingerprint'.
@@ -105,7 +107,7 @@ AllocationSiteInfoModel >> getContextFingerprintStream: aContext [
 			iterator ifNil: [ ^ stream ] ] ]
 ]
 
-{ #category : #printing }
+{ #category : 'printing' }
 AllocationSiteInfoModel >> printOn: aStream [
 
 	aStream << allocatorMethod name << ' allocated a ' << allocatedObjectClass asString

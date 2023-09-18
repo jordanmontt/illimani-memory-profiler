@@ -2,16 +2,18 @@
 An IllimaniProfilerMpHandlerTest is a test class for testing the behavior of IllimaniProfilerMpHandler
 "
 Class {
-	#name : #IllimaniProfilerMpHandlerTest,
-	#superclass : #ParametrizedTestCase,
+	#name : 'IllimaniProfilerMpHandlerTest',
+	#superclass : 'ParametrizedTestCase',
 	#instVars : [
 		'handler',
 		'handlerClass'
 	],
-	#category : #'IllimaniAllocationProfiler-Tests-Profiler'
+	#category : 'IllimaniAllocationProfiler-Tests-Profiler',
+	#package : 'IllimaniAllocationProfiler-Tests',
+	#tag : 'Profiler'
 }
 
-{ #category : #'building suites' }
+{ #category : 'building suites' }
 IllimaniProfilerMpHandlerTest class >> testParameters [
 
 	^ ParametrizedTestMatrix new
@@ -20,20 +22,20 @@ IllimaniProfilerMpHandlerTest class >> testParameters [
 		  yourself
 ]
 
-{ #category : #running }
+{ #category : 'running' }
 IllimaniProfilerMpHandlerTest >> handlerClass: aClass [
 
 	handlerClass := aClass
 ]
 
-{ #category : #running }
+{ #category : 'running' }
 IllimaniProfilerMpHandlerTest >> setUp [
 
 	super setUp.
 	handler := handlerClass new
 ]
 
-{ #category : #tests }
+{ #category : 'tests' }
 IllimaniProfilerMpHandlerTest >> testCaptureAllObjects [
 
 	handler captureAllObjects.
@@ -44,7 +46,7 @@ IllimaniProfilerMpHandlerTest >> testCaptureAllObjects [
 	self assert: (handler shouldICaptureTheObject: nil)
 ]
 
-{ #category : #tests }
+{ #category : 'tests' }
 IllimaniProfilerMpHandlerTest >> testCaptureAllObjectsAndIgnoringClasses [
 
 	handler captureAllObjects.
@@ -57,14 +59,14 @@ IllimaniProfilerMpHandlerTest >> testCaptureAllObjectsAndIgnoringClasses [
 	self assert: (handler shouldICaptureTheObject: nil)
 ]
 
-{ #category : #tests }
+{ #category : 'tests' }
 IllimaniProfilerMpHandlerTest >> testCleanProfilingData [
 
 	handler
 		objectsToCapture: { Color . Point };
 		objectsToIgnore: { ByteString };
 		samplingRate: 20;
-		samplingConter: 22.
+		samplingCounter: 22.
 
 	handler cleanObjectAllocations.
 
@@ -75,7 +77,7 @@ IllimaniProfilerMpHandlerTest >> testCleanProfilingData [
 	self assertCollection: handler objectsToIgnore hasSameElements: { ByteString }
 ]
 
-{ #category : #tests }
+{ #category : 'tests' }
 IllimaniProfilerMpHandlerTest >> testObjectsToCapture [
 
 	handler objectsToCapture: { Color . Point }.
@@ -84,7 +86,7 @@ IllimaniProfilerMpHandlerTest >> testObjectsToCapture [
 	self deny: (handler shouldICaptureTheObject: ByteString new).
 ]
 
-{ #category : #tests }
+{ #category : 'tests' }
 IllimaniProfilerMpHandlerTest >> testObjectsToIgnore [
 
 	handler objectsToIgnore: { Point . ByteString }.
@@ -96,7 +98,7 @@ IllimaniProfilerMpHandlerTest >> testObjectsToIgnore [
 	self assert: (handler shouldICaptureTheObject: 5).
 ]
 
-{ #category : #tests }
+{ #category : 'tests' }
 IllimaniProfilerMpHandlerTest >> testSamplingRate [
 
 	"By default, do not sample"
@@ -112,7 +114,7 @@ IllimaniProfilerMpHandlerTest >> testSamplingRate [
 	self assert: handler samplingRate equals: 1.
 ]
 
-{ #category : #tests }
+{ #category : 'tests' }
 IllimaniProfilerMpHandlerTest >> testShouldICaptureTheObject [
 
 	handler objectsToCapture: { Color . Point }.

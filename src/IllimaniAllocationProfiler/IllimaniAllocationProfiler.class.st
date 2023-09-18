@@ -62,8 +62,8 @@ IllimaniAllocationProfiler new
 ```
 "
 Class {
-	#name : #IllimaniAllocationProfiler,
-	#superclass : #Object,
+	#name : 'IllimaniAllocationProfiler',
+	#superclass : 'Object',
 	#traits : 'IllimaniTAllocatorWrapper',
 	#classTraits : 'IllimaniTAllocatorWrapper classTrait',
 	#instVars : [
@@ -71,40 +71,42 @@ Class {
 		'statisticsModel',
 		'illimaniAnnouncer'
 	],
-	#category : #'IllimaniAllocationProfiler-Allocation Sites Profiler'
+	#category : 'IllimaniAllocationProfiler-Allocation Sites Profiler',
+	#package : 'IllimaniAllocationProfiler',
+	#tag : 'Allocation Sites Profiler'
 }
 
-{ #category : #announcements }
+{ #category : 'announcements' }
 IllimaniAllocationProfiler >> announceProfilerStopedProfiling [
 
 	illimaniAnnouncer announce: IllimaniStopedProfilingAnnouncement
 ]
 
-{ #category : #api }
+{ #category : 'api' }
 IllimaniAllocationProfiler >> captureAllObjects [
 
 	profilerHandler captureAllObjects
 ]
 
-{ #category : #evaluating }
+{ #category : 'evaluating' }
 IllimaniAllocationProfiler >> cleanProfilingData [
 
 	profilerHandler cleanObjectAllocations
 ]
 
-{ #category : #api }
+{ #category : 'api' }
 IllimaniAllocationProfiler >> copyExecutionStack [
 
 	profilerHandler copyExecutionStack
 ]
 
-{ #category : #api }
+{ #category : 'api' }
 IllimaniAllocationProfiler >> copyObjectIdentityHash [
 
 	profilerHandler copyObjectIdentityHash
 ]
 
-{ #category : #initialization }
+{ #category : 'initialization' }
 IllimaniAllocationProfiler >> initialize [
 
 	super initialize.
@@ -113,43 +115,43 @@ IllimaniAllocationProfiler >> initialize [
 	self initializeMethodProxies: profilerHandler.
 ]
 
-{ #category : #api }
+{ #category : 'api' }
 IllimaniAllocationProfiler >> keepReferencesToAllocatedObjects [
 
 	profilerHandler keepReferencesToAllocatedObjects
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 IllimaniAllocationProfiler >> objectAllocations [
 
 	^ profilerHandler objectAllocations
 ]
 
-{ #category : #api }
+{ #category : 'api' }
 IllimaniAllocationProfiler >> objectsToCapture: aCollectionOfClasses [
 
 	profilerHandler objectsToCapture: aCollectionOfClasses
 ]
 
-{ #category : #api }
+{ #category : 'api' }
 IllimaniAllocationProfiler >> objectsToIgnore: aCollectionOfClasses [
 
 	profilerHandler objectsToIgnore: aCollectionOfClasses
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 IllimaniAllocationProfiler >> profilerHandler [
 
 	^ profilerHandler
 ]
 
-{ #category : #api }
+{ #category : 'api' }
 IllimaniAllocationProfiler >> samplingRate: anInteger [
 
 	profilerHandler samplingRate: anInteger
 ]
 
-{ #category : #evaluating }
+{ #category : 'evaluating' }
 IllimaniAllocationProfiler >> startProfiling [
 
 	self cleanProfilingData.
@@ -158,13 +160,13 @@ IllimaniAllocationProfiler >> startProfiling [
 	self initializeProfilingBasicStats
 ]
 
-{ #category : #'accessing - statistics' }
+{ #category : 'accessing - statistics' }
 IllimaniAllocationProfiler >> stats [
 
 	^ statisticsModel
 ]
 
-{ #category : #evaluating }
+{ #category : 'evaluating' }
 IllimaniAllocationProfiler >> stopProfiling [
 
 	self uninstallMethodProxies.

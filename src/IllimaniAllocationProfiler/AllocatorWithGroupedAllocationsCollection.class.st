@@ -2,49 +2,51 @@
 I am an object that acts like a collection. I am only used to calculate statistics and I am used because my api facilitates the calculations.
 "
 Class {
-	#name : #AllocatorWithGroupedAllocationsCollection,
-	#superclass : #Object,
+	#name : 'AllocatorWithGroupedAllocationsCollection',
+	#superclass : 'Object',
 	#instVars : [
 		'sortedByTotalAllocationsNodes',
 		'groupedNodesDictionary'
 	],
-	#category : #'IllimaniAllocationProfiler-Statistics-Model'
+	#category : 'IllimaniAllocationProfiler-Statistics-Model',
+	#package : 'IllimaniAllocationProfiler',
+	#tag : 'Statistics-Model'
 }
 
-{ #category : #converting }
+{ #category : 'converting' }
 AllocatorWithGroupedAllocationsCollection >> asOrderedCollection [
 
 	^ self sortedByTotalAllocations
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 AllocatorWithGroupedAllocationsCollection >> groupedNodesDictionary [
 
 	^ groupedNodesDictionary
 ]
 
-{ #category : #initialization }
+{ #category : 'initialization' }
 AllocatorWithGroupedAllocationsCollection >> initialize [
 
 	super initialize.
 	groupedNodesDictionary := Dictionary new
 ]
 
-{ #category : #api }
+{ #category : 'api' }
 AllocatorWithGroupedAllocationsCollection >> sort [
 
 	sortedByTotalAllocationsNodes := groupedNodesDictionary sorted: [ :a :b |
 		               a value totalAllocations > b value totalAllocations ]
 ]
 
-{ #category : #api }
+{ #category : 'api' }
 AllocatorWithGroupedAllocationsCollection >> sortedByTotalAllocations [
 
 	sortedByTotalAllocationsNodes ifNil: [ self sort ].
 	^ sortedByTotalAllocationsNodes
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 AllocatorWithGroupedAllocationsCollection >> updateAllocationForAllocator: allocator allocation: anAllocationHolder [
 
 	groupedNodesDictionary at: allocator

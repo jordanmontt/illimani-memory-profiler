@@ -4,8 +4,8 @@ I am a class that defines the logic to only registed an specific type of object.
 Please define my `classesToRegister` variable with the classes you want to capture or if you want to capture all use the message `captureAllObjects`
 "
 Class {
-	#name : #IllimaniProfilerMpHandler,
-	#superclass : #MpHandler,
+	#name : 'IllimaniProfilerMpHandler',
+	#superclass : 'MpHandler',
 	#instVars : [
 		'objectAllocations',
 		'classesToAvoidInTheContextSearch',
@@ -18,10 +18,12 @@ Class {
 		'objectClassesToIgnore',
 		'samplingRate'
 	],
-	#category : #'IllimaniAllocationProfiler-Allocation Sites Profiler'
+	#category : 'IllimaniAllocationProfiler-Allocation Sites Profiler',
+	#package : 'IllimaniAllocationProfiler',
+	#tag : 'Allocation Sites Profiler'
 }
 
-{ #category : #evaluating }
+{ #category : 'evaluating' }
 IllimaniProfilerMpHandler >> afterExecutionWithReceiver: receiver arguments: arguments returnValue: newlyAllocatedObject [
 
 	"Sampling"
@@ -33,21 +35,21 @@ IllimaniProfilerMpHandler >> afterExecutionWithReceiver: receiver arguments: arg
 	^ newlyAllocatedObject
 ]
 
-{ #category : #api }
+{ #category : 'api' }
 IllimaniProfilerMpHandler >> captureAllObjects [
 	"When this turned to true I will capture all the allocations of all the objects"
 
 	captureAllObjects := true
 ]
 
-{ #category : #api }
+{ #category : 'api' }
 IllimaniProfilerMpHandler >> cleanObjectAllocations [
 
 	objectAllocations removeAll.
 	samplingCounter := 0
 ]
 
-{ #category : #api }
+{ #category : 'api' }
 IllimaniProfilerMpHandler >> copyExecutionStack [
 	"When this is set to true, for each object allocationn the full execution stack from which
 	the method was created will be copied and store. This information will be available for
@@ -57,7 +59,7 @@ IllimaniProfilerMpHandler >> copyExecutionStack [
 	copyExecutionStack := true
 ]
 
-{ #category : #api }
+{ #category : 'api' }
 IllimaniProfilerMpHandler >> copyObjectIdentityHash [
 	"When this turned to true I will ask for the hash for all the allocated objects"
 
@@ -68,7 +70,7 @@ IllimaniProfilerMpHandler >> copyObjectIdentityHash [
 	copyObjectHash := true
 ]
 
-{ #category : #initialization }
+{ #category : 'initialization' }
 IllimaniProfilerMpHandler >> defaultClassesToAvoidInTheContextSearch [
 
 	^ {
@@ -80,21 +82,21 @@ IllimaniProfilerMpHandler >> defaultClassesToAvoidInTheContextSearch [
 		  "CompiledBlock" }
 ]
 
-{ #category : #api }
+{ #category : 'api' }
 IllimaniProfilerMpHandler >> doNotCaptureAllObjects [
 	"See the comment of my opposite method"
 
 	captureAllObjects := false
 ]
 
-{ #category : #api }
+{ #category : 'api' }
 IllimaniProfilerMpHandler >> doNotCopyExecutionStack [
 	"See the comment of my opposite method"
 
 	copyExecutionStack := false
 ]
 
-{ #category : #evaluating }
+{ #category : 'evaluating' }
 IllimaniProfilerMpHandler >> filterContext: aContext ignoringClass: aClass [
 
 	| sender |
@@ -107,7 +109,7 @@ IllimaniProfilerMpHandler >> filterContext: aContext ignoringClass: aClass [
 	^ sender
 ]
 
-{ #category : #evaluating }
+{ #category : 'evaluating' }
 IllimaniProfilerMpHandler >> handleObjectAllocation: newlyAllocatedObject [
 
 	| filteredContext  allocationInformationHolder |
@@ -130,7 +132,7 @@ IllimaniProfilerMpHandler >> handleObjectAllocation: newlyAllocatedObject [
 	objectAllocations add: allocationInformationHolder
 ]
 
-{ #category : #initialization }
+{ #category : 'initialization' }
 IllimaniProfilerMpHandler >> initialize [
 
 	super initialize.
@@ -152,14 +154,14 @@ IllimaniProfilerMpHandler >> initialize [
 	  , (self defaultClassesToAvoidInTheContextSearch collect: [ :aClass | aClass class ])
 ]
 
-{ #category : #initialization }
+{ #category : 'initialization' }
 IllimaniProfilerMpHandler >> initializeClassesToAvoidInContextSearch [
 
 	classesToAvoidInTheContextSearch := self defaultClassesToAvoidInTheContextSearch ,
 		(self defaultClassesToAvoidInTheContextSearch collect: [ :aClass | aClass class ])
 ]
 
-{ #category : #api }
+{ #category : 'api' }
 IllimaniProfilerMpHandler >> keepReferencesToAllocatedObjects [
 	"When this turned to true I will copy all the allocated of all the objects"
 
@@ -170,63 +172,63 @@ IllimaniProfilerMpHandler >> keepReferencesToAllocatedObjects [
 	keepReferencesToAllocatedObjects := true
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 IllimaniProfilerMpHandler >> objectAllocations [
 
 	^ objectAllocations
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 IllimaniProfilerMpHandler >> objectsToCapture [
 
 	^ objectClassesToCapture
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 IllimaniProfilerMpHandler >> objectsToCapture: aCollectionOfClasses [
 
 	objectClassesToCapture := aCollectionOfClasses
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 IllimaniProfilerMpHandler >> objectsToIgnore [
 
 	^ objectClassesToIgnore
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 IllimaniProfilerMpHandler >> objectsToIgnore: aCollectionOfClasses [
 
 	objectClassesToIgnore := aCollectionOfClasses
 ]
 
-{ #category : #accessing }
-IllimaniProfilerMpHandler >> samplingConter: anInteger [
+{ #category : 'accessing' }
+IllimaniProfilerMpHandler >> samplingCounter [
+
+	^ samplingCounter
+]
+
+{ #category : 'accessing' }
+IllimaniProfilerMpHandler >> samplingCounter: anInteger [
 	"This method is only for testing! As a user, you don't normally will need to use this
 	accessor"
 
 	samplingCounter := anInteger
 ]
 
-{ #category : #accessing }
-IllimaniProfilerMpHandler >> samplingCounter [
-
-	^ samplingCounter
-]
-
-{ #category : #accessing }
+{ #category : 'accessing' }
 IllimaniProfilerMpHandler >> samplingRate [
 	^ samplingRate
 ]
 
-{ #category : #api }
+{ #category : 'api' }
 IllimaniProfilerMpHandler >> samplingRate: anInteger [
 	"The anInteger needs to be an integer number between 1 and 100.  "
 
 	samplingRate := (100 / anInteger) asInteger
 ]
 
-{ #category : #testing }
+{ #category : 'testing' }
 IllimaniProfilerMpHandler >> shouldICaptureTheObject: returnValue [
 
 	"Objects to ignore have the priority"

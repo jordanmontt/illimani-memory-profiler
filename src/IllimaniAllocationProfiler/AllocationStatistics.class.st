@@ -2,18 +2,20 @@
 I am a model for calculating the statistics for the allocation profiler. My methods `allocationsByClass` and `allocationsByMethod` return the grouped and sorted allocations. Only access them by the accessors as they are lazy calculated 
 "
 Class {
-	#name : #AllocationStatistics,
-	#superclass : #Object,
+	#name : 'AllocationStatistics',
+	#superclass : 'Object',
 	#instVars : [
 		'rawAllocations',
 		'allocationNodesByClass',
 		'allocationNodesByMethod',
 		'didIWalk'
 	],
-	#category : #'IllimaniAllocationProfiler-Statistics-Model'
+	#category : 'IllimaniAllocationProfiler-Statistics-Model',
+	#package : 'IllimaniAllocationProfiler',
+	#tag : 'Statistics-Model'
 }
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 AllocationStatistics class >> allocations: someAllocations [
 
 	^ self new
@@ -21,21 +23,21 @@ AllocationStatistics class >> allocations: someAllocations [
 		yourself
 ]
 
-{ #category : #statistics }
+{ #category : 'statistics' }
 AllocationStatistics >> allocationsByClass [
 
 	didIWalk ifFalse: [ self walkAllocations ].
 	^ allocationNodesByClass sortedByTotalAllocations
 ]
 
-{ #category : #statistics }
+{ #category : 'statistics' }
 AllocationStatistics >> allocationsByMethod [
 
 	didIWalk ifFalse: [ self walkAllocations ].
 	^ allocationNodesByMethod sortedByTotalAllocations
 ]
 
-{ #category : #initialization }
+{ #category : 'initialization' }
 AllocationStatistics >> initialize [
 
 	super initialize.
@@ -44,37 +46,37 @@ AllocationStatistics >> initialize [
 	didIWalk := false
 ]
 
-{ #category : #statistics }
+{ #category : 'statistics' }
 AllocationStatistics >> numberOfClasses [
 
 	^ self allocationsByClass size
 ]
 
-{ #category : #statistics }
+{ #category : 'statistics' }
 AllocationStatistics >> numberOfMethods [
 
 	^ self allocationsByMethod size
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 AllocationStatistics >> rawAllocations [
 
 	^ rawAllocations
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 AllocationStatistics >> rawAllocations: anObject [
 
 	rawAllocations := anObject
 ]
 
-{ #category : #'statistics - time' }
+{ #category : 'statistics - time' }
 AllocationStatistics >> timeDifferenceBetweenFirstAndLastAllocation [
 
 	^ rawAllocations last initializationTimestamp - rawAllocations first initializationTimestamp
 ]
 
-{ #category : #statistics }
+{ #category : 'statistics' }
 AllocationStatistics >> topNAllocationsByClass: n [
 
 	| allocationsOrderedByClass |
@@ -82,7 +84,7 @@ AllocationStatistics >> topNAllocationsByClass: n [
 	^ allocationsOrderedByClass first: (n min: allocationsOrderedByClass size)
 ]
 
-{ #category : #statistics }
+{ #category : 'statistics' }
 AllocationStatistics >> topNAllocationsByMethod: n [
 
 	| allocationsOrderedByMethod |
@@ -90,19 +92,19 @@ AllocationStatistics >> topNAllocationsByMethod: n [
 	^ allocationsOrderedByMethod first: (n min: allocationsOrderedByMethod size)
 ]
 
-{ #category : #statistics }
+{ #category : 'statistics' }
 AllocationStatistics >> totalAllocatedMemory [
 
 	^ rawAllocations inject: 0 into: [ :sum : elem | sum + elem totalSizeInBytes ]
 ]
 
-{ #category : #statistics }
+{ #category : 'statistics' }
 AllocationStatistics >> totalAllocatedObjects [
 
 	^ rawAllocations size
 ]
 
-{ #category : #statistics }
+{ #category : 'statistics' }
 AllocationStatistics >> totalEqualAllocatedObjects [
 	"This only makes sense if you kept the allocated objects in the profiler. If not, you will
 	end up with a set with nil"
@@ -110,7 +112,7 @@ AllocationStatistics >> totalEqualAllocatedObjects [
 	^ (rawAllocations collect: [ :a | a allocatedObject ] as: Set) size
 ]
 
-{ #category : #calculating }
+{ #category : 'calculating' }
 AllocationStatistics >> walkAllocations [
 
 	rawAllocations do: [ :allocationHolder |

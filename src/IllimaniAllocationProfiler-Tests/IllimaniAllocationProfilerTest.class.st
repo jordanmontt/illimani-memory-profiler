@@ -1,20 +1,22 @@
 Class {
-	#name : #IllimaniAllocationProfilerTest,
-	#superclass : #TestCase,
+	#name : 'IllimaniAllocationProfilerTest',
+	#superclass : 'TestCase',
 	#instVars : [
 		'illimani'
 	],
-	#category : #'IllimaniAllocationProfiler-Tests-Profiler'
+	#category : 'IllimaniAllocationProfiler-Tests-Profiler',
+	#package : 'IllimaniAllocationProfiler-Tests',
+	#tag : 'Profiler'
 }
 
-{ #category : #running }
+{ #category : 'running' }
 IllimaniAllocationProfilerTest >> setUp [
 
 	super setUp.
 	illimani := IllimaniAllocationProfiler new
 ]
 
-{ #category : #running }
+{ #category : 'running' }
 IllimaniAllocationProfilerTest >> tearDown [
 
 	illimani forceUninstall.
@@ -22,7 +24,7 @@ IllimaniAllocationProfilerTest >> tearDown [
 	super tearDown
 ]
 
-{ #category : #tests }
+{ #category : 'tests' }
 IllimaniAllocationProfilerTest >> testProfileOn [
 
 	illimani
@@ -37,7 +39,7 @@ IllimaniAllocationProfilerTest >> testProfileOn [
 	self assert: illimani objectAllocations size > 5
 ]
 
-{ #category : #tests }
+{ #category : 'tests' }
 IllimaniAllocationProfilerTest >> testProfileOnExample [
 
 	| objectsToCapture |
@@ -55,7 +57,7 @@ IllimaniAllocationProfilerTest >> testProfileOnExample [
 		self assert: alloc context class equals: Context ]
 ]
 
-{ #category : #tests }
+{ #category : 'tests' }
 IllimaniAllocationProfilerTest >> testProfileOnExampleCapturingAll [
 
 	illimani
@@ -72,7 +74,7 @@ IllimaniAllocationProfilerTest >> testProfileOnExampleCapturingAll [
 		self assert: alloc context class equals: Context ]
 ]
 
-{ #category : #tests }
+{ #category : 'tests' }
 IllimaniAllocationProfilerTest >> testProfileOnExampleCapturingAllAndIgnoringClasses [
 
 	| allocatorClassesToIgnore |
@@ -96,7 +98,7 @@ IllimaniAllocationProfilerTest >> testProfileOnExampleCapturingAllAndIgnoringCla
 		self assert: alloc context class equals: Context ]
 ]
 
-{ #category : #tests }
+{ #category : 'tests' }
 IllimaniAllocationProfilerTest >> testSamplingRate [
 
 	| allocatedByteSrings |

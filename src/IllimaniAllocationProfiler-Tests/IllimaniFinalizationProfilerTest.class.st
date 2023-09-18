@@ -1,20 +1,22 @@
 Class {
-	#name : #IllimaniFinalizationProfilerTest,
-	#superclass : #TestCase,
+	#name : 'IllimaniFinalizationProfilerTest',
+	#superclass : 'TestCase',
 	#instVars : [
 		'finalizationProfiler'
 	],
-	#category : #'IllimaniAllocationProfiler-Tests-Profiler'
+	#category : 'IllimaniAllocationProfiler-Tests-Profiler',
+	#package : 'IllimaniAllocationProfiler-Tests',
+	#tag : 'Profiler'
 }
 
-{ #category : #running }
+{ #category : 'running' }
 IllimaniFinalizationProfilerTest >> setUp [
 
 	super setUp.
 	finalizationProfiler := IllimaniFinalizationProfiler new
 ]
 
-{ #category : #running }
+{ #category : 'running' }
 IllimaniFinalizationProfilerTest >> tearDown [
 
 	finalizationProfiler forceUninstall.
@@ -22,7 +24,7 @@ IllimaniFinalizationProfilerTest >> tearDown [
 	super tearDown
 ]
 
-{ #category : #tests }
+{ #category : 'tests' }
 IllimaniFinalizationProfilerTest >> testProfileOn [
 
 	finalizationProfiler
@@ -37,7 +39,7 @@ IllimaniFinalizationProfilerTest >> testProfileOn [
 	self assert: finalizationProfiler objectAllocations size > 10
 ]
 
-{ #category : #tests }
+{ #category : 'tests' }
 IllimaniFinalizationProfilerTest >> testProfileOnFinalizesCorrectly [
 
 	| timeNow |
@@ -58,7 +60,7 @@ IllimaniFinalizationProfilerTest >> testProfileOnFinalizesCorrectly [
 		self assert: alloc finalizationTimestamp > timeNow ]
 ]
 
-{ #category : #tests }
+{ #category : 'tests' }
 IllimaniFinalizationProfilerTest >> testSamplingRate [
 
 	| allocatedByteSrings |

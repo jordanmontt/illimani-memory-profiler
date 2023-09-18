@@ -2,46 +2,48 @@
 I am an object that acts like a node for a collection. I am a data structure that is used to calculate statistics. I know the allocator and I also have the allocated objects grouped by the class of the allocated object.
 "
 Class {
-	#name : #AllocatorWithGroupedAllocationsNode,
-	#superclass : #Object,
+	#name : 'AllocatorWithGroupedAllocationsNode',
+	#superclass : 'Object',
 	#instVars : [
 		'allocator',
 		'groupedAllocations'
 	],
-	#category : #'IllimaniAllocationProfiler-Statistics-Model'
+	#category : 'IllimaniAllocationProfiler-Statistics-Model',
+	#package : 'IllimaniAllocationProfiler',
+	#tag : 'Statistics-Model'
 }
 
-{ #category : #api }
+{ #category : 'api' }
 AllocatorWithGroupedAllocationsNode >> allocationsOf: aClass [
 
 	^ groupedAllocations at: aClass ifPresent: [ :e | e size ] ifAbsent: [ 0 ]
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 AllocatorWithGroupedAllocationsNode >> allocator [
 
 	^ allocator
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 AllocatorWithGroupedAllocationsNode >> allocator: anObject [
 
 	allocator := anObject
 ]
 
-{ #category : #api }
+{ #category : 'api' }
 AllocatorWithGroupedAllocationsNode >> eachAllocationsTotal [
 
 	^ groupedAllocations values
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 AllocatorWithGroupedAllocationsNode >> groupedAllocations [
 
 	^ groupedAllocations
 ]
 
-{ #category : #api }
+{ #category : 'api' }
 AllocatorWithGroupedAllocationsNode >> increaseAllocationsFor: anAllocationHolder [
 
 	groupedAllocations
@@ -53,45 +55,45 @@ AllocatorWithGroupedAllocationsNode >> increaseAllocationsFor: anAllocationHolde
 		initial: [ OrderedCollection with: anAllocationHolder ]
 ]
 
-{ #category : #initialization }
+{ #category : 'initialization' }
 AllocatorWithGroupedAllocationsNode >> initialize [
 
 	super initialize.
 	groupedAllocations := Dictionary new
 ]
 
-{ #category : #printing }
+{ #category : 'printing' }
 AllocatorWithGroupedAllocationsNode >> printOn: aStream [
 
 	aStream << allocator asString << ' allocated ' << self totalAllocations asString << ' instances that weight ' << self totalSizeInBytes humanReadableByteSizeString
 ]
 
-{ #category : #api }
+{ #category : 'api' }
 AllocatorWithGroupedAllocationsNode >> sortedGroupedAllocations [
 
 	^ (groupedAllocations values sorted: [ :a :b | a size > b size ]) flattened
 ]
 
-{ #category : #api }
+{ #category : 'api' }
 AllocatorWithGroupedAllocationsNode >> sortedGroupedAllocationsAsAssociation [
 
 	^ (groupedAllocations associations sorted: [ :a :b | a value size > b value size ])
 		  flattened
 ]
 
-{ #category : #api }
+{ #category : 'api' }
 AllocatorWithGroupedAllocationsNode >> totalAllocations [
 
 	^ groupedAllocations values inject: 0 into: [ :sum :collection | sum + collection size ]
 ]
 
-{ #category : #api }
+{ #category : 'api' }
 AllocatorWithGroupedAllocationsNode >> totalGroupedAllocations [
 
 	^ groupedAllocations values collect: #size
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 AllocatorWithGroupedAllocationsNode >> totalSizeInBytes [
 
 	^ groupedAllocations inject: 0

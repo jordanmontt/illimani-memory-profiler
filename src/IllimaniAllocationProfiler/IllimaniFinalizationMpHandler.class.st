@@ -1,19 +1,21 @@
 Class {
-	#name : #IllimaniFinalizationMpHandler,
-	#superclass : #IllimaniProfilerMpHandler,
+	#name : 'IllimaniFinalizationMpHandler',
+	#superclass : 'IllimaniProfilerMpHandler',
 	#instVars : [
 		'profiler'
 	],
-	#category : #'IllimaniAllocationProfiler-Finalization Profiler'
+	#category : 'IllimaniAllocationProfiler-Finalization Profiler',
+	#package : 'IllimaniAllocationProfiler',
+	#tag : 'Finalization Profiler'
 }
 
-{ #category : #initialization }
+{ #category : 'initialization' }
 IllimaniFinalizationMpHandler >> defaultClassesToAvoidInTheContextSearch [
 
 	^ super defaultClassesToAvoidInTheContextSearch, { self class }
 ]
 
-{ #category : #evaluating }
+{ #category : 'evaluating' }
 IllimaniFinalizationMpHandler >> handleObjectAllocation: newlyAllocatedObject [
 
 	| objectFinalizationModel filteredContext |
@@ -33,7 +35,7 @@ IllimaniFinalizationMpHandler >> handleObjectAllocation: newlyAllocatedObject [
 	profiler addFinalizationFor: newlyAllocatedObject finalizer: objectFinalizationModel
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 IllimaniFinalizationMpHandler >> profiler: anIllimaniFinalizationProfiler [
 
 	profiler := anIllimaniFinalizationProfiler

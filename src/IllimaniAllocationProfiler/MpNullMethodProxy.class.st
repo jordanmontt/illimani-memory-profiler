@@ -1,19 +1,21 @@
 Class {
-	#name : #MpNullMethodProxy,
-	#superclass : #MpMethodProxy,
-	#category : #'IllimaniAllocationProfiler-Profiler Instrumentator'
+	#name : 'MpNullMethodProxy',
+	#superclass : 'MpMethodProxy',
+	#category : 'IllimaniAllocationProfiler-Profiler Instrumentator',
+	#package : 'IllimaniAllocationProfiler',
+	#tag : 'Profiler Instrumentator'
 }
 
-{ #category : #installation }
+{ #category : 'installation' }
 MpNullMethodProxy >> install [
 ]
 
-{ #category : #installation }
+{ #category : 'installation' }
 MpNullMethodProxy >> shouldWrap: aMethod [
 
 	^ false
 ]
 
-{ #category : #installation }
+{ #category : 'installation' }
 MpNullMethodProxy >> uninstall [
 ]

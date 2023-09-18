@@ -1,6 +1,6 @@
 Class {
-	#name : #BasicAllocationInfoModel,
-	#superclass : #Object,
+	#name : 'BasicAllocationInfoModel',
+	#superclass : 'Object',
 	#instVars : [
 		'allocatedObjectClass',
 		'finalizationTimestamp',
@@ -8,50 +8,52 @@ Class {
 		'initializationTimestamp',
 		'gcSpentTime'
 	],
-	#category : #'IllimaniAllocationProfiler-Model'
+	#category : 'IllimaniAllocationProfiler-Model',
+	#package : 'IllimaniAllocationProfiler',
+	#tag : 'Model'
 }
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 BasicAllocationInfoModel >> allocatedObjectClass [
 
 	^ allocatedObjectClass
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 BasicAllocationInfoModel >> allocatedObjectClass: anObject [
 
 	allocatedObjectClass := anObject
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 BasicAllocationInfoModel >> finalizationTimestamp [
 	"In microseconds"
 
 	^ finalizationTimestamp
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 BasicAllocationInfoModel >> finalizationTimestamp: anObject [
 	"In microseconds"
 
 	finalizationTimestamp := anObject
 ]
 
-{ #category : #finalization }
+{ #category : 'finalization' }
 BasicAllocationInfoModel >> finalize [
 
 	finalizationTimestamp := Time microsecondClockValue.
 	gcSpentTime := gcSpentTime - Smalltalk vm totalGCTime
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 BasicAllocationInfoModel >> initializationTimestamp [
 	"In microseconds"
 
 	^ initializationTimestamp
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 BasicAllocationInfoModel >> initializationTimestamp: microsecondsAsInt [
 	"In microseconds"
 
@@ -59,39 +61,39 @@ BasicAllocationInfoModel >> initializationTimestamp: microsecondsAsInt [
 	initializationTimestamp := microsecondsAsInt
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 BasicAllocationInfoModel >> lifetime [
 
 	^ finalizationTimestamp - initializationTimestamp - gcSpentTime
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 BasicAllocationInfoModel >> lifetimeAsDuration [
 
 	^ Duration microSeconds: self lifetime
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 BasicAllocationInfoModel >> lifetimeAsString [
 
 	finalizationTimestamp ifNil: [ ^ '-' ].
 	^ self lifetimeAsDuration humanReadablePrintString
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 BasicAllocationInfoModel >> timestampAsSeconds [
 
 	^ initializationTimestamp / 1000000
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 BasicAllocationInfoModel >> totalSizeInBytes [
 	"Returns the total size in memory in bytes"
 
 	^ totalSizeInBytes
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 BasicAllocationInfoModel >> totalSizeInBytes: aNumber [
 
 	totalSizeInBytes := aNumber

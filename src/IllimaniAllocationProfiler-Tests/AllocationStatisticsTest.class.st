@@ -2,16 +2,18 @@
 An AllocationStatisticsWalkerTest is a test class for testing the behavior of AllocationStatisticsWalker
 "
 Class {
-	#name : #AllocationStatisticsTest,
-	#superclass : #TestCase,
+	#name : 'AllocationStatisticsTest',
+	#superclass : 'TestCase',
 	#instVars : [
 		'fixture',
 		'statsModel'
 	],
-	#category : #'IllimaniAllocationProfiler-Tests-Statistics-Model'
+	#category : 'IllimaniAllocationProfiler-Tests-Statistics-Model',
+	#package : 'IllimaniAllocationProfiler-Tests',
+	#tag : 'Statistics-Model'
 }
 
-{ #category : #running }
+{ #category : 'running' }
 AllocationStatisticsTest >> setUp [
 
 	super setUp.
@@ -21,7 +23,7 @@ AllocationStatisticsTest >> setUp [
 		          yourself
 ]
 
-{ #category : #tests }
+{ #category : 'tests' }
 AllocationStatisticsTest >> testAllocationsByClassHasExactTheSameObjects [
 
 	| col1 col2 |
@@ -31,7 +33,7 @@ AllocationStatisticsTest >> testAllocationsByClassHasExactTheSameObjects [
 	self assertCollection: col2 includesAll: col2
 ]
 
-{ #category : #tests }
+{ #category : 'tests' }
 AllocationStatisticsTest >> testAllocationsByClassMatchesTotalAllocations [
 
 	self assert: statsModel allocationsByClass first totalAllocations
@@ -47,7 +49,7 @@ AllocationStatisticsTest >> testAllocationsByClassMatchesTotalAllocations [
 		(fixture groupedAndSortedByClassAllocations third value sum: [ :e | e value size ])
 ]
 
-{ #category : #tests }
+{ #category : 'tests' }
 AllocationStatisticsTest >> testAllocationsByClassRespectsOrder [
 
 	self assert: statsModel allocationsByClass first allocator
@@ -60,7 +62,7 @@ AllocationStatisticsTest >> testAllocationsByClassRespectsOrder [
 		equals: fixture groupedAndSortedByClassAllocations third key
 ]
 
-{ #category : #tests }
+{ #category : 'tests' }
 AllocationStatisticsTest >> testAllocationsByMethodMatchesTotalAllocations [
 
 	self assert: statsModel allocationsByMethod first totalAllocations
@@ -76,7 +78,7 @@ AllocationStatisticsTest >> testAllocationsByMethodMatchesTotalAllocations [
 		(fixture groupedAndSortedByMethodAllocations third value sum: [ :e | e value size ])
 ]
 
-{ #category : #tests }
+{ #category : 'tests' }
 AllocationStatisticsTest >> testAllocationsByMethodRespectsOrder [
 
 	self assert: statsModel allocationsByMethod first allocator
@@ -89,28 +91,28 @@ AllocationStatisticsTest >> testAllocationsByMethodRespectsOrder [
 		equals: fixture groupedAndSortedByMethodAllocations third key
 ]
 
-{ #category : #tests }
+{ #category : 'tests' }
 AllocationStatisticsTest >> testNumberOfClasses [
 
 	self assert: statsModel numberOfClasses
 		equals: fixture groupedAndSortedByClassAllocations size
 ]
 
-{ #category : #tests }
+{ #category : 'tests' }
 AllocationStatisticsTest >> testNumberOfMethods [
 
 	self assert: statsModel numberOfMethods
 		equals: fixture groupedAndSortedByMethodAllocations size
 ]
 
-{ #category : #tests }
+{ #category : 'tests' }
 AllocationStatisticsTest >> testTimeDifferenceBetweenFirstAndLastAllocation [
 
 	self assert: statsModel timeDifferenceBetweenFirstAndLastAllocation
 		equals: fixture mockedAllocations last initializationTimestamp - fixture mockedAllocations first initializationTimestamp
 ]
 
-{ #category : #tests }
+{ #category : 'tests' }
 AllocationStatisticsTest >> testTopNAllocationsByClass [
 
 	(statsModel topNAllocationsByClass: 2) with:
@@ -118,7 +120,7 @@ AllocationStatisticsTest >> testTopNAllocationsByClass [
 		do: [ :a :b | self assert: a allocator equals: b key ]
 ]
 
-{ #category : #tests }
+{ #category : 'tests' }
 AllocationStatisticsTest >> testTopNAllocationsByMethod [
 
 	(statsModel topNAllocationsByMethod: 2) with:
@@ -126,14 +128,14 @@ AllocationStatisticsTest >> testTopNAllocationsByMethod [
 		do: [ :a :b | self assert: a allocator equals: b key ]
 ]
 
-{ #category : #tests }
+{ #category : 'tests' }
 AllocationStatisticsTest >> testTotalAllocatedMemory [
 
 	self assert: statsModel totalAllocatedMemory
 		equals: (fixture mockedAllocations sum: [ :e | e totalSizeInBytes ])
 ]
 
-{ #category : #tests }
+{ #category : 'tests' }
 AllocationStatisticsTest >> testTotalAllocatedObjects [
 
 	self assert: statsModel totalAllocatedObjects equals: fixture mockedAllocations size

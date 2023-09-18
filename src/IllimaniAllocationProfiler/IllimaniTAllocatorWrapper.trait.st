@@ -2,7 +2,7 @@
 I am a trait that contains the basic behavior to wrap and intercept the allocator methods of Pharo. I am used by the specific profilers
 "
 Trait {
-	#name : #IllimaniTAllocatorWrapper,
+	#name : 'IllimaniTAllocatorWrapper',
 	#instVars : [
 		'proxyBasicNew',
 		'proxyBasicNewKeyword',
@@ -14,22 +14,24 @@ Trait {
 		'totalGCTime',
 		'endOfProfilingTime'
 	],
-	#category : #'IllimaniAllocationProfiler-Profiler Instrumentator'
+	#category : 'IllimaniAllocationProfiler-Profiler Instrumentator',
+	#package : 'IllimaniAllocationProfiler',
+	#tag : 'Profiler Instrumentator'
 }
 
-{ #category : #'accessing - statistics' }
+{ #category : 'accessing - statistics' }
 IllimaniTAllocatorWrapper >> beginningOfProfilingTime [
 
 	^ beginningOfProfilingTime
 ]
 
-{ #category : #'accessing - statistics' }
+{ #category : 'accessing - statistics' }
 IllimaniTAllocatorWrapper >> endOfProfilingTime [
 
 	^ endOfProfilingTime
 ]
 
-{ #category : #api }
+{ #category : 'api' }
 IllimaniTAllocatorWrapper >> forceUninstall [
 	"Waring, do not use unless you cannot start the profiler because you have the
 	MpCannotInstall exceptionp"
@@ -37,19 +39,19 @@ IllimaniTAllocatorWrapper >> forceUninstall [
 	MpMethodProxy allInstances do: #uninstall
 ]
 
-{ #category : #'accessing - statistics' }
+{ #category : 'accessing - statistics' }
 IllimaniTAllocatorWrapper >> fullGCCount [
 
 	^ fullGCCount
 ]
 
-{ #category : #'accessing - statistics' }
+{ #category : 'accessing - statistics' }
 IllimaniTAllocatorWrapper >> incrementalGCCount [
 
 	^ incrementalGCCount
 ]
 
-{ #category : #initialization }
+{ #category : 'initialization' }
 IllimaniTAllocatorWrapper >> initializeMethodProxies: aHandler [
 
 	proxyBasicNew := MpMethodProxy onMethod: Behavior >> #basicNew handler: aHandler.
@@ -62,7 +64,7 @@ IllimaniTAllocatorWrapper >> initializeMethodProxies: aHandler [
 	proxyArrayClass := MpMethodProxy onMethod: Array class >> #new: handler: aHandler
 ]
 
-{ #category : #profiling }
+{ #category : 'profiling' }
 IllimaniTAllocatorWrapper >> initializeProfilingBasicStats [
 
 	beginningOfProfilingTime := Time microsecondClockValue.
@@ -71,7 +73,7 @@ IllimaniTAllocatorWrapper >> initializeProfilingBasicStats [
 	totalGCTime := Duration milliSeconds: Smalltalk vm totalGCTime
 ]
 
-{ #category : #profiling }
+{ #category : 'profiling' }
 IllimaniTAllocatorWrapper >> installMethodProxies [
 
 	proxyBasicNew install.
@@ -80,19 +82,19 @@ IllimaniTAllocatorWrapper >> installMethodProxies [
 	proxyArrayClass install
 ]
 
-{ #category : #testing }
+{ #category : 'testing' }
 IllimaniTAllocatorWrapper >> isProfilingFinished [
 
 	^ endOfProfilingTime isNotNil
 ]
 
-{ #category : #testing }
+{ #category : 'testing' }
 IllimaniTAllocatorWrapper >> isProfilingStarted [
 
 	^ beginningOfProfilingTime isNotNil
 ]
 
-{ #category : #api }
+{ #category : 'api' }
 IllimaniTAllocatorWrapper >> profileFor: aDuration [
 	"Done with a fork because we don't want to block the ui thread since it allocates objects. "
 
@@ -102,7 +104,7 @@ IllimaniTAllocatorWrapper >> profileFor: aDuration [
 	self stopProfiling ] fork
 ]
 
-{ #category : #api }
+{ #category : 'api' }
 IllimaniTAllocatorWrapper >> profileOn: aBlock [
 
 	self startProfiling.
@@ -114,19 +116,19 @@ IllimaniTAllocatorWrapper >> profileOn: aBlock [
 	nil ] ensure: [ self stopProfiling ]
 ]
 
-{ #category : #'accessing - statistics' }
+{ #category : 'accessing - statistics' }
 IllimaniTAllocatorWrapper >> totalGCTime [
 
 	^ totalGCTime
 ]
 
-{ #category : #'accessing - statistics' }
+{ #category : 'accessing - statistics' }
 IllimaniTAllocatorWrapper >> totalProfiledTime [
 
 	^ endOfProfilingTime - beginningOfProfilingTime
 ]
 
-{ #category : #profiling }
+{ #category : 'profiling' }
 IllimaniTAllocatorWrapper >> uninstallMethodProxies [
 
 	proxyBasicNew uninstall.
@@ -135,7 +137,7 @@ IllimaniTAllocatorWrapper >> uninstallMethodProxies [
 	proxyArrayClass uninstall
 ]
 
-{ #category : #profiling }
+{ #category : 'profiling' }
 IllimaniTAllocatorWrapper >> updateStatsWhenFinishingProfiling [
 
 	endOfProfilingTime := Time microsecondClockValue.
