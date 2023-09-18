@@ -1,10 +1,16 @@
 Class {
 	#name : 'MpNullMethodProxy',
-	#superclass : 'MpMethodProxy',
+	#superclass : 'Object',
 	#category : 'IllimaniAllocationProfiler-Profiler Instrumentator',
 	#package : 'IllimaniAllocationProfiler',
 	#tag : 'Profiler Instrumentator'
 }
+
+{ #category : 'instance creation' }
+MpNullMethodProxy class >> onMethod: aMethod handler: aHandler [
+
+	^ self new
+]
 
 { #category : 'installation' }
 MpNullMethodProxy >> install [

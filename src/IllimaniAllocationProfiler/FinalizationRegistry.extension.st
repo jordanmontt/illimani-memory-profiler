@@ -1,7 +1,11 @@
 Extension { #name : 'FinalizationRegistry' }
 
 { #category : '*IllimaniAllocationProfiler' }
-FinalizationRegistry >> finalizeAllEphemerons [
+FinalizationRegistry >> finalizeAllEphemerons [ 
 
-	self valuesDo: #finalize
+	| node |
+	node := ephemeronListHead.
+	[ node isNotNil ] whileTrue: [
+		node value finalize.
+		node := node next ]
 ]

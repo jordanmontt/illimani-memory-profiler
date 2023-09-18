@@ -2,22 +2,12 @@ Class {
 	#name : 'IllimaniFinalizationMpHandlerTest',
 	#superclass : 'TestCase',
 	#instVars : [
-		'handler',
-		'handlerClass'
+		'handler'
 	],
 	#category : 'IllimaniAllocationProfiler-Tests-Profiler',
 	#package : 'IllimaniAllocationProfiler-Tests',
 	#tag : 'Profiler'
 }
-
-{ #category : 'building suites' }
-IllimaniFinalizationMpHandlerTest class >> testParameters [
-
-	^ ParametrizedTestMatrix new
-		  addCase: { (#handlerClass -> IllimaniFinalizationMpHandler) };
-		  addCase: { (#handlerClass -> IllimaniProfilerMpHandler) };
-		  yourself
-]
 
 { #category : 'running' }
 IllimaniFinalizationMpHandlerTest >> setUp [

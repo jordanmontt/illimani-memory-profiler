@@ -98,7 +98,7 @@ IllimaniFinalizationProfiler >> startProfiling [
 	self installMethodProxies.
 	"Run a process that triggers the garbage collector. Using ephemerons we overload the GC
 	stress."
-	self startAndRunGCProcess
+	"self startAndRunGCProcess"
 ]
 
 { #category : 'profiling' }
@@ -106,8 +106,8 @@ IllimaniFinalizationProfiler >> stopProfiling [
 	
 	self uninstallMethodProxies.
 	
-	self terminateGCProcess.
-	self forceFinalizationOfObjects.
+	"self terminateGCProcess."
+	"self forceFinalizationOfObjects."
 
 	self updateStatsWhenFinishingProfiling
 ]
