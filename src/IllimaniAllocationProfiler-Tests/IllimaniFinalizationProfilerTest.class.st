@@ -27,9 +27,7 @@ IllimaniFinalizationProfilerTest >> tearDown [
 { #category : 'tests' }
 IllimaniFinalizationProfilerTest >> testProfileOn [
 
-	finalizationProfiler
-		captureAllObjects;
-		profileOn: [ 10 timesRepeat: [ IllimaniFinalizationProfiler new ] ].
+	finalizationProfiler profileOn: [ 10 timesRepeat: [ IllimaniFinalizationProfiler new ] ].
 
 	"We let the GC run for N times to clean the not referenced objects. Because of the
 	implementation of ephemerons, they can have hard references between them so it is
@@ -46,9 +44,7 @@ IllimaniFinalizationProfilerTest >> testProfileOnFinalizesCorrectly [
 	
 	timeNow := Time microsecondClockValue.
 	
-	finalizationProfiler
-		captureAllObjects;
-		profileOn: [ 10 timesRepeat: [ IllimaniFinalizationProfiler new ] ].
+	finalizationProfiler profileOn: [ 10 timesRepeat: [ IllimaniFinalizationProfiler new ] ].
 	
 	"We let the GC run for N times to clean the not referenced objects. Because of the
 	implementation of ephemerons, they can have hard references between them so it is
@@ -65,7 +61,6 @@ IllimaniFinalizationProfilerTest >> testSamplingRate [
 
 	| allocatedByteSrings |
 	finalizationProfiler
-		captureAllObjects;
 		samplingRate: 20;
 		profileOn: [ 20 timesRepeat: [ ByteString new ] ].
 
@@ -80,5 +75,5 @@ IllimaniFinalizationProfilerTest >> testSamplingRate [
 	"We are cheking in this range becase the profiler makes some allocations that are
 	necessary for the profiler to work, like Durations objects. So we cannot check that the
 	allocations are exacty 1/5 of the total."
-	self assert: (allocatedByteSrings >= 4) & (allocatedByteSrings < 7)
+	self assert: allocatedByteSrings < 7
 ]

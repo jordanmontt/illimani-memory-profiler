@@ -23,12 +23,6 @@ IllimaniFinalizationProfiler >> addFinalizationFor: newlyAllocatedObject finaliz
 ]
 
 { #category : 'profiling' }
-IllimaniFinalizationProfiler >> captureAllObjects [
-
-	profilerHandler captureAllObjects
-]
-
-{ #category : 'profiling' }
 IllimaniFinalizationProfiler >> cleanProfilingData [
 
 	profilerHandler cleanObjectAllocations.

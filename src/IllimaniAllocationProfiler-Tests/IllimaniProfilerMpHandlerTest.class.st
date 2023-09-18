@@ -3,36 +3,20 @@ An IllimaniProfilerMpHandlerTest is a test class for testing the behavior of Ill
 "
 Class {
 	#name : 'IllimaniProfilerMpHandlerTest',
-	#superclass : 'ParametrizedTestCase',
+	#superclass : 'TestCase',
 	#instVars : [
-		'handler',
-		'handlerClass'
+		'handler'
 	],
 	#category : 'IllimaniAllocationProfiler-Tests-Profiler',
 	#package : 'IllimaniAllocationProfiler-Tests',
 	#tag : 'Profiler'
 }
 
-{ #category : 'building suites' }
-IllimaniProfilerMpHandlerTest class >> testParameters [
-
-	^ ParametrizedTestMatrix new
-		  addCase: { (#handlerClass -> IllimaniFinalizationMpHandler) };
-		  addCase: { (#handlerClass -> IllimaniProfilerMpHandler) };
-		  yourself
-]
-
-{ #category : 'running' }
-IllimaniProfilerMpHandlerTest >> handlerClass: aClass [
-
-	handlerClass := aClass
-]
-
 { #category : 'running' }
 IllimaniProfilerMpHandlerTest >> setUp [
 
 	super setUp.
-	handler := handlerClass new
+	handler := IllimaniProfilerMpHandler new
 ]
 
 { #category : 'tests' }
