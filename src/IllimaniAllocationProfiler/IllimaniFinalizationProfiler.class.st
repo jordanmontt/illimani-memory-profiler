@@ -30,6 +30,12 @@ IllimaniFinalizationProfiler >> cleanProfilingData [
 ]
 
 { #category : 'profiling' }
+IllimaniFinalizationProfiler >> finalizeAllEphemerons [
+
+	finalizationRegistry finalizeAllEphemerons
+]
+
+{ #category : 'profiling' }
 IllimaniFinalizationProfiler >> forceFinalizationOfObjects [
 
 	"We force the finalization timestamp for the not yet finalized objects."

@@ -42,12 +42,6 @@ IllimaniFinalizationMpHandler >> cleanObjectAllocations [
 	samplingCounter := 0
 ]
 
-{ #category : 'initialization' }
-IllimaniFinalizationMpHandler >> defaultClassesToAvoidInTheContextSearch [
-
-	^ super defaultClassesToAvoidInTheContextSearch, { self class }
-]
-
 { #category : 'evaluating' }
 IllimaniFinalizationMpHandler >> handleObjectAllocation: newlyAllocatedObject [
 
