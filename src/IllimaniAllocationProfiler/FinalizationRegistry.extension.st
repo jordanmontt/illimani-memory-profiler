@@ -9,15 +9,3 @@ FinalizationRegistry >> finalizeAllEphemerons [
 		node value finalize.
 		node := node next ]
 ]
-
-{ #category : '*IllimaniAllocationProfiler' }
-FinalizationRegistry >> values [
-
-	^ ephemeronCollection collect: [ :e | e value ]
-]
-
-{ #category : '*IllimaniAllocationProfiler' }
-FinalizationRegistry >> valuesDo: aBlock [
-
-	^ self values do: aBlock
-]
