@@ -43,13 +43,16 @@ IllimaniFinalizationProfilerTest >> testProfileOnFinalizesCorrectly [
 	| timeNow |
 	
 	timeNow := Time microsecondClockValue.
-	
 	finalizationProfiler profileOn: [ 10 timesRepeat: [ IllimaniFinalizationProfiler new ] ].
 	
 	"We let the GC run for N times to clean the not referenced objects. Because of the
 	implementation of ephemerons, they can have hard references between them so it is
 	necessary to run the GC several times  "
 	10 timesRepeat: [ Smalltalk garbageCollect ].
+	
+	self
+		assert: finalizationProfiler objectAllocations size
+		equals: (finalizationProfiler objectAllocations select: [ :e | e finalizationTimestamp isNotNil]) size.
 
 	finalizationProfiler objectAllocations do: [ :alloc |
 		"Finalization time must be after timeNow variable"
