@@ -55,12 +55,6 @@ IllimaniFinalizationProfiler >> initialize [
 	self initializeMethodProxies: profilerHandler
 ]
 
-{ #category : 'profiling' }
-IllimaniFinalizationProfiler >> isProfiling [
-
-	^ gcProcess isNotNil
-]
-
 { #category : 'initialization' }
 IllimaniFinalizationProfiler >> objectAllocations [
 
