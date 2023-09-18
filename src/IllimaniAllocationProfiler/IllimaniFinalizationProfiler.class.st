@@ -8,7 +8,6 @@ Class {
 	#classTraits : 'IllimaniTAllocatorWrapper classTrait',
 	#instVars : [
 		'profilerHandler',
-		'gcProcess',
 		'finalizationRegistry'
 	],
 	#category : 'IllimaniAllocationProfiler-Finalization Profiler',
@@ -40,18 +39,9 @@ IllimaniFinalizationProfiler >> forceFinalizationOfObjects [
 
 	"We force the finalization timestamp for the not yet finalized objects."
 	"finalizationRegistry valuesDo: #finalize."
-	finalizationRegistry finalizeAllEphemerons.
+	self finalizeAllEphemerons.
 	"Then we stop referencing the finalization registry to not re-finalize the objects."
-	finalizationRegistry := FinalizationRegistry new.
-
-	"We let the GC run for N times to clean the not referenced objects. Because of the
-	implementation of ephemerons, they can have hard references between them so it is
-	necessary to run the GC several times  "
-
-	[
-	20 timesRepeat: [
-		Smalltalk garbageCollect.
-		30 milliSecond wait ] ] fork
+	finalizationRegistry := FinalizationRegistry new
 ]
 
 { #category : 'initialization' }
@@ -84,43 +74,17 @@ IllimaniFinalizationProfiler >> samplingRate: anInteger [
 ]
 
 { #category : 'profiling' }
-IllimaniFinalizationProfiler >> startAndRunGCProcess [
-
-	gcProcess := [
-	             [ true ] whileTrue: [
-		             300 milliSeconds wait.
-		             Smalltalk garbageCollect ] ] newProcess.
-
-	gcProcess resume
-]
-
-{ #category : 'profiling' }
 IllimaniFinalizationProfiler >> startProfiling [
 
 	self cleanProfilingData.
-
 	self initializeProfilingBasicStats.
-
-	self installMethodProxies.
-	"Run a process that triggers the garbage collector. Using ephemerons we overload the GC
-	stress."
-	"self startAndRunGCProcess"
+	self installMethodProxies
 ]
 
 { #category : 'profiling' }
 IllimaniFinalizationProfiler >> stopProfiling [
 	
 	self uninstallMethodProxies.
-	
-	"self terminateGCProcess."
-	"self forceFinalizationOfObjects."
-
+	self forceFinalizationOfObjects.
 	self updateStatsWhenFinishingProfiling
-]
-
-{ #category : 'profiling' }
-IllimaniFinalizationProfiler >> terminateGCProcess [
-
-	gcProcess terminate.
-	gcProcess := nil
 ]
