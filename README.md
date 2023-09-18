@@ -13,7 +13,9 @@
   <em>The Illimani mountain in La Paz, Bolivia</em>
 </p>
 
-## How to install it
+The release version `v0.8` works on Pharo 11 and Pharo 10. To use it on Pharo 12, please use the version that is on the `main` branch.
+
+## How to install it (`main` version for Pharo 12)
 
 ```smalltalk
 EpMonitor disableDuring: [
