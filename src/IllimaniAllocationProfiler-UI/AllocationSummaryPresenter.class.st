@@ -20,7 +20,6 @@ AllocationSummaryPresenter >> defaultLayout [
 		'Total profiled time' -> self totalProfiledTime .
 		'Time difference between first and last allocation' -> self timeDifferenceBetweenFirstAndLastAllocation .
 		'Total allocated objects' -> self totalAllocatedObjects .
-		'Total equal allocated objects' -> self totalEqualAllocatedObjects .
 		'Total allocated memory' -> self totalAllocatedMemory .
 		'Classes that allocate objects' -> self numberOfClasses .
 		'Methods that allocate objects' -> self numberOfMethods .
@@ -100,17 +99,6 @@ AllocationSummaryPresenter >> totalAllocatedMemory [
 AllocationSummaryPresenter >> totalAllocatedObjects [
 
 	^ profiler stats totalAllocatedObjects asStringWithCommas
-]
-
-{ #category : 'accessing' }
-AllocationSummaryPresenter >> totalEqualAllocatedObjects [
-
-	| totalEqualAllocatedObjects |
-	totalEqualAllocatedObjects := profiler stats totalEqualAllocatedObjects.
-
-	^ totalEqualAllocatedObjects = 1
-		ifTrue: [ '-' ]
-		ifFalse: [ totalEqualAllocatedObjects asString ]
 ]
 
 { #category : 'accessing' }

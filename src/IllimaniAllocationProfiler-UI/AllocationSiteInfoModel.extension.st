@@ -6,9 +6,7 @@ AllocationSiteInfoModel >> inspectableAssociations [
 	^ super inspectableAssociations , {
 		  ('Allocator Class' -> allocatorClass).
 		  ('Allocator Method' -> allocatorMethod).
-		  ('Context' -> context).
-		  ('Allocated Object' -> allocatedObject).
-		  ('Allocated Object Hash' -> allocatedObjectHash) }
+		  ('Context' -> context) }
 ]
 
 { #category : '*IllimaniAllocationProfiler-UI' }

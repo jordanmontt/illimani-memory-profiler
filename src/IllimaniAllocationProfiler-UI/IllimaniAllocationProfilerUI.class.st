@@ -35,7 +35,7 @@ IllimaniAllocationProfilerUI class >> profiler: aProfiler announcer: anIllimaniA
 		yourself
 ]
 
-{ #category : 'accessing' }
+{ #category : 'accessing - lazy presenters' }
 IllimaniAllocationProfilerUI >> allocatedObjectsPerSecondPerClassPresenter [
 
 	^ SpRoassalPresenter new
@@ -46,7 +46,7 @@ IllimaniAllocationProfilerUI >> allocatedObjectsPerSecondPerClassPresenter [
 		yourself
 ]
 
-{ #category : 'accessing' }
+{ #category : 'accessing - lazy presenters' }
 IllimaniAllocationProfilerUI >> allocatedObjectsPerSecondPerMethodPresenter [
 
 	^ SpRoassalPresenter new

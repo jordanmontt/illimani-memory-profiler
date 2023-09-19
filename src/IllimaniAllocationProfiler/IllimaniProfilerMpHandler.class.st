@@ -11,9 +11,7 @@ Class {
 		'classesToAvoidInTheContextSearch',
 		'captureAllObjects',
 		'copyExecutionStack',
-		'keepReferencesToAllocatedObjects',
 		'objectClassesToCapture',
-		'copyObjectHash',
 		'samplingCounter',
 		'objectClassesToIgnore',
 		'samplingRate'
@@ -57,17 +55,6 @@ IllimaniProfilerMpHandler >> copyExecutionStack [
 	the image can grow quickly and drastically."
 
 	copyExecutionStack := true
-]
-
-{ #category : 'api' }
-IllimaniProfilerMpHandler >> copyObjectIdentityHash [
-	"When this turned to true I will ask for the hash for all the allocated objects"
-
-	"Keep in mind that if you send the message has to a no configurated object, it will raise
-	an exception. So activate this when you are sure that an object is configurated only
-	sending the message new."
-
-	copyObjectHash := true
 ]
 
 { #category : 'initialization' }
@@ -118,8 +105,6 @@ IllimaniProfilerMpHandler >> handleObjectAllocation: newlyAllocatedObject [
 	filteredContext := self filterContext: thisContext ignoringClass: newlyAllocatedObject class.
 
 	copyExecutionStack ifTrue: [ allocationInformationHolder context: filteredContext copyStack ].
-	copyObjectHash ifTrue: [ allocationInformationHolder allocatedObjectHash: newlyAllocatedObject hash ].
-	keepReferencesToAllocatedObjects ifTrue: [ allocationInformationHolder allocatedObject: newlyAllocatedObject ].
 
 	allocationInformationHolder
 		allocatorClass: filteredContext receiver class;
@@ -139,8 +124,6 @@ IllimaniProfilerMpHandler >> initialize [
 
 	copyExecutionStack := false.
 	captureAllObjects := false.
-	copyObjectHash := false.
-	keepReferencesToAllocatedObjects := false.
 
 	objectClassesToCapture := {  }.
 	objectClassesToIgnore := {  }.
@@ -159,17 +142,6 @@ IllimaniProfilerMpHandler >> initializeClassesToAvoidInContextSearch [
 
 	classesToAvoidInTheContextSearch := self defaultClassesToAvoidInTheContextSearch ,
 		(self defaultClassesToAvoidInTheContextSearch collect: [ :aClass | aClass class ])
-]
-
-{ #category : 'api' }
-IllimaniProfilerMpHandler >> keepReferencesToAllocatedObjects [
-	"When this turned to true I will copy all the allocated of all the objects"
-
-	"Keep in mind that with option turned on it will affect the GC.
-	All the allocated objects will be referenced, because we are keeping them.
-	So the GC because it will never discard any of the objects."
-
-	keepReferencesToAllocatedObjects := true
 ]
 
 { #category : 'accessing' }

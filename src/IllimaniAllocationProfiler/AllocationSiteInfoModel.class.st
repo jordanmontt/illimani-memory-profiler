@@ -5,38 +5,12 @@ Class {
 		'context',
 		'allocatorClass',
 		'allocatorMethod',
-		'contextFingerprint',
-		'allocatedObject',
-		'allocatedObjectHash'
+		'contextFingerprint'
 	],
 	#category : 'IllimaniAllocationProfiler-Model',
 	#package : 'IllimaniAllocationProfiler',
 	#tag : 'Model'
 }
-
-{ #category : 'accessing' }
-AllocationSiteInfoModel >> allocatedObject [
-
-	^ allocatedObject
-]
-
-{ #category : 'accessing' }
-AllocationSiteInfoModel >> allocatedObject: anObj [
-
-	allocatedObject := anObj
-]
-
-{ #category : 'accessing' }
-AllocationSiteInfoModel >> allocatedObjectHash [
-
-	^ allocatedObjectHash
-]
-
-{ #category : 'accessing' }
-AllocationSiteInfoModel >> allocatedObjectHash: anObject [
-
-	allocatedObjectHash := anObject
-]
 
 { #category : 'accessing' }
 AllocationSiteInfoModel >> allocatorClass [
