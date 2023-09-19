@@ -33,19 +33,19 @@ FinalizationLifetimesTablePresenter >> initializePresenters [
 		items: groupedAllocationsBySeconds;
 		alternateRowsColor;
 		addColumn: (SpStringTableColumn
-			title: 'Grouped lifetime duration'
+			title: 'Lifetime duration (seconds)'
 			evaluated: [ :assoc | assoc key ]);
 		addColumn: (SpStringTableColumn
-			title: 'Allocated memory'
+			title: 'Total allocated memory'
 			evaluated: [ :assoc | (assoc value sum: [ :e | e totalSizeInBytes ]) humanReadableByteSizeString ]);
 		addColumn: (SpStringTableColumn
-			title: 'Memory %'
+			title: '% Memory'
 			evaluated: [ :assoc | self convertToPercentageString: (assoc value sum: [ :e | e totalSizeInBytes ]) / totalMemory ]);
 		addColumn: (SpStringTableColumn
 			title: '# of allocated objects'
 			evaluated: [ :assoc | assoc value size asStringWithCommas ]);
 		addColumn: (SpStringTableColumn
-			title: 'Allocated objects %'
+			title: '% Allocated objects'
 			evaluated: [ :assoc | self convertToPercentageString: (assoc value size / totalAllocations) ]);
 			yourself
 ]
