@@ -1,8 +1,5 @@
-"
-I am a presenter class that shows basic statistics about the object allocations.
-"
 Class {
-	#name : 'AllocationSummaryPresenter',
+	#name : 'BasicAllocationSummaryPresenter',
 	#superclass : 'SpPresenter',
 	#instVars : [
 		'profiler'
@@ -13,17 +10,10 @@ Class {
 }
 
 { #category : 'layout' }
-AllocationSummaryPresenter >> defaultLayout [
+BasicAllocationSummaryPresenter >> defaultLayout [
 
 	| gcElements generalStatsElements tablePresenter tablePresenter2 |
-	generalStatsElements := {
-		'Total profiled time' -> self totalProfiledTime .
-		'Time difference between first and last allocation' -> self timeDifferenceBetweenFirstAndLastAllocation .
-		'Total allocated objects' -> self totalAllocatedObjects .
-		'Total allocated memory' -> self totalAllocatedMemory .
-		'Classes that allocate objects' -> self numberOfClasses .
-		'Methods that allocate objects' -> self numberOfMethods .
-		 }.
+	generalStatsElements := self generalStatsAssociations.
 
 	tablePresenter := self newTable.
 	tablePresenter
@@ -53,62 +43,60 @@ AllocationSummaryPresenter >> defaultLayout [
 ]
 
 { #category : 'accessing' }
-AllocationSummaryPresenter >> fullGCCount [
+BasicAllocationSummaryPresenter >> fullGCCount [
 
 	^ profiler fullGCCount asString
 ]
 
+{ #category : 'layout' }
+BasicAllocationSummaryPresenter >> generalStatsAssociations [
+
+	^ {
+		  ('Total profiled time' -> self totalProfiledTime).
+		  ('Time difference between first and last allocation' -> self timeDifferenceBetweenFirstAndLastAllocation).
+		  ('Total allocated objects' -> self totalAllocatedObjects).
+		  ('Total allocated memory' -> self totalAllocatedMemory) }
+]
+
 { #category : 'accessing' }
-AllocationSummaryPresenter >> incrementalGCCount [
+BasicAllocationSummaryPresenter >> incrementalGCCount [
 
 	^ profiler incrementalGCCount asString
 ]
 
-{ #category : 'accessing' }
-AllocationSummaryPresenter >> numberOfClasses [
-
-	^ profiler stats numberOfClasses asString
-]
-
-{ #category : 'accessing' }
-AllocationSummaryPresenter >> numberOfMethods [
-
-	^ profiler stats numberOfMethods asString
-]
-
 { #category : 'accessing - model' }
-AllocationSummaryPresenter >> setModelBeforeInitialization: aModel [
+BasicAllocationSummaryPresenter >> setModelBeforeInitialization: aModel [
 
 	profiler := aModel
 ]
 
 { #category : 'accessing' }
-AllocationSummaryPresenter >> timeDifferenceBetweenFirstAndLastAllocation [
+BasicAllocationSummaryPresenter >> timeDifferenceBetweenFirstAndLastAllocation [
 
 	^ (Duration microSeconds: profiler stats timeDifferenceBetweenFirstAndLastAllocation)
 		  humanReadableStringWithOnlySeconds
 ]
 
 { #category : 'accessing' }
-AllocationSummaryPresenter >> totalAllocatedMemory [
+BasicAllocationSummaryPresenter >> totalAllocatedMemory [
 
 	^ profiler stats totalAllocatedMemory humanReadableByteSizeString
 ]
 
 { #category : 'accessing' }
-AllocationSummaryPresenter >> totalAllocatedObjects [
+BasicAllocationSummaryPresenter >> totalAllocatedObjects [
 
 	^ profiler stats totalAllocatedObjects asStringWithCommas
 ]
 
 { #category : 'accessing' }
-AllocationSummaryPresenter >> totalGCTime [
+BasicAllocationSummaryPresenter >> totalGCTime [
 
 	^ profiler totalGCTime asDuration humanReadableStringWithOnlySeconds
 ]
 
 { #category : 'accessing' }
-AllocationSummaryPresenter >> totalProfiledTime [
+BasicAllocationSummaryPresenter >> totalProfiledTime [
 
 	^ (Duration microSeconds: profiler totalProfiledTime) humanReadableStringWithOnlySeconds
 ]

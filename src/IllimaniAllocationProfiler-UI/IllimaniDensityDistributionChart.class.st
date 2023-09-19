@@ -27,7 +27,7 @@ IllimaniDensityDistributionChart >> addChartTitles [
 { #category : 'defaults' }
 IllimaniDensityDistributionChart >> addTickDecorations [
 
-	"Horizonral tick is always the same"
+	"Horizontal ticks are always the same"
 	chart horizontalTick
 		numberOfTicks: numberOfTicks;
 		labelConversion: [ :e | e asInteger printString ].

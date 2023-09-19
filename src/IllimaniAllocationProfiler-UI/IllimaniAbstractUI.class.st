@@ -8,7 +8,10 @@ Class {
 		'profiler',
 		'illimaniAnnouncer',
 		'topCalculationsNumberInputPresenter',
-		'topCalculationsNumber'
+		'topCalculationsNumber',
+		'codeEvaluator',
+		'allocatedObjectsTablePresenter',
+		'summaryAndEvaluatorPresenter'
 	],
 	#category : 'IllimaniAllocationProfiler-UI-Main Presenter',
 	#package : 'IllimaniAllocationProfiler-UI',
@@ -23,6 +26,26 @@ IllimaniAbstractUI class >> profiler: aProfiler announcer: anIllimaniAnnouncer [
 		illimaniAnnouncer: anIllimaniAnnouncer;
 		initialize;
 		yourself
+]
+
+{ #category : 'accessing - lazy presenters' }
+IllimaniAbstractUI >> allocatedObjectsTablePresenter [
+
+	allocatedObjectsTablePresenter ifNil: [ self initializeAllocatedObjectsTablePresenter ].
+	^ allocatedObjectsTablePresenter
+]
+
+{ #category : 'accessing - lazy presenters' }
+IllimaniAbstractUI >> codeEvaluator [
+
+	codeEvaluator ifNil: [ self initializeCodeEvaluator ].
+	^ codeEvaluator
+]
+
+{ #category : 'accessing' }
+IllimaniAbstractUI >> codeEvaluatorText [
+
+	^ self subclassResponsibility
 ]
 
 { #category : 'initialization' }
@@ -61,6 +84,21 @@ IllimaniAbstractUI >> illimaniAnnouncer: aIllimaniAnnouncer [
 ]
 
 { #category : 'initialization - lazy presenters' }
+IllimaniAbstractUI >> initializeAllocatedObjectsTablePresenter [
+
+	allocatedObjectsTablePresenter := self instantiate: (AllocatedObjectsTablePresenter on: profiler objectAllocations)
+]
+
+{ #category : 'initialization - lazy presenters' }
+IllimaniAbstractUI >> initializeCodeEvaluator [
+
+	codeEvaluator := self newCode
+		text: self codeEvaluatorText;
+		beForObject: profiler;
+		yourself
+]
+
+{ #category : 'initialization - lazy presenters' }
 IllimaniAbstractUI >> initializeNotebook [
 
 	self subclassResponsibility
@@ -73,6 +111,23 @@ IllimaniAbstractUI >> initializePresenters [
 	self respondToAnnouncement.
 	topCalculationsNumber := 10.
 	self initializeTopCalculationsInputPresenter
+]
+
+{ #category : 'initialization - lazy presenters' }
+IllimaniAbstractUI >> initializeSummaryAndEvaluatorPresenter [
+
+	| statsAndEvaluatorLayout statsPresenter |
+	statsPresenter :=	self summaryStatsPresenter.
+
+	statsAndEvaluatorLayout := SpPanedLayout newTopToBottom
+		positionOfSlider: 0.75;
+		add: statsPresenter;
+		add: self codeEvaluator;
+		yourself.
+
+	summaryAndEvaluatorPresenter := SpPresenter new
+		layout: statsAndEvaluatorLayout ;
+		yourself
 ]
 
 { #category : 'initialization' }
@@ -101,7 +156,7 @@ IllimaniAbstractUI >> initializeTopCalculationsInputPresenter [
 IllimaniAbstractUI >> initializeWindow: aWindowPresenter [
 
 	aWindowPresenter
-		title: 'Illimani Memory Profiler';
+		title: self title;
 		initialExtent: 1000 @ 650
 ]
 
@@ -151,12 +206,6 @@ IllimaniAbstractUI >> notebookPresenter [
 ]
 
 { #category : 'accessing' }
-IllimaniAbstractUI >> profiler [
-
-	^ profiler
-]
-
-{ #category : 'accessing' }
 IllimaniAbstractUI >> profiler: aProfiler [
 
 	profiler := aProfiler
@@ -176,8 +225,21 @@ IllimaniAbstractUI >> respondToAnnouncement [
 		for: self
 ]
 
-{ #category : 'accessing' }
-IllimaniAbstractUI >> topCalculationsNumber [
+{ #category : 'accessing - lazy presenters' }
+IllimaniAbstractUI >> summaryAndEvaluatorPresenter [
 
-	^ topCalculationsNumber
+	summaryAndEvaluatorPresenter ifNil: [ self initializeSummaryAndEvaluatorPresenter ].
+	^ summaryAndEvaluatorPresenter
+]
+
+{ #category : 'initialization - lazy presenters' }
+IllimaniAbstractUI >> summaryStatsPresenter [
+
+	^ self subclassResponsibility
+]
+
+{ #category : 'initialization' }
+IllimaniAbstractUI >> title [
+
+	^ 'Illimani Memory Profiler'
 ]

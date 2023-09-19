@@ -60,14 +60,6 @@ IllimaniFinalizationProfiler >> objectAllocations [
 	^ profilerHandler objectAllocations
 ]
 
-{ #category : 'instance creation' }
-IllimaniFinalizationProfiler >> open [
-
-	^ (IllimaniFinalizationProfilerUI profiler: self announcer: IllimaniAnnouncer new)
-		  open;
-		  yourself
-]
-
 { #category : 'api' }
 IllimaniFinalizationProfiler >> samplingRate: anInteger [
 
@@ -82,10 +74,35 @@ IllimaniFinalizationProfiler >> startProfiling [
 	self installMethodProxies
 ]
 
+{ #category : 'accessing - statistics' }
+IllimaniFinalizationProfiler >> stats [
+	"There is no stats model for this profiler yet"
+
+	^ self
+]
+
 { #category : 'profiling' }
 IllimaniFinalizationProfiler >> stopProfiling [
 	
 	self uninstallMethodProxies.
 	self forceFinalizationOfObjects.
 	self updateStatsWhenFinishingProfiling
+]
+
+{ #category : 'statistics - time' }
+IllimaniFinalizationProfiler >> timeDifferenceBetweenFirstAndLastAllocation [
+
+	^ self objectAllocations last initializationTimestamp - self objectAllocations first initializationTimestamp
+]
+
+{ #category : 'accessing' }
+IllimaniFinalizationProfiler >> totalAllocatedMemory [
+
+	^ self objectAllocations inject: 0 into: [ :sum : elem | sum + elem totalSizeInBytes ]
+]
+
+{ #category : 'accessing' }
+IllimaniFinalizationProfiler >> totalAllocatedObjects [
+
+	^ self objectAllocations size
 ]
