@@ -1,22 +1,24 @@
 Class {
-	#name : #AllocatedObjectsTablePresenter,
-	#superclass : #SpPresenter,
+	#name : 'AllocatedObjectsTablePresenter',
+	#superclass : 'SpPresenter',
 	#instVars : [
 		'tablePresenter',
 		'totalAllocations',
 		'inputPresenter',
 		'objectAllocations'
 	],
-	#category : #'IllimaniAllocationProfiler-UI-Widgets'
+	#category : 'IllimaniAllocationProfiler-UI-Widgets',
+	#package : 'IllimaniAllocationProfiler-UI',
+	#tag : 'Widgets'
 }
 
-{ #category : #initialization }
+{ #category : 'initialization' }
 AllocatedObjectsTablePresenter >> connectPresenters [
 
 	inputPresenter whenTextChangedDo: [ :text | self filterTable: text ]
 ]
 
-{ #category : #layout }
+{ #category : 'layout' }
 AllocatedObjectsTablePresenter >> defaultLayout [
 
 	^ SpBoxLayout newTopToBottom
@@ -26,7 +28,7 @@ AllocatedObjectsTablePresenter >> defaultLayout [
 		yourself
 ]
 
-{ #category : #'accessing - model' }
+{ #category : 'accessing - model' }
 AllocatedObjectsTablePresenter >> filterTable: aText [
 
 	| newItems |
@@ -38,7 +40,7 @@ AllocatedObjectsTablePresenter >> filterTable: aText [
 	tablePresenter items: newItems
 ]
 
-{ #category : #initialization }
+{ #category : 'initialization' }
 AllocatedObjectsTablePresenter >> initializePresenters [
 
 	inputPresenter := self newTextInput
@@ -64,7 +66,7 @@ AllocatedObjectsTablePresenter >> initializePresenters [
 		yourself
 ]
 
-{ #category : #'accessing - model' }
+{ #category : 'accessing - model' }
 AllocatedObjectsTablePresenter >> setModelBeforeInitialization: aModel [
 
 	objectAllocations := (aModel collect: #allocatedObjectClass as: Bag) sortedCounts.

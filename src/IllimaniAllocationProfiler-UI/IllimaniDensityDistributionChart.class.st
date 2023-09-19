@@ -1,6 +1,6 @@
 Class {
-	#name : #IllimaniDensityDistributionChart,
-	#superclass : #Object,
+	#name : 'IllimaniDensityDistributionChart',
+	#superclass : 'Object',
 	#instVars : [
 		'x',
 		'y',
@@ -11,10 +11,12 @@ Class {
 		'chart',
 		'isMemoryChart'
 	],
-	#category : #'IllimaniAllocationProfiler-UI-Roassal'
+	#category : 'IllimaniAllocationProfiler-UI-Roassal',
+	#package : 'IllimaniAllocationProfiler-UI',
+	#tag : 'Roassal'
 }
 
-{ #category : #defaults }
+{ #category : 'defaults' }
 IllimaniDensityDistributionChart >> addChartTitles [
 
 	chart xlabel: xTitle.
@@ -22,7 +24,7 @@ IllimaniDensityDistributionChart >> addChartTitles [
 	chart title: title
 ]
 
-{ #category : #defaults }
+{ #category : 'defaults' }
 IllimaniDensityDistributionChart >> addTickDecorations [
 
 	"Horizonral tick is always the same"
@@ -38,7 +40,7 @@ IllimaniDensityDistributionChart >> addTickDecorations [
 			chart verticalTick labelConversion: [ :e | e asInteger asStringWithCommas ] ]
 ]
 
-{ #category : #api }
+{ #category : 'api' }
 IllimaniDensityDistributionChart >> densityChartCanvas [
 
 	| plot |
@@ -73,7 +75,7 @@ IllimaniDensityDistributionChart >> densityChartCanvas [
 	^ chart canvas
 ]
 
-{ #category : #api }
+{ #category : 'api' }
 IllimaniDensityDistributionChart >> densityChartPresenter [
 
 	^ SpRoassalPresenter new
@@ -81,7 +83,7 @@ IllimaniDensityDistributionChart >> densityChartPresenter [
 		  yourself
 ]
 
-{ #category : #initialization }
+{ #category : 'initialization' }
 IllimaniDensityDistributionChart >> initialize [
 
 	super initialize.
@@ -94,7 +96,7 @@ IllimaniDensityDistributionChart >> initialize [
 	isMemoryChart := true
 ]
 
-{ #category : #initialization }
+{ #category : 'initialization' }
 IllimaniDensityDistributionChart >> initializeChart [
 
 	^ RSCompositeChart new
@@ -102,49 +104,49 @@ IllimaniDensityDistributionChart >> initializeChart [
 		  yourself
 ]
 
-{ #category : #api }
+{ #category : 'api' }
 IllimaniDensityDistributionChart >> isMemoryChart: aBoolean [
 
 	isMemoryChart := aBoolean
 ]
 
-{ #category : #api }
+{ #category : 'api' }
 IllimaniDensityDistributionChart >> numberOfTicks: anInteger [
 
 	numberOfTicks := anInteger
 ]
 
-{ #category : #api }
+{ #category : 'api' }
 IllimaniDensityDistributionChart >> title: aTitle [
 
 	title := aTitle
 ]
 
-{ #category : #api }
+{ #category : 'api' }
 IllimaniDensityDistributionChart >> x: col [
 
 	x := col
 ]
 
-{ #category : #api }
+{ #category : 'api' }
 IllimaniDensityDistributionChart >> xTitle: aTitle [
 
 	xTitle := aTitle
 ]
 
-{ #category : #api }
+{ #category : 'api' }
 IllimaniDensityDistributionChart >> y: col [
 
 	y := col
 ]
 
-{ #category : #api }
+{ #category : 'api' }
 IllimaniDensityDistributionChart >> yLog [
 
 	chart yLog
 ]
 
-{ #category : #api }
+{ #category : 'api' }
 IllimaniDensityDistributionChart >> yTitle: aTitle [
 
 	yTitle := aTitle

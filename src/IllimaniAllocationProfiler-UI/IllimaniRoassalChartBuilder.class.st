@@ -2,16 +2,18 @@
 I am a class that builds the canvas of the different visualizations.
 "
 Class {
-	#name : #IllimaniRoassalChartBuilder,
-	#superclass : #Object,
+	#name : 'IllimaniRoassalChartBuilder',
+	#superclass : 'Object',
 	#instVars : [
 		'topCalculationsNumber',
 		'model'
 	],
-	#category : #'IllimaniAllocationProfiler-UI-Roassal'
+	#category : 'IllimaniAllocationProfiler-UI-Roassal',
+	#package : 'IllimaniAllocationProfiler-UI',
+	#tag : 'Roassal'
 }
 
-{ #category : #'instance creation' }
+{ #category : 'instance creation' }
 IllimaniRoassalChartBuilder class >> on: aModel [
 
 	^ self new
@@ -19,20 +21,20 @@ IllimaniRoassalChartBuilder class >> on: aModel [
 		  yourself
 ]
 
-{ #category : #'chart construction' }
+{ #category : 'chart construction' }
 IllimaniRoassalChartBuilder >> addLabelsX: xText y: yText forChart: chart [
 
 	(chart xlabel: xText) shape color: Color black.
 	(chart ylabel: yText) shape color: Color black
 ]
 
-{ #category : #'chart construction' }
+{ #category : 'chart construction' }
 IllimaniRoassalChartBuilder >> addTicksToLabel: chart [
 
 	chart verticalTick labelConversion: [ :value | value asInteger asStringWithCommas ]
 ]
 
-{ #category : #'api - line chart' }
+{ #category : 'api - line chart' }
 IllimaniRoassalChartBuilder >> allocatedObjectsPerSecondLineChartCanvas [
 
 	| chart linePlot |
@@ -47,21 +49,21 @@ IllimaniRoassalChartBuilder >> allocatedObjectsPerSecondLineChartCanvas [
 	^ chart canvas
 ]
 
-{ #category : #'api - line chart' }
+{ #category : 'api - line chart' }
 IllimaniRoassalChartBuilder >> allocatedObjectsPerSecondPerClassLineChartCanvas [
 
 	^ self constructPerSecondLineChart:
 		  (model stats topNAllocationsByClass: topCalculationsNumber)
 ]
 
-{ #category : #'api - line chart' }
+{ #category : 'api - line chart' }
 IllimaniRoassalChartBuilder >> allocatedObjectsPerSecondPerMethodLineChartCanvas [
 
 	^ self constructPerSecondLineChart:
 		  (model stats topNAllocationsByMethod: topCalculationsNumber)
 ]
 
-{ #category : #'chart construction' }
+{ #category : 'chart construction' }
 IllimaniRoassalChartBuilder >> constructPerSecondLineChart: aCollection [
 
 	| chart linePlot legend |
@@ -93,7 +95,7 @@ IllimaniRoassalChartBuilder >> constructPerSecondLineChart: aCollection [
 	^ chart canvas
 ]
 
-{ #category : #'chart construction' }
+{ #category : 'chart construction' }
 IllimaniRoassalChartBuilder >> createLinePlotForAllocations: someAllocations [
 
 	| times linePlot indices sortedByTime |
@@ -109,7 +111,7 @@ IllimaniRoassalChartBuilder >> createLinePlotForAllocations: someAllocations [
 	^ linePlot
 ]
 
-{ #category : #'api - heatmap' }
+{ #category : 'api - heatmap' }
 IllimaniRoassalChartBuilder >> heatmapAllocatorAllocatedCanvasByClass [
 
 	^ IllimaniHeatmapRoassalBuilder new
@@ -118,7 +120,7 @@ IllimaniRoassalChartBuilder >> heatmapAllocatorAllocatedCanvasByClass [
 		canvas
 ]
 
-{ #category : #'api - heatmap' }
+{ #category : 'api - heatmap' }
 IllimaniRoassalChartBuilder >> heatmapAllocatorAllocatedCanvasByMethod [
 
 	^ IllimaniHeatmapRoassalBuilder new
@@ -127,7 +129,7 @@ IllimaniRoassalChartBuilder >> heatmapAllocatorAllocatedCanvasByMethod [
 		canvas
 ]
 
-{ #category : #'api - line chart' }
+{ #category : 'api - line chart' }
 IllimaniRoassalChartBuilder >> initializeChart [
 
 	^ RSCompositeChart new
@@ -135,13 +137,13 @@ IllimaniRoassalChartBuilder >> initializeChart [
 		  yourself
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 IllimaniRoassalChartBuilder >> model: aModel [
 
 	model := aModel
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 IllimaniRoassalChartBuilder >> topCalculationsNumber: aNumber [
 
 	topCalculationsNumber := aNumber

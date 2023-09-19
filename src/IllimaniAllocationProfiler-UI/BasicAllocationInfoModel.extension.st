@@ -1,6 +1,6 @@
-Extension { #name : #BasicAllocationInfoModel }
+Extension { #name : 'BasicAllocationInfoModel' }
 
-{ #category : #'*IllimaniAllocationProfiler-UI' }
+{ #category : '*IllimaniAllocationProfiler-UI' }
 BasicAllocationInfoModel >> inspectableAssociations [
 
 	^ {
@@ -11,7 +11,7 @@ BasicAllocationInfoModel >> inspectableAssociations [
 		  ('Object''s lifetime' -> self lifetimeAsString) }
 ]
 
-{ #category : #'*IllimaniAllocationProfiler-UI' }
+{ #category : '*IllimaniAllocationProfiler-UI' }
 BasicAllocationInfoModel >> inspectorExtension: aBuilder [
 
 	<inspectorPresentationOrder: 0 title: 'Overview'>

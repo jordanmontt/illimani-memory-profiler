@@ -1,12 +1,12 @@
-Extension { #name : #Duration }
+Extension { #name : 'Duration' }
 
-{ #category : #'*IllimaniAllocationProfiler-UI' }
+{ #category : '*IllimaniAllocationProfiler-UI' }
 Duration >> humanReadableStringWithOnlySeconds [
 
 	^ String streamContents: [ :out | self printHumanReadableStringWithOnlySecondsOn: out ]
 ]
 
-{ #category : #'*IllimaniAllocationProfiler-UI' }
+{ #category : '*IllimaniAllocationProfiler-UI' }
 Duration >> printHumanReadableStringWithOnlySecondsOn: stream [
 
 	self negative ifTrue: [

@@ -1,1 +1,1 @@
-Package { #name : #'IllimaniAllocationProfiler-UI' }
+Package { #name : 'IllimaniAllocationProfiler-UI' }

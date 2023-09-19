@@ -2,8 +2,8 @@
 I am a table that shows the information of number of allocations and size in memory 
 "
 Class {
-	#name : #TableMemoryInformationPresenter,
-	#superclass : #SpPresenter,
+	#name : 'TableMemoryInformationPresenter',
+	#superclass : 'SpPresenter',
 	#instVars : [
 		'tablePresenter',
 		'textInput',
@@ -11,10 +11,12 @@ Class {
 		'totalAllocations',
 		'totalSizeInBytes'
 	],
-	#category : #'IllimaniAllocationProfiler-UI-Widgets'
+	#category : 'IllimaniAllocationProfiler-UI-Widgets',
+	#package : 'IllimaniAllocationProfiler-UI',
+	#tag : 'Widgets'
 }
 
-{ #category : #initialization }
+{ #category : 'initialization' }
 TableMemoryInformationPresenter >> connectPresenters [
 
 	textInput
@@ -23,7 +25,7 @@ TableMemoryInformationPresenter >> connectPresenters [
 		whenSelectedDo: [ :item | item inspect ]
 ]
 
-{ #category : #layout }
+{ #category : 'layout' }
 TableMemoryInformationPresenter >> defaultLayout [
 
 	^ SpBoxLayout newTopToBottom
@@ -33,7 +35,7 @@ TableMemoryInformationPresenter >> defaultLayout [
 		  yourself
 ]
 
-{ #category : #'accessing - model' }
+{ #category : 'accessing - model' }
 TableMemoryInformationPresenter >> filterTable: aText [
 
 	| newItems |
@@ -45,7 +47,7 @@ TableMemoryInformationPresenter >> filterTable: aText [
 	tablePresenter items: newItems
 ]
 
-{ #category : #initialization }
+{ #category : 'initialization' }
 TableMemoryInformationPresenter >> initializePresenters [
 
 	textInput := self newTextInput
@@ -89,25 +91,25 @@ TableMemoryInformationPresenter >> initializePresenters [
 		items: self tableItems
 ]
 
-{ #category : #'accessing - model' }
+{ #category : 'accessing - model' }
 TableMemoryInformationPresenter >> setModelBeforeInitialization: someTableItems [
 
 	tableItems := someTableItems
 ]
 
-{ #category : #'accessing - model' }
+{ #category : 'accessing - model' }
 TableMemoryInformationPresenter >> tableItems [
 
 	^ tableItems
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 TableMemoryInformationPresenter >> totalAllocations [
 
 	^ totalAllocations ifNil: [ totalAllocations := tableItems sum: [ :e | e totalAllocations ] ]
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 TableMemoryInformationPresenter >> totalSizeInBytes [
 
 	^ totalSizeInBytes ifNil: [ totalSizeInBytes := tableItems sum: [ :e | e totalSizeInBytes ] ]

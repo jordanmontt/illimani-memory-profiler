@@ -1,10 +1,9 @@
-Extension { #name : #IllimaniAllocationProfiler }
+Extension { #name : 'IllimaniAllocationProfiler' }
 
-{ #category : #'*IllimaniAllocationProfiler-UI' }
+{ #category : '*IllimaniAllocationProfiler-UI' }
 IllimaniAllocationProfiler >> open [
 
-	^ (IllimaniAllocationProfilerUI illimaniAnnouncer: illimaniAnnouncer)
-		  profiler: self;
+	^ (IllimaniAllocationProfilerUI profiler: self announcer: illimaniAnnouncer)
 		  open;
 		  yourself
 ]

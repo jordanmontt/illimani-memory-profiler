@@ -1,6 +1,6 @@
-Extension { #name : #AllocationSiteInfoModel }
+Extension { #name : 'AllocationSiteInfoModel' }
 
-{ #category : #'*IllimaniAllocationProfiler-UI' }
+{ #category : '*IllimaniAllocationProfiler-UI' }
 AllocationSiteInfoModel >> inspectableAssociations [
 
 	^ super inspectableAssociations , {
@@ -11,7 +11,7 @@ AllocationSiteInfoModel >> inspectableAssociations [
 		  ('Allocated Object Hash' -> allocatedObjectHash) }
 ]
 
-{ #category : #'*IllimaniAllocationProfiler-UI' }
+{ #category : '*IllimaniAllocationProfiler-UI' }
 AllocationSiteInfoModel >> inspectorExtensionContextFingerprint: aBuilder [
 
 	<inspectorPresentationOrder: 2 title: 'Context Fingerprint'>

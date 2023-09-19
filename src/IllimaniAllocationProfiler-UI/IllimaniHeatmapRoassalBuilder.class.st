@@ -2,18 +2,20 @@
 I am a subclass of Roassal RSDSM presenter. I am a subclass because I define specific behavior for coloring the matrix and calculating the labels
 "
 Class {
-	#name : #IllimaniHeatmapRoassalBuilder,
-	#superclass : #RSDSM,
+	#name : 'IllimaniHeatmapRoassalBuilder',
+	#superclass : 'RSDSM',
 	#instVars : [
 		'scale',
 		'data',
 		'colorPaletteList',
 		'dataDomain'
 	],
-	#category : #'IllimaniAllocationProfiler-UI-Widgets - Advanced'
+	#category : 'IllimaniAllocationProfiler-UI-Widgets - Advanced',
+	#package : 'IllimaniAllocationProfiler-UI',
+	#tag : 'Widgets - Advanced'
 }
 
-{ #category : #hooks }
+{ #category : 'hooks' }
 IllimaniHeatmapRoassalBuilder >> computeColor: aTuple [
 
 	^ scale scale: (self numberFor: aTuple)
@@ -27,7 +29,7 @@ IllimaniHeatmapRoassalBuilder >> computeColor: aTuple [
 	^ scale range fifth"
 ]
 
-{ #category : #hooks }
+{ #category : 'hooks' }
 IllimaniHeatmapRoassalBuilder >> data: someData [
 
 	| allocatedSortedClasses |
@@ -48,7 +50,7 @@ IllimaniHeatmapRoassalBuilder >> data: someData [
 		 , ' instances of ' , tuple value asString ])
 ]
 
-{ #category : #initialization }
+{ #category : 'initialization' }
 IllimaniHeatmapRoassalBuilder >> initialize [
 
 	super initialize.
@@ -61,7 +63,7 @@ IllimaniHeatmapRoassalBuilder >> initialize [
 		Color black }
 ]
 
-{ #category : #hooks }
+{ #category : 'hooks' }
 IllimaniHeatmapRoassalBuilder >> initializeColorMultilinearScale [
 
 	| maxDataDomain |
@@ -79,7 +81,7 @@ IllimaniHeatmapRoassalBuilder >> initializeColorMultilinearScale [
 		         yourself
 ]
 
-{ #category : #hooks }
+{ #category : 'hooks' }
 IllimaniHeatmapRoassalBuilder >> labelX [
 
 	| labelX |
@@ -95,7 +97,7 @@ IllimaniHeatmapRoassalBuilder >> labelX [
 	^ labelX
 ]
 
-{ #category : #hooks }
+{ #category : 'hooks' }
 IllimaniHeatmapRoassalBuilder >> labelY [
 
 	| labelY |
@@ -113,7 +115,7 @@ IllimaniHeatmapRoassalBuilder >> labelY [
 	^ labelY
 ]
 
-{ #category : #hooks }
+{ #category : 'hooks' }
 IllimaniHeatmapRoassalBuilder >> numberFor: tuple [
 
 	| allocatorClass allocatedClass index |
@@ -123,7 +125,7 @@ IllimaniHeatmapRoassalBuilder >> numberFor: tuple [
 	^ (data at: index) allocationsOf: allocatedClass
 ]
 
-{ #category : #hooks }
+{ #category : 'hooks' }
 IllimaniHeatmapRoassalBuilder >> renderIn: aCanvas [
 
 	| labelY labelX |
@@ -138,7 +140,7 @@ IllimaniHeatmapRoassalBuilder >> renderIn: aCanvas [
 	self renderLegend: aCanvas
 ]
 
-{ #category : #hooks }
+{ #category : 'hooks' }
 IllimaniHeatmapRoassalBuilder >> renderLegend: aCanvas [
 
 	| box percentages paint legend boxScale lastColumn |

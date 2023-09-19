@@ -2,8 +2,8 @@
 I am a presenter for alternating one presenter with another
 "
 Class {
-	#name : #AlternatorPresenter,
-	#superclass : #SpPresenter,
+	#name : 'AlternatorPresenter',
+	#superclass : 'SpPresenter',
 	#instVars : [
 		'toggleChartButton',
 		'presenterTwo',
@@ -12,34 +12,36 @@ Class {
 		'presenterOneName',
 		'presenterTwoName'
 	],
-	#category : #'IllimaniAllocationProfiler-UI-Widgets'
+	#category : 'IllimaniAllocationProfiler-UI-Widgets',
+	#package : 'IllimaniAllocationProfiler-UI',
+	#tag : 'Widgets'
 }
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 AlternatorPresenter >> activePresenter [
 
 	^ isForPresenterOne ifTrue: [ presenterOne ] ifFalse: [ presenterTwo ]
 ]
 
-{ #category : #api }
+{ #category : 'api' }
 AlternatorPresenter >> beForPresenterOne [
 
 	isForPresenterOne := true
 ]
 
-{ #category : #api }
+{ #category : 'api' }
 AlternatorPresenter >> beForPresenterTwo [
 
 	isForPresenterOne := false
 ]
 
-{ #category : #initialization }
+{ #category : 'initialization' }
 AlternatorPresenter >> connectPresenters [
 
 	toggleChartButton action: [ self switchActivePresenter ]
 ]
 
-{ #category : #layout }
+{ #category : 'layout' }
 AlternatorPresenter >> defaultLayout [
 
 	^ SpBoxLayout newTopToBottom
@@ -52,7 +54,7 @@ AlternatorPresenter >> defaultLayout [
 		  yourself
 ]
 
-{ #category : #initialization }
+{ #category : 'initialization' }
 AlternatorPresenter >> initializePresenters [
 
 	self beForPresenterOne.
@@ -68,7 +70,7 @@ AlternatorPresenter >> initializePresenters [
 		yourself
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 AlternatorPresenter >> labelForToggleButton [
 
 	^ isForPresenterOne
@@ -76,53 +78,53 @@ AlternatorPresenter >> labelForToggleButton [
 		ifFalse: [ 'Group by ', presenterOneName  ]
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 AlternatorPresenter >> nonActivePresenter [
 
 	^ isForPresenterOne ifFalse: [ presenterOne ] ifTrue: [ presenterTwo ]
 ]
 
-{ #category : #'accessing - api' }
+{ #category : 'accessing - api' }
 AlternatorPresenter >> presenterOne: aPresenter [
 
 	presenterOne := aPresenter
 ]
 
-{ #category : #'accessing - api' }
+{ #category : 'accessing - api' }
 AlternatorPresenter >> presenterOne: aPresenter withName: aName [
 
 	self presenterOne: aPresenter.
 	self presenterOneName: aName
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 AlternatorPresenter >> presenterOneName: aString [
 
 	presenterOneName := aString.
 	self updateButtonLabel
 ]
 
-{ #category : #'accessing - api' }
+{ #category : 'accessing - api' }
 AlternatorPresenter >> presenterTwo: aPresenter [
 
 	presenterTwo := aPresenter
 ]
 
-{ #category : #'accessing - api' }
+{ #category : 'accessing - api' }
 AlternatorPresenter >> presenterTwo: aPresenter withName: aName [
 
 	self presenterTwo: aPresenter.
 	self presenterTwoName: aName
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 AlternatorPresenter >> presenterTwoName: aString [
 
 	presenterTwoName := aString.
 	self updateButtonLabel
 ]
 
-{ #category : #actions }
+{ #category : 'actions' }
 AlternatorPresenter >> switchActivePresenter [
 
 	isForPresenterOne := isForPresenterOne not.
@@ -132,7 +134,7 @@ AlternatorPresenter >> switchActivePresenter [
 	self layout replace: self nonActivePresenter with: self activePresenter
 ]
 
-{ #category : #actions }
+{ #category : 'actions' }
 AlternatorPresenter >> updateButtonLabel [
 
 	toggleChartButton label: self labelForToggleButton

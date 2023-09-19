@@ -1,6 +1,6 @@
-Extension { #name : #IllimaniFinalizationProfiler }
+Extension { #name : 'IllimaniFinalizationProfiler' }
 
-{ #category : #'*IllimaniAllocationProfiler-UI' }
+{ #category : '*IllimaniAllocationProfiler-UI' }
 IllimaniFinalizationProfiler >> densityChart [
 
 	|  groupedData x dictionary y |

@@ -2,8 +2,8 @@
 I am a user interface for my profiling. My implementation is independent from the one of my profiler.
 "
 Class {
-	#name : #IllimaniAllocationProfilerUI,
-	#superclass : #SpPresenter,
+	#name : 'IllimaniAllocationProfilerUI',
+	#superclass : 'SpPresenter',
 	#instVars : [
 		'notebookPresenter',
 		'refreshButton',
@@ -18,21 +18,24 @@ Class {
 		'memoryTablePresenter',
 		'allocationsPerSecondPerAllocatorPresenter',
 		'allocatedObjectsTablePresenter',
-		'illimaniAnnouncer',
-		'densityChartRoassalPresenter'
+		'illimaniAnnouncer'
 	],
-	#category : #'IllimaniAllocationProfiler-UI-Main Presenter'
+	#category : 'IllimaniAllocationProfiler-UI-Main Presenter',
+	#package : 'IllimaniAllocationProfiler-UI',
+	#tag : 'Main Presenter'
 }
 
-{ #category : #accessing }
-IllimaniAllocationProfilerUI class >> illimaniAnnouncer: anIllimaniAnnouncer [
+{ #category : 'accessing' }
+IllimaniAllocationProfilerUI class >> profiler: aProfiler announcer: anIllimaniAnnouncer [
 
 	^ self basicNew
+		profiler: aProfiler;
 		illimaniAnnouncer: anIllimaniAnnouncer;
-		initialize
+		initialize;
+		yourself
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 IllimaniAllocationProfilerUI >> allocatedObjectsPerSecondPerClassPresenter [
 
 	^ SpRoassalPresenter new
@@ -43,7 +46,7 @@ IllimaniAllocationProfilerUI >> allocatedObjectsPerSecondPerClassPresenter [
 		yourself
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 IllimaniAllocationProfilerUI >> allocatedObjectsPerSecondPerMethodPresenter [
 
 	^ SpRoassalPresenter new
@@ -54,43 +57,42 @@ IllimaniAllocationProfilerUI >> allocatedObjectsPerSecondPerMethodPresenter [
 		yourself
 ]
 
-{ #category : #'accessing - lazy presenters' }
+{ #category : 'accessing - lazy presenters' }
 IllimaniAllocationProfilerUI >> allocatedObjectsPerSecondPresenter [
 
 	allocatedObjectsPerSecondPresenter ifNil: [ self initializeAllocatedObjectsPerSecond ].
 	^ allocatedObjectsPerSecondPresenter
 ]
 
-{ #category : #'accessing - lazy presenters' }
+{ #category : 'accessing - lazy presenters' }
 IllimaniAllocationProfilerUI >> allocatedObjectsTablePresenter [
 
 	allocatedObjectsTablePresenter ifNil: [ self initializeAllocatedObjectsTablePresenter ].
 	^ allocatedObjectsTablePresenter
 ]
 
-{ #category : #'accessing - lazy presenters' }
+{ #category : 'accessing - lazy presenters' }
 IllimaniAllocationProfilerUI >> allocationsPerSecondPerAllocatorPresenter [
 
 	allocationsPerSecondPerAllocatorPresenter ifNil: [ self initializeAllocationsPerSecondPerAllocator ].
 	^ allocationsPerSecondPerAllocatorPresenter
 ]
 
-{ #category : #'accessing - lazy presenters' }
+{ #category : 'accessing - lazy presenters' }
 IllimaniAllocationProfilerUI >> codeEvaluator [
 
 	codeEvaluator ifNil: [ self initializeCodeEvaluator ].
 	^ codeEvaluator
 ]
 
-{ #category : #initialization }
+{ #category : 'initialization' }
 IllimaniAllocationProfilerUI >> connectPresenters [
 
 	refreshButton action: [ self refresh ].
-	topCalculationsNumberInputPresenter whenNumberChangedDo: [ :newValue |
-		topCalculationsNumber := newValue ]
+	topCalculationsNumberInputPresenter whenNumberChangedDo: [ :newValue | topCalculationsNumber := newValue ]
 ]
 
-{ #category : #layout }
+{ #category : 'layout' }
 IllimaniAllocationProfilerUI >> controlButtonsLayout [
 
 	^ SpBoxLayout newTopToBottom
@@ -104,7 +106,7 @@ IllimaniAllocationProfilerUI >> controlButtonsLayout [
 		  yourself
 ]
 
-{ #category : #layout }
+{ #category : 'layout' }
 IllimaniAllocationProfilerUI >> defaultLayout [
 
 	^ (profiler isNil or: [ profiler isProfilingStarted not ])
@@ -112,27 +114,20 @@ IllimaniAllocationProfilerUI >> defaultLayout [
 		  ifFalse: [ self layoutWhenThereIsAProfiler ]
 ]
 
-{ #category : #'accessing - lazy presenters' }
-IllimaniAllocationProfilerUI >> densityChart [
-
-	densityChartRoassalPresenter ifNil: [ self initializeDensityChart ].
-	^ densityChartRoassalPresenter
-]
-
-{ #category : #'accessing - lazy presenters' }
+{ #category : 'accessing - lazy presenters' }
 IllimaniAllocationProfilerUI >> heatMapPresenter [
 
 	heatmapPresenter ifNil: [ self initializeHeatmapPresenter ].
 	^ heatmapPresenter
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 IllimaniAllocationProfilerUI >> illimaniAnnouncer: aIllimaniAnnouncer [
 
 	illimaniAnnouncer := aIllimaniAnnouncer
 ]
 
-{ #category : #'initialization - lazy presenters' }
+{ #category : 'initialization - lazy presenters' }
 IllimaniAllocationProfilerUI >> initializeAllocatedObjectsPerSecond [
 
 	allocatedObjectsPerSecondPresenter := SpRoassalPresenter new
@@ -143,13 +138,13 @@ IllimaniAllocationProfilerUI >> initializeAllocatedObjectsPerSecond [
 		yourself
 ]
 
-{ #category : #'initialization - lazy presenters' }
+{ #category : 'initialization - lazy presenters' }
 IllimaniAllocationProfilerUI >> initializeAllocatedObjectsTablePresenter [
 
 	allocatedObjectsTablePresenter := self instantiate: (AllocatedObjectsTablePresenter on: profiler objectAllocations)
 ]
 
-{ #category : #'initialization - lazy presenters' }
+{ #category : 'initialization - lazy presenters' }
 IllimaniAllocationProfilerUI >> initializeAllocationsPerSecondPerAllocator [
 
 	allocationsPerSecondPerAllocatorPresenter := AlternatorPresenter new
@@ -158,7 +153,7 @@ IllimaniAllocationProfilerUI >> initializeAllocationsPerSecondPerAllocator [
 		  yourself
 ]
 
-{ #category : #'initialization - lazy presenters' }
+{ #category : 'initialization - lazy presenters' }
 IllimaniAllocationProfilerUI >> initializeCodeEvaluator [
 
 	codeEvaluator := self newCode
@@ -169,36 +164,7 @@ self stats allocationsByMethod';
 		yourself
 ]
 
-{ #category : #'initialization - lazy presenters' }
-IllimaniAllocationProfilerUI >> initializeDensityChart [
-
-	| x dictionary y groupedByAllocationTime sortedData |
-	groupedByAllocationTime := (profiler objectAllocations groupedBy: [ :allocationModel |
-		                            (Duration microSeconds:
-			                             allocationModel initializationTimestamp) asSeconds ])
-		                           associations.
-	sortedData := groupedByAllocationTime sorted: [ :a :b | a key < b key ].
-	sortedData := sortedData collect: [ :e | e key - sortedData first key -> e value ].
-
-	x := 0 to: sortedData last key asInteger.
-	dictionary := Dictionary newFrom: sortedData.
-
-	y := x collect: [ :index |
-		     dictionary at: index
-			     ifPresent: [ :collection | collection sum: #totalSizeInBytes ]
-			     ifAbsent: [ 0 ] ].
-
-	densityChartRoassalPresenter := IllimaniDensityDistributionChart new
-		          x: x;
-		          y: y;
-		          yLog;
-		          xTitle: 'Initialization time in seconds';
-		          yTitle: 'Memory (log scale)';
-		          title: 'Object lifetimes density';
-		          densityChartPresenter.
-]
-
-{ #category : #'initialization - lazy presenters' }
+{ #category : 'initialization - lazy presenters' }
 IllimaniAllocationProfilerUI >> initializeHeatmapPresenter [
 
 	| roassalPresenterByClass roassalPresenterByMethod |
@@ -219,7 +185,7 @@ IllimaniAllocationProfilerUI >> initializeHeatmapPresenter [
 		yourself
 ]
 
-{ #category : #'initialization - lazy presenters' }
+{ #category : 'initialization - lazy presenters' }
 IllimaniAllocationProfilerUI >> initializeMemoryTablePresenter [
 
 	memoryTablePresenter := AlternatorPresenter new
@@ -230,7 +196,7 @@ IllimaniAllocationProfilerUI >> initializeMemoryTablePresenter [
 		yourself
 ]
 
-{ #category : #'initialization - lazy presenters' }
+{ #category : 'initialization - lazy presenters' }
 IllimaniAllocationProfilerUI >> initializeNotebook [
 
 	notebookPresenter := self newNotebook
@@ -238,7 +204,6 @@ IllimaniAllocationProfilerUI >> initializeNotebook [
 		addPageTitle: 'Memory' provider: [ self memoryTablePresenter  ];
 		addPageTitle: 'Allocated Objects' provider: [ self allocatedObjectsTablePresenter ];
 		addPageTitle: 'Heatmap' provider: [ self heatMapPresenter ];
-		addPageTitle: 'Density' provider: [ self densityChart ];
 		addPageTitle: 'Allocations per Second Total'
 		provider: [ self allocatedObjectsPerSecondPresenter ];
 		addPageTitle: 'Allocations per Second per Allocator'
@@ -248,7 +213,7 @@ IllimaniAllocationProfilerUI >> initializeNotebook [
 		yourself
 ]
 
-{ #category : #initialization }
+{ #category : 'initialization' }
 IllimaniAllocationProfilerUI >> initializePresenters [
 
 	topCalculationsNumber := 10.
@@ -257,7 +222,7 @@ IllimaniAllocationProfilerUI >> initializePresenters [
 	self respondToAnnouncement
 ]
 
-{ #category : #'initialization - lazy presenters' }
+{ #category : 'initialization - lazy presenters' }
 IllimaniAllocationProfilerUI >> initializeSummaryAndEvaluatorPresenter [
 
 	| statsAndEvaluatorLayout statsPresenter |
@@ -274,7 +239,7 @@ IllimaniAllocationProfilerUI >> initializeSummaryAndEvaluatorPresenter [
 		yourself
 ]
 
-{ #category : #initialization }
+{ #category : 'initialization' }
 IllimaniAllocationProfilerUI >> initializeToolbar [
 
 	refreshButton := self newToolbarButton
@@ -287,7 +252,7 @@ IllimaniAllocationProfilerUI >> initializeToolbar [
 		yourself
 ]
 
-{ #category : #initialization }
+{ #category : 'initialization' }
 IllimaniAllocationProfilerUI >> initializeTopCalculationsInputPresenter [
 
 	topCalculationsNumberInputPresenter := self newNumberInput
@@ -296,7 +261,7 @@ IllimaniAllocationProfilerUI >> initializeTopCalculationsInputPresenter [
 		yourself
 ]
 
-{ #category : #initialization }
+{ #category : 'initialization' }
 IllimaniAllocationProfilerUI >> initializeWindow: aWindowPresenter [
 
 	aWindowPresenter
@@ -304,26 +269,23 @@ IllimaniAllocationProfilerUI >> initializeWindow: aWindowPresenter [
 		initialExtent: 1000 @ 650
 ]
 
-{ #category : #layout }
+{ #category : 'layout' }
 IllimaniAllocationProfilerUI >> layoutWhenThereIsAProfiler [
 
 	| layoutToReturn |
-	(profiler isProfilingStarted and: [
-		 profiler isProfilingFinished not ]) ifTrue: [
+	(profiler isProfilingStarted and: [ profiler isProfilingFinished not ]) ifTrue: [
 		layoutToReturn := self layoutWhenThereIsNotDataWithMessage: 'Still profiling' ].
 
-	(profiler isProfilingFinished and: [
-		 profiler objectAllocations isEmpty ]) ifTrue: [
+	(profiler isProfilingFinished and: [ profiler objectAllocations isEmpty ]) ifTrue: [
 		layoutToReturn := self layoutWhenThereIsNotDataWithMessage: 'Profiling finished without any allocations. No allocations were produced during this profiling' ].
 
-	(profiler isProfilingFinished and: [
-		 profiler objectAllocations isNotEmpty ]) ifTrue: [
+	(profiler isProfilingFinished and: [ profiler objectAllocations isNotEmpty ]) ifTrue: [
 		layoutToReturn := self layoutWhenThereIsData ].
 
 	^ layoutToReturn
 ]
 
-{ #category : #layout }
+{ #category : 'layout' }
 IllimaniAllocationProfilerUI >> layoutWhenThereIsData [
 
 	^ SpBoxLayout newTopToBottom
@@ -332,7 +294,7 @@ IllimaniAllocationProfilerUI >> layoutWhenThereIsData [
 		yourself
 ]
 
-{ #category : #layout }
+{ #category : 'layout' }
 IllimaniAllocationProfilerUI >> layoutWhenThereIsNotDataWithMessage: aString [
 
 	^ SpBoxLayout newTopToBottom
@@ -345,27 +307,27 @@ IllimaniAllocationProfilerUI >> layoutWhenThereIsNotDataWithMessage: aString [
 		  yourself
 ]
 
-{ #category : #'accessing - lazy presenters' }
+{ #category : 'accessing - lazy presenters' }
 IllimaniAllocationProfilerUI >> memoryTablePresenter [
 
 	memoryTablePresenter ifNil: [ self initializeMemoryTablePresenter ].
 	^ memoryTablePresenter
 ]
 
-{ #category : #'accessing - lazy presenters' }
+{ #category : 'accessing - lazy presenters' }
 IllimaniAllocationProfilerUI >> notebookPresenter [
 
 	notebookPresenter ifNil: [ self initializeNotebook ].
 	^ notebookPresenter
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 IllimaniAllocationProfilerUI >> profiler: aProfiler [
 
 	profiler := aProfiler
 ]
 
-{ #category : #actions }
+{ #category : 'actions' }
 IllimaniAllocationProfilerUI >> refresh [
 
 	self layout: self defaultLayout.
@@ -374,7 +336,7 @@ IllimaniAllocationProfilerUI >> refresh [
 	allocatedObjectsPerSecondPresenter := nil
 ]
 
-{ #category : #announcements }
+{ #category : 'announcements' }
 IllimaniAllocationProfilerUI >> respondToAnnouncement [
 
 	illimaniAnnouncer when: IllimaniStopedProfilingAnnouncement
@@ -382,7 +344,7 @@ IllimaniAllocationProfilerUI >> respondToAnnouncement [
 		for: self
 ]
 
-{ #category : #'accessing - lazy presenters' }
+{ #category : 'accessing - lazy presenters' }
 IllimaniAllocationProfilerUI >> summaryAndEvaluatorPresenter [
 
 	summaryAndEvaluatorPresenter ifNil: [ self initializeSummaryAndEvaluatorPresenter ].

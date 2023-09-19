@@ -2,15 +2,17 @@
 I am a presenter class that shows basic statistics about the object allocations.
 "
 Class {
-	#name : #AllocationSummaryPresenter,
-	#superclass : #SpPresenter,
+	#name : 'AllocationSummaryPresenter',
+	#superclass : 'SpPresenter',
 	#instVars : [
 		'profiler'
 	],
-	#category : #'IllimaniAllocationProfiler-UI-Widgets'
+	#category : 'IllimaniAllocationProfiler-UI-Widgets',
+	#package : 'IllimaniAllocationProfiler-UI',
+	#tag : 'Widgets'
 }
 
-{ #category : #layout }
+{ #category : 'layout' }
 AllocationSummaryPresenter >> defaultLayout [
 
 	| gcElements generalStatsElements tablePresenter tablePresenter2 |
@@ -51,56 +53,56 @@ AllocationSummaryPresenter >> defaultLayout [
 		yourself
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 AllocationSummaryPresenter >> fullGCCount [
 
 	^ profiler fullGCCount asString
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 AllocationSummaryPresenter >> incrementalGCCount [
 
 	^ profiler incrementalGCCount asString
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 AllocationSummaryPresenter >> numberOfClasses [
 
 	^ profiler stats numberOfClasses asString
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 AllocationSummaryPresenter >> numberOfMethods [
 
 	^ profiler stats numberOfMethods asString
 ]
 
-{ #category : #'accessing - model' }
+{ #category : 'accessing - model' }
 AllocationSummaryPresenter >> setModelBeforeInitialization: aModel [
 
 	profiler := aModel
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 AllocationSummaryPresenter >> timeDifferenceBetweenFirstAndLastAllocation [
 
 	^ (Duration microSeconds: profiler stats timeDifferenceBetweenFirstAndLastAllocation)
 		  humanReadableStringWithOnlySeconds
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 AllocationSummaryPresenter >> totalAllocatedMemory [
 
 	^ profiler stats totalAllocatedMemory humanReadableByteSizeString
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 AllocationSummaryPresenter >> totalAllocatedObjects [
 
 	^ profiler stats totalAllocatedObjects asStringWithCommas
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 AllocationSummaryPresenter >> totalEqualAllocatedObjects [
 
 	| totalEqualAllocatedObjects |
@@ -111,13 +113,13 @@ AllocationSummaryPresenter >> totalEqualAllocatedObjects [
 		ifFalse: [ totalEqualAllocatedObjects asString ]
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 AllocationSummaryPresenter >> totalGCTime [
 
 	^ profiler totalGCTime asDuration humanReadableStringWithOnlySeconds
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 AllocationSummaryPresenter >> totalProfiledTime [
 
 	^ (Duration microSeconds: profiler totalProfiledTime) humanReadableStringWithOnlySeconds
