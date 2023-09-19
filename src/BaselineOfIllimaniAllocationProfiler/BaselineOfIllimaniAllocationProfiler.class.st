@@ -17,7 +17,7 @@ BaselineOfIllimaniAllocationProfiler >> baseline: spec [
 		spec package: 'IllimaniAllocationProfiler' with: [ spec requires: #( 'MethodProxies') ].
 		spec package: 'IllimaniFinalizationProfiler' with: [ spec requires: #( 'IllimaniAllocationProfiler') ].
 		spec package: 'IllimaniAllocationProfiler-Tests' with: [ spec requires: #( 'IllimaniAllocationProfiler' ) ].
-		spec package: 'IllimaniAllocationProfiler-UI' with: [ spec requires: #( 'IllimaniAllocationProfiler' ) ].
+		spec package: 'IllimaniAllocationProfiler-UI' with: [ spec requires: #( 'IllimaniAllocationProfiler' 'IllimaniFinalizationProfiler' ) ].
 
 		"External dependencies"
 		spec baseline: 'MethodProxies'
