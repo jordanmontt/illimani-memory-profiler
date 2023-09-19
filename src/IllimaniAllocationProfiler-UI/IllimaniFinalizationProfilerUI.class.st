@@ -25,38 +25,20 @@ IllimaniFinalizationProfilerUI >> densityChartPresenter [
 { #category : 'initialization - lazy presenters' }
 IllimaniFinalizationProfilerUI >> initializeDensityChartPresenter [
 
-	|  groupedDataByTime x dictionary yByMemory yByNumbOfAlloc densityChartByMemory densityChartByNumbOfAlloc |
-	groupedDataByTime := (profiler objectAllocations groupedBy: [ :allocationModel |
-		allocationModel lifetimeAsDuration asSeconds ]) associations.
-	groupedDataByTime sort: [ :a :b | a key < b key ].
-	x := 0 to: groupedDataByTime last key asInteger.
-	
-	dictionary := Dictionary newFrom: groupedDataByTime.
-	yByNumbOfAlloc := x collect: [ :index |
-		dictionary at: index
-			ifPresent: [ :collection | collection size ]
-			ifAbsent: [ 0 ] ].
-		
-	dictionary := Dictionary newFrom: groupedDataByTime.
-	yByMemory := x collect: [ :index |
-		dictionary at: index
-			ifPresent: [ :collection | collection sum: #totalSizeInBytes ]
-			ifAbsent: [ 0 ] ].
-
-	densityChartByMemory := IllimaniDensityDistributionChart new
-		x: x;
-		y: yByMemory;
+	| densityPlotBuilder densityChartByMemory densityChartByNumbOfAlloc |
+	densityPlotBuilder := IllimaniDensityDistributionChart new
+		objectAllocations: profiler objectAllocations;
 		xTitle: 'Lifetime in seconds';
+		yourself.
+	densityChartByMemory := densityPlotBuilder
+		beForMemory;
 		yTitle: 'Memory (log scale)';
 		densityChartPresenter.
-	densityChartByNumbOfAlloc := IllimaniDensityDistributionChart new
-		x: x;
-		y: yByNumbOfAlloc;
-		isMemoryChart: false;
-		xTitle: 'Lifetime in seconds';
-		yTitle: 'Number of objects (log scale)';
+	densityChartByNumbOfAlloc := densityPlotBuilder
+		beForNumberOfAllocations;
+		yTitle: 'Number of allocations (log scale)';
 		densityChartPresenter.
-	
+
 	densityChartPresenter := AlternatorPresenter new
 	   presenterOne: densityChartByMemory withName: 'memory';
 		presenterTwo: densityChartByNumbOfAlloc withName: 'number of allocations';

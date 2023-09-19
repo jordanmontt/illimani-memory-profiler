@@ -2,14 +2,13 @@ Class {
 	#name : 'IllimaniDensityDistributionChart',
 	#superclass : 'Object',
 	#instVars : [
-		'x',
-		'y',
 		'yTitle',
 		'xTitle',
 		'title',
 		'numberOfTicks',
-		'chart',
-		'isMemoryChart'
+		'groupedDataBySeconds',
+		'isForMemory',
+		'x'
 	],
 	#category : 'IllimaniAllocationProfiler-UI-Roassal',
 	#package : 'IllimaniAllocationProfiler-UI',
@@ -17,7 +16,7 @@ Class {
 }
 
 { #category : 'defaults' }
-IllimaniDensityDistributionChart >> addChartTitles [
+IllimaniDensityDistributionChart >> addChartTitles: chart [
 
 	chart xlabel: xTitle.
 	chart ylabel: yTitle.
@@ -25,7 +24,7 @@ IllimaniDensityDistributionChart >> addChartTitles [
 ]
 
 { #category : 'defaults' }
-IllimaniDensityDistributionChart >> addTickDecorations [
+IllimaniDensityDistributionChart >> addTickDecorations: chart [
 
 	"Horizontal ticks are always the same"
 	chart horizontalTick
@@ -33,7 +32,7 @@ IllimaniDensityDistributionChart >> addTickDecorations [
 		labelConversion: [ :e | e asInteger printString ].
 
 	chart verticalTick numberOfTicks: numberOfTicks.
-	isMemoryChart 
+	isForMemory 
 		ifTrue: [
 			chart verticalTick labelConversion: [ :e | e asInteger humanReadableByteSizeString ] ]
 		ifFalse: [ 
@@ -41,33 +40,66 @@ IllimaniDensityDistributionChart >> addTickDecorations [
 ]
 
 { #category : 'api' }
+IllimaniDensityDistributionChart >> beForMemory [
+
+	isForMemory := true
+]
+
+{ #category : 'api' }
+IllimaniDensityDistributionChart >> beForNumberOfAllocations [
+
+	isForMemory := false
+]
+
+{ #category : 'defaults' }
+IllimaniDensityDistributionChart >> dataByMemory [
+
+	| dictionary |
+	dictionary := Dictionary newFrom: groupedDataBySeconds.
+	^ x collect: [ :index |
+		  dictionary at: index
+			  ifPresent: [ :collection | collection sum: [ :e | e totalSizeInBytes ] ]
+			  ifAbsent: [ 0 ] ]
+]
+
+{ #category : 'defaults' }
+IllimaniDensityDistributionChart >> dataByNumberOfAllocations [
+
+	| dictionary |
+	dictionary := Dictionary newFrom: groupedDataBySeconds.
+	^ x collect: [ :index |
+		  dictionary at: index ifPresent: [ :collection | collection size ] ifAbsent: [ 0 ] ]
+]
+
+{ #category : 'api' }
 IllimaniDensityDistributionChart >> densityChartCanvas [
 
-	| plot |
+	| plot y chart |
+	chart := self initializeChart.
+	y := isForMemory ifTrue: [ self dataByMemory ] ifFalse: [ self dataByNumberOfAllocations ].
 	plot := RSLinePlot new
 		color: (Color fromHexString: '#CD5C5C');
 		x: x y: y.
+	
 	chart add: plot.
-	"markerColor := Color blue.
-	chart addDecoration: (marker := RSXMarkerDecoration new
-		sumUpTo: 0.6""0.75"";
-		color: markerColor;
+	"marker := RSXMarkerDecoration new
+		sumUpTo: 0.6 ""0.75"";
+		color: Color blue;
 		width: 0.6;
-		yourself). "
-	
-	self addTickDecorations.
-	
+		yourself.
+	chart addDecoration: marker."
+	self addTickDecorations: chart.
 	chart minChartValueX: -1.
-	self addChartTitles.
-	
+	self addChartTitles: chart.
+	chart yLog.
 	chart build.
 	"marker lines do: [ :line |
 		| label |
 		label := RSLabel new
-			         ""text: '75%';"" text: '60%';
-			         color: markerColor;
-			         fontSize: 6;
-			         yourself.
+			""text: '75%';"" text: '60%';
+			color: Color blue;
+			fontSize: 6;
+			yourself.
 		RSLocation new
 			above;
 			move: label on: line.
@@ -87,27 +119,20 @@ IllimaniDensityDistributionChart >> densityChartPresenter [
 IllimaniDensityDistributionChart >> initialize [
 
 	super initialize.
-	chart := self initializeChart.
 
 	xTitle := ''.
 	yTitle := ''.
 	title := ''.
 	numberOfTicks := 10.
-	isMemoryChart := true
+	isForMemory := true
 ]
 
 { #category : 'initialization' }
 IllimaniDensityDistributionChart >> initializeChart [
 
 	^ RSCompositeChart new
-		  colors: NSScale google20;
-		  yourself
-]
-
-{ #category : 'api' }
-IllimaniDensityDistributionChart >> isMemoryChart: aBoolean [
-
-	isMemoryChart := aBoolean
+		colors: NSScale google20;
+		yourself
 ]
 
 { #category : 'api' }
@@ -117,33 +142,24 @@ IllimaniDensityDistributionChart >> numberOfTicks: anInteger [
 ]
 
 { #category : 'api' }
+IllimaniDensityDistributionChart >> objectAllocations: someObjectAllocations [
+
+	groupedDataBySeconds := (someObjectAllocations groupedBy: [ :allocationModel |
+		allocationModel lifetimeAsDuration asSeconds ]) associations.
+	groupedDataBySeconds sort: [ :a :b | a key < b key ].
+	x := 0 to: groupedDataBySeconds last key asInteger.
+]
+
+{ #category : 'api' }
 IllimaniDensityDistributionChart >> title: aTitle [
 
 	title := aTitle
 ]
 
 { #category : 'api' }
-IllimaniDensityDistributionChart >> x: col [
-
-	x := col
-]
-
-{ #category : 'api' }
 IllimaniDensityDistributionChart >> xTitle: aTitle [
 
 	xTitle := aTitle
-]
-
-{ #category : 'api' }
-IllimaniDensityDistributionChart >> y: col [
-
-	y := col
-]
-
-{ #category : 'api' }
-IllimaniDensityDistributionChart >> yLog [
-
-	chart yLog
 ]
 
 { #category : 'api' }
