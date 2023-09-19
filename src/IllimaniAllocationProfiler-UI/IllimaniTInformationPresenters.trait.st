@@ -32,9 +32,9 @@ self stats allocationsByMethod';
 IllimaniTInformationPresenters >> initializeMemoryTablePresenter [
 
 	memoryTablePresenter := AlternatorPresenter new
-		presenterOne: (TableMemoryInformationPresenter owner: self on: profiler stats allocationsByClass)
+		presenterOne: (TableMemoryInformationPresenter owner: self on: self profiler stats allocationsByClass)
 		withName: 'Classes';
-		presenterTwo: (TableMemoryInformationPresenter owner: self on: profiler stats allocationsByMethod)
+		presenterTwo: (TableMemoryInformationPresenter owner: self on: self profiler stats allocationsByMethod)
 		withName: 'Methods';
 		yourself
 ]
@@ -43,7 +43,7 @@ IllimaniTInformationPresenters >> initializeMemoryTablePresenter [
 IllimaniTInformationPresenters >> initializeSummaryAndEvaluatorPresenter [
 
 	| statsAndEvaluatorLayout statsPresenter |
-	statsPresenter := AllocationSummaryPresenter on: profiler.
+	statsPresenter := AllocationSummaryPresenter on: self profiler.
 
 	statsAndEvaluatorLayout := SpPanedLayout newTopToBottom
 		positionOfSlider: 0.75;
