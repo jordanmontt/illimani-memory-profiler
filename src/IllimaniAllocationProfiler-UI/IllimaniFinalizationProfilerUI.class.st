@@ -2,7 +2,8 @@ Class {
 	#name : 'IllimaniFinalizationProfilerUI',
 	#superclass : 'IllimaniAbstractUI',
 	#instVars : [
-		'densityChartPresenter'
+		'densityChartPresenter',
+		'lifetimesTable'
 	],
 	#category : 'IllimaniAllocationProfiler-UI-Main Presenter',
 	#package : 'IllimaniAllocationProfiler-UI',
@@ -15,7 +16,7 @@ IllimaniFinalizationProfilerUI >> codeEvaluatorText [
 	^ 'self objectAllocations'
 ]
 
-{ #category : 'accessing' }
+{ #category : 'accessing - lazy presenters' }
 IllimaniFinalizationProfilerUI >> densityChartPresenter [
 
 	densityChartPresenter ifNil: [ self initializeDensityChartPresenter ].
@@ -46,15 +47,31 @@ IllimaniFinalizationProfilerUI >> initializeDensityChartPresenter [
 ]
 
 { #category : 'initialization - lazy presenters' }
+IllimaniFinalizationProfilerUI >> initializeLifetimesTable [
+
+	lifetimesTable := self
+		instantiate: FinalizationLifetimesTablePresenter
+		on: profiler objectAllocations
+]
+
+{ #category : 'initialization - lazy presenters' }
 IllimaniFinalizationProfilerUI >> initializeNotebook [
 
 	notebookPresenter := self newNotebook
 		addPageTitle: 'Summary' provider: [ self summaryAndEvaluatorPresenter ];
 		addPageTitle: 'Allocated Objects' provider: [ self allocatedObjectsTablePresenter ];
+		addPageTitle: 'Lifetimes Table' provider: [ self lifetimesTable ];
 		addPageTitle: 'Lifetimes Density' provider: [ self densityChartPresenter ];
 
 		addPageTitle: 'Evaluator' provider: [ self codeEvaluator ];
 		yourself
+]
+
+{ #category : 'accessing - lazy presenters' }
+IllimaniFinalizationProfilerUI >> lifetimesTable [
+
+	lifetimesTable ifNil: [ self initializeLifetimesTable ].
+	^ lifetimesTable
 ]
 
 { #category : 'actions' }
