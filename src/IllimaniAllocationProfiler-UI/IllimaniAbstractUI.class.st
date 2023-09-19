@@ -143,6 +143,13 @@ IllimaniAbstractUI >> layoutWhenThereIsNotDataWithMessage: aString [
 		  yourself
 ]
 
+{ #category : 'accessing - lazy presenters' }
+IllimaniAbstractUI >> notebookPresenter [
+
+	notebookPresenter ifNil: [ self initializeNotebook ].
+	^ notebookPresenter
+]
+
 { #category : 'accessing' }
 IllimaniAbstractUI >> profiler [
 
@@ -167,4 +174,10 @@ IllimaniAbstractUI >> respondToAnnouncement [
 	illimaniAnnouncer when: IllimaniStopedProfilingAnnouncement
 		do: [ self refresh ]
 		for: self
+]
+
+{ #category : 'accessing' }
+IllimaniAbstractUI >> topCalculationsNumber [
+
+	^ topCalculationsNumber
 ]

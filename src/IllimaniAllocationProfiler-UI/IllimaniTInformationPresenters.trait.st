@@ -3,7 +3,8 @@ Trait {
 	#instVars : [
 		'codeEvaluator',
 		'summaryAndEvaluatorPresenter',
-		'memoryTablePresenter'
+		'memoryTablePresenter',
+		'allocatedObjectsTablePresenter'
 	],
 	#category : 'IllimaniAllocationProfiler-UI-Main Presenter',
 	#package : 'IllimaniAllocationProfiler-UI',
@@ -11,10 +12,23 @@ Trait {
 }
 
 { #category : 'accessing - lazy presenters' }
+IllimaniTInformationPresenters >> allocatedObjectsTablePresenter [
+
+	allocatedObjectsTablePresenter ifNil: [ self initializeAllocatedObjectsTablePresenter ].
+	^ allocatedObjectsTablePresenter
+]
+
+{ #category : 'accessing - lazy presenters' }
 IllimaniTInformationPresenters >> codeEvaluator [
 
 	codeEvaluator ifNil: [ self initializeCodeEvaluator ].
 	^ codeEvaluator
+]
+
+{ #category : 'initialization - lazy presenters' }
+IllimaniTInformationPresenters >> initializeAllocatedObjectsTablePresenter [
+
+	allocatedObjectsTablePresenter := self instantiate: (AllocatedObjectsTablePresenter on: self profiler objectAllocations)
 ]
 
 { #category : 'initialization - lazy presenters' }

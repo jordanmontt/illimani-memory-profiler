@@ -60,6 +60,14 @@ IllimaniFinalizationProfiler >> objectAllocations [
 	^ profilerHandler objectAllocations
 ]
 
+{ #category : 'instance creation' }
+IllimaniFinalizationProfiler >> open [
+
+	^ (IllimaniFinalizationProfilerUI profiler: self announcer: IllimaniAnnouncer new)
+		  open;
+		  yourself
+]
+
 { #category : 'api' }
 IllimaniFinalizationProfiler >> samplingRate: anInteger [
 

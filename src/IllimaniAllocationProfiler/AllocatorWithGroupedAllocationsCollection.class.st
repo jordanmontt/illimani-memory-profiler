@@ -36,7 +36,7 @@ AllocatorWithGroupedAllocationsCollection >> initialize [
 AllocatorWithGroupedAllocationsCollection >> sort [
 
 	sortedByTotalAllocationsNodes := groupedNodesDictionary sorted: [ :a :b |
-		               a value totalAllocations > b value totalAllocations ]
+		a value totalAllocations > b value totalAllocations ]
 ]
 
 { #category : 'api' }
