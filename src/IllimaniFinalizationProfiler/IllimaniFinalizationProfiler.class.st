@@ -83,7 +83,7 @@ IllimaniFinalizationProfiler >> stats [
 
 { #category : 'profiling' }
 IllimaniFinalizationProfiler >> stopProfiling [
-	
+
 	self uninstallMethodProxies.
 	self forceFinalizationOfObjects.
 	self updateStatsWhenFinishingProfiling
