@@ -71,9 +71,9 @@ Class {
 		'statisticsModel',
 		'illimaniAnnouncer'
 	],
-	#category : 'IllimaniAllocationProfiler-Allocation Sites Profiler',
+	#category : 'IllimaniAllocationProfiler-Core',
 	#package : 'IllimaniAllocationProfiler',
-	#tag : 'Allocation Sites Profiler'
+	#tag : 'Core'
 }
 
 { #category : 'announcements' }

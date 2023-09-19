@@ -15,6 +15,7 @@ BaselineOfIllimaniAllocationProfiler >> baseline: spec [
 	spec for: #common do: [
 		"Packages"
 		spec package: 'IllimaniAllocationProfiler' with: [ spec requires: #( 'MethodProxies') ].
+		spec package: 'IllimaniFinalizationProfiler' with: [ spec requires: #( 'IllimaniAllocationProfiler') ].
 		spec package: 'IllimaniAllocationProfiler-Tests' with: [ spec requires: #( 'IllimaniAllocationProfiler' ) ].
 		spec package: 'IllimaniAllocationProfiler-UI' with: [ spec requires: #( 'IllimaniAllocationProfiler' ) ].
 
@@ -35,6 +36,8 @@ BaselineOfIllimaniAllocationProfiler >> baseline: spec [
 
 		"Groups"
 		spec group: 'default' with: #( 'core' 'tests' ).
-		spec group: 'core' with: #( 'IllimaniAllocationProfiler' 'IllimaniAllocationProfiler-UI' ).
+		spec
+			group: 'core'
+			with: #( 'IllimaniAllocationProfiler' 'IllimaniAllocationProfiler-UI' 'IllimaniFinalizationProfiler').
 		spec group: 'tests' with: #( 'IllimaniAllocationProfiler-Tests' ) ]
 ]

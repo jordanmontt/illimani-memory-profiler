@@ -7,9 +7,8 @@ Class {
 		'samplingRate',
 		'objectAllocations'
 	],
-	#category : 'IllimaniAllocationProfiler-Finalization Profiler',
-	#package : 'IllimaniAllocationProfiler',
-	#tag : 'Finalization Profiler'
+	#category : 'IllimaniFinalizationProfiler',
+	#package : 'IllimaniFinalizationProfiler'
 }
 
 { #category : 'evaluating' }
