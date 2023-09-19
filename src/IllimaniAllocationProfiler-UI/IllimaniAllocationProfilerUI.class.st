@@ -4,12 +4,11 @@ I am a user interface for my profiling. My implementation is independent from th
 Class {
 	#name : 'IllimaniAllocationProfilerUI',
 	#superclass : 'IllimaniAbstractUI',
+	#traits : 'IllimaniTInformationPresenters',
+	#classTraits : 'IllimaniTInformationPresenters classTrait',
 	#instVars : [
 		'allocatedObjectsPerSecondPresenter',
-		'codeEvaluator',
 		'heatmapPresenter',
-		'summaryAndEvaluatorPresenter',
-		'memoryTablePresenter',
 		'allocationsPerSecondPerAllocatorPresenter',
 		'allocatedObjectsTablePresenter'
 	],
@@ -59,13 +58,6 @@ IllimaniAllocationProfilerUI >> allocationsPerSecondPerAllocatorPresenter [
 
 	allocationsPerSecondPerAllocatorPresenter ifNil: [ self initializeAllocationsPerSecondPerAllocator ].
 	^ allocationsPerSecondPerAllocatorPresenter
-]
-
-{ #category : 'accessing - lazy presenters' }
-IllimaniAllocationProfilerUI >> codeEvaluator [
-
-	codeEvaluator ifNil: [ self initializeCodeEvaluator ].
-	^ codeEvaluator
 ]
 
 { #category : 'accessing - lazy presenters' }
@@ -140,13 +132,6 @@ IllimaniAllocationProfilerUI >> initializeNotebook [
 ]
 
 { #category : 'accessing - lazy presenters' }
-IllimaniAllocationProfilerUI >> memoryTablePresenter [
-
-	memoryTablePresenter ifNil: [ self initializeMemoryTablePresenter ].
-	^ memoryTablePresenter
-]
-
-{ #category : 'accessing - lazy presenters' }
 IllimaniAllocationProfilerUI >> notebookPresenter [
 
 	notebookPresenter ifNil: [ self initializeNotebook ].
@@ -160,11 +145,4 @@ IllimaniAllocationProfilerUI >> refresh [
 	heatmapPresenter := nil.
 	allocationsPerSecondPerAllocatorPresenter := nil.
 	allocatedObjectsPerSecondPresenter := nil
-]
-
-{ #category : 'accessing - lazy presenters' }
-IllimaniAllocationProfilerUI >> summaryAndEvaluatorPresenter [
-
-	summaryAndEvaluatorPresenter ifNil: [ self initializeSummaryAndEvaluatorPresenter ].
-	^ summaryAndEvaluatorPresenter
 ]

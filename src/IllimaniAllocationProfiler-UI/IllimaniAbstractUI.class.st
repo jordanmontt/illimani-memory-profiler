@@ -144,6 +144,12 @@ IllimaniAbstractUI >> layoutWhenThereIsNotDataWithMessage: aString [
 ]
 
 { #category : 'accessing' }
+IllimaniAbstractUI >> profiler [
+
+	^ profiler
+]
+
+{ #category : 'accessing' }
 IllimaniAbstractUI >> profiler: aProfiler [
 
 	profiler := aProfiler

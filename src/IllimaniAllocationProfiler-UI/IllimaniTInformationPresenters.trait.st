@@ -2,12 +2,20 @@ Trait {
 	#name : 'IllimaniTInformationPresenters',
 	#instVars : [
 		'codeEvaluator',
-		'profiler'
+		'summaryAndEvaluatorPresenter',
+		'memoryTablePresenter'
 	],
 	#category : 'IllimaniAllocationProfiler-UI-Main Presenter',
 	#package : 'IllimaniAllocationProfiler-UI',
 	#tag : 'Main Presenter'
 }
+
+{ #category : 'accessing - lazy presenters' }
+IllimaniTInformationPresenters >> codeEvaluator [
+
+	codeEvaluator ifNil: [ self initializeCodeEvaluator ].
+	^ codeEvaluator
+]
 
 { #category : 'initialization - lazy presenters' }
 IllimaniTInformationPresenters >> initializeCodeEvaluator [
@@ -16,7 +24,7 @@ IllimaniTInformationPresenters >> initializeCodeEvaluator [
 		text: 'self objectAllocations.
 self stats allocationsByClass.
 self stats allocationsByMethod';
-		beForObject: profiler;
+		beForObject: self profiler;
 		yourself
 ]
 
@@ -46,4 +54,18 @@ IllimaniTInformationPresenters >> initializeSummaryAndEvaluatorPresenter [
 	summaryAndEvaluatorPresenter := SpPresenter new
 		layout: statsAndEvaluatorLayout ;
 		yourself
+]
+
+{ #category : 'accessing - lazy presenters' }
+IllimaniTInformationPresenters >> memoryTablePresenter [
+
+	memoryTablePresenter ifNil: [ self initializeMemoryTablePresenter ].
+	^ memoryTablePresenter
+]
+
+{ #category : 'accessing - lazy presenters' }
+IllimaniTInformationPresenters >> summaryAndEvaluatorPresenter [
+
+	summaryAndEvaluatorPresenter ifNil: [ self initializeSummaryAndEvaluatorPresenter ].
+	^ summaryAndEvaluatorPresenter
 ]
