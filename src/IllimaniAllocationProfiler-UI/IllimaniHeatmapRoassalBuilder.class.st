@@ -10,9 +10,9 @@ Class {
 		'colorPaletteList',
 		'dataDomain'
 	],
-	#category : 'IllimaniAllocationProfiler-UI-Widgets - Advanced',
+	#category : 'IllimaniAllocationProfiler-UI-Roassal',
 	#package : 'IllimaniAllocationProfiler-UI',
-	#tag : 'Widgets - Advanced'
+	#tag : 'Roassal'
 }
 
 { #category : 'hooks' }
