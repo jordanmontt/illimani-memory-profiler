@@ -8,8 +8,7 @@ Class {
 		'currentIndex',
 		'arrMaxSize',
 		'arrays',
-		'currentArray',
-		'globalFinalizer'
+		'currentArray'
 	],
 	#category : 'IllimaniFinalizationProfiler',
 	#package : 'IllimaniFinalizationProfiler'
