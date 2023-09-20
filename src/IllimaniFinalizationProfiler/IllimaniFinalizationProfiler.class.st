@@ -27,17 +27,11 @@ IllimaniFinalizationProfiler >> finalizationRegistryClass [
 ]
 
 { #category : 'profiling' }
-IllimaniFinalizationProfiler >> finalizeAllEphemerons [
-
-	finalizationRegistry finalizeAllEphemerons
-]
-
-{ #category : 'profiling' }
 IllimaniFinalizationProfiler >> forceFinalizationOfObjects [
 
 	"We force the finalization timestamp for the not yet finalized objects."
 	"finalizationRegistry valuesDo: #finalize."
-	self finalizeAllEphemerons.
+	finalizationRegistry finalizeAllEphemerons.
 	"Then we stop referencing the finalization registry to not re-finalize the objects."
 	finalizationRegistry := self finalizationRegistryClass new
 ]
