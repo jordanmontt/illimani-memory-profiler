@@ -1,7 +1,6 @@
 Class {
 	#name : 'IllimaniFinalizationProfilerFast',
 	#superclass : 'IllimaniFinalizationProfiler',
-	#traits : 'IllimaniTAllocatorWrapper',
 	#classTraits : 'IllimaniTAllocatorWrapper classTrait',
 	#category : 'IllimaniFinalizationProfiler',
 	#package : 'IllimaniFinalizationProfiler'

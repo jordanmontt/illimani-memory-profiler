@@ -57,6 +57,7 @@ IllimaniFinalizationMpHandlerFast >> finalize: anIdentityHash [
 	currentIndex := currentIndex + 1.
 	currentArray at: currentIndex put: Time primUTCMicrosecondsClock.
 	currentIndex := currentIndex + 1.
+	"marker"
 	currentArray at: currentIndex put: -2.
 	currentIndex := currentIndex + 1
 ]

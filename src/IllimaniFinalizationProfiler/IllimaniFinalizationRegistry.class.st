@@ -8,11 +8,11 @@ Class {
 { #category : 'profiling' }
 IllimaniFinalizationRegistry >> finalizeAllEphemerons [ 
 
-	"| node |
+	| node |
 	node := ephemeronListHead next.
 	[ node isNotNil ] whileTrue: [
 		node value finalize: node key.
-		node := node next ]"
+		node := node next ]
 ]
 
 { #category : 'finalization' }

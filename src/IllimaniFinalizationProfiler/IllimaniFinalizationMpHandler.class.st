@@ -34,13 +34,6 @@ IllimaniFinalizationMpHandler >> afterExecutionWithReceiver: receiver arguments:
 	^ newlyAllocatedObject
 ]
 
-{ #category : 'evaluating' }
-IllimaniFinalizationMpHandler >> cleanObjectAllocations [
-
-	objectAllocations removeAll.
-	samplingCounter := 0
-]
-
 { #category : 'initialization' }
 IllimaniFinalizationMpHandler >> initialize [
 
