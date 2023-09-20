@@ -8,7 +8,8 @@ Class {
 		'currentIndex',
 		'arrMaxSize',
 		'arrays',
-		'currentArray'
+		'currentArray',
+		'finalizationRegistry'
 	],
 	#category : 'IllimaniFinalizationProfiler',
 	#package : 'IllimaniFinalizationProfiler'
@@ -45,7 +46,7 @@ IllimaniFinalizationMpHandlerFast >> afterExecutionWithReceiver: receiver argume
 ]
 
 { #category : 'evaluating' }
-IllimaniFinalizationMpHandlerFast >> finalize: anIdentityHash [
+IllimaniFinalizationMpHandlerFast >> finalize: anObject [
 
 	currentIndex + 3 > arrMaxSize ifTrue: [
 		arrMaxSize := arrMaxSize * 2.
@@ -53,7 +54,7 @@ IllimaniFinalizationMpHandlerFast >> finalize: anIdentityHash [
 		arrays add: currentArray.
 		currentArray := Array new: arrMaxSize ].
 
-	currentArray at: currentIndex put: anIdentityHash.
+	currentArray at: currentIndex put: anObject identityHash.
 	currentIndex := currentIndex + 1.
 	currentArray at: currentIndex put: Time primUTCMicrosecondsClock.
 	currentIndex := currentIndex + 1.

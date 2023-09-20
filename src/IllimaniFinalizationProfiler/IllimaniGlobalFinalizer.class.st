@@ -26,7 +26,7 @@ IllimaniGlobalFinalizer class >> reset [
 { #category : 'finalization' }
 IllimaniGlobalFinalizer >> finalize: anObject [
 
-	handler finalize: anObject identityHash
+	handler finalize: anObject
 ]
 
 { #category : 'finalization' }
