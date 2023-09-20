@@ -6,16 +6,16 @@ Class {
 	#package : 'IllimaniFinalizationProfiler'
 }
 
-{ #category : 'api' }
-IllimaniFinalizationProfilerFast >> addFinalizationFor: newlyAllocatedObject [
+{ #category : 'profiling' }
+IllimaniFinalizationProfilerFast >> forceFinalizationOfObjects [
 
-	finalizationRegistry add: newlyAllocatedObject finalizer: IllimaniGlobalFinalizer default
+	profilerHandler forceFinalizationOfObjects
 ]
 
 { #category : 'initialization' }
 IllimaniFinalizationProfilerFast >> initializeFinalizationRegistry [
 
-	^ IllimaniFinalizationRegistry new
+	^ nil
 ]
 
 { #category : 'initialization' }

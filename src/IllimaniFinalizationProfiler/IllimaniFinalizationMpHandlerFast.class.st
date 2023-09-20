@@ -27,7 +27,7 @@ IllimaniFinalizationMpHandlerFast >> afterExecutionWithReceiver: receiver argume
 	allocationsUnconstructedCollection add: -1.
 
 	"Finalization"
-	finalizationRegistry add: newlyAllocatedObject finalizer: IllimaniGlobalFinalizer default.
+	finalizationRegistry add: newlyAllocatedObject finalizer: self.
 	^ newlyAllocatedObject
 ]
 
@@ -46,21 +46,27 @@ IllimaniFinalizationMpHandlerFast >> finalize: anObject [
 	allocationsUnconstructedCollection add: -2
 ]
 
+{ #category : 'evaluating' }
+IllimaniFinalizationMpHandlerFast >> forceFinalizationOfObjects [
+
+	"We force the finalization timestamp for the not yet finalized objects."
+	finalizationRegistry finalizeAllEphemerons.
+	"Then we stop referencing the finalization registry to not re-finalize the objects."
+	finalizationRegistry := IllimaniFinalizationRegistry new
+]
+
 { #category : 'initialization' }
 IllimaniFinalizationMpHandlerFast >> initialize [
 
 	super initialize.
-	
+
 	finalizationRegistry := IllimaniFinalizationRegistry new.
-	
+	samplingCounter := 0.
+	samplingRate := 1.
+
 	"We want an array big enough to be allocated directly into the old space"
 	initialArraySize := 10000000.
-	allocationsUnconstructedCollection := OrderedCollection new: initialArraySize.
-	
-	IllimaniGlobalFinalizer reset.
-	IllimaniGlobalFinalizer default handler: self.
-	samplingCounter := 0.
-	samplingRate := 1
+	allocationsUnconstructedCollection := OrderedCollection new: initialArraySize
 ]
 
 { #category : 'accessing' }
