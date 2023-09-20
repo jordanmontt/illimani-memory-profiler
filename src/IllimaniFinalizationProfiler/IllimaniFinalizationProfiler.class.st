@@ -20,11 +20,10 @@ IllimaniFinalizationProfiler >> addFinalizationFor: newlyAllocatedObject finaliz
 	finalizationRegistry add: newlyAllocatedObject finalizer: objectFinalizationModel
 ]
 
-{ #category : 'profiling' }
-IllimaniFinalizationProfiler >> cleanProfilingData [
+{ #category : 'initialization' }
+IllimaniFinalizationProfiler >> finalizationRegistryClass [
 
-	profilerHandler cleanObjectAllocations.
-	finalizationRegistry := FinalizationRegistry new
+	^ FinalizationRegistry
 ]
 
 { #category : 'profiling' }
@@ -40,21 +39,27 @@ IllimaniFinalizationProfiler >> forceFinalizationOfObjects [
 	"finalizationRegistry valuesDo: #finalize."
 	self finalizeAllEphemerons.
 	"Then we stop referencing the finalization registry to not re-finalize the objects."
-	finalizationRegistry := FinalizationRegistry new
+	finalizationRegistry := self finalizationRegistryClass new
+]
+
+{ #category : 'initialization' }
+IllimaniFinalizationProfiler >> handlerClass [
+
+	^ IllimaniFinalizationMpHandler
 ]
 
 { #category : 'initialization' }
 IllimaniFinalizationProfiler >> initialize [
 
 	super initialize.
-	finalizationRegistry := FinalizationRegistry new.
-	profilerHandler := IllimaniFinalizationMpHandler new
+	finalizationRegistry := self finalizationRegistryClass new.
+	profilerHandler := self handlerClass new
 		profiler: self;
 		yourself.
 	self initializeMethodProxies: profilerHandler
 ]
 
-{ #category : 'initialization' }
+{ #category : 'api' }
 IllimaniFinalizationProfiler >> objectAllocations [
 
 	^ profilerHandler objectAllocations
@@ -69,7 +74,6 @@ IllimaniFinalizationProfiler >> samplingRate: anInteger [
 { #category : 'profiling' }
 IllimaniFinalizationProfiler >> startProfiling [
 
-	self cleanProfilingData.
 	self initializeProfilingBasicStats.
 	self installMethodProxies
 ]
@@ -89,19 +93,19 @@ IllimaniFinalizationProfiler >> stopProfiling [
 	self updateStatsWhenFinishingProfiling
 ]
 
-{ #category : 'statistics - time' }
+{ #category : 'accessing - statistics' }
 IllimaniFinalizationProfiler >> timeDifferenceBetweenFirstAndLastAllocation [
 
 	^ self objectAllocations last initializationTimestamp - self objectAllocations first initializationTimestamp
 ]
 
-{ #category : 'accessing' }
+{ #category : 'accessing - statistics' }
 IllimaniFinalizationProfiler >> totalAllocatedMemory [
 
 	^ self objectAllocations inject: 0 into: [ :sum : elem | sum + elem sizeInBytes ]
 ]
 
-{ #category : 'accessing' }
+{ #category : 'accessing - statistics' }
 IllimaniFinalizationProfiler >> totalAllocatedObjects [
 
 	^ self objectAllocations size

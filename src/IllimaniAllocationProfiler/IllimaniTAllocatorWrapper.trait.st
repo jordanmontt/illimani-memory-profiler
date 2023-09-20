@@ -33,8 +33,8 @@ IllimaniTAllocatorWrapper >> endOfProfilingTime [
 
 { #category : 'api' }
 IllimaniTAllocatorWrapper >> forceUninstall [
-	"Waring, do not use unless you cannot start the profiler because you have the
-	MpCannotInstall exceptionp"
+	"Warning, do not use unless you cannot start the profiler because you have the
+	MpCannotInstall exception"
 
 	MpMethodProxy allInstances do: #uninstall
 ]

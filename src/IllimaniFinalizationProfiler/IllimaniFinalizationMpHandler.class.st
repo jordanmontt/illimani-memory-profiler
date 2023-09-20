@@ -41,22 +41,6 @@ IllimaniFinalizationMpHandler >> cleanObjectAllocations [
 	samplingCounter := 0
 ]
 
-{ #category : 'evaluating' }
-IllimaniFinalizationMpHandler >> handleObjectAllocation: newlyAllocatedObject [
-
-	| objectFinalizationModel |
-	
-	objectFinalizationModel := AllocationSiteInfoModel new
-		initializationTimestamp: Time microsecondClockValue;
-		totalSizeInBytes: newlyAllocatedObject sizeInMemory;
-		yourself.
-
-	objectAllocations add: objectFinalizationModel.
-
-	"Finalization"
-	profiler addFinalizationFor: newlyAllocatedObject finalizer: objectFinalizationModel
-]
-
 { #category : 'initialization' }
 IllimaniFinalizationMpHandler >> initialize [
 
