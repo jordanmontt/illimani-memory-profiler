@@ -23,7 +23,7 @@ IllimaniFinalizationMpHandler >> afterExecutionWithReceiver: receiver arguments:
 	"Handle object allocation"
 	objectFinalizationModel := BasicAllocationInfoModel new
 		initializationTimestamp: Time microsecondClockValue;
-		totalSizeInBytes: newlyAllocatedObject sizeInMemory;
+		sizeInBytes: newlyAllocatedObject sizeInMemory;
 		allocatedObjectClass: newlyAllocatedObject class;
 		yourself.
 

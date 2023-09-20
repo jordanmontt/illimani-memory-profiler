@@ -85,13 +85,13 @@ BasicAllocationInfoModel >> sizeInBytes [
 ]
 
 { #category : 'accessing' }
-BasicAllocationInfoModel >> timestampAsSeconds [
+BasicAllocationInfoModel >> sizeInBytes: aNumber [
 
-	^ initializationTimestamp / 1000000
+	sizeInBytes := aNumber
 ]
 
 { #category : 'accessing' }
-BasicAllocationInfoModel >> totalSizeInBytes: aNumber [
+BasicAllocationInfoModel >> timestampAsSeconds [
 
-	sizeInBytes := aNumber
+	^ initializationTimestamp / 1000000
 ]

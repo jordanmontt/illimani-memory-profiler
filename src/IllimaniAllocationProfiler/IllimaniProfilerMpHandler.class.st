@@ -111,7 +111,7 @@ IllimaniProfilerMpHandler >> handleObjectAllocation: newlyAllocatedObject [
 		allocatorMethod: filteredContext compiledCode method;
 		allocatedObjectClass: newlyAllocatedObject class;
 		contextFingerprint: filteredContext;
-		totalSizeInBytes: newlyAllocatedObject sizeInMemory;
+		sizeInBytes: newlyAllocatedObject sizeInMemory;
 		initializationTimestamp: Time microsecondClockValue.
 
 	objectAllocations add: allocationInformationHolder

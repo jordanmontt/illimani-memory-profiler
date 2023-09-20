@@ -6,14 +6,20 @@ Class {
 		'samplingCounter',
 		'samplingRate',
 		'currentIndex',
-		'arrMaxSize',
-		'arrays',
 		'currentArray',
-		'finalizationRegistry'
+		'finalizationRegistry',
+		'initialArraySize',
+		'accumulatedArrays'
 	],
 	#category : 'IllimaniFinalizationProfiler',
 	#package : 'IllimaniFinalizationProfiler'
 }
+
+{ #category : 'accessing' }
+IllimaniFinalizationMpHandlerFast >> accumulatedArrays [
+
+	^ accumulatedArrays
+]
 
 { #category : 'evaluating' }
 IllimaniFinalizationMpHandlerFast >> afterExecutionWithReceiver: receiver arguments: arguments returnValue: newlyAllocatedObject [
@@ -22,11 +28,11 @@ IllimaniFinalizationMpHandlerFast >> afterExecutionWithReceiver: receiver argume
 	samplingCounter := samplingCounter + 1.
 	samplingCounter % samplingRate = 0 ifFalse: [ ^ newlyAllocatedObject ].
 	
-	currentIndex + 5 > arrMaxSize ifTrue: [
-		arrMaxSize := arrMaxSize * 2.
+	(currentIndex - 1) + 5 > initialArraySize ifTrue: [
+		initialArraySize := initialArraySize * 2.
 		currentIndex := 1.
-		arrays add: currentArray.
-		currentArray := Array new: arrMaxSize ].
+		accumulatedArrays add: currentArray.
+		currentArray := Array new: initialArraySize ].
 	
 	currentArray at: currentIndex put: newlyAllocatedObject identityHash.
 	currentIndex := currentIndex + 1.
@@ -41,18 +47,31 @@ IllimaniFinalizationMpHandlerFast >> afterExecutionWithReceiver: receiver argume
 	currentIndex := currentIndex + 1.
 
 	"Finalization"
-	profiler addFinalizationFor: newlyAllocatedObject "finalizer: objectFinalizationModel".
+	finalizationRegistry add: newlyAllocatedObject finalizer: IllimaniGlobalFinalizer default.
+	"profiler addFinalizationFor: newlyAllocatedObject" "finalizer: objectFinalizationModel".
 	^ newlyAllocatedObject
+]
+
+{ #category : 'accessing' }
+IllimaniFinalizationMpHandlerFast >> currentArray [
+
+	^ currentArray
+]
+
+{ #category : 'accessing' }
+IllimaniFinalizationMpHandlerFast >> currentIndex [
+
+	^ currentIndex
 ]
 
 { #category : 'evaluating' }
 IllimaniFinalizationMpHandlerFast >> finalize: anObject [
 
-	currentIndex + 3 > arrMaxSize ifTrue: [
-		arrMaxSize := arrMaxSize * 2.
+	(currentIndex - 1) + 3 > initialArraySize ifTrue: [
+		initialArraySize := initialArraySize * 2.
 		currentIndex := 1.
-		arrays add: currentArray.
-		currentArray := Array new: arrMaxSize ].
+		accumulatedArrays add: currentArray.
+		currentArray := Array new: initialArraySize ].
 
 	currentArray at: currentIndex put: anObject identityHash.
 	currentIndex := currentIndex + 1.
@@ -63,16 +82,25 @@ IllimaniFinalizationMpHandlerFast >> finalize: anObject [
 	currentIndex := currentIndex + 1
 ]
 
+{ #category : 'accessing' }
+IllimaniFinalizationMpHandlerFast >> initialArraySize: anInteger [
+
+	initialArraySize := anInteger.
+	currentArray := Array new: initialArraySize
+]
+
 { #category : 'initialization' }
 IllimaniFinalizationMpHandlerFast >> initialize [
 
 	super initialize.
 	
-	arrays := OrderedCollection new.
+	finalizationRegistry := IllimaniFinalizationRegistry new.
+	
+	accumulatedArrays := OrderedCollection new.
 	currentIndex := 1.
 	"We want an array big enough to be allocated directly into the old space"
-	arrMaxSize := 1000000.
-	currentArray := Array new: arrMaxSize.
+	initialArraySize := 1000000.
+	currentArray := Array new: initialArraySize.
 	
 	IllimaniGlobalFinalizer reset.
 	IllimaniGlobalFinalizer default handler: self.
@@ -83,7 +111,44 @@ IllimaniFinalizationMpHandlerFast >> initialize [
 { #category : 'accessing' }
 IllimaniFinalizationMpHandlerFast >> objectAllocations [
 
-	^ {  }
+	| allocationsDictionary |
+	allocationsDictionary := Dictionary new.
+	accumulatedArrays do: [ :allocationsArray |
+		allocationsArray doWithIndex: [ :data :index |
+			| model |
+			data = -1 ifTrue: [
+				model := allocationsDictionary at: (allocationsArray at: index - 4) ifAbsentPut: [ BasicAllocationInfoModel new ].
+				self processForInitialization: allocationsArray model: model atIndex: index ].
+			data = -2 ifTrue: [
+				model := allocationsDictionary at: (allocationsArray at: index - 2).
+				self processForFinalization: allocationsArray model: model atIndex: index ] ] ].
+
+	1 to: currentIndex - 1 do: [ :i |
+		| model data |
+		data := currentArray at: i.
+		data = -1 ifTrue: [
+			model := allocationsDictionary at: (currentArray at: i - 4) ifAbsentPut: [ BasicAllocationInfoModel new ].
+			self processForInitialization: currentArray model: model atIndex: i ].
+		data = -2 ifTrue: [
+			model := allocationsDictionary at: (currentArray at: i - 2).
+			self processForFinalization: currentArray model: model atIndex: i ] ].
+	
+	^ allocationsDictionary values
+]
+
+{ #category : 'defaults' }
+IllimaniFinalizationMpHandlerFast >> processForFinalization: allocationsArray model: model atIndex: index [
+
+	model finalizationTimestamp: (allocationsArray at: index - 1)
+]
+
+{ #category : 'defaults' }
+IllimaniFinalizationMpHandlerFast >> processForInitialization: allocationsArray model: model atIndex: index [
+
+	model
+		allocatedObjectClass: (allocationsArray at: index - 1);
+		sizeInBytes: (allocationsArray at: index - 2);
+		initializationTimestamp: (allocationsArray at: index - 3)
 ]
 
 { #category : 'accessing' }

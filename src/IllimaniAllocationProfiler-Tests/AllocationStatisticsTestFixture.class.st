@@ -25,63 +25,63 @@ AllocationStatisticsTestFixture >> allocationsOne [
 				 allocatorMethod: Margin >> #asMargin;
 				 initializationTimestamp: DateAndTime now;
 				 allocatedObjectClass: OrderedCollection;
-				 totalSizeInBytes: 16;
+				 sizeInBytes: 16;
 				 yourself);
 		add: (AllocationSiteInfoModel new
 				 allocatorClass: Rectangle;
 				 allocatorMethod: Margin >> #asMargin;
 				 initializationTimestamp: DateAndTime now;
 				 allocatedObjectClass: OrderedCollection;
-				 totalSizeInBytes: 16;
+				 sizeInBytes: 16;
 				 yourself);
 		add: (AllocationSiteInfoModel new
 				 allocatorClass: Rectangle;
 				 allocatorMethod: Margin >> #asMargin;
 				 initializationTimestamp: DateAndTime now;
 				 allocatedObjectClass: Dictionary;
-				 totalSizeInBytes: 16;
+				 sizeInBytes: 16;
 				 yourself);
 		add: (AllocationSiteInfoModel new
 				 allocatorClass: Rectangle;
 				 allocatorMethod: Margin >> #asMargin;
 				 initializationTimestamp: DateAndTime now;
 				 allocatedObjectClass: ByteString;
-				 totalSizeInBytes: 32;
+				 sizeInBytes: 32;
 				 yourself);
 		add: (AllocationSiteInfoModel new
 				 allocatorClass: Rectangle;
 				 allocatorMethod: Margin >> #asMargin;
 				 initializationTimestamp: DateAndTime now;
 				 allocatedObjectClass: ByteString;
-				 totalSizeInBytes: 48;
+				 sizeInBytes: 48;
 				 yourself);
 		add: (AllocationSiteInfoModel new
 				 allocatorClass: Rectangle;
 				 allocatorMethod: Object >> #'->';
 				 initializationTimestamp: DateAndTime now;
 				 allocatedObjectClass: ByteString;
-				 totalSizeInBytes: 100;
+				 sizeInBytes: 100;
 				 yourself);
 		add: (AllocationSiteInfoModel new
 				 allocatorClass: Rectangle;
 				 allocatorMethod: Object >> #'->';
 				 initializationTimestamp: DateAndTime now;
 				 allocatedObjectClass: ByteString;
-				 totalSizeInBytes: 55;
+				 sizeInBytes: 55;
 				 yourself);
 		add: (AllocationSiteInfoModel new
 				 allocatorClass: Rectangle;
 				 allocatorMethod: Object >> #'->';
 				 initializationTimestamp: DateAndTime now;
 				 allocatedObjectClass: Color;
-				 totalSizeInBytes: 60;
+				 sizeInBytes: 60;
 				 yourself);
 		add: (AllocationSiteInfoModel new
 				 allocatorClass: Rectangle;
 				 allocatorMethod: Object >> #'->';
 				 initializationTimestamp: DateAndTime now;
 				 allocatedObjectClass: Color;
-				 totalSizeInBytes: 16;
+				 sizeInBytes: 16;
 				 yourself).
 	^ allocations
 ]
@@ -96,7 +96,7 @@ AllocationStatisticsTestFixture >> allocationsThree [
 			 allocatorMethod: Collection>>#sorted:;
 			 initializationTimestamp: Time microsecondClockValue;
 			 allocatedObjectClass: ByteArray;
-			 totalSizeInBytes: 16;
+			 sizeInBytes: 16;
 			 yourself).
 	^ allocations
 ]
@@ -112,35 +112,35 @@ AllocationStatisticsTestFixture >> allocationsTwo [
 				 allocatorMethod: ArrayedCollection >> #add:;
 				 initializationTimestamp: Time microsecondClockValue;
 				 allocatedObjectClass: ByteString;
-				 totalSizeInBytes: 16;
+				 sizeInBytes: 16;
 				 yourself);
 		add: (AllocationSiteInfoModel new
 				 allocatorClass: OrderedCollection;
 				 allocatorMethod: ArrayedCollection >> #add:;
 				 initializationTimestamp: Time microsecondClockValue;
 				 allocatedObjectClass: ByteString;
-				 totalSizeInBytes: 16;
+				 sizeInBytes: 16;
 				 yourself);
 		add: (AllocationSiteInfoModel new
 				 allocatorClass: OrderedCollection;
 				 allocatorMethod: ArrayedCollection >> #add:;
 				 initializationTimestamp: Time microsecondClockValue;
 				 allocatedObjectClass: ByteString;
-				 totalSizeInBytes: 32;
+				 sizeInBytes: 32;
 				 yourself);
 		add: (AllocationSiteInfoModel new
 				 allocatorClass: OrderedCollection;
 				 allocatorMethod: ArrayedCollection >> #add:;
 				 initializationTimestamp: Time microsecondClockValue;
 				 allocatedObjectClass: ByteArray;
-				 totalSizeInBytes: 100;
+				 sizeInBytes: 100;
 				 yourself);
 		add: (AllocationSiteInfoModel new
 				 allocatorClass: OrderedCollection;
 				 allocatorMethod: ArrayedCollection >> #add:;
 				 initializationTimestamp: Time microsecondClockValue;
 				 allocatedObjectClass: ByteArray;
-				 totalSizeInBytes: 16;
+				 sizeInBytes: 16;
 				 yourself).
 	^ allocations
 ]
