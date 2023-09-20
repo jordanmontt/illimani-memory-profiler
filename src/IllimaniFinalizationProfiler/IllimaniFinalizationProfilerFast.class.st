@@ -13,13 +13,13 @@ IllimaniFinalizationProfilerFast >> addFinalizationFor: newlyAllocatedObject [
 ]
 
 { #category : 'initialization' }
-IllimaniFinalizationProfilerFast >> finalizationRegistryClass [
+IllimaniFinalizationProfilerFast >> initializeFinalizationRegistry [
 
-	^ IllimaniFinalizationRegistry
+	^ IllimaniFinalizationRegistry new
 ]
 
 { #category : 'initialization' }
-IllimaniFinalizationProfilerFast >> handlerClass [
+IllimaniFinalizationProfilerFast >> initializeHandler [
 
-	^ IllimaniFinalizationMpHandlerFast
+	^ IllimaniFinalizationMpHandlerFast new
 ]

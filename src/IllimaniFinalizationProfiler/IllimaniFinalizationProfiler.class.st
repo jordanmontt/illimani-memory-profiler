@@ -20,36 +20,36 @@ IllimaniFinalizationProfiler >> addFinalizationFor: newlyAllocatedObject finaliz
 	finalizationRegistry add: newlyAllocatedObject finalizer: objectFinalizationModel
 ]
 
-{ #category : 'initialization' }
-IllimaniFinalizationProfiler >> finalizationRegistryClass [
-
-	^ FinalizationRegistry
-]
-
 { #category : 'profiling' }
 IllimaniFinalizationProfiler >> forceFinalizationOfObjects [
 
 	"We force the finalization timestamp for the not yet finalized objects."
 	finalizationRegistry finalizeAllEphemerons.
 	"Then we stop referencing the finalization registry to not re-finalize the objects."
-	finalizationRegistry := self finalizationRegistryClass new
-]
-
-{ #category : 'initialization' }
-IllimaniFinalizationProfiler >> handlerClass [
-
-	^ IllimaniFinalizationMpHandler
+	finalizationRegistry := self initializeFinalizationRegistry
 ]
 
 { #category : 'initialization' }
 IllimaniFinalizationProfiler >> initialize [
 
 	super initialize.
-	finalizationRegistry := self finalizationRegistryClass new.
-	profilerHandler := self handlerClass new
-		profiler: self;
-		yourself.
+	finalizationRegistry := self initializeFinalizationRegistry.
+	profilerHandler := self initializeHandler.
 	self initializeMethodProxies: profilerHandler
+]
+
+{ #category : 'initialization' }
+IllimaniFinalizationProfiler >> initializeFinalizationRegistry [
+
+	^ FinalizationRegistry new
+]
+
+{ #category : 'initialization' }
+IllimaniFinalizationProfiler >> initializeHandler [
+
+	^ IllimaniFinalizationMpHandler new
+		  profiler: self;
+		  yourself
 ]
 
 { #category : 'api' }

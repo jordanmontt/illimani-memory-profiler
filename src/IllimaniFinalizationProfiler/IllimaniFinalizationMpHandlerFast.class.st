@@ -2,7 +2,6 @@ Class {
 	#name : 'IllimaniFinalizationMpHandlerFast',
 	#superclass : 'MpHandler',
 	#instVars : [
-		'profiler',
 		'samplingCounter',
 		'samplingRate',
 		'currentIndex',
@@ -48,7 +47,6 @@ IllimaniFinalizationMpHandlerFast >> afterExecutionWithReceiver: receiver argume
 
 	"Finalization"
 	finalizationRegistry add: newlyAllocatedObject finalizer: IllimaniGlobalFinalizer default.
-	"profiler addFinalizationFor: newlyAllocatedObject" "finalizer: objectFinalizationModel".
 	^ newlyAllocatedObject
 ]
 
@@ -150,18 +148,6 @@ IllimaniFinalizationMpHandlerFast >> processForInitialization: allocationsArray 
 		allocatedObjectClass: (allocationsArray at: index - 1);
 		sizeInBytes: (allocationsArray at: index - 2);
 		initializationTimestamp: (allocationsArray at: index - 3)
-]
-
-{ #category : 'accessing' }
-IllimaniFinalizationMpHandlerFast >> profiler [
-
-	^ profiler
-]
-
-{ #category : 'accessing' }
-IllimaniFinalizationMpHandlerFast >> profiler: anIllimaniFinalizationProfiler [
-
-	profiler := anIllimaniFinalizationProfiler
 ]
 
 { #category : 'accessing' }
