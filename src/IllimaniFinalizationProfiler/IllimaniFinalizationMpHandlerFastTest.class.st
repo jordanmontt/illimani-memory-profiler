@@ -8,6 +8,22 @@ Class {
 	#package : 'IllimaniFinalizationProfiler'
 }
 
+{ #category : 'tests' }
+IllimaniFinalizationMpHandlerFastTest >> assertAllocationResult: allocationHolderResult expected: allocationHolderExpected [
+
+	self assert: allocationHolderResult allocatedObjectClass equals: allocationHolderExpected allocatedObjectClass.
+	self assert: allocationHolderResult sizeInBytes equals: allocationHolderExpected sizeInBytes.
+	self assert: allocationHolderResult finalizationTimestamp > allocationHolderResult initializationTimestamp
+]
+
+{ #category : 'tests' }
+IllimaniFinalizationMpHandlerFastTest >> assertAllocationResultWithTime: allocationHolderResult expected: allocationHolderExpected [
+
+	self assertAllocationResult: allocationHolderResult expected: allocationHolderExpected.
+	self assert: allocationHolderResult initializationTimestamp > allocationHolderExpected initializationTimestamp.
+	self assert: allocationHolderResult finalizationTimestamp > allocationHolderExpected finalizationTimestamp
+]
+
 { #category : 'running' }
 IllimaniFinalizationMpHandlerFastTest >> setUp [
 
@@ -88,19 +104,13 @@ IllimaniFinalizationMpHandlerFastTest >> testObjectAllocations [
 		yourself.
 	allocationHolderResult := handler objectAllocations first.
 	
-	self assert: allocationHolderResult allocatedObjectClass equals: allocationHolderExpected allocatedObjectClass.
-	self assert: allocationHolderResult sizeInBytes equals: allocationHolderExpected sizeInBytes.
-	self assert: allocationHolderResult initializationTimestamp > allocationHolderExpected initializationTimestamp.
-	self assert: allocationHolderResult finalizationTimestamp > allocationHolderExpected finalizationTimestamp.
-	
-	"finalization is after initialization"
-	self assert: allocationHolderResult finalizationTimestamp > allocationHolderResult initializationTimestamp.
+	self assertAllocationResultWithTime: allocationHolderResult expected: allocationHolderExpected
 ]
 
 { #category : 'tests' }
 IllimaniFinalizationMpHandlerFastTest >> testObjectAllocationsTwoObjects [
 
-	| allocation allocationHolderExpected1 allocationHolderExpected2 allocationHolderResult |
+	| allocation allocationHolderExpected1 allocationHolderExpected2 |
 	allocation := Array new.
 	handler afterExecutionWithReceiver: nil arguments: nil  returnValue: allocation.
 	handler finalize: allocation.
@@ -117,22 +127,14 @@ IllimaniFinalizationMpHandlerFastTest >> testObjectAllocationsTwoObjects [
 		sizeInBytes: allocation sizeInMemory;
 		yourself.
 	
-	allocationHolderResult := handler objectAllocations first.
-	self assert: allocationHolderResult allocatedObjectClass equals: allocationHolderExpected1 allocatedObjectClass.
-	self assert: allocationHolderResult sizeInBytes equals: allocationHolderExpected1 sizeInBytes.
-	self assert: allocationHolderResult finalizationTimestamp > allocationHolderResult initializationTimestamp.
-	
-	"Second allocation"
-	allocationHolderResult := handler objectAllocations second.
-	self assert: allocationHolderResult allocatedObjectClass equals: allocationHolderExpected2 allocatedObjectClass.
-	self assert: allocationHolderResult sizeInBytes equals: allocationHolderExpected2 sizeInBytes.
-	self assert: allocationHolderResult finalizationTimestamp > allocationHolderResult initializationTimestamp.
+	self assertAllocationResult: handler objectAllocations first expected: allocationHolderExpected1.
+	self assertAllocationResult: handler objectAllocations second expected: allocationHolderExpected2.
 ]
 
 { #category : 'tests' }
 IllimaniFinalizationMpHandlerFastTest >> testObjectAllocationsTwoObjectsTwoArrays [
 
-	| allocation allocationHolderExpected1 allocationHolderExpected2 allocationHolderResult |
+	| allocation allocationHolderExpected1 allocationHolderExpected2 |
 	allocation := Array new.
 	handler initialArraySize: 7.
 	handler afterExecutionWithReceiver: nil arguments: nil  returnValue: allocation.
@@ -150,16 +152,9 @@ IllimaniFinalizationMpHandlerFastTest >> testObjectAllocationsTwoObjectsTwoArray
 		sizeInBytes: allocation sizeInMemory;
 		yourself.
 	
-	allocationHolderResult := handler objectAllocations first.
-	self assert: allocationHolderResult allocatedObjectClass equals: allocationHolderExpected1 allocatedObjectClass.
-	self assert: allocationHolderResult sizeInBytes equals: allocationHolderExpected1 sizeInBytes.
-	self assert: allocationHolderResult finalizationTimestamp > allocationHolderResult initializationTimestamp.
+	self assertAllocationResult: handler objectAllocations first expected: allocationHolderExpected1.
+	self assertAllocationResult: handler objectAllocations second expected: allocationHolderExpected2.
 	
-	"Second allocation"
-	allocationHolderResult := handler objectAllocations second.
-	self assert: allocationHolderResult allocatedObjectClass equals: allocationHolderExpected2 allocatedObjectClass.
-	self assert: allocationHolderResult sizeInBytes equals: allocationHolderExpected2 sizeInBytes.
-	self assert: allocationHolderResult finalizationTimestamp > allocationHolderResult initializationTimestamp.
 ]
 
 { #category : 'tests' }
@@ -181,11 +176,5 @@ IllimaniFinalizationMpHandlerFastTest >> testObjectAllocationsWithTwoArrays [
 		yourself.
 	allocationHolderResult := handler objectAllocations first.
 	
-	self assert: allocationHolderResult allocatedObjectClass equals: allocationHolderExpected allocatedObjectClass.
-	self assert: allocationHolderResult sizeInBytes equals: allocationHolderExpected sizeInBytes.
-	self assert: allocationHolderResult initializationTimestamp > allocationHolderExpected initializationTimestamp.
-	self assert: allocationHolderResult finalizationTimestamp > allocationHolderExpected finalizationTimestamp.
-	
-	"finalization is after initialization"
-	self assert: allocationHolderResult finalizationTimestamp > allocationHolderResult initializationTimestamp.
+	self assertAllocationResultWithTime: allocationHolderResult expected: allocationHolderExpected
 ]
