@@ -134,7 +134,7 @@ IllimaniFinalizationMpHandlerFast >> objectAllocations [
 			model := allocationsDictionary at: (currentArray at: i - 2).
 			self processForFinalization: currentArray model: model atIndex: i ] ].
 	
-	^ allocationsDictionary values
+	^ allocationsDictionary values sorted: [ :a :b | a initializationTimestamp < b initializationTimestamp ]
 ]
 
 { #category : 'defaults' }
