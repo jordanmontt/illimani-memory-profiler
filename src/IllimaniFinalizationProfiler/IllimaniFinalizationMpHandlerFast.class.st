@@ -21,7 +21,7 @@ IllimaniFinalizationMpHandlerFast >> afterExecutionWithReceiver: receiver argume
 	samplingCounter := samplingCounter + 1.
 	samplingCounter % samplingRate = 0 ifFalse: [ ^ newlyAllocatedObject ].
 	
-	currentIndex + 5 >= arrMaxSize ifTrue: [
+	currentIndex + 5 > arrMaxSize ifTrue: [
 		arrMaxSize := arrMaxSize * 2.
 		currentIndex := 1.
 		arrays add: currentArray.
@@ -47,7 +47,7 @@ IllimaniFinalizationMpHandlerFast >> afterExecutionWithReceiver: receiver argume
 { #category : 'evaluating' }
 IllimaniFinalizationMpHandlerFast >> finalize: anIdentityHash [
 
-	currentIndex + 3 >= arrMaxSize ifTrue: [
+	currentIndex + 3 > arrMaxSize ifTrue: [
 		arrMaxSize := arrMaxSize * 2.
 		currentIndex := 1.
 		arrays add: currentArray.
