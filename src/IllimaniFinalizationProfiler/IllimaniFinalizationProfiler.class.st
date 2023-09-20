@@ -30,7 +30,6 @@ IllimaniFinalizationProfiler >> finalizationRegistryClass [
 IllimaniFinalizationProfiler >> forceFinalizationOfObjects [
 
 	"We force the finalization timestamp for the not yet finalized objects."
-	"finalizationRegistry valuesDo: #finalize."
 	finalizationRegistry finalizeAllEphemerons.
 	"Then we stop referencing the finalization registry to not re-finalize the objects."
 	finalizationRegistry := self finalizationRegistryClass new
