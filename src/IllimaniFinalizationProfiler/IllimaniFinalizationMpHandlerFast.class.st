@@ -84,6 +84,7 @@ IllimaniFinalizationMpHandlerFast >> finalize: anObject [
 
 { #category : 'accessing' }
 IllimaniFinalizationMpHandlerFast >> initialArraySize: anInteger [
+	"ONLY USED FOR TESTING"
 
 	initialArraySize := anInteger.
 	currentArray := Array new: initialArraySize
