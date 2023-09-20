@@ -98,7 +98,7 @@ IllimaniFinalizationProfiler >> timeDifferenceBetweenFirstAndLastAllocation [
 { #category : 'accessing' }
 IllimaniFinalizationProfiler >> totalAllocatedMemory [
 
-	^ self objectAllocations inject: 0 into: [ :sum : elem | sum + elem totalSizeInBytes ]
+	^ self objectAllocations inject: 0 into: [ :sum : elem | sum + elem sizeInBytes ]
 ]
 
 { #category : 'accessing' }

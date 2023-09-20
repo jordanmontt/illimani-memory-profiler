@@ -33,11 +33,13 @@ IllimaniFinalizationProfilerUI >> initializeDensityChartPresenter [
 		yourself.
 	densityChartByMemory := densityPlotBuilder
 		beForMemory;
-		yTitle: 'Memory (log scale)';
+		yTitle: 'Memory';
+		"yLog: true;"
 		densityChartPresenter.
 	densityChartByNumbOfAlloc := densityPlotBuilder
 		beForNumberOfAllocations;
-		yTitle: 'Number of allocations (log scale)';
+		yTitle: 'Number of allocations';
+		"yLog: true;"
 		densityChartPresenter.
 
 	densityChartPresenter := AlternatorPresenter new

@@ -4,8 +4,8 @@ Class {
 	#instVars : [
 		'allocatedObjectClass',
 		'finalizationTimestamp',
-		'totalSizeInBytes',
-		'initializationTimestamp'
+		'initializationTimestamp',
+		'sizeInBytes'
 	],
 	#category : 'IllimaniAllocationProfiler-Model',
 	#package : 'IllimaniAllocationProfiler',
@@ -78,20 +78,20 @@ BasicAllocationInfoModel >> lifetimeAsString [
 ]
 
 { #category : 'accessing' }
+BasicAllocationInfoModel >> sizeInBytes [
+	"Returns the size in memory in bytes"
+
+	^ sizeInBytes
+]
+
+{ #category : 'accessing' }
 BasicAllocationInfoModel >> timestampAsSeconds [
 
 	^ initializationTimestamp / 1000000
 ]
 
 { #category : 'accessing' }
-BasicAllocationInfoModel >> totalSizeInBytes [
-	"Returns the total size in memory in bytes"
-
-	^ totalSizeInBytes
-]
-
-{ #category : 'accessing' }
 BasicAllocationInfoModel >> totalSizeInBytes: aNumber [
 
-	totalSizeInBytes := aNumber
+	sizeInBytes := aNumber
 ]

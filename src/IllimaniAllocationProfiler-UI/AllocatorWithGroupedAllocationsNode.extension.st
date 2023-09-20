@@ -5,7 +5,7 @@ AllocatorWithGroupedAllocationsNode >> inspectorExtension: aBuilder [
 
 	<inspectorPresentationOrder: 0 title: 'Summary'>
 	| elements tablePresenter |
-	elements := { 'Allocator' -> allocator . 'Total allocations' -> self totalAllocations . 'Total size in memory' -> self totalSizeInBytes }.
+	elements := { 'Allocator' -> allocator . 'Total allocations' -> self totalAllocations . 'Total size in memory' -> self sizeInBytes }.
 	tablePresenter := aBuilder newTable.
 	tablePresenter
 		addColumn: (SpStringTableColumn title: 'Name' evaluated: #key);

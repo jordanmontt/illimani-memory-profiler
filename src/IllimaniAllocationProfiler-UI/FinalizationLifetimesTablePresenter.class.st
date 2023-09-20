@@ -37,10 +37,10 @@ FinalizationLifetimesTablePresenter >> initializePresenters [
 			evaluated: [ :assoc | assoc key ]);
 		addColumn: (SpStringTableColumn
 			title: 'Total allocated memory'
-			evaluated: [ :assoc | (assoc value sum: [ :e | e totalSizeInBytes ]) humanReadableByteSizeString ]);
+			evaluated: [ :assoc | (assoc value sum: [ :e | e sizeInBytes ]) humanReadableByteSizeString ]);
 		addColumn: (SpStringTableColumn
 			title: '% Memory'
-			evaluated: [ :assoc | self convertToPercentageString: (assoc value sum: [ :e | e totalSizeInBytes ]) / totalMemory ]);
+			evaluated: [ :assoc | self convertToPercentageString: (assoc value sum: [ :e | e sizeInBytes ]) / totalMemory ]);
 		addColumn: (SpStringTableColumn
 			title: '# of allocated objects'
 			evaluated: [ :assoc | assoc value size asStringWithCommas ]);
@@ -56,6 +56,6 @@ FinalizationLifetimesTablePresenter >> setModelBeforeInitialization: someObjectA
 	groupedAllocationsBySeconds := (someObjectAllocations groupedBy: [ :allocationModel |
 		allocationModel lifetimeAsDuration asSeconds ]) associations.
 	groupedAllocationsBySeconds sort: [ :a :b | a key < b key ].
-	totalMemory := groupedAllocationsBySeconds sum: [ :assoc | assoc value sum: [ :e | e totalSizeInBytes ] ].
+	totalMemory := groupedAllocationsBySeconds sum: [ :assoc | assoc value sum: [ :e | e sizeInBytes ] ].
 	totalAllocations := groupedAllocationsBySeconds sum: [ :assoc | assoc value size ].
 ]

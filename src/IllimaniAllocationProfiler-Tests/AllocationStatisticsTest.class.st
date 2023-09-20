@@ -132,7 +132,7 @@ AllocationStatisticsTest >> testTopNAllocationsByMethod [
 AllocationStatisticsTest >> testTotalAllocatedMemory [
 
 	self assert: statsModel totalAllocatedMemory
-		equals: (fixture mockedAllocations sum: [ :e | e totalSizeInBytes ])
+		equals: (fixture mockedAllocations sum: [ :e | e sizeInBytes ])
 ]
 
 { #category : 'tests' }

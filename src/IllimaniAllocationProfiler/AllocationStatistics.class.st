@@ -95,7 +95,7 @@ AllocationStatistics >> topNAllocationsByMethod: n [
 { #category : 'statistics' }
 AllocationStatistics >> totalAllocatedMemory [
 
-	^ rawAllocations inject: 0 into: [ :sum : elem | sum + elem totalSizeInBytes ]
+	^ rawAllocations inject: 0 into: [ :sum : elem | sum + elem sizeInBytes ]
 ]
 
 { #category : 'statistics' }

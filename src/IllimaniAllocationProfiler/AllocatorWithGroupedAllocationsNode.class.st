@@ -65,7 +65,14 @@ AllocatorWithGroupedAllocationsNode >> initialize [
 { #category : 'printing' }
 AllocatorWithGroupedAllocationsNode >> printOn: aStream [
 
-	aStream << allocator asString << ' allocated ' << self totalAllocations asString << ' instances that weight ' << self totalSizeInBytes humanReadableByteSizeString
+	aStream << allocator asString << ' allocated ' << self totalAllocations asString << ' instances that weight ' << self sizeInBytes humanReadableByteSizeString
+]
+
+{ #category : 'accessing' }
+AllocatorWithGroupedAllocationsNode >> sizeInBytes [
+
+	^ groupedAllocations inject: 0
+		  into: [ :sum :node | sum + (node sum: [ :e | e sizeInBytes ]) ]
 ]
 
 { #category : 'api' }
@@ -91,11 +98,4 @@ AllocatorWithGroupedAllocationsNode >> totalAllocations [
 AllocatorWithGroupedAllocationsNode >> totalGroupedAllocations [
 
 	^ groupedAllocations values collect: #size
-]
-
-{ #category : 'accessing' }
-AllocatorWithGroupedAllocationsNode >> totalSizeInBytes [
-
-	^ groupedAllocations inject: 0
-		  into: [ :sum :node | sum + (node sum: [ :e | e totalSizeInBytes ]) ]
 ]

@@ -79,14 +79,14 @@ TableMemoryInformationPresenter >> initializePresenters [
 			yourself);
 		addColumn: (SpStringTableColumn new
 			title: 'Total size in bytes';
-			evaluated: [ :each | each totalSizeInBytes humanReadableByteSizeString ];
-			sortFunction: #totalSizeInBytes ascending;
+			evaluated: [ :each | each sizeInBytes humanReadableByteSizeString ];
+			sortFunction: #sizeInBytes ascending;
 			yourself);
 		addColumn: (SpStringTableColumn new
 			width: 60;
 			title: '%';
 			evaluated: [ :e |
-				(((e totalSizeInBytes / self totalSizeInBytes) * 100) asFloat printShowingDecimalPlaces: 2) , '%'];
+				(((e sizeInBytes / self sizeInBytes) * 100) asFloat printShowingDecimalPlaces: 2) , '%'];
 			yourself);
 		items: self tableItems
 ]
@@ -95,6 +95,12 @@ TableMemoryInformationPresenter >> initializePresenters [
 TableMemoryInformationPresenter >> setModelBeforeInitialization: someTableItems [
 
 	tableItems := someTableItems
+]
+
+{ #category : 'accessing' }
+TableMemoryInformationPresenter >> sizeInBytes [
+
+	^ totalSizeInBytes ifNil: [ totalSizeInBytes := tableItems sum: [ :e | e sizeInBytes ] ]
 ]
 
 { #category : 'accessing - model' }
@@ -107,10 +113,4 @@ TableMemoryInformationPresenter >> tableItems [
 TableMemoryInformationPresenter >> totalAllocations [
 
 	^ totalAllocations ifNil: [ totalAllocations := tableItems sum: [ :e | e totalAllocations ] ]
-]
-
-{ #category : 'accessing' }
-TableMemoryInformationPresenter >> totalSizeInBytes [
-
-	^ totalSizeInBytes ifNil: [ totalSizeInBytes := tableItems sum: [ :e | e totalSizeInBytes ] ]
 ]

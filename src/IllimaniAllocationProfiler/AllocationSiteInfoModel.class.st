@@ -86,6 +86,6 @@ AllocationSiteInfoModel >> printOn: aStream [
 
 	aStream << allocatorMethod name << ' allocated a ' << allocatedObjectClass asString
 	<< ' that weights '.
-	totalSizeInBytes ifNil: [ aStream << ' - ' ]
-		ifNotNil: [ aStream << totalSizeInBytes humanReadableByteSizeString ]
+	sizeInBytes ifNil: [ aStream << ' - ' ]
+		ifNotNil: [ aStream << sizeInBytes humanReadableByteSizeString ]
 ]

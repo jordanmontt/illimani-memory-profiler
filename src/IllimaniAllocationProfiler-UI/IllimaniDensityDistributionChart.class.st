@@ -8,7 +8,8 @@ Class {
 		'numberOfTicks',
 		'groupedDataBySeconds',
 		'isForMemory',
-		'x'
+		'x',
+		'isYLog'
 	],
 	#category : 'IllimaniAllocationProfiler-UI-Roassal',
 	#package : 'IllimaniAllocationProfiler-UI',
@@ -18,8 +19,10 @@ Class {
 { #category : 'defaults' }
 IllimaniDensityDistributionChart >> addChartTitles: chart [
 
+	| completeYTitle |
 	chart xlabel: xTitle.
-	chart ylabel: yTitle.
+	completeYTitle := isYLog ifTrue: [ yTitle , ' (log scale)' ] ifFalse: [ yTitle ].
+	chart ylabel: completeYTitle.
 	chart title: title
 ]
 
@@ -58,7 +61,7 @@ IllimaniDensityDistributionChart >> dataByMemory [
 	dictionary := Dictionary newFrom: groupedDataBySeconds.
 	^ x collect: [ :index |
 		  dictionary at: index
-			  ifPresent: [ :collection | collection sum: [ :e | e totalSizeInBytes ] ]
+			  ifPresent: [ :collection | collection sum: [ :e | e sizeInBytes ] ]
 			  ifAbsent: [ 0 ] ]
 ]
 
@@ -79,11 +82,12 @@ IllimaniDensityDistributionChart >> densityChartCanvas [
 	y := isForMemory ifTrue: [ self dataByMemory ] ifFalse: [ self dataByNumberOfAllocations ].
 	plot := RSLinePlot new
 		color: (Color fromHexString: '#CD5C5C');
-		x: x y: y.
-	
+		x: x y: y;
+		yourself.
+
 	chart add: plot.
 	"marker := RSXMarkerDecoration new
-		sumUpTo: 0.6 ""0.75"";
+		sumUpTo: 0.77 ""0.75"";
 		color: Color blue;
 		width: 0.6;
 		yourself.
@@ -91,7 +95,9 @@ IllimaniDensityDistributionChart >> densityChartCanvas [
 	self addTickDecorations: chart.
 	chart minChartValueX: -1.
 	self addChartTitles: chart.
-	chart yLog.
+	
+	isYLog ifTrue: [ chart yLog ].
+	
 	chart build.
 	"marker lines do: [ :line |
 		| label |
@@ -111,8 +117,8 @@ IllimaniDensityDistributionChart >> densityChartCanvas [
 IllimaniDensityDistributionChart >> densityChartPresenter [
 
 	^ SpRoassalPresenter new
-		  canvas: self densityChartCanvas;
-		  yourself
+		canvas: self densityChartCanvas;
+		yourself
 ]
 
 { #category : 'initialization' }
@@ -120,11 +126,12 @@ IllimaniDensityDistributionChart >> initialize [
 
 	super initialize.
 
-	xTitle := ''.
+	xTitle := 'Lifetime in seconds'.
 	yTitle := ''.
 	title := ''.
 	numberOfTicks := 10.
-	isForMemory := true
+	isForMemory := true.
+	isYLog := false
 ]
 
 { #category : 'initialization' }
@@ -160,6 +167,12 @@ IllimaniDensityDistributionChart >> title: aTitle [
 IllimaniDensityDistributionChart >> xTitle: aTitle [
 
 	xTitle := aTitle
+]
+
+{ #category : 'api' }
+IllimaniDensityDistributionChart >> yLog: aBoolean [
+
+	isYLog := aBoolean
 ]
 
 { #category : 'api' }
