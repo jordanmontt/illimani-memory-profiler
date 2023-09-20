@@ -31,20 +31,17 @@ IllimaniFinalizationMpHandlerFastTest >> testAfterExecutionWithReceiverArguments
 	handler afterExecutionWithReceiver: nil arguments: nil  returnValue: allocation.
 	handler finalize: allocation.
 	
-	self assert: (handler currentArray at: 1) equals: allocation identityHash.
-	self assert: (handler currentArray at: 3) equals: allocation sizeInMemory.
-	self assert: (handler currentArray at: 4) equals: allocation class.
+	self assert: (handler allocationsUnconstructedCollection at: 1) equals: allocation identityHash.
+	self assert: (handler allocationsUnconstructedCollection at: 3) equals: allocation sizeInMemory.
+	self assert: (handler allocationsUnconstructedCollection at: 4) equals: allocation class.
 	"allocation marker"
-	self assert: (handler currentArray at: 5) equals: -1.
+	self assert: (handler allocationsUnconstructedCollection at: 5) equals: -1.
 	"finalization"
-	self assert: (handler currentArray at: 6) equals: allocation identityHash.
+	self assert: (handler allocationsUnconstructedCollection at: 6) equals: allocation identityHash.
 	"finalization marker"
-	self assert: (handler currentArray at: 8) equals: -2.
+	self assert: (handler allocationsUnconstructedCollection at: 8) equals: -2.
 	"finalization is after initialization"
-	self assert: (handler currentArray at: 7) > (handler currentArray at: 2).
-	
-	"current index"
-	self assert: handler currentIndex equals: 9
+	self assert: (handler allocationsUnconstructedCollection at: 7) > (handler allocationsUnconstructedCollection at: 2).
 ]
 
 { #category : 'tests' }
@@ -53,25 +50,22 @@ IllimaniFinalizationMpHandlerFastTest >> testArraysAllocation [
 	| allocation time |
 	time := Time primUTCMicrosecondsClock.
 	allocation := Array new.
-	handler initialArraySize: 5.
 	handler afterExecutionWithReceiver: nil arguments: nil  returnValue: allocation.
 	handler finalize: allocation.
 	
-	self assert: (handler currentArray at: 1) equals: allocation identityHash.
+	self assert: (handler allocationsUnconstructedCollection at: 1) equals: allocation identityHash.
 	"allocation time"
-	self assert: (handler accumulatedArrays first at: 2) > time.
-	self assert: (handler accumulatedArrays first at: 3) equals: allocation sizeInMemory.
-	self assert: (handler accumulatedArrays first at: 4) equals: allocation class.
+	self assert: (handler allocationsUnconstructedCollection at: 2) > time.
+	self assert: (handler allocationsUnconstructedCollection at: 3) equals: allocation sizeInMemory.
+	self assert: (handler allocationsUnconstructedCollection at: 4) equals: allocation class.
 	"allocation marker"
-	self assert: (handler accumulatedArrays first at: 5) equals: -1.
+	self assert: (handler allocationsUnconstructedCollection at: 5) equals: -1.
 	
 	"finalization"
-	self assert: (handler currentArray at: 1) equals: allocation identityHash.
-	self assert: (handler currentArray at: 2) > time.
+	self assert: (handler allocationsUnconstructedCollection at: 6) equals: allocation identityHash.
+	self assert: (handler allocationsUnconstructedCollection at: 7) > time.
 	"marker"
-	self assert: (handler currentArray at: 3) equals: -2.
-
-	self assert: handler currentIndex equals: 4
+	self assert: (handler allocationsUnconstructedCollection at: 8) equals: -2.
 ]
 
 { #category : 'tests' }
@@ -120,7 +114,6 @@ IllimaniFinalizationMpHandlerFastTest >> testObjectAllocationsTwoObjectsTwoArray
 
 	| allocation allocationHolderExpected1 allocationHolderExpected2 |
 	allocation := Array new.
-	handler initialArraySize: 7.
 	handler afterExecutionWithReceiver: nil arguments: nil  returnValue: allocation.
 	handler finalize: allocation.
 	allocationHolderExpected1 := BasicAllocationInfoModel new
@@ -146,7 +139,6 @@ IllimaniFinalizationMpHandlerFastTest >> testObjectAllocationsWithTwoArrays [
 
 	| allocation allocationHolderExpected allocationHolderResult |
 	allocation := Array new.
-	handler initialArraySize: 5.
 	handler afterExecutionWithReceiver: nil arguments: nil  returnValue: allocation.
 	handler finalize: allocation.
 	
