@@ -1,5 +1,5 @@
 Class {
-	#name : 'IllimaniFinalizationMpHandlerTest',
+	#name : 'IllFinalizationMpHandlerTest',
 	#superclass : 'TestCase',
 	#instVars : [
 		'handler'
@@ -10,14 +10,14 @@ Class {
 }
 
 { #category : 'running' }
-IllimaniFinalizationMpHandlerTest >> setUp [
+IllFinalizationMpHandlerTest >> setUp [
 
 	super setUp.
-	handler := IllimaniFinalizationMpHandler new
+	handler := IllFinalizationMpHandler new
 ]
 
 { #category : 'tests' }
-IllimaniFinalizationMpHandlerTest >> testSamplingRate [
+IllFinalizationMpHandlerTest >> testSamplingRate [
 
 	"By default, do not sample"
 	self assert: handler samplingRate equals: 1.

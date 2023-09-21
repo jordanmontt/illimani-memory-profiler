@@ -1,5 +1,5 @@
 Class {
-	#name : 'IllimaniFinalizationProfilerTest',
+	#name : 'IllFinalizationProfilerTest',
 	#superclass : 'TestCase',
 	#instVars : [
 		'finalizationProfiler'
@@ -10,14 +10,14 @@ Class {
 }
 
 { #category : 'running' }
-IllimaniFinalizationProfilerTest >> setUp [
+IllFinalizationProfilerTest >> setUp [
 
 	super setUp.
-	finalizationProfiler := IllimaniFinalizationProfiler new
+	finalizationProfiler := IllFinalizationProfiler new
 ]
 
 { #category : 'running' }
-IllimaniFinalizationProfilerTest >> tearDown [
+IllFinalizationProfilerTest >> tearDown [
 
 	finalizationProfiler forceUninstall.
 	finalizationProfiler := nil.
@@ -25,9 +25,9 @@ IllimaniFinalizationProfilerTest >> tearDown [
 ]
 
 { #category : 'tests' }
-IllimaniFinalizationProfilerTest >> testProfileOn [
+IllFinalizationProfilerTest >> testProfileOn [
 
-	finalizationProfiler profileOn: [ 10 timesRepeat: [ IllimaniFinalizationProfiler new ] ].
+	finalizationProfiler profileOn: [ 10 timesRepeat: [ IllFinalizationProfiler new ] ].
 
 	"We let the GC run for N times to clean the not referenced objects. Because of the
 	implementation of ephemerons, they can have hard references between them so it is
@@ -38,12 +38,12 @@ IllimaniFinalizationProfilerTest >> testProfileOn [
 ]
 
 { #category : 'tests' }
-IllimaniFinalizationProfilerTest >> testProfileOnFinalizesCorrectly [
+IllFinalizationProfilerTest >> testProfileOnFinalizesCorrectly [
 
 	| timeNow |
 	
 	timeNow := Time microsecondClockValue.
-	finalizationProfiler profileOn: [ 10 timesRepeat: [ IllimaniFinalizationProfiler new ] ].
+	finalizationProfiler profileOn: [ 10 timesRepeat: [ IllFinalizationProfiler new ] ].
 	
 	"We let the GC run for N times to clean the not referenced objects. Because of the
 	implementation of ephemerons, they can have hard references between them so it is
@@ -60,7 +60,7 @@ IllimaniFinalizationProfilerTest >> testProfileOnFinalizesCorrectly [
 ]
 
 { #category : 'tests' }
-IllimaniFinalizationProfilerTest >> testSamplingRate [
+IllFinalizationProfilerTest >> testSamplingRate [
 
 	| allocatedByteSrings |
 	finalizationProfiler

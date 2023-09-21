@@ -1,5 +1,5 @@
 Class {
-	#name : 'IllimaniAllocationProfilerTest',
+	#name : 'IllAllocationProfilerTest',
 	#superclass : 'TestCase',
 	#instVars : [
 		'illimani'
@@ -10,14 +10,14 @@ Class {
 }
 
 { #category : 'running' }
-IllimaniAllocationProfilerTest >> setUp [
+IllAllocationProfilerTest >> setUp [
 
 	super setUp.
-	illimani := IllimaniAllocationProfiler new
+	illimani := IllAllocationProfiler new
 ]
 
 { #category : 'running' }
-IllimaniAllocationProfilerTest >> tearDown [
+IllAllocationProfilerTest >> tearDown [
 
 	illimani forceUninstall.
 	illimani := nil.
@@ -25,7 +25,7 @@ IllimaniAllocationProfilerTest >> tearDown [
 ]
 
 { #category : 'tests' }
-IllimaniAllocationProfilerTest >> testProfileOn [
+IllAllocationProfilerTest >> testProfileOn [
 
 	illimani
 		captureAllObjects;
@@ -40,7 +40,7 @@ IllimaniAllocationProfilerTest >> testProfileOn [
 ]
 
 { #category : 'tests' }
-IllimaniAllocationProfilerTest >> testProfileOnExample [
+IllAllocationProfilerTest >> testProfileOnExample [
 
 	| objectsToCapture |
 	objectsToCapture := { ByteString. Array. String. OrderedCollection. ByteArray }.
@@ -48,7 +48,7 @@ IllimaniAllocationProfilerTest >> testProfileOnExample [
 	illimani
 		objectsToCapture: objectsToCapture;
 		copyExecutionStack;
-		profileOn: [ 1000 timesRepeat: [ IllimaniAllocationProfiler new ] ].
+		profileOn: [ 1000 timesRepeat: [ IllAllocationProfiler new ] ].
 	
 	self assert: illimani objectAllocations size > 1000.
 	illimani objectAllocations do: [ :alloc |
@@ -58,12 +58,12 @@ IllimaniAllocationProfilerTest >> testProfileOnExample [
 ]
 
 { #category : 'tests' }
-IllimaniAllocationProfilerTest >> testProfileOnExampleCapturingAll [
+IllAllocationProfilerTest >> testProfileOnExampleCapturingAll [
 
 	illimani
 		captureAllObjects;
 		copyExecutionStack;
-		profileOn: [ 1000 timesRepeat: [ IllimaniAllocationProfiler new ] ].
+		profileOn: [ 1000 timesRepeat: [ IllAllocationProfiler new ] ].
 
 	"Take one random allocation to check"
 	self assert: illimani objectAllocations last context class equals: Context.
@@ -75,7 +75,7 @@ IllimaniAllocationProfilerTest >> testProfileOnExampleCapturingAll [
 ]
 
 { #category : 'tests' }
-IllimaniAllocationProfilerTest >> testProfileOnExampleCapturingAllAndIgnoringClasses [
+IllAllocationProfilerTest >> testProfileOnExampleCapturingAllAndIgnoringClasses [
 
 	| allocatorClassesToIgnore |
 	allocatorClassesToIgnore := { ByteString . OrderedCollection . Point . Array }.
@@ -86,7 +86,7 @@ IllimaniAllocationProfilerTest >> testProfileOnExampleCapturingAllAndIgnoringCla
 		objectsToIgnore: allocatorClassesToIgnore;
 		profileOn: [ 
 			allocatorClassesToIgnore do: [ :aClass | aClass new ].
-			1000 timesRepeat: [ IllimaniAllocationProfiler new ] ].
+			1000 timesRepeat: [ IllAllocationProfiler new ] ].
 
 	"Take one random allocation to check"
 	self assert: illimani objectAllocations last context class equals: Context.
@@ -99,7 +99,7 @@ IllimaniAllocationProfilerTest >> testProfileOnExampleCapturingAllAndIgnoringCla
 ]
 
 { #category : 'tests' }
-IllimaniAllocationProfilerTest >> testSamplingRate [
+IllAllocationProfilerTest >> testSamplingRate [
 
 	| allocatedByteSrings |
 	illimani

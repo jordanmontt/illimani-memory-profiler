@@ -1,5 +1,5 @@
 Class {
-	#name : 'IllimaniGlobalFinalizer',
+	#name : 'IllGlobalFinalizer',
 	#superclass : 'Object',
 	#instVars : [
 		'handler'
@@ -12,25 +12,25 @@ Class {
 }
 
 { #category : 'accessing' }
-IllimaniGlobalFinalizer class >> default [
+IllGlobalFinalizer class >> default [
 
 	^ DefaultInstance ifNil: [ DefaultInstance := self new ]
 ]
 
 { #category : 'class initialization' }
-IllimaniGlobalFinalizer class >> reset [
+IllGlobalFinalizer class >> reset [
 
 	DefaultInstance := self new
 ]
 
 { #category : 'finalization' }
-IllimaniGlobalFinalizer >> finalize: anObject [
+IllGlobalFinalizer >> finalize: anObject [
 
 	handler finalize: anObject
 ]
 
 { #category : 'finalization' }
-IllimaniGlobalFinalizer >> handler: aHandler [
+IllGlobalFinalizer >> handler: aHandler [
 
 	handler := aHandler
 ]

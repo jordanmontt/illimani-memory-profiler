@@ -1,6 +1,6 @@
 Class {
-	#name : 'IllimaniFinalizationProfilerUI',
-	#superclass : 'IllimaniAbstractUI',
+	#name : 'IllFinalizationProfilerUI',
+	#superclass : 'IllAbstractUI',
 	#instVars : [
 		'densityChartPresenter',
 		'lifetimesTable'
@@ -11,23 +11,23 @@ Class {
 }
 
 { #category : 'accessing' }
-IllimaniFinalizationProfilerUI >> codeEvaluatorText [
+IllFinalizationProfilerUI >> codeEvaluatorText [
 
 	^ 'self objectAllocations'
 ]
 
 { #category : 'accessing - lazy presenters' }
-IllimaniFinalizationProfilerUI >> densityChartPresenter [
+IllFinalizationProfilerUI >> densityChartPresenter [
 
 	densityChartPresenter ifNil: [ self initializeDensityChartPresenter ].
 	^ densityChartPresenter
 ]
 
 { #category : 'initialization - lazy presenters' }
-IllimaniFinalizationProfilerUI >> initializeDensityChartPresenter [
+IllFinalizationProfilerUI >> initializeDensityChartPresenter [
 
 	| densityPlotBuilder densityChartByMemory densityChartByNumbOfAlloc |
-	densityPlotBuilder := IllimaniDensityDistributionChart new
+	densityPlotBuilder := IllDensityDistributionChart new
 		objectAllocations: profiler objectAllocations;
 		xTitle: 'Lifetime in seconds';
 		yourself.
@@ -49,7 +49,7 @@ IllimaniFinalizationProfilerUI >> initializeDensityChartPresenter [
 ]
 
 { #category : 'initialization - lazy presenters' }
-IllimaniFinalizationProfilerUI >> initializeLifetimesTable [
+IllFinalizationProfilerUI >> initializeLifetimesTable [
 
 	lifetimesTable := self
 		instantiate: FinalizationLifetimesTablePresenter
@@ -57,7 +57,7 @@ IllimaniFinalizationProfilerUI >> initializeLifetimesTable [
 ]
 
 { #category : 'initialization - lazy presenters' }
-IllimaniFinalizationProfilerUI >> initializeNotebook [
+IllFinalizationProfilerUI >> initializeNotebook [
 
 	notebookPresenter := self newNotebook
 		addPageTitle: 'Summary' provider: [ self summaryAndEvaluatorPresenter ];
@@ -70,27 +70,27 @@ IllimaniFinalizationProfilerUI >> initializeNotebook [
 ]
 
 { #category : 'accessing - lazy presenters' }
-IllimaniFinalizationProfilerUI >> lifetimesTable [
+IllFinalizationProfilerUI >> lifetimesTable [
 
 	lifetimesTable ifNil: [ self initializeLifetimesTable ].
 	^ lifetimesTable
 ]
 
 { #category : 'actions' }
-IllimaniFinalizationProfilerUI >> refresh [
+IllFinalizationProfilerUI >> refresh [
 
 	self layout: self defaultLayout.
 	densityChartPresenter := nil
 ]
 
 { #category : 'initialization - lazy presenters' }
-IllimaniFinalizationProfilerUI >> summaryStatsPresenter [
+IllFinalizationProfilerUI >> summaryStatsPresenter [
 
 	^ BasicAllocationSummaryPresenter on: profiler
 ]
 
 { #category : 'initialization' }
-IllimaniFinalizationProfilerUI >> title [
+IllFinalizationProfilerUI >> title [
 
 	^ 'Illimani Finalization Memory Profiler'
 ]

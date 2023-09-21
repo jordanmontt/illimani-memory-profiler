@@ -1,5 +1,5 @@
 Class {
-	#name : 'IllimaniFinalizationMpHandlerFastTest',
+	#name : 'IllFinalizationMpHandlerFastTest',
 	#superclass : 'TestCase',
 	#instVars : [
 		'handler'
@@ -9,7 +9,7 @@ Class {
 }
 
 { #category : 'tests' }
-IllimaniFinalizationMpHandlerFastTest >> assertAllocationResult: allocationHolderResult expected: allocationHolderExpected [
+IllFinalizationMpHandlerFastTest >> assertAllocationResult: allocationHolderResult expected: allocationHolderExpected [
 
 	self assert: allocationHolderResult allocatedObjectClass equals: allocationHolderExpected allocatedObjectClass.
 	self assert: allocationHolderResult sizeInBytes equals: allocationHolderExpected sizeInBytes.
@@ -17,14 +17,14 @@ IllimaniFinalizationMpHandlerFastTest >> assertAllocationResult: allocationHolde
 ]
 
 { #category : 'running' }
-IllimaniFinalizationMpHandlerFastTest >> setUp [
+IllFinalizationMpHandlerFastTest >> setUp [
 
 	super setUp.
-	handler := IllimaniFinalizationMpHandlerFast new
+	handler := IllFinalizationMpHandlerFast new
 ]
 
 { #category : 'tests' }
-IllimaniFinalizationMpHandlerFastTest >> testAfterExecutionWithReceiverArgumentsReturnValue [
+IllFinalizationMpHandlerFastTest >> testAfterExecutionWithReceiverArgumentsReturnValue [
 
 	| allocation |
 	allocation := Array new.
@@ -45,7 +45,7 @@ IllimaniFinalizationMpHandlerFastTest >> testAfterExecutionWithReceiverArguments
 ]
 
 { #category : 'tests' }
-IllimaniFinalizationMpHandlerFastTest >> testArraysAllocation [
+IllFinalizationMpHandlerFastTest >> testArraysAllocation [
 
 	| allocation time |
 	time := Time primUTCMicrosecondsClock.
@@ -69,7 +69,7 @@ IllimaniFinalizationMpHandlerFastTest >> testArraysAllocation [
 ]
 
 { #category : 'tests' }
-IllimaniFinalizationMpHandlerFastTest >> testObjectAllocations [
+IllFinalizationMpHandlerFastTest >> testObjectAllocations [
 
 	| allocation allocationHolderExpected allocationHolderResult |
 	allocation := Array new.
@@ -86,7 +86,7 @@ IllimaniFinalizationMpHandlerFastTest >> testObjectAllocations [
 ]
 
 { #category : 'tests' }
-IllimaniFinalizationMpHandlerFastTest >> testObjectAllocationsTwoObjects [
+IllFinalizationMpHandlerFastTest >> testObjectAllocationsTwoObjects [
 
 	| allocation allocationHolderExpected1 allocationHolderExpected2 |
 	allocation := Array new.
@@ -110,7 +110,7 @@ IllimaniFinalizationMpHandlerFastTest >> testObjectAllocationsTwoObjects [
 ]
 
 { #category : 'tests' }
-IllimaniFinalizationMpHandlerFastTest >> testObjectAllocationsTwoObjectsTwoArrays [
+IllFinalizationMpHandlerFastTest >> testObjectAllocationsTwoObjectsTwoArrays [
 
 	| allocation allocationHolderExpected1 allocationHolderExpected2 |
 	allocation := Array new.
@@ -135,7 +135,7 @@ IllimaniFinalizationMpHandlerFastTest >> testObjectAllocationsTwoObjectsTwoArray
 ]
 
 { #category : 'tests' }
-IllimaniFinalizationMpHandlerFastTest >> testObjectAllocationsWithTwoArrays [
+IllFinalizationMpHandlerFastTest >> testObjectAllocationsWithTwoArrays [
 
 	| allocation allocationHolderExpected allocationHolderResult |
 	allocation := Array new.

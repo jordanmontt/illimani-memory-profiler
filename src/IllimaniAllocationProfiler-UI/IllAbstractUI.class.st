@@ -1,5 +1,5 @@
 Class {
-	#name : 'IllimaniAbstractUI',
+	#name : 'IllAbstractUI',
 	#superclass : 'SpPresenter',
 	#instVars : [
 		'notebookPresenter',
@@ -19,7 +19,7 @@ Class {
 }
 
 { #category : 'accessing' }
-IllimaniAbstractUI class >> profiler: aProfiler announcer: anIllimaniAnnouncer [
+IllAbstractUI class >> profiler: aProfiler announcer: anIllimaniAnnouncer [
 
 	^ self basicNew
 		profiler: aProfiler;
@@ -29,34 +29,34 @@ IllimaniAbstractUI class >> profiler: aProfiler announcer: anIllimaniAnnouncer [
 ]
 
 { #category : 'accessing - lazy presenters' }
-IllimaniAbstractUI >> allocatedObjectsTablePresenter [
+IllAbstractUI >> allocatedObjectsTablePresenter [
 
 	allocatedObjectsTablePresenter ifNil: [ self initializeAllocatedObjectsTablePresenter ].
 	^ allocatedObjectsTablePresenter
 ]
 
 { #category : 'accessing - lazy presenters' }
-IllimaniAbstractUI >> codeEvaluator [
+IllAbstractUI >> codeEvaluator [
 
 	codeEvaluator ifNil: [ self initializeCodeEvaluator ].
 	^ codeEvaluator
 ]
 
 { #category : 'accessing' }
-IllimaniAbstractUI >> codeEvaluatorText [
+IllAbstractUI >> codeEvaluatorText [
 
 	^ self subclassResponsibility
 ]
 
 { #category : 'initialization' }
-IllimaniAbstractUI >> connectPresenters [
+IllAbstractUI >> connectPresenters [
 
 	refreshButton action: [ self refresh ].
 	topCalculationsNumberInputPresenter whenNumberChangedDo: [ :newValue | topCalculationsNumber := newValue ]
 ]
 
 { #category : 'layout' }
-IllimaniAbstractUI >> controlButtonsLayout [
+IllAbstractUI >> controlButtonsLayout [
 
 	^ SpBoxLayout newTopToBottom
 		  spacing: 5;
@@ -70,7 +70,7 @@ IllimaniAbstractUI >> controlButtonsLayout [
 ]
 
 { #category : 'layout' }
-IllimaniAbstractUI >> defaultLayout [
+IllAbstractUI >> defaultLayout [
 
 	^ (profiler isNil or: [ profiler isProfilingStarted not ])
 		  ifTrue: [ self layoutWhenThereIsNotDataWithMessage: 'Profiler backend not set or not it didn''t start to profile.' ]
@@ -78,19 +78,19 @@ IllimaniAbstractUI >> defaultLayout [
 ]
 
 { #category : 'accessing' }
-IllimaniAbstractUI >> illimaniAnnouncer: aIllimaniAnnouncer [
+IllAbstractUI >> illimaniAnnouncer: aIllimaniAnnouncer [
 
 	illimaniAnnouncer := aIllimaniAnnouncer
 ]
 
 { #category : 'initialization - lazy presenters' }
-IllimaniAbstractUI >> initializeAllocatedObjectsTablePresenter [
+IllAbstractUI >> initializeAllocatedObjectsTablePresenter [
 
 	allocatedObjectsTablePresenter := self instantiate: (AllocatedObjectsTablePresenter on: profiler objectAllocations)
 ]
 
 { #category : 'initialization - lazy presenters' }
-IllimaniAbstractUI >> initializeCodeEvaluator [
+IllAbstractUI >> initializeCodeEvaluator [
 
 	codeEvaluator := self newCode
 		text: self codeEvaluatorText;
@@ -99,13 +99,13 @@ IllimaniAbstractUI >> initializeCodeEvaluator [
 ]
 
 { #category : 'initialization - lazy presenters' }
-IllimaniAbstractUI >> initializeNotebook [
+IllAbstractUI >> initializeNotebook [
 
 	self subclassResponsibility
 ]
 
 { #category : 'initialization' }
-IllimaniAbstractUI >> initializePresenters [
+IllAbstractUI >> initializePresenters [
 
 	self initializeToolbar.
 	self respondToAnnouncement.
@@ -114,7 +114,7 @@ IllimaniAbstractUI >> initializePresenters [
 ]
 
 { #category : 'initialization - lazy presenters' }
-IllimaniAbstractUI >> initializeSummaryAndEvaluatorPresenter [
+IllAbstractUI >> initializeSummaryAndEvaluatorPresenter [
 
 	| statsAndEvaluatorLayout statsPresenter |
 	statsPresenter :=	self summaryStatsPresenter.
@@ -131,7 +131,7 @@ IllimaniAbstractUI >> initializeSummaryAndEvaluatorPresenter [
 ]
 
 { #category : 'initialization' }
-IllimaniAbstractUI >> initializeToolbar [
+IllAbstractUI >> initializeToolbar [
 
 	refreshButton := self newToolbarButton
 		label: 'Refresh views';
@@ -144,7 +144,7 @@ IllimaniAbstractUI >> initializeToolbar [
 ]
 
 { #category : 'initialization' }
-IllimaniAbstractUI >> initializeTopCalculationsInputPresenter [
+IllAbstractUI >> initializeTopCalculationsInputPresenter [
 
 	topCalculationsNumberInputPresenter := self newNumberInput
 		number: topCalculationsNumber;
@@ -153,7 +153,7 @@ IllimaniAbstractUI >> initializeTopCalculationsInputPresenter [
 ]
 
 { #category : 'initialization' }
-IllimaniAbstractUI >> initializeWindow: aWindowPresenter [
+IllAbstractUI >> initializeWindow: aWindowPresenter [
 
 	aWindowPresenter
 		title: self title;
@@ -161,7 +161,7 @@ IllimaniAbstractUI >> initializeWindow: aWindowPresenter [
 ]
 
 { #category : 'layout' }
-IllimaniAbstractUI >> layoutWhenThereIsAProfiler [
+IllAbstractUI >> layoutWhenThereIsAProfiler [
 
 	| layoutToReturn |
 	(profiler isProfilingStarted and: [ profiler isProfilingFinished not ]) ifTrue: [
@@ -177,7 +177,7 @@ IllimaniAbstractUI >> layoutWhenThereIsAProfiler [
 ]
 
 { #category : 'layout' }
-IllimaniAbstractUI >> layoutWhenThereIsData [
+IllAbstractUI >> layoutWhenThereIsData [
 
 	^ SpBoxLayout newTopToBottom
 		add: self controlButtonsLayout expand: false;
@@ -186,7 +186,7 @@ IllimaniAbstractUI >> layoutWhenThereIsData [
 ]
 
 { #category : 'layout' }
-IllimaniAbstractUI >> layoutWhenThereIsNotDataWithMessage: aString [
+IllAbstractUI >> layoutWhenThereIsNotDataWithMessage: aString [
 
 	^ SpBoxLayout newTopToBottom
 		  add: self controlButtonsLayout expand: false;
@@ -199,47 +199,47 @@ IllimaniAbstractUI >> layoutWhenThereIsNotDataWithMessage: aString [
 ]
 
 { #category : 'accessing - lazy presenters' }
-IllimaniAbstractUI >> notebookPresenter [
+IllAbstractUI >> notebookPresenter [
 
 	notebookPresenter ifNil: [ self initializeNotebook ].
 	^ notebookPresenter
 ]
 
 { #category : 'accessing' }
-IllimaniAbstractUI >> profiler: aProfiler [
+IllAbstractUI >> profiler: aProfiler [
 
 	profiler := aProfiler
 ]
 
 { #category : 'actions' }
-IllimaniAbstractUI >> refresh [
+IllAbstractUI >> refresh [
 
 	self subclassResponsibility
 ]
 
 { #category : 'actions' }
-IllimaniAbstractUI >> respondToAnnouncement [
+IllAbstractUI >> respondToAnnouncement [
 
-	illimaniAnnouncer when: IllimaniStopedProfilingAnnouncement
+	illimaniAnnouncer when: IllStopedProfilingAnnouncement
 		do: [ self refresh ]
 		for: self
 ]
 
 { #category : 'accessing - lazy presenters' }
-IllimaniAbstractUI >> summaryAndEvaluatorPresenter [
+IllAbstractUI >> summaryAndEvaluatorPresenter [
 
 	summaryAndEvaluatorPresenter ifNil: [ self initializeSummaryAndEvaluatorPresenter ].
 	^ summaryAndEvaluatorPresenter
 ]
 
 { #category : 'initialization - lazy presenters' }
-IllimaniAbstractUI >> summaryStatsPresenter [
+IllAbstractUI >> summaryStatsPresenter [
 
 	^ self subclassResponsibility
 ]
 
 { #category : 'initialization' }
-IllimaniAbstractUI >> title [
+IllAbstractUI >> title [
 
 	^ 'Illimani Memory Profiler'
 ]

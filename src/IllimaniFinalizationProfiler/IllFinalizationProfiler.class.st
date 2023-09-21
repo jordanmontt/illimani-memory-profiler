@@ -2,10 +2,10 @@
 I profile the Garbage Collector and provide information about the lifetime of objects.
 "
 Class {
-	#name : 'IllimaniFinalizationProfiler',
+	#name : 'IllFinalizationProfiler',
 	#superclass : 'Object',
-	#traits : 'IllimaniTAllocatorWrapper',
-	#classTraits : 'IllimaniTAllocatorWrapper classTrait',
+	#traits : 'IllTAllocatorWrapper',
+	#classTraits : 'IllTAllocatorWrapper classTrait',
 	#instVars : [
 		'profilerHandler',
 		'finalizationRegistry'
@@ -15,13 +15,13 @@ Class {
 }
 
 { #category : 'api' }
-IllimaniFinalizationProfiler >> addFinalizationFor: newlyAllocatedObject finalizer: objectFinalizationModel [
+IllFinalizationProfiler >> addFinalizationFor: newlyAllocatedObject finalizer: objectFinalizationModel [
 
 	finalizationRegistry add: newlyAllocatedObject finalizer: objectFinalizationModel
 ]
 
 { #category : 'profiling' }
-IllimaniFinalizationProfiler >> forceFinalizationOfObjects [
+IllFinalizationProfiler >> forceFinalizationOfObjects [
 
 	"We force the finalization timestamp for the not yet finalized objects."
 	finalizationRegistry finalizeAllEphemerons.
@@ -30,7 +30,7 @@ IllimaniFinalizationProfiler >> forceFinalizationOfObjects [
 ]
 
 { #category : 'initialization' }
-IllimaniFinalizationProfiler >> initialize [
+IllFinalizationProfiler >> initialize [
 
 	super initialize.
 	finalizationRegistry := self initializeFinalizationRegistry.
@@ -39,47 +39,47 @@ IllimaniFinalizationProfiler >> initialize [
 ]
 
 { #category : 'initialization' }
-IllimaniFinalizationProfiler >> initializeFinalizationRegistry [
+IllFinalizationProfiler >> initializeFinalizationRegistry [
 
 	^ FinalizationRegistry new
 ]
 
 { #category : 'initialization' }
-IllimaniFinalizationProfiler >> initializeHandler [
+IllFinalizationProfiler >> initializeHandler [
 
-	^ IllimaniFinalizationMpHandler new
+	^ IllFinalizationMpHandler new
 		  profiler: self;
 		  yourself
 ]
 
 { #category : 'api' }
-IllimaniFinalizationProfiler >> objectAllocations [
+IllFinalizationProfiler >> objectAllocations [
 
 	^ profilerHandler objectAllocations
 ]
 
 { #category : 'api' }
-IllimaniFinalizationProfiler >> samplingRate: anInteger [
+IllFinalizationProfiler >> samplingRate: anInteger [
 
 	profilerHandler samplingRate: anInteger
 ]
 
 { #category : 'profiling' }
-IllimaniFinalizationProfiler >> startProfiling [
+IllFinalizationProfiler >> startProfiling [
 
 	self initializeProfilingBasicStats.
 	self installMethodProxies
 ]
 
 { #category : 'accessing - statistics' }
-IllimaniFinalizationProfiler >> stats [
+IllFinalizationProfiler >> stats [
 	"There is no stats model for this profiler yet"
 
 	^ self
 ]
 
 { #category : 'profiling' }
-IllimaniFinalizationProfiler >> stopProfiling [
+IllFinalizationProfiler >> stopProfiling [
 
 	self uninstallMethodProxies.
 	self forceFinalizationOfObjects.
@@ -87,19 +87,19 @@ IllimaniFinalizationProfiler >> stopProfiling [
 ]
 
 { #category : 'accessing - statistics' }
-IllimaniFinalizationProfiler >> timeDifferenceBetweenFirstAndLastAllocation [
+IllFinalizationProfiler >> timeDifferenceBetweenFirstAndLastAllocation [
 
 	^ self objectAllocations last initializationTimestamp - self objectAllocations first initializationTimestamp
 ]
 
 { #category : 'accessing - statistics' }
-IllimaniFinalizationProfiler >> totalAllocatedMemory [
+IllFinalizationProfiler >> totalAllocatedMemory [
 
 	^ self objectAllocations inject: 0 into: [ :sum : elem | sum + elem sizeInBytes ]
 ]
 
 { #category : 'accessing - statistics' }
-IllimaniFinalizationProfiler >> totalAllocatedObjects [
+IllFinalizationProfiler >> totalAllocatedObjects [
 
 	^ self objectAllocations size
 ]

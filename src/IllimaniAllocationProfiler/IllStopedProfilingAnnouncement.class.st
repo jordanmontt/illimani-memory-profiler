@@ -1,5 +1,5 @@
 Class {
-	#name : 'IllimaniStopedProfilingAnnouncement',
+	#name : 'IllStopedProfilingAnnouncement',
 	#superclass : 'Announcement',
 	#category : 'IllimaniAllocationProfiler-Announcements',
 	#package : 'IllimaniAllocationProfiler',

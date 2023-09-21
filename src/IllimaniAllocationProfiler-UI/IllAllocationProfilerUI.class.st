@@ -2,8 +2,8 @@
 I am a user interface for my profiling. My implementation is independent from the one of my profiler.
 "
 Class {
-	#name : 'IllimaniAllocationProfilerUI',
-	#superclass : 'IllimaniAbstractUI',
+	#name : 'IllAllocationProfilerUI',
+	#superclass : 'IllAbstractUI',
 	#instVars : [
 		'heatmapPresenter',
 		'allocationsPerSecondPerAllocatorPresenter',
@@ -16,10 +16,10 @@ Class {
 }
 
 { #category : 'accessing - lazy roassal presenters' }
-IllimaniAllocationProfilerUI >> allocatedObjectsPerSecondPerClassPresenter [
+IllAllocationProfilerUI >> allocatedObjectsPerSecondPerClassPresenter [
 
 	^ SpRoassalPresenter new
-		canvas: (IllimaniRoassalChartBuilder new
+		canvas: (IllRoassalChartBuilder new
 			model: profiler;
 			topCalculationsNumber: topCalculationsNumber;
 			allocatedObjectsPerSecondPerClassLineChartCanvas);
@@ -27,10 +27,10 @@ IllimaniAllocationProfilerUI >> allocatedObjectsPerSecondPerClassPresenter [
 ]
 
 { #category : 'accessing - lazy roassal presenters' }
-IllimaniAllocationProfilerUI >> allocatedObjectsPerSecondPerMethodPresenter [
+IllAllocationProfilerUI >> allocatedObjectsPerSecondPerMethodPresenter [
 
 	^ SpRoassalPresenter new
-		canvas: (IllimaniRoassalChartBuilder new
+		canvas: (IllRoassalChartBuilder new
 			model: profiler;
 			topCalculationsNumber: topCalculationsNumber;
 			allocatedObjectsPerSecondPerMethodLineChartCanvas);
@@ -38,21 +38,21 @@ IllimaniAllocationProfilerUI >> allocatedObjectsPerSecondPerMethodPresenter [
 ]
 
 { #category : 'accessing - lazy roassal presenters' }
-IllimaniAllocationProfilerUI >> allocatedObjectsPerSecondPresenter [
+IllAllocationProfilerUI >> allocatedObjectsPerSecondPresenter [
 
 	allocatedObjectsPerSecondPresenter ifNil: [ self initializeAllocatedObjectsPerSecond ].
 	^ allocatedObjectsPerSecondPresenter
 ]
 
 { #category : 'accessing - lazy roassal presenters' }
-IllimaniAllocationProfilerUI >> allocationsPerSecondPerAllocatorPresenter [
+IllAllocationProfilerUI >> allocationsPerSecondPerAllocatorPresenter [
 
 	allocationsPerSecondPerAllocatorPresenter ifNil: [ self initializeAllocationsPerSecondPerAllocator ].
 	^ allocationsPerSecondPerAllocatorPresenter
 ]
 
 { #category : 'accessing' }
-IllimaniAllocationProfilerUI >> codeEvaluatorText [
+IllAllocationProfilerUI >> codeEvaluatorText [
 
 	^ 'self objectAllocations.
 self stats allocationsByClass.
@@ -60,17 +60,17 @@ self stats allocationsByMethod'
 ]
 
 { #category : 'accessing - lazy roassal presenters' }
-IllimaniAllocationProfilerUI >> heatMapPresenter [
+IllAllocationProfilerUI >> heatMapPresenter [
 
 	heatmapPresenter ifNil: [ self initializeHeatmapPresenter ].
 	^ heatmapPresenter
 ]
 
 { #category : 'initialization - lazy roassal presenters' }
-IllimaniAllocationProfilerUI >> initializeAllocatedObjectsPerSecond [
+IllAllocationProfilerUI >> initializeAllocatedObjectsPerSecond [
 
 	allocatedObjectsPerSecondPresenter := SpRoassalPresenter new
-		canvas: (IllimaniRoassalChartBuilder new
+		canvas: (IllRoassalChartBuilder new
 			model: profiler;
 			topCalculationsNumber: topCalculationsNumber;
 			allocatedObjectsPerSecondLineChartCanvas);
@@ -78,7 +78,7 @@ IllimaniAllocationProfilerUI >> initializeAllocatedObjectsPerSecond [
 ]
 
 { #category : 'initialization - lazy roassal presenters' }
-IllimaniAllocationProfilerUI >> initializeAllocationsPerSecondPerAllocator [
+IllAllocationProfilerUI >> initializeAllocationsPerSecondPerAllocator [
 
 	allocationsPerSecondPerAllocatorPresenter := AlternatorPresenter new
 		  presenterOne: self allocatedObjectsPerSecondPerClassPresenter withName: 'Classes';
@@ -87,16 +87,16 @@ IllimaniAllocationProfilerUI >> initializeAllocationsPerSecondPerAllocator [
 ]
 
 { #category : 'initialization - lazy roassal presenters' }
-IllimaniAllocationProfilerUI >> initializeHeatmapPresenter [
+IllAllocationProfilerUI >> initializeHeatmapPresenter [
 
 	| roassalPresenterByClass roassalPresenterByMethod |
 	roassalPresenterByClass := self instantiate: SpRoassalPresenter.
-	roassalPresenterByClass canvas: (IllimaniRoassalChartBuilder new
+	roassalPresenterByClass canvas: (IllRoassalChartBuilder new
 			 model: profiler;
 			 topCalculationsNumber: topCalculationsNumber;
 			 heatmapAllocatorAllocatedCanvasByClass).
 	roassalPresenterByMethod := self instantiate: SpRoassalPresenter.
-	roassalPresenterByMethod canvas: (IllimaniRoassalChartBuilder new
+	roassalPresenterByMethod canvas: (IllRoassalChartBuilder new
 			 model: profiler;
 			 topCalculationsNumber: topCalculationsNumber;
 			 heatmapAllocatorAllocatedCanvasByMethod).
@@ -108,7 +108,7 @@ IllimaniAllocationProfilerUI >> initializeHeatmapPresenter [
 ]
 
 { #category : 'initialization - lazy presenters' }
-IllimaniAllocationProfilerUI >> initializeMemoryTablePresenter [
+IllAllocationProfilerUI >> initializeMemoryTablePresenter [
 
 	memoryTablePresenter := AlternatorPresenter new
 		presenterOne: (TableMemoryInformationPresenter owner: self on: profiler stats allocationsByClass)
@@ -119,7 +119,7 @@ IllimaniAllocationProfilerUI >> initializeMemoryTablePresenter [
 ]
 
 { #category : 'initialization - lazy presenters' }
-IllimaniAllocationProfilerUI >> initializeNotebook [
+IllAllocationProfilerUI >> initializeNotebook [
 
 	notebookPresenter := self newNotebook
 		addPageTitle: 'Summary' provider: [ self summaryAndEvaluatorPresenter ];
@@ -136,14 +136,14 @@ IllimaniAllocationProfilerUI >> initializeNotebook [
 ]
 
 { #category : 'accessing - lazy presenters' }
-IllimaniAllocationProfilerUI >> memoryTablePresenter [
+IllAllocationProfilerUI >> memoryTablePresenter [
 
 	memoryTablePresenter ifNil: [ self initializeMemoryTablePresenter ].
 	^ memoryTablePresenter
 ]
 
 { #category : 'actions' }
-IllimaniAllocationProfilerUI >> refresh [
+IllAllocationProfilerUI >> refresh [
 
 	self layout: self defaultLayout.
 	heatmapPresenter := nil.
@@ -152,13 +152,13 @@ IllimaniAllocationProfilerUI >> refresh [
 ]
 
 { #category : 'initialization - lazy presenters' }
-IllimaniAllocationProfilerUI >> summaryStatsPresenter [
+IllAllocationProfilerUI >> summaryStatsPresenter [
 
 	^ AllocationSiteSummaryPresenter on: profiler
 ]
 
 { #category : 'initialization' }
-IllimaniAllocationProfilerUI >> title [
+IllAllocationProfilerUI >> title [
 
 	^ 'Illimani Allocation Sites Memory Profiler'
 ]

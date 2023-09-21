@@ -2,7 +2,7 @@
 An IllimaniProfilerMpHandlerTest is a test class for testing the behavior of IllimaniProfilerMpHandler
 "
 Class {
-	#name : 'IllimaniProfilerMpHandlerTest',
+	#name : 'IllProfilerMpHandlerTest',
 	#superclass : 'TestCase',
 	#instVars : [
 		'handler'
@@ -13,14 +13,14 @@ Class {
 }
 
 { #category : 'running' }
-IllimaniProfilerMpHandlerTest >> setUp [
+IllProfilerMpHandlerTest >> setUp [
 
 	super setUp.
-	handler := IllimaniProfilerMpHandler new
+	handler := IllProfilerMpHandler new
 ]
 
 { #category : 'tests' }
-IllimaniProfilerMpHandlerTest >> testCaptureAllObjects [
+IllProfilerMpHandlerTest >> testCaptureAllObjects [
 
 	handler captureAllObjects.
 
@@ -31,7 +31,7 @@ IllimaniProfilerMpHandlerTest >> testCaptureAllObjects [
 ]
 
 { #category : 'tests' }
-IllimaniProfilerMpHandlerTest >> testCaptureAllObjectsAndIgnoringClasses [
+IllProfilerMpHandlerTest >> testCaptureAllObjectsAndIgnoringClasses [
 
 	handler captureAllObjects.
 	handler objectsToIgnore: { Point . ByteString }.
@@ -44,7 +44,7 @@ IllimaniProfilerMpHandlerTest >> testCaptureAllObjectsAndIgnoringClasses [
 ]
 
 { #category : 'tests' }
-IllimaniProfilerMpHandlerTest >> testCleanProfilingData [
+IllProfilerMpHandlerTest >> testCleanProfilingData [
 
 	handler
 		objectsToCapture: { Color . Point };
@@ -62,7 +62,7 @@ IllimaniProfilerMpHandlerTest >> testCleanProfilingData [
 ]
 
 { #category : 'tests' }
-IllimaniProfilerMpHandlerTest >> testObjectsToCapture [
+IllProfilerMpHandlerTest >> testObjectsToCapture [
 
 	handler objectsToCapture: { Color . Point }.
 	self assert: (handler shouldICaptureTheObject: Point new).
@@ -71,7 +71,7 @@ IllimaniProfilerMpHandlerTest >> testObjectsToCapture [
 ]
 
 { #category : 'tests' }
-IllimaniProfilerMpHandlerTest >> testObjectsToIgnore [
+IllProfilerMpHandlerTest >> testObjectsToIgnore [
 
 	handler objectsToIgnore: { Point . ByteString }.
 	handler captureAllObjects.
@@ -83,7 +83,7 @@ IllimaniProfilerMpHandlerTest >> testObjectsToIgnore [
 ]
 
 { #category : 'tests' }
-IllimaniProfilerMpHandlerTest >> testSamplingRate [
+IllProfilerMpHandlerTest >> testSamplingRate [
 
 	"By default, do not sample"
 	self assert: handler samplingRate equals: 1.
@@ -99,7 +99,7 @@ IllimaniProfilerMpHandlerTest >> testSamplingRate [
 ]
 
 { #category : 'tests' }
-IllimaniProfilerMpHandlerTest >> testShouldICaptureTheObject [
+IllProfilerMpHandlerTest >> testShouldICaptureTheObject [
 
 	handler objectsToCapture: { Color . Point }.
 	self assert: (handler shouldICaptureTheObject: Point new).

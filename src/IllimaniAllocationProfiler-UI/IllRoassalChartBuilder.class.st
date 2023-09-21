@@ -2,7 +2,7 @@
 I am a class that builds the canvas of the different visualizations.
 "
 Class {
-	#name : 'IllimaniRoassalChartBuilder',
+	#name : 'IllRoassalChartBuilder',
 	#superclass : 'Object',
 	#instVars : [
 		'topCalculationsNumber',
@@ -14,7 +14,7 @@ Class {
 }
 
 { #category : 'instance creation' }
-IllimaniRoassalChartBuilder class >> on: aModel [
+IllRoassalChartBuilder class >> on: aModel [
 
 	^ self new
 		  model: aModel;
@@ -22,20 +22,20 @@ IllimaniRoassalChartBuilder class >> on: aModel [
 ]
 
 { #category : 'chart construction' }
-IllimaniRoassalChartBuilder >> addLabelsX: xText y: yText forChart: chart [
+IllRoassalChartBuilder >> addLabelsX: xText y: yText forChart: chart [
 
 	(chart xlabel: xText) shape color: Color black.
 	(chart ylabel: yText) shape color: Color black
 ]
 
 { #category : 'chart construction' }
-IllimaniRoassalChartBuilder >> addTicksToLabel: chart [
+IllRoassalChartBuilder >> addTicksToLabel: chart [
 
 	chart verticalTick labelConversion: [ :value | value asInteger asStringWithCommas ]
 ]
 
 { #category : 'api - line chart' }
-IllimaniRoassalChartBuilder >> allocatedObjectsPerSecondLineChartCanvas [
+IllRoassalChartBuilder >> allocatedObjectsPerSecondLineChartCanvas [
 
 	| chart linePlot |
 	linePlot := self createLinePlotForAllocations: model objectAllocations.
@@ -50,21 +50,21 @@ IllimaniRoassalChartBuilder >> allocatedObjectsPerSecondLineChartCanvas [
 ]
 
 { #category : 'api - line chart' }
-IllimaniRoassalChartBuilder >> allocatedObjectsPerSecondPerClassLineChartCanvas [
+IllRoassalChartBuilder >> allocatedObjectsPerSecondPerClassLineChartCanvas [
 
 	^ self constructPerSecondLineChart:
 		  (model stats topNAllocationsByClass: topCalculationsNumber)
 ]
 
 { #category : 'api - line chart' }
-IllimaniRoassalChartBuilder >> allocatedObjectsPerSecondPerMethodLineChartCanvas [
+IllRoassalChartBuilder >> allocatedObjectsPerSecondPerMethodLineChartCanvas [
 
 	^ self constructPerSecondLineChart:
 		  (model stats topNAllocationsByMethod: topCalculationsNumber)
 ]
 
 { #category : 'chart construction' }
-IllimaniRoassalChartBuilder >> constructPerSecondLineChart: aCollection [
+IllRoassalChartBuilder >> constructPerSecondLineChart: aCollection [
 
 	| chart linePlot legend |
 
@@ -96,7 +96,7 @@ IllimaniRoassalChartBuilder >> constructPerSecondLineChart: aCollection [
 ]
 
 { #category : 'chart construction' }
-IllimaniRoassalChartBuilder >> createLinePlotForAllocations: someAllocations [
+IllRoassalChartBuilder >> createLinePlotForAllocations: someAllocations [
 
 	| times linePlot indices sortedByTime |
 	sortedByTime := someAllocations sorted: [ :a :b | a initializationTimestamp < b initializationTimestamp ].
@@ -112,25 +112,25 @@ IllimaniRoassalChartBuilder >> createLinePlotForAllocations: someAllocations [
 ]
 
 { #category : 'api - heatmap' }
-IllimaniRoassalChartBuilder >> heatmapAllocatorAllocatedCanvasByClass [
+IllRoassalChartBuilder >> heatmapAllocatorAllocatedCanvasByClass [
 
-	^ IllimaniHeatmapRoassalBuilder new
+	^ IllHeatmapRoassalBuilder new
 		data: (model stats topNAllocationsByClass: topCalculationsNumber);
 		build;
 		canvas
 ]
 
 { #category : 'api - heatmap' }
-IllimaniRoassalChartBuilder >> heatmapAllocatorAllocatedCanvasByMethod [
+IllRoassalChartBuilder >> heatmapAllocatorAllocatedCanvasByMethod [
 
-	^ IllimaniHeatmapRoassalBuilder new
+	^ IllHeatmapRoassalBuilder new
 		data: (model stats topNAllocationsByMethod: topCalculationsNumber);
 		build;
 		canvas
 ]
 
 { #category : 'api - line chart' }
-IllimaniRoassalChartBuilder >> initializeChart [
+IllRoassalChartBuilder >> initializeChart [
 
 	^ RSCompositeChart new
 		  colors: NSScale google20;
@@ -138,13 +138,13 @@ IllimaniRoassalChartBuilder >> initializeChart [
 ]
 
 { #category : 'accessing' }
-IllimaniRoassalChartBuilder >> model: aModel [
+IllRoassalChartBuilder >> model: aModel [
 
 	model := aModel
 ]
 
 { #category : 'accessing' }
-IllimaniRoassalChartBuilder >> topCalculationsNumber: aNumber [
+IllRoassalChartBuilder >> topCalculationsNumber: aNumber [
 
 	topCalculationsNumber := aNumber
 ]

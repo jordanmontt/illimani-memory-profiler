@@ -1,12 +1,12 @@
 Class {
-	#name : 'IllimaniFinalizationRegistry',
+	#name : 'IllFinalizationRegistry',
 	#superclass : 'FinalizationRegistry',
 	#category : 'IllimaniFinalizationProfiler',
 	#package : 'IllimaniFinalizationProfiler'
 }
 
 { #category : 'profiling' }
-IllimaniFinalizationRegistry >> finalizeAllEphemerons [ 
+IllFinalizationRegistry >> finalizeAllEphemerons [ 
 
 	| node |
 	node := ephemeronListHead next.
@@ -16,7 +16,7 @@ IllimaniFinalizationRegistry >> finalizeAllEphemerons [
 ]
 
 { #category : 'finalization' }
-IllimaniFinalizationRegistry >> finalizeEphemeron: anEphemeron [
+IllFinalizationRegistry >> finalizeEphemeron: anEphemeron [
 
 	self removeEphemeron: anEphemeron.
 	errorHandler handleErrorsDuring: [ anEphemeron value finalize: anEphemeron key ]

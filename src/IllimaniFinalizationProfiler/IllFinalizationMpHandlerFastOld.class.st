@@ -1,5 +1,5 @@
 Class {
-	#name : 'IllimaniFinalizationMpHandlerFastOld',
+	#name : 'IllFinalizationMpHandlerFastOld',
 	#superclass : 'MpHandler',
 	#instVars : [
 		'samplingCounter',
@@ -15,13 +15,13 @@ Class {
 }
 
 { #category : 'accessing' }
-IllimaniFinalizationMpHandlerFastOld >> accumulatedArrays [
+IllFinalizationMpHandlerFastOld >> accumulatedArrays [
 
 	^ accumulatedArrays
 ]
 
 { #category : 'evaluating' }
-IllimaniFinalizationMpHandlerFastOld >> afterExecutionWithReceiver: receiver arguments: arguments returnValue: newlyAllocatedObject [
+IllFinalizationMpHandlerFastOld >> afterExecutionWithReceiver: receiver arguments: arguments returnValue: newlyAllocatedObject [
 
 	| numberOfElementsToAdd |
 	numberOfElementsToAdd := 5.
@@ -40,12 +40,12 @@ IllimaniFinalizationMpHandlerFastOld >> afterExecutionWithReceiver: receiver arg
 	currentIndex := currentIndex + numberOfElementsToAdd.
 
 	"Finalization"
-	finalizationRegistry add: newlyAllocatedObject finalizer: IllimaniGlobalFinalizer default.
+	finalizationRegistry add: newlyAllocatedObject finalizer: IllGlobalFinalizer default.
 	^ newlyAllocatedObject
 ]
 
 { #category : 'evaluating' }
-IllimaniFinalizationMpHandlerFastOld >> checkIfArrayIsFull: n [
+IllFinalizationMpHandlerFastOld >> checkIfArrayIsFull: n [
 
 	currentIndex - 1 + n > initialArraySize ifFalse: [ ^ self ].
 	initialArraySize := initialArraySize * 2.
@@ -55,19 +55,19 @@ IllimaniFinalizationMpHandlerFastOld >> checkIfArrayIsFull: n [
 ]
 
 { #category : 'accessing' }
-IllimaniFinalizationMpHandlerFastOld >> currentArray [
+IllFinalizationMpHandlerFastOld >> currentArray [
 
 	^ currentArray
 ]
 
 { #category : 'accessing' }
-IllimaniFinalizationMpHandlerFastOld >> currentIndex [
+IllFinalizationMpHandlerFastOld >> currentIndex [
 
 	^ currentIndex
 ]
 
 { #category : 'evaluating' }
-IllimaniFinalizationMpHandlerFastOld >> finalize: anObject [
+IllFinalizationMpHandlerFastOld >> finalize: anObject [
 
 	| numberOfElementsToAdd |
 	numberOfElementsToAdd := 3.
@@ -81,7 +81,7 @@ IllimaniFinalizationMpHandlerFastOld >> finalize: anObject [
 ]
 
 { #category : 'accessing' }
-IllimaniFinalizationMpHandlerFastOld >> initialArraySize: anInteger [
+IllFinalizationMpHandlerFastOld >> initialArraySize: anInteger [
 	"ONLY USED FOR TESTING"
 
 	initialArraySize := anInteger.
@@ -89,11 +89,11 @@ IllimaniFinalizationMpHandlerFastOld >> initialArraySize: anInteger [
 ]
 
 { #category : 'initialization' }
-IllimaniFinalizationMpHandlerFastOld >> initialize [
+IllFinalizationMpHandlerFastOld >> initialize [
 
 	super initialize.
 	
-	finalizationRegistry := IllimaniFinalizationRegistry new.
+	finalizationRegistry := IllFinalizationRegistry new.
 	
 	accumulatedArrays := OrderedCollection new.
 	currentIndex := 1.
@@ -101,14 +101,14 @@ IllimaniFinalizationMpHandlerFastOld >> initialize [
 	initialArraySize := 1000000.
 	currentArray := Array new: initialArraySize.
 	
-	IllimaniGlobalFinalizer reset.
-	IllimaniGlobalFinalizer default handler: self.
+	IllGlobalFinalizer reset.
+	IllGlobalFinalizer default handler: self.
 	samplingCounter := 0.
 	samplingRate := 1
 ]
 
 { #category : 'accessing' }
-IllimaniFinalizationMpHandlerFastOld >> objectAllocations [
+IllFinalizationMpHandlerFastOld >> objectAllocations [
 
 	| allocationsDictionary |
 	allocationsDictionary := Dictionary new.
@@ -136,13 +136,13 @@ IllimaniFinalizationMpHandlerFastOld >> objectAllocations [
 ]
 
 { #category : 'defaults' }
-IllimaniFinalizationMpHandlerFastOld >> processForFinalization: allocationsArray model: model atIndex: index [
+IllFinalizationMpHandlerFastOld >> processForFinalization: allocationsArray model: model atIndex: index [
 
 	model finalizationTimestamp: (allocationsArray at: index - 1)
 ]
 
 { #category : 'defaults' }
-IllimaniFinalizationMpHandlerFastOld >> processForInitialization: allocationsArray model: model atIndex: index [
+IllFinalizationMpHandlerFastOld >> processForInitialization: allocationsArray model: model atIndex: index [
 
 	model
 		allocatedObjectClass: (allocationsArray at: index - 1);
@@ -151,25 +151,25 @@ IllimaniFinalizationMpHandlerFastOld >> processForInitialization: allocationsArr
 ]
 
 { #category : 'accessing' }
-IllimaniFinalizationMpHandlerFastOld >> samplingCounter [
+IllFinalizationMpHandlerFastOld >> samplingCounter [
 
 	^ samplingCounter
 ]
 
 { #category : 'accessing' }
-IllimaniFinalizationMpHandlerFastOld >> samplingCounter: anObject [
+IllFinalizationMpHandlerFastOld >> samplingCounter: anObject [
 
 	samplingCounter := anObject
 ]
 
 { #category : 'accessing' }
-IllimaniFinalizationMpHandlerFastOld >> samplingRate [
+IllFinalizationMpHandlerFastOld >> samplingRate [
 
 	^ samplingRate
 ]
 
 { #category : 'accessing' }
-IllimaniFinalizationMpHandlerFastOld >> samplingRate: anInteger [
+IllFinalizationMpHandlerFastOld >> samplingRate: anInteger [
 	"The anInteger needs to be an integer number between 1 and 100 that represents the sampling percentage"
 
 	samplingRate := (100 / anInteger) asInteger

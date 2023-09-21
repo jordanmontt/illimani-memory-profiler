@@ -1,5 +1,5 @@
 Class {
-	#name : 'IllimaniFinalizationMpHandlerFast',
+	#name : 'IllFinalizationMpHandlerFast',
 	#superclass : 'MpHandler',
 	#instVars : [
 		'samplingCounter',
@@ -13,7 +13,7 @@ Class {
 }
 
 { #category : 'evaluating' }
-IllimaniFinalizationMpHandlerFast >> afterExecutionWithReceiver: receiver arguments: arguments returnValue: newlyAllocatedObject [
+IllFinalizationMpHandlerFast >> afterExecutionWithReceiver: receiver arguments: arguments returnValue: newlyAllocatedObject [
 
 	"Sampling"
 	samplingCounter := samplingCounter + 1.
@@ -32,13 +32,13 @@ IllimaniFinalizationMpHandlerFast >> afterExecutionWithReceiver: receiver argume
 ]
 
 { #category : 'accessing' }
-IllimaniFinalizationMpHandlerFast >> allocationsUnconstructedCollection [
+IllFinalizationMpHandlerFast >> allocationsUnconstructedCollection [
 
 	^ allocationsUnconstructedCollection
 ]
 
 { #category : 'evaluating' }
-IllimaniFinalizationMpHandlerFast >> finalize: anObject [
+IllFinalizationMpHandlerFast >> finalize: anObject [
 
 	allocationsUnconstructedCollection add: anObject identityHash.
 	allocationsUnconstructedCollection add: Time primUTCMicrosecondsClock.
@@ -47,20 +47,20 @@ IllimaniFinalizationMpHandlerFast >> finalize: anObject [
 ]
 
 { #category : 'evaluating' }
-IllimaniFinalizationMpHandlerFast >> forceFinalizationOfObjects [
+IllFinalizationMpHandlerFast >> forceFinalizationOfObjects [
 
 	"We force the finalization timestamp for the not yet finalized objects."
 	finalizationRegistry finalizeAllEphemerons.
 	"Then we stop referencing the finalization registry to not re-finalize the objects."
-	finalizationRegistry := IllimaniFinalizationRegistry new
+	finalizationRegistry := IllFinalizationRegistry new
 ]
 
 { #category : 'initialization' }
-IllimaniFinalizationMpHandlerFast >> initialize [
+IllFinalizationMpHandlerFast >> initialize [
 
 	super initialize.
 
-	finalizationRegistry := IllimaniFinalizationRegistry new.
+	finalizationRegistry := IllFinalizationRegistry new.
 	samplingCounter := 0.
 	samplingRate := 1.
 
@@ -70,7 +70,7 @@ IllimaniFinalizationMpHandlerFast >> initialize [
 ]
 
 { #category : 'accessing' }
-IllimaniFinalizationMpHandlerFast >> objectAllocations [
+IllFinalizationMpHandlerFast >> objectAllocations [
 
 	| allocationsDictionary |
 	allocationsDictionary := Dictionary new.
@@ -87,13 +87,13 @@ IllimaniFinalizationMpHandlerFast >> objectAllocations [
 ]
 
 { #category : 'defaults' }
-IllimaniFinalizationMpHandlerFast >> processFinalization: model atIndex: index [
+IllFinalizationMpHandlerFast >> processFinalization: model atIndex: index [
 
 	model finalizationTimestamp: (allocationsUnconstructedCollection at: index - 1)
 ]
 
 { #category : 'defaults' }
-IllimaniFinalizationMpHandlerFast >> processInitialization: model atIndex: index [
+IllFinalizationMpHandlerFast >> processInitialization: model atIndex: index [
 
 	model
 		allocatedObjectClass: (allocationsUnconstructedCollection at: index - 1);
@@ -102,19 +102,19 @@ IllimaniFinalizationMpHandlerFast >> processInitialization: model atIndex: index
 ]
 
 { #category : 'accessing' }
-IllimaniFinalizationMpHandlerFast >> samplingCounter [
+IllFinalizationMpHandlerFast >> samplingCounter [
 
 	^ samplingCounter
 ]
 
 { #category : 'accessing' }
-IllimaniFinalizationMpHandlerFast >> samplingRate [
+IllFinalizationMpHandlerFast >> samplingRate [
 
 	^ samplingRate
 ]
 
 { #category : 'accessing' }
-IllimaniFinalizationMpHandlerFast >> samplingRate: anInteger [
+IllFinalizationMpHandlerFast >> samplingRate: anInteger [
 	"The anInteger needs to be an integer number between 1 and 100 that represents the sampling percentage"
 
 	samplingRate := (100 / anInteger) asInteger

@@ -62,10 +62,10 @@ IllimaniAllocationProfiler new
 ```
 "
 Class {
-	#name : 'IllimaniAllocationProfiler',
+	#name : 'IllAllocationProfiler',
 	#superclass : 'Object',
-	#traits : 'IllimaniTAllocatorWrapper',
-	#classTraits : 'IllimaniTAllocatorWrapper classTrait',
+	#traits : 'IllTAllocatorWrapper',
+	#classTraits : 'IllTAllocatorWrapper classTrait',
 	#instVars : [
 		'profilerHandler',
 		'statisticsModel',
@@ -77,82 +77,82 @@ Class {
 }
 
 { #category : 'announcements' }
-IllimaniAllocationProfiler >> announceProfilerStopedProfiling [
+IllAllocationProfiler >> announceProfilerStopedProfiling [
 
-	illimaniAnnouncer announce: IllimaniStopedProfilingAnnouncement
+	illimaniAnnouncer announce: IllStopedProfilingAnnouncement
 ]
 
 { #category : 'api' }
-IllimaniAllocationProfiler >> captureAllObjects [
+IllAllocationProfiler >> captureAllObjects [
 
 	profilerHandler captureAllObjects
 ]
 
 { #category : 'evaluating' }
-IllimaniAllocationProfiler >> cleanProfilingData [
+IllAllocationProfiler >> cleanProfilingData [
 
 	profilerHandler cleanObjectAllocations
 ]
 
 { #category : 'api' }
-IllimaniAllocationProfiler >> copyExecutionStack [
+IllAllocationProfiler >> copyExecutionStack [
 
 	profilerHandler copyExecutionStack
 ]
 
 { #category : 'api' }
-IllimaniAllocationProfiler >> copyObjectIdentityHash [
+IllAllocationProfiler >> copyObjectIdentityHash [
 
 	profilerHandler copyObjectIdentityHash
 ]
 
 { #category : 'initialization' }
-IllimaniAllocationProfiler >> initialize [
+IllAllocationProfiler >> initialize [
 
 	super initialize.
-	profilerHandler := IllimaniProfilerMpHandler new.
-	illimaniAnnouncer := IllimaniAnnouncer new.
+	profilerHandler := IllProfilerMpHandler new.
+	illimaniAnnouncer := IllAnnouncer new.
 	self initializeMethodProxies: profilerHandler.
 ]
 
 { #category : 'api' }
-IllimaniAllocationProfiler >> keepReferencesToAllocatedObjects [
+IllAllocationProfiler >> keepReferencesToAllocatedObjects [
 
 	profilerHandler keepReferencesToAllocatedObjects
 ]
 
 { #category : 'accessing' }
-IllimaniAllocationProfiler >> objectAllocations [
+IllAllocationProfiler >> objectAllocations [
 
 	^ profilerHandler objectAllocations
 ]
 
 { #category : 'api' }
-IllimaniAllocationProfiler >> objectsToCapture: aCollectionOfClasses [
+IllAllocationProfiler >> objectsToCapture: aCollectionOfClasses [
 
 	profilerHandler objectsToCapture: aCollectionOfClasses
 ]
 
 { #category : 'api' }
-IllimaniAllocationProfiler >> objectsToIgnore: aCollectionOfClasses [
+IllAllocationProfiler >> objectsToIgnore: aCollectionOfClasses [
 
 	profilerHandler objectsToIgnore: aCollectionOfClasses
 ]
 
 { #category : 'accessing' }
-IllimaniAllocationProfiler >> profilerHandler [
+IllAllocationProfiler >> profilerHandler [
 
 	^ profilerHandler
 ]
 
 { #category : 'api' }
-IllimaniAllocationProfiler >> samplingRate: anInteger [
+IllAllocationProfiler >> samplingRate: anInteger [
 
 	profilerHandler samplingRate: anInteger
 ]
 
 { #category : 'evaluating' }
-IllimaniAllocationProfiler >> startProfiling [
+IllAllocationProfiler >> startProfiling [
 
 	self cleanProfilingData.
 	self installMethodProxies.
@@ -161,13 +161,13 @@ IllimaniAllocationProfiler >> startProfiling [
 ]
 
 { #category : 'accessing - statistics' }
-IllimaniAllocationProfiler >> stats [
+IllAllocationProfiler >> stats [
 
 	^ statisticsModel
 ]
 
 { #category : 'evaluating' }
-IllimaniAllocationProfiler >> stopProfiling [
+IllAllocationProfiler >> stopProfiling [
 
 	self uninstallMethodProxies.
 	self updateStatsWhenFinishingProfiling.

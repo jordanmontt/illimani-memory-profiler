@@ -1,5 +1,5 @@
 Class {
-	#name : 'IllimaniDensityDistributionChart',
+	#name : 'IllDensityDistributionChart',
 	#superclass : 'Object',
 	#instVars : [
 		'yTitle',
@@ -17,7 +17,7 @@ Class {
 }
 
 { #category : 'defaults' }
-IllimaniDensityDistributionChart >> addChartTitles: chart [
+IllDensityDistributionChart >> addChartTitles: chart [
 
 	| completeYTitle |
 	chart xlabel: xTitle.
@@ -27,7 +27,7 @@ IllimaniDensityDistributionChart >> addChartTitles: chart [
 ]
 
 { #category : 'defaults' }
-IllimaniDensityDistributionChart >> addTickDecorations: chart [
+IllDensityDistributionChart >> addTickDecorations: chart [
 
 	"Horizontal ticks are always the same"
 	chart horizontalTick
@@ -43,19 +43,19 @@ IllimaniDensityDistributionChart >> addTickDecorations: chart [
 ]
 
 { #category : 'api' }
-IllimaniDensityDistributionChart >> beForMemory [
+IllDensityDistributionChart >> beForMemory [
 
 	isForMemory := true
 ]
 
 { #category : 'api' }
-IllimaniDensityDistributionChart >> beForNumberOfAllocations [
+IllDensityDistributionChart >> beForNumberOfAllocations [
 
 	isForMemory := false
 ]
 
 { #category : 'defaults' }
-IllimaniDensityDistributionChart >> dataByMemory [
+IllDensityDistributionChart >> dataByMemory [
 
 	| dictionary |
 	dictionary := Dictionary newFrom: groupedDataBySeconds.
@@ -66,7 +66,7 @@ IllimaniDensityDistributionChart >> dataByMemory [
 ]
 
 { #category : 'defaults' }
-IllimaniDensityDistributionChart >> dataByNumberOfAllocations [
+IllDensityDistributionChart >> dataByNumberOfAllocations [
 
 	| dictionary |
 	dictionary := Dictionary newFrom: groupedDataBySeconds.
@@ -75,7 +75,7 @@ IllimaniDensityDistributionChart >> dataByNumberOfAllocations [
 ]
 
 { #category : 'api' }
-IllimaniDensityDistributionChart >> densityChartCanvas [
+IllDensityDistributionChart >> densityChartCanvas [
 
 	| plot y chart |
 	chart := self initializeChart.
@@ -114,7 +114,7 @@ IllimaniDensityDistributionChart >> densityChartCanvas [
 ]
 
 { #category : 'api' }
-IllimaniDensityDistributionChart >> densityChartPresenter [
+IllDensityDistributionChart >> densityChartPresenter [
 
 	^ SpRoassalPresenter new
 		canvas: self densityChartCanvas;
@@ -122,7 +122,7 @@ IllimaniDensityDistributionChart >> densityChartPresenter [
 ]
 
 { #category : 'initialization' }
-IllimaniDensityDistributionChart >> initialize [
+IllDensityDistributionChart >> initialize [
 
 	super initialize.
 
@@ -135,7 +135,7 @@ IllimaniDensityDistributionChart >> initialize [
 ]
 
 { #category : 'initialization' }
-IllimaniDensityDistributionChart >> initializeChart [
+IllDensityDistributionChart >> initializeChart [
 
 	^ RSCompositeChart new
 		colors: NSScale google20;
@@ -143,13 +143,13 @@ IllimaniDensityDistributionChart >> initializeChart [
 ]
 
 { #category : 'api' }
-IllimaniDensityDistributionChart >> numberOfTicks: anInteger [
+IllDensityDistributionChart >> numberOfTicks: anInteger [
 
 	numberOfTicks := anInteger
 ]
 
 { #category : 'api' }
-IllimaniDensityDistributionChart >> objectAllocations: someObjectAllocations [
+IllDensityDistributionChart >> objectAllocations: someObjectAllocations [
 
 	groupedDataBySeconds := (someObjectAllocations groupedBy: [ :allocationModel |
 		allocationModel lifetimeAsDuration asSeconds ]) associations.
@@ -158,25 +158,25 @@ IllimaniDensityDistributionChart >> objectAllocations: someObjectAllocations [
 ]
 
 { #category : 'api' }
-IllimaniDensityDistributionChart >> title: aTitle [
+IllDensityDistributionChart >> title: aTitle [
 
 	title := aTitle
 ]
 
 { #category : 'api' }
-IllimaniDensityDistributionChart >> xTitle: aTitle [
+IllDensityDistributionChart >> xTitle: aTitle [
 
 	xTitle := aTitle
 ]
 
 { #category : 'api' }
-IllimaniDensityDistributionChart >> yLog: aBoolean [
+IllDensityDistributionChart >> yLog: aBoolean [
 
 	isYLog := aBoolean
 ]
 
 { #category : 'api' }
-IllimaniDensityDistributionChart >> yTitle: aTitle [
+IllDensityDistributionChart >> yTitle: aTitle [
 
 	yTitle := aTitle
 ]

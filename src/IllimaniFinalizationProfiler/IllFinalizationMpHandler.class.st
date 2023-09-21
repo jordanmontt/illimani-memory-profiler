@@ -1,5 +1,5 @@
 Class {
-	#name : 'IllimaniFinalizationMpHandler',
+	#name : 'IllFinalizationMpHandler',
 	#superclass : 'MpHandler',
 	#instVars : [
 		'profiler',
@@ -12,7 +12,7 @@ Class {
 }
 
 { #category : 'evaluating' }
-IllimaniFinalizationMpHandler >> afterExecutionWithReceiver: receiver arguments: arguments returnValue: newlyAllocatedObject [
+IllFinalizationMpHandler >> afterExecutionWithReceiver: receiver arguments: arguments returnValue: newlyAllocatedObject [
 	
 	| objectFinalizationModel |
 	
@@ -35,7 +35,7 @@ IllimaniFinalizationMpHandler >> afterExecutionWithReceiver: receiver arguments:
 ]
 
 { #category : 'initialization' }
-IllimaniFinalizationMpHandler >> initialize [
+IllFinalizationMpHandler >> initialize [
 
 	super initialize.
 
@@ -45,49 +45,49 @@ IllimaniFinalizationMpHandler >> initialize [
 ]
 
 { #category : 'accessing' }
-IllimaniFinalizationMpHandler >> objectAllocations [
+IllFinalizationMpHandler >> objectAllocations [
 
 	^ objectAllocations
 ]
 
 { #category : 'accessing' }
-IllimaniFinalizationMpHandler >> objectAllocations: anObject [
+IllFinalizationMpHandler >> objectAllocations: anObject [
 
 	objectAllocations := anObject
 ]
 
 { #category : 'accessing' }
-IllimaniFinalizationMpHandler >> profiler [
+IllFinalizationMpHandler >> profiler [
 
 	^ profiler
 ]
 
 { #category : 'accessing' }
-IllimaniFinalizationMpHandler >> profiler: anIllimaniFinalizationProfiler [
+IllFinalizationMpHandler >> profiler: anIllimaniFinalizationProfiler [
 
 	profiler := anIllimaniFinalizationProfiler
 ]
 
 { #category : 'accessing' }
-IllimaniFinalizationMpHandler >> samplingCounter [
+IllFinalizationMpHandler >> samplingCounter [
 
 	^ samplingCounter
 ]
 
 { #category : 'accessing' }
-IllimaniFinalizationMpHandler >> samplingCounter: anObject [
+IllFinalizationMpHandler >> samplingCounter: anObject [
 
 	samplingCounter := anObject
 ]
 
 { #category : 'accessing' }
-IllimaniFinalizationMpHandler >> samplingRate [
+IllFinalizationMpHandler >> samplingRate [
 
 	^ samplingRate
 ]
 
 { #category : 'accessing' }
-IllimaniFinalizationMpHandler >> samplingRate: anInteger [
+IllFinalizationMpHandler >> samplingRate: anInteger [
 	"The anInteger needs to be an integer number between 1 and 100 that represents the sampling percentage"
 
 	samplingRate := (100 / anInteger) asInteger

@@ -2,7 +2,7 @@
 I am a trait that contains the basic behavior to wrap and intercept the allocator methods of Pharo. I am used by the specific profilers
 "
 Trait {
-	#name : 'IllimaniTAllocatorWrapper',
+	#name : 'IllTAllocatorWrapper',
 	#instVars : [
 		'proxyBasicNew',
 		'proxyBasicNewKeyword',
@@ -20,19 +20,19 @@ Trait {
 }
 
 { #category : 'accessing - statistics' }
-IllimaniTAllocatorWrapper >> beginningOfProfilingTime [
+IllTAllocatorWrapper >> beginningOfProfilingTime [
 
 	^ beginningOfProfilingTime
 ]
 
 { #category : 'accessing - statistics' }
-IllimaniTAllocatorWrapper >> endOfProfilingTime [
+IllTAllocatorWrapper >> endOfProfilingTime [
 
 	^ endOfProfilingTime
 ]
 
 { #category : 'api' }
-IllimaniTAllocatorWrapper >> forceUninstall [
+IllTAllocatorWrapper >> forceUninstall [
 	"Warning, do not use unless you cannot start the profiler because you have the
 	MpCannotInstall exception"
 
@@ -40,19 +40,19 @@ IllimaniTAllocatorWrapper >> forceUninstall [
 ]
 
 { #category : 'accessing - statistics' }
-IllimaniTAllocatorWrapper >> fullGCCount [
+IllTAllocatorWrapper >> fullGCCount [
 
 	^ fullGCCount
 ]
 
 { #category : 'accessing - statistics' }
-IllimaniTAllocatorWrapper >> incrementalGCCount [
+IllTAllocatorWrapper >> incrementalGCCount [
 
 	^ incrementalGCCount
 ]
 
 { #category : 'initialization' }
-IllimaniTAllocatorWrapper >> initializeMethodProxies: aHandler [
+IllTAllocatorWrapper >> initializeMethodProxies: aHandler [
 
 	proxyBasicNew := MpMethodProxy onMethod: Behavior >> #basicNew handler: aHandler.
 	proxyBasicNewKeyword := MpMethodProxy onMethod: Behavior >> #basicNew: handler: aHandler.
@@ -65,7 +65,7 @@ IllimaniTAllocatorWrapper >> initializeMethodProxies: aHandler [
 ]
 
 { #category : 'profiling' }
-IllimaniTAllocatorWrapper >> initializeProfilingBasicStats [
+IllTAllocatorWrapper >> initializeProfilingBasicStats [
 
 	beginningOfProfilingTime := Time microsecondClockValue.
 	incrementalGCCount := Smalltalk vm incrementalGCCount.
@@ -74,7 +74,7 @@ IllimaniTAllocatorWrapper >> initializeProfilingBasicStats [
 ]
 
 { #category : 'profiling' }
-IllimaniTAllocatorWrapper >> installMethodProxies [
+IllTAllocatorWrapper >> installMethodProxies [
 
 	proxyBasicNew install.
 	proxyBasicNewKeyword install.
@@ -83,19 +83,19 @@ IllimaniTAllocatorWrapper >> installMethodProxies [
 ]
 
 { #category : 'testing' }
-IllimaniTAllocatorWrapper >> isProfilingFinished [
+IllTAllocatorWrapper >> isProfilingFinished [
 
 	^ endOfProfilingTime isNotNil
 ]
 
 { #category : 'testing' }
-IllimaniTAllocatorWrapper >> isProfilingStarted [
+IllTAllocatorWrapper >> isProfilingStarted [
 
 	^ beginningOfProfilingTime isNotNil
 ]
 
 { #category : 'api' }
-IllimaniTAllocatorWrapper >> profileFor: aDuration [
+IllTAllocatorWrapper >> profileFor: aDuration [
 	"Done with a fork because we don't want to block the ui thread since it allocates objects. "
 
 	self startProfiling.
@@ -105,7 +105,7 @@ IllimaniTAllocatorWrapper >> profileFor: aDuration [
 ]
 
 { #category : 'api' }
-IllimaniTAllocatorWrapper >> profileOn: aBlock [
+IllTAllocatorWrapper >> profileOn: aBlock [
 
 	self startProfiling.
 	"The nil at the end is necessary because else the value of the block is referenced inside
@@ -117,19 +117,19 @@ IllimaniTAllocatorWrapper >> profileOn: aBlock [
 ]
 
 { #category : 'accessing - statistics' }
-IllimaniTAllocatorWrapper >> totalGCTime [
+IllTAllocatorWrapper >> totalGCTime [
 
 	^ totalGCTime
 ]
 
 { #category : 'accessing - statistics' }
-IllimaniTAllocatorWrapper >> totalProfiledTime [
+IllTAllocatorWrapper >> totalProfiledTime [
 
 	^ endOfProfilingTime - beginningOfProfilingTime
 ]
 
 { #category : 'profiling' }
-IllimaniTAllocatorWrapper >> uninstallMethodProxies [
+IllTAllocatorWrapper >> uninstallMethodProxies [
 
 	proxyBasicNew uninstall.
 	proxyBasicNewKeyword uninstall.
@@ -138,7 +138,7 @@ IllimaniTAllocatorWrapper >> uninstallMethodProxies [
 ]
 
 { #category : 'profiling' }
-IllimaniTAllocatorWrapper >> updateStatsWhenFinishingProfiling [
+IllTAllocatorWrapper >> updateStatsWhenFinishingProfiling [
 
 	endOfProfilingTime := Time microsecondClockValue.
 	incrementalGCCount := Smalltalk vm incrementalGCCount - incrementalGCCount.
