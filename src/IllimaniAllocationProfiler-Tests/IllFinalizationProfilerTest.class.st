@@ -52,11 +52,11 @@ IllFinalizationProfilerTest >> testProfileOnFinalizesCorrectly [
 	
 	self
 		assert: finalizationProfiler objectAllocations size
-		equals: (finalizationProfiler objectAllocations select: [ :e | e finalizationTimestamp isNotNil]) size.
+		equals: (finalizationProfiler objectAllocations select: [ :e | e finalizationTime isNotNil]) size.
 
 	finalizationProfiler objectAllocations do: [ :alloc |
 		"Finalization time must be after timeNow variable"
-		self assert: alloc finalizationTimestamp > timeNow ]
+		self assert: alloc finalizationTime > timeNow ]
 ]
 
 { #category : 'tests' }

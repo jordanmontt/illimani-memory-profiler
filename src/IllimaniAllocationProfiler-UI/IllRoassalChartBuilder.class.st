@@ -99,12 +99,12 @@ IllRoassalChartBuilder >> constructPerSecondLineChart: aCollection [
 IllRoassalChartBuilder >> createLinePlotForAllocations: someAllocations [
 
 	| times linePlot indices sortedByTime |
-	sortedByTime := someAllocations sorted: [ :a :b | a initializationTimestamp < b initializationTimestamp ].
+	sortedByTime := someAllocations sorted: [ :a :b | a initializationTime < b initializationTime ].
 
 	"Roassal does not accepts Duration"
-	times := sortedByTime collect: [ :each | each timestampAsSeconds ].
+	times := sortedByTime collect: [ :each | each timeAsSeconds ].
 	"To start in 0"
-	times := times collect: [ :e | (e - sortedByTime first timestampAsSeconds) asFloat ].
+	times := times collect: [ :e | (e - sortedByTime first timeAsSeconds) asFloat ].
 
 	indices := 1 to: times size.
 	linePlot := RSLinePlot new x: times y: indices.

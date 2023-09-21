@@ -7,8 +7,9 @@ Class {
 		'samplingRate',
 		'objectAllocations'
 	],
-	#category : 'IllimaniFinalizationProfiler',
-	#package : 'IllimaniFinalizationProfiler'
+	#category : 'IllimaniFinalizationProfiler-MethodProxies-Handler',
+	#package : 'IllimaniFinalizationProfiler',
+	#tag : 'MethodProxies-Handler'
 }
 
 { #category : 'evaluating' }
@@ -22,7 +23,7 @@ IllFinalizationMpHandler >> afterExecutionWithReceiver: receiver arguments: argu
 	
 	"Handle object allocation"
 	objectFinalizationModel := BasicAllocationInfoModel new
-		initializationTimestamp: Time microsecondClockValue;
+		initializationTime: Time microsecondClockValue;
 		sizeInBytes: newlyAllocatedObject sizeInMemory;
 		allocatedObjectClass: newlyAllocatedObject class;
 		yourself.

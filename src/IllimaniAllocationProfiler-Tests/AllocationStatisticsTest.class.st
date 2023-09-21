@@ -109,7 +109,7 @@ AllocationStatisticsTest >> testNumberOfMethods [
 AllocationStatisticsTest >> testTimeDifferenceBetweenFirstAndLastAllocation [
 
 	self assert: statsModel timeDifferenceBetweenFirstAndLastAllocation
-		equals: fixture mockedAllocations last initializationTimestamp - fixture mockedAllocations first initializationTimestamp
+		equals: fixture mockedAllocations last initializationTime - fixture mockedAllocations first initializationTime
 ]
 
 { #category : 'tests' }

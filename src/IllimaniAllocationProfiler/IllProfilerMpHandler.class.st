@@ -112,7 +112,7 @@ IllProfilerMpHandler >> handleObjectAllocation: newlyAllocatedObject [
 		allocatedObjectClass: newlyAllocatedObject class;
 		contextFingerprint: filteredContext;
 		sizeInBytes: newlyAllocatedObject sizeInMemory;
-		initializationTimestamp: Time microsecondClockValue.
+		initializationTime: Time microsecondClockValue.
 
 	objectAllocations add: allocationInformationHolder
 ]

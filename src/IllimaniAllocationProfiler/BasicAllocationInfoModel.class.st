@@ -3,9 +3,9 @@ Class {
 	#superclass : 'Object',
 	#instVars : [
 		'allocatedObjectClass',
-		'finalizationTimestamp',
-		'initializationTimestamp',
-		'sizeInBytes'
+		'sizeInBytes',
+		'finalizationTime',
+		'initializationTime'
 	],
 	#category : 'IllimaniAllocationProfiler-Model',
 	#package : 'IllimaniAllocationProfiler',
@@ -25,43 +25,43 @@ BasicAllocationInfoModel >> allocatedObjectClass: anObject [
 ]
 
 { #category : 'accessing' }
-BasicAllocationInfoModel >> finalizationTimestamp [
+BasicAllocationInfoModel >> finalizationTime [
 	"In microseconds"
 
-	^ finalizationTimestamp
+	^ finalizationTime
 ]
 
 { #category : 'accessing' }
-BasicAllocationInfoModel >> finalizationTimestamp: anObject [
+BasicAllocationInfoModel >> finalizationTime: anObject [
 	"In microseconds"
 
-	finalizationTimestamp := anObject
+	finalizationTime := anObject
 ]
 
 { #category : 'finalization' }
 BasicAllocationInfoModel >> finalize [
 
-	finalizationTimestamp := Time microsecondClockValue
+	finalizationTime := Time microsecondClockValue
 ]
 
 { #category : 'accessing' }
-BasicAllocationInfoModel >> initializationTimestamp [
+BasicAllocationInfoModel >> initializationTime [
 	"In microseconds"
 
-	^ initializationTimestamp
+	^ initializationTime
 ]
 
 { #category : 'accessing' }
-BasicAllocationInfoModel >> initializationTimestamp: microsecondsAsInt [
+BasicAllocationInfoModel >> initializationTime: microsecondsAsInt [
 	"In microseconds"
 
-	initializationTimestamp := microsecondsAsInt
+	initializationTime := microsecondsAsInt
 ]
 
 { #category : 'accessing' }
 BasicAllocationInfoModel >> lifetime [
 
-	^ finalizationTimestamp - initializationTimestamp
+	^ finalizationTime - initializationTime
 ]
 
 { #category : 'accessing' }
@@ -73,7 +73,7 @@ BasicAllocationInfoModel >> lifetimeAsDuration [
 { #category : 'accessing' }
 BasicAllocationInfoModel >> lifetimeAsString [
 
-	finalizationTimestamp ifNil: [ ^ '-' ].
+	finalizationTime ifNil: [ ^ '-' ].
 	^ self lifetimeAsDuration humanReadablePrintString
 ]
 
@@ -91,7 +91,7 @@ BasicAllocationInfoModel >> sizeInBytes: aNumber [
 ]
 
 { #category : 'accessing' }
-BasicAllocationInfoModel >> timestampAsSeconds [
+BasicAllocationInfoModel >> timeAsSeconds [
 
-	^ initializationTimestamp / 1000000
+	^ initializationTime / 1000000
 ]

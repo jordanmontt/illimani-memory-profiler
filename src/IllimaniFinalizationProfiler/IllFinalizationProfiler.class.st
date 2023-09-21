@@ -10,8 +10,9 @@ Class {
 		'profilerHandler',
 		'finalizationRegistry'
 	],
-	#category : 'IllimaniFinalizationProfiler',
-	#package : 'IllimaniFinalizationProfiler'
+	#category : 'IllimaniFinalizationProfiler-Profiler',
+	#package : 'IllimaniFinalizationProfiler',
+	#tag : 'Profiler'
 }
 
 { #category : 'api' }
@@ -26,22 +27,16 @@ IllFinalizationProfiler >> forceFinalizationOfObjects [
 	"We force the finalization timestamp for the not yet finalized objects."
 	finalizationRegistry finalizeAllEphemerons.
 	"Then we stop referencing the finalization registry to not re-finalize the objects."
-	finalizationRegistry := self initializeFinalizationRegistry
+	finalizationRegistry := FinalizationRegistry new
 ]
 
 { #category : 'initialization' }
 IllFinalizationProfiler >> initialize [
 
 	super initialize.
-	finalizationRegistry := self initializeFinalizationRegistry.
+	finalizationRegistry := FinalizationRegistry new.
 	profilerHandler := self initializeHandler.
 	self initializeMethodProxies: profilerHandler
-]
-
-{ #category : 'initialization' }
-IllFinalizationProfiler >> initializeFinalizationRegistry [
-
-	^ FinalizationRegistry new
 ]
 
 { #category : 'initialization' }
@@ -89,7 +84,7 @@ IllFinalizationProfiler >> stopProfiling [
 { #category : 'accessing - statistics' }
 IllFinalizationProfiler >> timeDifferenceBetweenFirstAndLastAllocation [
 
-	^ self objectAllocations last initializationTimestamp - self objectAllocations first initializationTimestamp
+	^ self objectAllocations last initializationTime - self objectAllocations first initializationTime
 ]
 
 { #category : 'accessing - statistics' }
