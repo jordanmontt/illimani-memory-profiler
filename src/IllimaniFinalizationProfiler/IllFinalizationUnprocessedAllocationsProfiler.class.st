@@ -9,7 +9,8 @@ Class {
 		'finalizationRegistry',
 		'samplingCounter',
 		'samplingRate',
-		'unprocessedAllocationsCollection'
+		'unprocessedFinalizations',
+		'unprocessedAllocations'
 	],
 	#category : 'IllimaniFinalizationProfiler-Profiler',
 	#package : 'IllimaniFinalizationProfiler',
@@ -19,10 +20,10 @@ Class {
 { #category : 'profiling' }
 IllFinalizationUnprocessedAllocationsProfiler >> finalize: anObject [
 
-	unprocessedAllocationsCollection add: anObject identityHash.
-	unprocessedAllocationsCollection add: Time primUTCMicrosecondsClock.
+	unprocessedFinalizations add: anObject identityHash.
+	unprocessedFinalizations add: Time primUTCMicrosecondsClock.
 	"marker"
-	unprocessedAllocationsCollection add: -2
+	unprocessedFinalizations add: -2
 ]
 
 { #category : 'testing' }
@@ -43,7 +44,8 @@ IllFinalizationUnprocessedAllocationsProfiler >> initialize [
 		yourself.
 	finalizationRegistry := IllFinalizationRegistry new.
 	"We want an array big enough to be allocated directly into the old space"
-	unprocessedAllocationsCollection := OrderedCollection new: 10000000.
+	unprocessedAllocations := OrderedCollection new: 6000000.
+	unprocessedFinalizations := OrderedCollection new: 4000000.
 	
 	samplingCounter := 0.
 	samplingRate := 1.
@@ -56,18 +58,21 @@ IllFinalizationUnprocessedAllocationsProfiler >> objectAllocations [
 
 	| allocationsDictionary |
 	allocationsDictionary := Dictionary new.
-	unprocessedAllocationsCollection doWithIndex: [ :data :index |
-		| model |
+	unprocessedAllocations doWithIndex: [ :data :index |
 		data = -1 ifTrue: [
-			model := allocationsDictionary at: (unprocessedAllocationsCollection at: index - 4) ifAbsentPut: [ BasicAllocationInfoModel new ].
-			self processInitialization: model atIndex: index ].
+			| model |
+			model := allocationsDictionary at: (unprocessedAllocations at: index - 4) ifAbsentPut: [ BasicAllocationInfoModel new ].
+			self processInitialization: model atIndex: index ] ].
+	
+	unprocessedFinalizations doWithIndex: [ :data :index |
 		data = -2 ifTrue: [
+			| model |
 			self flag: 'This is a bug. To pu #ifAbsentPut: is a hack.
 			The object should exist by now. We are in the finalization and that happens after the initialization'.
-			model := allocationsDictionary at: (unprocessedAllocationsCollection at: index - 2) ifAbsentPut: [ BasicAllocationInfoModel new ].
+			model := allocationsDictionary at: (unprocessedAllocations at: index - 2).
 			self processFinalization: model atIndex: index ] ].
 
-	^ allocationsDictionary values "sorted: [ :a :b | a initializationTime < b initializationTime ]"
+	^ allocationsDictionary values sorted: [ :a :b | a initializationTime < b initializationTime ]
 ]
 
 { #category : 'testing' }
@@ -81,16 +86,16 @@ IllFinalizationUnprocessedAllocationsProfiler >> open [
 { #category : 'profiling' }
 IllFinalizationUnprocessedAllocationsProfiler >> processFinalization: model atIndex: index [
 
-	model finalizationTime: (unprocessedAllocationsCollection at: index - 1)
+	model finalizationTime: (unprocessedAllocations at: index - 1)
 ]
 
 { #category : 'profiling' }
 IllFinalizationUnprocessedAllocationsProfiler >> processInitialization: model atIndex: index [
 
 	model
-		allocatedObjectClass: (unprocessedAllocationsCollection at: index - 1);
-		sizeInBytes: (unprocessedAllocationsCollection at: index - 2);
-		initializationTime: (unprocessedAllocationsCollection at: index - 3)
+		allocatedObjectClass: (unprocessedFinalizations at: index - 1);
+		sizeInBytes: (unprocessedFinalizations at: index - 2);
+		initializationTime: (unprocessedFinalizations at: index - 3)
 ]
 
 { #category : 'profiling' }
@@ -100,12 +105,12 @@ IllFinalizationUnprocessedAllocationsProfiler >> registerAllocation: anObject [
 	"samplingCounter := samplingCounter + 1.
 	samplingCounter % samplingRate = 0 ifFalse: [ ^ newlyAllocatedObject ]."
 
-	unprocessedAllocationsCollection add: anObject identityHash.
-	unprocessedAllocationsCollection add: Time primUTCMicrosecondsClock.
-	unprocessedAllocationsCollection add: anObject sizeInMemory.
-	unprocessedAllocationsCollection add: anObject class.
+	unprocessedAllocations add: anObject identityHash.
+	unprocessedAllocations add: Time primUTCMicrosecondsClock.
+	unprocessedAllocations add: anObject sizeInMemory.
+	unprocessedAllocations add: anObject class.
 	"marker"
-	unprocessedAllocationsCollection add: -1.
+	unprocessedAllocations add: -1.
 
 	"Finalization"
 	finalizationRegistry add: anObject finalizer: self
@@ -128,5 +133,5 @@ IllFinalizationUnprocessedAllocationsProfiler >> stopProfiling [
 { #category : 'accessing' }
 IllFinalizationUnprocessedAllocationsProfiler >> unprocessedAllocationsCollection [
 
-	^ unprocessedAllocationsCollection
+	^ unprocessedAllocations
 ]
