@@ -4,13 +4,11 @@ Class {
 	#instVars : [
 		'samplingCounter',
 		'samplingRate',
-		'finalizationRegistry',
-		'initialArraySize',
-		'allocationsUnconstructedCollection'
+		'profiler'
 	],
-	#category : 'IllimaniFinalizationProfiler-MethodProxies-Handler',
+	#category : 'IllimaniFinalizationProfiler-Speedup-Experimental',
 	#package : 'IllimaniFinalizationProfiler',
-	#tag : 'MethodProxies-Handler'
+	#tag : 'Speedup-Experimental'
 }
 
 { #category : 'evaluating' }
@@ -20,86 +18,22 @@ IllFinalizationMpHandlerUnconstructedCollection >> afterExecutionWithReceiver: r
 	"samplingCounter := samplingCounter + 1.
 	samplingCounter % samplingRate = 0 ifFalse: [ ^ newlyAllocatedObject ]."
 
-	allocationsUnconstructedCollection add: newlyAllocatedObject identityHash.
-	allocationsUnconstructedCollection add: Time primUTCMicrosecondsClock.
-	allocationsUnconstructedCollection add: newlyAllocatedObject sizeInMemory.
-	allocationsUnconstructedCollection add: newlyAllocatedObject class.
-	"marker"
-	allocationsUnconstructedCollection add: -1.
-
-	"Finalization"
-	finalizationRegistry add: newlyAllocatedObject finalizer: self.
+	profiler registerAllocation: newlyAllocatedObject.
 	^ newlyAllocatedObject
-]
-
-{ #category : 'accessing' }
-IllFinalizationMpHandlerUnconstructedCollection >> allocationsUnconstructedCollection [
-
-	^ allocationsUnconstructedCollection
-]
-
-{ #category : 'evaluating' }
-IllFinalizationMpHandlerUnconstructedCollection >> finalize: anObject [
-
-	allocationsUnconstructedCollection add: anObject identityHash.
-	allocationsUnconstructedCollection add: Time primUTCMicrosecondsClock.
-	"marker"
-	allocationsUnconstructedCollection add: -2
-]
-
-{ #category : 'evaluating' }
-IllFinalizationMpHandlerUnconstructedCollection >> forceFinalizationOfObjects [
-
-	"We force the finalization timestamp for the not yet finalized objects."
-	finalizationRegistry finalizeAllEphemerons.
-	"Then we stop referencing the finalization registry to not re-finalize the objects."
-	finalizationRegistry := IllFinalizationRegistry new
 ]
 
 { #category : 'initialization' }
 IllFinalizationMpHandlerUnconstructedCollection >> initialize [
 
 	super initialize.
-
-	finalizationRegistry := IllFinalizationRegistry new.
 	samplingCounter := 0.
-	samplingRate := 1.
-
-	"We want an array big enough to be allocated directly into the old space"
-	initialArraySize := 10000000.
-	allocationsUnconstructedCollection := OrderedCollection new: initialArraySize
+	samplingRate := 1
 ]
 
-{ #category : 'accessing' }
-IllFinalizationMpHandlerUnconstructedCollection >> objectAllocations [
+{ #category : 'initialization' }
+IllFinalizationMpHandlerUnconstructedCollection >> profiler: aProfiler [
 
-	| allocationsDictionary |
-	allocationsDictionary := Dictionary new.
-	allocationsUnconstructedCollection doWithIndex: [ :data :index |
-		| model |
-		data = -1 ifTrue: [
-			model := allocationsDictionary at: (allocationsUnconstructedCollection at: index - 4) ifAbsentPut: [ BasicAllocationInfoModel new ].
-			self processInitialization: model atIndex: index ].
-		data = -2 ifTrue: [
-			model := allocationsDictionary at: (allocationsUnconstructedCollection at: index - 2).
-			self processFinalization: model atIndex: index ] ].
-
-	^ allocationsDictionary values sorted: [ :a :b | a initializationTime < b initializationTime ]
-]
-
-{ #category : 'defaults' }
-IllFinalizationMpHandlerUnconstructedCollection >> processFinalization: model atIndex: index [
-
-	model finalizationTime: (allocationsUnconstructedCollection at: index - 1)
-]
-
-{ #category : 'defaults' }
-IllFinalizationMpHandlerUnconstructedCollection >> processInitialization: model atIndex: index [
-
-	model
-		allocatedObjectClass: (allocationsUnconstructedCollection at: index - 1);
-		sizeInBytes: (allocationsUnconstructedCollection at: index - 2);
-		initializationTime: (allocationsUnconstructedCollection at: index - 3)
+	profiler := aProfiler
 ]
 
 { #category : 'accessing' }

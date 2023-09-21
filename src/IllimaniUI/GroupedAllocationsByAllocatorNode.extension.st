@@ -1,7 +1,7 @@
-Extension { #name : 'AllocatorWithGroupedAllocationsNode' }
+Extension { #name : 'GroupedAllocationsByAllocatorNode' }
 
 { #category : '*IllimaniUI' }
-AllocatorWithGroupedAllocationsNode >> inspectorExtension: aBuilder [
+GroupedAllocationsByAllocatorNode >> inspectorExtension: aBuilder [
 
 	<inspectorPresentationOrder: 0 title: 'Summary'>
 	| elements tablePresenter |
@@ -16,7 +16,7 @@ AllocatorWithGroupedAllocationsNode >> inspectorExtension: aBuilder [
 ]
 
 { #category : '*IllimaniUI' }
-AllocatorWithGroupedAllocationsNode >> inspectorExtensionGroupedAllocations: aBuilder [
+GroupedAllocationsByAllocatorNode >> inspectorExtensionGroupedAllocations: aBuilder [
 
 	<inspectorPresentationOrder: 1 title: 'Grouped Allocations'>
 	| tablePresenter |

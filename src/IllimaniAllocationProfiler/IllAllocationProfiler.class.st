@@ -149,7 +149,7 @@ IllAllocationProfiler >> samplingRate: anInteger [
 IllAllocationProfiler >> stats [
 
 	^ statisticsModel ifNil: [
-		statisticsModel := AllocationStatistics new rawAllocations: profilerHandler objectAllocations.
+		statisticsModel := AllocationsStatsModel new rawAllocations: profilerHandler objectAllocations.
 		statisticsModel ]
 ]
 

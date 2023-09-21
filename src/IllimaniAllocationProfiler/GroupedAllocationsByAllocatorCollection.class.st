@@ -2,7 +2,7 @@
 I am an object that acts like a collection. I am only used to calculate statistics and I am used because my api facilitates the calculations.
 "
 Class {
-	#name : 'AllocatorWithGroupedAllocationsCollection',
+	#name : 'GroupedAllocationsByAllocatorCollection',
 	#superclass : 'Object',
 	#instVars : [
 		'sortedByTotalAllocationsNodes',
@@ -14,45 +14,45 @@ Class {
 }
 
 { #category : 'converting' }
-AllocatorWithGroupedAllocationsCollection >> asOrderedCollection [
+GroupedAllocationsByAllocatorCollection >> asOrderedCollection [
 
 	^ self sortedByTotalAllocations
 ]
 
 { #category : 'accessing' }
-AllocatorWithGroupedAllocationsCollection >> groupedNodesDictionary [
+GroupedAllocationsByAllocatorCollection >> groupedNodesDictionary [
 
 	^ groupedNodesDictionary
 ]
 
 { #category : 'initialization' }
-AllocatorWithGroupedAllocationsCollection >> initialize [
+GroupedAllocationsByAllocatorCollection >> initialize [
 
 	super initialize.
 	groupedNodesDictionary := Dictionary new
 ]
 
 { #category : 'api' }
-AllocatorWithGroupedAllocationsCollection >> sort [
+GroupedAllocationsByAllocatorCollection >> sort [
 
 	sortedByTotalAllocationsNodes := groupedNodesDictionary sorted: [ :a :b |
 		a value totalAllocations > b value totalAllocations ]
 ]
 
 { #category : 'api' }
-AllocatorWithGroupedAllocationsCollection >> sortedByTotalAllocations [
+GroupedAllocationsByAllocatorCollection >> sortedByTotalAllocations [
 
 	sortedByTotalAllocationsNodes ifNil: [ self sort ].
 	^ sortedByTotalAllocationsNodes
 ]
 
 { #category : 'accessing' }
-AllocatorWithGroupedAllocationsCollection >> updateAllocationForAllocator: allocator allocation: anAllocationHolder [
+GroupedAllocationsByAllocatorCollection >> updateAllocationForAllocator: allocator allocation: anAllocationHolder [
 
 	groupedNodesDictionary at: allocator
 		ifPresent: [ :subDictionary | subDictionary increaseAllocationsFor: anAllocationHolder ]
 		ifAbsentPut: [
-			AllocatorWithGroupedAllocationsNode new
+			GroupedAllocationsByAllocatorNode new
 				allocator: allocator;
 				increaseAllocationsFor: anAllocationHolder;
 				yourself ]

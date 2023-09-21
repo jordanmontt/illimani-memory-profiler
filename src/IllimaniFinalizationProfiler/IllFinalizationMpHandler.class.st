@@ -6,9 +6,9 @@ Class {
 		'samplingCounter',
 		'samplingRate'
 	],
-	#category : 'IllimaniFinalizationProfiler-MethodProxies-Handler',
+	#category : 'IllimaniFinalizationProfiler-Profiler',
 	#package : 'IllimaniFinalizationProfiler',
-	#tag : 'MethodProxies-Handler'
+	#tag : 'Profiler'
 }
 
 { #category : 'evaluating' }

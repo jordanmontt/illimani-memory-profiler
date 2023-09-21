@@ -2,7 +2,7 @@
 I am a model for calculating the statistics for the allocation profiler. My methods `allocationsByClass` and `allocationsByMethod` return the grouped and sorted allocations. Only access them by the accessors as they are lazy calculated 
 "
 Class {
-	#name : 'AllocationStatistics',
+	#name : 'AllocationsStatsModel',
 	#superclass : 'Object',
 	#instVars : [
 		'rawAllocations',
@@ -16,7 +16,7 @@ Class {
 }
 
 { #category : 'accessing' }
-AllocationStatistics class >> allocations: someAllocations [
+AllocationsStatsModel class >> allocations: someAllocations [
 
 	^ self new
 		allocations: someAllocations;
@@ -24,60 +24,60 @@ AllocationStatistics class >> allocations: someAllocations [
 ]
 
 { #category : 'statistics' }
-AllocationStatistics >> allocationsByClass [
+AllocationsStatsModel >> allocationsByClass [
 
 	didIWalk ifFalse: [ self walkAllocations ].
 	^ allocationNodesByClass sortedByTotalAllocations
 ]
 
 { #category : 'statistics' }
-AllocationStatistics >> allocationsByMethod [
+AllocationsStatsModel >> allocationsByMethod [
 
 	didIWalk ifFalse: [ self walkAllocations ].
 	^ allocationNodesByMethod sortedByTotalAllocations
 ]
 
 { #category : 'initialization' }
-AllocationStatistics >> initialize [
+AllocationsStatsModel >> initialize [
 
 	super initialize.
-	allocationNodesByClass := AllocatorWithGroupedAllocationsCollection new.
-	allocationNodesByMethod := AllocatorWithGroupedAllocationsCollection new.
+	allocationNodesByClass := GroupedAllocationsByAllocatorCollection new.
+	allocationNodesByMethod := GroupedAllocationsByAllocatorCollection new.
 	didIWalk := false
 ]
 
 { #category : 'statistics' }
-AllocationStatistics >> numberOfClasses [
+AllocationsStatsModel >> numberOfClasses [
 
 	^ self allocationsByClass size
 ]
 
 { #category : 'statistics' }
-AllocationStatistics >> numberOfMethods [
+AllocationsStatsModel >> numberOfMethods [
 
 	^ self allocationsByMethod size
 ]
 
 { #category : 'accessing' }
-AllocationStatistics >> rawAllocations [
+AllocationsStatsModel >> rawAllocations [
 
 	^ rawAllocations
 ]
 
 { #category : 'accessing' }
-AllocationStatistics >> rawAllocations: anObject [
+AllocationsStatsModel >> rawAllocations: anObject [
 
 	rawAllocations := anObject
 ]
 
 { #category : 'statistics - time' }
-AllocationStatistics >> timeDifferenceBetweenFirstAndLastAllocation [
+AllocationsStatsModel >> timeDifferenceBetweenFirstAndLastAllocation [
 
 	^ rawAllocations last initializationTime - rawAllocations first initializationTime
 ]
 
 { #category : 'statistics' }
-AllocationStatistics >> topNAllocationsByClass: n [
+AllocationsStatsModel >> topNAllocationsByClass: n [
 
 	| allocationsOrderedByClass |
 	allocationsOrderedByClass := self allocationsByClass.
@@ -85,7 +85,7 @@ AllocationStatistics >> topNAllocationsByClass: n [
 ]
 
 { #category : 'statistics' }
-AllocationStatistics >> topNAllocationsByMethod: n [
+AllocationsStatsModel >> topNAllocationsByMethod: n [
 
 	| allocationsOrderedByMethod |
 	allocationsOrderedByMethod := self allocationsByMethod.
@@ -93,19 +93,19 @@ AllocationStatistics >> topNAllocationsByMethod: n [
 ]
 
 { #category : 'statistics' }
-AllocationStatistics >> totalAllocatedMemory [
+AllocationsStatsModel >> totalAllocatedMemory [
 
 	^ rawAllocations inject: 0 into: [ :sum : elem | sum + elem sizeInBytes ]
 ]
 
 { #category : 'statistics' }
-AllocationStatistics >> totalAllocatedObjects [
+AllocationsStatsModel >> totalAllocatedObjects [
 
 	^ rawAllocations size
 ]
 
 { #category : 'calculating' }
-AllocationStatistics >> walkAllocations [
+AllocationsStatsModel >> walkAllocations [
 
 	rawAllocations do: [ :allocationHolder |
 		allocationNodesByClass

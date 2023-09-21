@@ -2,7 +2,7 @@
 I am an object that acts like a node for a collection. I am a data structure that is used to calculate statistics. I know the allocator and I also have the allocated objects grouped by the class of the allocated object.
 "
 Class {
-	#name : 'AllocatorWithGroupedAllocationsNode',
+	#name : 'GroupedAllocationsByAllocatorNode',
 	#superclass : 'Object',
 	#instVars : [
 		'allocator',
@@ -14,37 +14,37 @@ Class {
 }
 
 { #category : 'api' }
-AllocatorWithGroupedAllocationsNode >> allocationsOf: aClass [
+GroupedAllocationsByAllocatorNode >> allocationsOf: aClass [
 
 	^ groupedAllocations at: aClass ifPresent: [ :e | e size ] ifAbsent: [ 0 ]
 ]
 
 { #category : 'accessing' }
-AllocatorWithGroupedAllocationsNode >> allocator [
+GroupedAllocationsByAllocatorNode >> allocator [
 
 	^ allocator
 ]
 
 { #category : 'accessing' }
-AllocatorWithGroupedAllocationsNode >> allocator: anObject [
+GroupedAllocationsByAllocatorNode >> allocator: anObject [
 
 	allocator := anObject
 ]
 
 { #category : 'api' }
-AllocatorWithGroupedAllocationsNode >> eachAllocationsTotal [
+GroupedAllocationsByAllocatorNode >> eachAllocationsTotal [
 
 	^ groupedAllocations values
 ]
 
 { #category : 'accessing' }
-AllocatorWithGroupedAllocationsNode >> groupedAllocations [
+GroupedAllocationsByAllocatorNode >> groupedAllocations [
 
 	^ groupedAllocations
 ]
 
 { #category : 'api' }
-AllocatorWithGroupedAllocationsNode >> increaseAllocationsFor: anAllocationHolder [
+GroupedAllocationsByAllocatorNode >> increaseAllocationsFor: anAllocationHolder [
 
 	groupedAllocations
 		at: anAllocationHolder allocatedObjectClass
@@ -56,46 +56,46 @@ AllocatorWithGroupedAllocationsNode >> increaseAllocationsFor: anAllocationHolde
 ]
 
 { #category : 'initialization' }
-AllocatorWithGroupedAllocationsNode >> initialize [
+GroupedAllocationsByAllocatorNode >> initialize [
 
 	super initialize.
 	groupedAllocations := Dictionary new
 ]
 
 { #category : 'printing' }
-AllocatorWithGroupedAllocationsNode >> printOn: aStream [
+GroupedAllocationsByAllocatorNode >> printOn: aStream [
 
 	aStream << allocator asString << ' allocated ' << self totalAllocations asString << ' instances that weight ' << self sizeInBytes humanReadableByteSizeString
 ]
 
 { #category : 'accessing' }
-AllocatorWithGroupedAllocationsNode >> sizeInBytes [
+GroupedAllocationsByAllocatorNode >> sizeInBytes [
 
 	^ groupedAllocations inject: 0
 		  into: [ :sum :node | sum + (node sum: [ :e | e sizeInBytes ]) ]
 ]
 
 { #category : 'api' }
-AllocatorWithGroupedAllocationsNode >> sortedGroupedAllocations [
+GroupedAllocationsByAllocatorNode >> sortedGroupedAllocations [
 
 	^ (groupedAllocations values sorted: [ :a :b | a size > b size ]) flattened
 ]
 
 { #category : 'api' }
-AllocatorWithGroupedAllocationsNode >> sortedGroupedAllocationsAsAssociation [
+GroupedAllocationsByAllocatorNode >> sortedGroupedAllocationsAsAssociation [
 
 	^ (groupedAllocations associations sorted: [ :a :b | a value size > b value size ])
 		  flattened
 ]
 
 { #category : 'api' }
-AllocatorWithGroupedAllocationsNode >> totalAllocations [
+GroupedAllocationsByAllocatorNode >> totalAllocations [
 
 	^ groupedAllocations values inject: 0 into: [ :sum :collection | sum + collection size ]
 ]
 
 { #category : 'api' }
-AllocatorWithGroupedAllocationsNode >> totalGroupedAllocations [
+GroupedAllocationsByAllocatorNode >> totalGroupedAllocations [
 
 	^ groupedAllocations values collect: #size
 ]

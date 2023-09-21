@@ -1,7 +1,7 @@
-Extension { #name : 'AllocatorWithGroupedAllocationsCollection' }
+Extension { #name : 'GroupedAllocationsByAllocatorCollection' }
 
 { #category : '*IllimaniUI' }
-AllocatorWithGroupedAllocationsCollection >> inspectorExtension [
+GroupedAllocationsByAllocatorCollection >> inspectorExtension [
 
 	<inspectorPresentationOrder: 0 title: 'Title'>
 	^ SpListPresenter new
