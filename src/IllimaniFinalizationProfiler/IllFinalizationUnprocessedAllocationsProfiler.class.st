@@ -67,8 +67,6 @@ IllFinalizationUnprocessedAllocationsProfiler >> objectAllocations [
 	unprocessedFinalizations doWithIndex: [ :data :index |
 		data = -2 ifTrue: [
 			| model |
-			self flag: 'This is a bug. To pu #ifAbsentPut: is a hack.
-			The object should exist by now. We are in the finalization and that happens after the initialization'.
 			model := allocationsDictionary at: (unprocessedAllocations at: index - 2).
 			self processFinalization: model atIndex: index ] ].
 
