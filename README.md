@@ -20,7 +20,7 @@ The release version `v0.8` works on Pharo 11 and Pharo 10. To use it on Pharo 12
 ```smalltalk
 EpMonitor disableDuring: [
 	Metacello new
-		baseline: 'IllimaniAllocationProfiler';
+		baseline: 'IllimaniProfiler';
 		repository: 'github://jordanmontt/illimani-memory-profiler:main';
 		load ].
 ```
