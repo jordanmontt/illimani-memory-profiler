@@ -6,7 +6,9 @@ Class {
 	#instVars : [
 		'ephemeronsCollection',
 		'profilerHandler',
-		'statsModel'
+		'statsModel',
+		'samplingRate',
+		'samplingCounter'
 	],
 	#category : 'IllimaniFinalizationProfiler-Profiler',
 	#package : 'IllimaniFinalizationProfiler',
@@ -27,6 +29,8 @@ IllFinalizationProfiler >> initialize [
 	profilerHandler := IllFinalizationMpHandler new
 		profiler: self;
 		yourself.
+	samplingCounter := 0.
+	samplingRate := 1.
 	self initializeMethodProxies: profilerHandler
 ]
 
@@ -47,6 +51,10 @@ IllFinalizationProfiler >> open [
 { #category : 'profiling' }
 IllFinalizationProfiler >> registerAllocation: anObject [
 
+	"Sampling"
+	"samplingCounter := samplingCounter + 1.
+	samplingCounter % samplingRate = 0 ifFalse: [ ^ newlyAllocatedObject ]."
+	
 	ephemeronsCollection add: (IllEphemeron newPinned 
 		key: anObject value: nil;
 		initializationTime: Time primUTCMicrosecondsClock;
@@ -57,8 +65,9 @@ IllFinalizationProfiler >> registerAllocation: anObject [
 
 { #category : 'api' }
 IllFinalizationProfiler >> samplingRate: anInteger [
+	"The anInteger needs to be an integer number between 1 and 100 that represents the sampling percentage"
 
-	profilerHandler samplingRate: anInteger
+	samplingRate := (100 / anInteger) asInteger
 ]
 
 { #category : 'accessing - statistics' }

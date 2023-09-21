@@ -21,7 +21,7 @@ IllFinalizationProfilerUnconstructedCollectionTest >> assertAllocationResult: al
 IllFinalizationProfilerUnconstructedCollectionTest >> setUp [
 
 	super setUp.
-	profiler := IllFinalizationProfilerUnconstructedCollection new
+	profiler := IllFinalizationUnprocessedAllocationsProfiler new
 ]
 
 { #category : 'tests' }
@@ -32,17 +32,17 @@ IllFinalizationProfilerUnconstructedCollectionTest >> testAfterExecutionWithRece
 	profiler registerAllocation: allocation.
 	profiler finalize: allocation.
 	
-	self assert: (profiler allocationsUnconstructedCollection at: 1) equals: allocation identityHash.
-	self assert: (profiler allocationsUnconstructedCollection at: 3) equals: allocation sizeInMemory.
-	self assert: (profiler allocationsUnconstructedCollection at: 4) equals: allocation class.
+	self assert: (profiler unprocessedAllocationsCollection at: 1) equals: allocation identityHash.
+	self assert: (profiler unprocessedAllocationsCollection at: 3) equals: allocation sizeInMemory.
+	self assert: (profiler unprocessedAllocationsCollection at: 4) equals: allocation class.
 	"allocation marker"
-	self assert: (profiler allocationsUnconstructedCollection at: 5) equals: -1.
+	self assert: (profiler unprocessedAllocationsCollection at: 5) equals: -1.
 	"finalization"
-	self assert: (profiler allocationsUnconstructedCollection at: 6) equals: allocation identityHash.
+	self assert: (profiler unprocessedAllocationsCollection at: 6) equals: allocation identityHash.
 	"finalization marker"
-	self assert: (profiler allocationsUnconstructedCollection at: 8) equals: -2.
+	self assert: (profiler unprocessedAllocationsCollection at: 8) equals: -2.
 	"finalization is after initialization"
-	self assert: (profiler allocationsUnconstructedCollection at: 7) > (profiler allocationsUnconstructedCollection at: 2).
+	self assert: (profiler unprocessedAllocationsCollection at: 7) > (profiler unprocessedAllocationsCollection at: 2).
 ]
 
 { #category : 'tests' }
@@ -54,19 +54,19 @@ IllFinalizationProfilerUnconstructedCollectionTest >> testArraysAllocation [
 	profiler registerAllocation: allocation.
 	profiler finalize: allocation.
 	
-	self assert: (profiler allocationsUnconstructedCollection at: 1) equals: allocation identityHash.
+	self assert: (profiler unprocessedAllocationsCollection at: 1) equals: allocation identityHash.
 	"allocation time"
-	self assert: (profiler allocationsUnconstructedCollection at: 2) > time.
-	self assert: (profiler allocationsUnconstructedCollection at: 3) equals: allocation sizeInMemory.
-	self assert: (profiler allocationsUnconstructedCollection at: 4) equals: allocation class.
+	self assert: (profiler unprocessedAllocationsCollection at: 2) > time.
+	self assert: (profiler unprocessedAllocationsCollection at: 3) equals: allocation sizeInMemory.
+	self assert: (profiler unprocessedAllocationsCollection at: 4) equals: allocation class.
 	"allocation marker"
-	self assert: (profiler allocationsUnconstructedCollection at: 5) equals: -1.
+	self assert: (profiler unprocessedAllocationsCollection at: 5) equals: -1.
 	
 	"finalization"
-	self assert: (profiler allocationsUnconstructedCollection at: 6) equals: allocation identityHash.
-	self assert: (profiler allocationsUnconstructedCollection at: 7) > time.
+	self assert: (profiler unprocessedAllocationsCollection at: 6) equals: allocation identityHash.
+	self assert: (profiler unprocessedAllocationsCollection at: 7) > time.
 	"marker"
-	self assert: (profiler allocationsUnconstructedCollection at: 8) equals: -2.
+	self assert: (profiler unprocessedAllocationsCollection at: 8) equals: -2.
 ]
 
 { #category : 'tests' }
