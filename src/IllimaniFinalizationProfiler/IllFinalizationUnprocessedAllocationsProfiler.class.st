@@ -62,10 +62,20 @@ IllFinalizationUnprocessedAllocationsProfiler >> objectAllocations [
 			model := allocationsDictionary at: (unprocessedAllocationsCollection at: index - 4) ifAbsentPut: [ BasicAllocationInfoModel new ].
 			self processInitialization: model atIndex: index ].
 		data = -2 ifTrue: [
-			model := allocationsDictionary at: (unprocessedAllocationsCollection at: index - 2).
+			self flag: 'This is a bug. To pu #ifAbsentPut: is a hack.
+			The object should exist by now. We are in the finalization and that happens after the initialization'.
+			model := allocationsDictionary at: (unprocessedAllocationsCollection at: index - 2) ifAbsentPut: [ BasicAllocationInfoModel new ].
 			self processFinalization: model atIndex: index ] ].
 
-	^ allocationsDictionary values sorted: [ :a :b | a initializationTime < b initializationTime ]
+	^ allocationsDictionary values "sorted: [ :a :b | a initializationTime < b initializationTime ]"
+]
+
+{ #category : 'testing' }
+IllFinalizationUnprocessedAllocationsProfiler >> open [
+
+	^ (IllFinalizationProfilerUI profiler: self announcer: IllAnnouncer new)
+		  open;
+		  yourself
 ]
 
 { #category : 'profiling' }
