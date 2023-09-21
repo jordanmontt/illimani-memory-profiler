@@ -1,6 +1,6 @@
 Extension { #name : 'IllAllocationProfiler' }
 
-{ #category : '*IllimaniAllocationProfiler-UI' }
+{ #category : '*IllimaniUI' }
 IllAllocationProfiler >> open [
 
 	^ (IllAllocationProfilerUI profiler: self announcer: illimaniAnnouncer)

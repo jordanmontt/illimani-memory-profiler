@@ -12,8 +12,8 @@ Class {
 		'presenterOneName',
 		'presenterTwoName'
 	],
-	#category : 'IllimaniAllocationProfiler-UI-Widgets',
-	#package : 'IllimaniAllocationProfiler-UI',
+	#category : 'IllimaniUI-Widgets',
+	#package : 'IllimaniUI',
 	#tag : 'Widgets'
 }
 

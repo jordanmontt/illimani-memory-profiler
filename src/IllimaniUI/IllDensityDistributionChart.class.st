@@ -11,8 +11,8 @@ Class {
 		'x',
 		'isYLog'
 	],
-	#category : 'IllimaniAllocationProfiler-UI-Roassal',
-	#package : 'IllimaniAllocationProfiler-UI',
+	#category : 'IllimaniUI-Roassal',
+	#package : 'IllimaniUI',
 	#tag : 'Roassal'
 }
 

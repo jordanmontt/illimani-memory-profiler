@@ -8,8 +8,8 @@ Class {
 		'topCalculationsNumber',
 		'model'
 	],
-	#category : 'IllimaniAllocationProfiler-UI-Roassal',
-	#package : 'IllimaniAllocationProfiler-UI',
+	#category : 'IllimaniUI-Roassal',
+	#package : 'IllimaniUI',
 	#tag : 'Roassal'
 }
 

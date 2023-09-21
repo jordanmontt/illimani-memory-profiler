@@ -10,8 +10,8 @@ Class {
 		'allocatedObjectsPerSecondPresenter',
 		'memoryTablePresenter'
 	],
-	#category : 'IllimaniAllocationProfiler-UI-Main Presenter',
-	#package : 'IllimaniAllocationProfiler-UI',
+	#category : 'IllimaniUI-Main Presenter',
+	#package : 'IllimaniUI',
 	#tag : 'Main Presenter'
 }
 

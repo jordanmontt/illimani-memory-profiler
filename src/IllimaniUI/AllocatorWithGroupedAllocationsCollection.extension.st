@@ -1,6 +1,6 @@
 Extension { #name : 'AllocatorWithGroupedAllocationsCollection' }
 
-{ #category : '*IllimaniAllocationProfiler-UI' }
+{ #category : '*IllimaniUI' }
 AllocatorWithGroupedAllocationsCollection >> inspectorExtension [
 
 	<inspectorPresentationOrder: 0 title: 'Title'>

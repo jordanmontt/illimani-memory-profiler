@@ -1,6 +1,6 @@
 Extension { #name : 'AllocationSiteInfoModel' }
 
-{ #category : '*IllimaniAllocationProfiler-UI' }
+{ #category : '*IllimaniUI' }
 AllocationSiteInfoModel >> inspectableAssociations [
 
 	^ super inspectableAssociations , {
@@ -9,7 +9,7 @@ AllocationSiteInfoModel >> inspectableAssociations [
 		  ('Context' -> context) }
 ]
 
-{ #category : '*IllimaniAllocationProfiler-UI' }
+{ #category : '*IllimaniUI' }
 AllocationSiteInfoModel >> inspectorExtensionContextFingerprint: aBuilder [
 
 	<inspectorPresentationOrder: 2 title: 'Context Fingerprint'>
