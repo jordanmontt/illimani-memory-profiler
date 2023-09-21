@@ -4,8 +4,8 @@ Class {
 	#instVars : [
 		'handler'
 	],
-	#category : 'IllimaniFinalizationProfiler-Tests',
-	#package : 'IllimaniFinalizationProfiler',
+	#category : 'IllimaniFinalizationProfiler-Tests-Tests',
+	#package : 'IllimaniFinalizationProfiler-Tests',
 	#tag : 'Tests'
 }
 

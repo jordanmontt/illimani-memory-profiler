@@ -1,5 +1,5 @@
 Class {
-	#name : 'IllFinalizationStatsModel',
+	#name : 'FinalizationStatsModel',
 	#superclass : 'Object',
 	#classTraits : 'IllTAllocatorWrapper classTrait',
 	#instVars : [
@@ -11,7 +11,7 @@ Class {
 }
 
 { #category : 'instance creation' }
-IllFinalizationStatsModel class >> on: objectAllocations [
+FinalizationStatsModel class >> on: objectAllocations [
 
 	^ self new
 		  objectAllocations: objectAllocations;
@@ -19,31 +19,31 @@ IllFinalizationStatsModel class >> on: objectAllocations [
 ]
 
 { #category : 'accessing' }
-IllFinalizationStatsModel >> objectAllocations [
+FinalizationStatsModel >> objectAllocations [
 
 	^ objectAllocations
 ]
 
 { #category : 'accessing' }
-IllFinalizationStatsModel >> objectAllocations: anObject [
+FinalizationStatsModel >> objectAllocations: anObject [
 
 	objectAllocations := anObject
 ]
 
 { #category : 'statistics - time' }
-IllFinalizationStatsModel >> timeDifferenceBetweenFirstAndLastAllocation [
+FinalizationStatsModel >> timeDifferenceBetweenFirstAndLastAllocation [
 
 	^ self objectAllocations last initializationTime - self objectAllocations first initializationTime
 ]
 
 { #category : 'accessing' }
-IllFinalizationStatsModel >> totalAllocatedMemory [
+FinalizationStatsModel >> totalAllocatedMemory [
 
 	^ self objectAllocations inject: 0 into: [ :sum : elem | sum + elem sizeInBytes ]
 ]
 
 { #category : 'accessing' }
-IllFinalizationStatsModel >> totalAllocatedObjects [
+FinalizationStatsModel >> totalAllocatedObjects [
 
 	^ self objectAllocations size
 ]

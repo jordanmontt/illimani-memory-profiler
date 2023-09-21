@@ -42,7 +42,7 @@ IllFinalizationProfilerUnconstructedCollection >> startProfiling [
 { #category : 'accessing - statistics' }
 IllFinalizationProfilerUnconstructedCollection >> stats [
 
-	^ statsModel ifNil: [ statsModel := IllFinalizationStatsModel on: self objectAllocations ]
+	^ statsModel ifNil: [ statsModel := FinalizationStatsModel on: self objectAllocations ]
 ]
 
 { #category : 'profiling' }

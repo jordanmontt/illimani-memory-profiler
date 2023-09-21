@@ -71,7 +71,7 @@ IllFinalizationProfiler >> startProfiling [
 { #category : 'accessing - statistics' }
 IllFinalizationProfiler >> stats [
 
-	^ statsModel ifNil: [ statsModel := IllFinalizationStatsModel on: ephemeronsCollection ]
+	^ statsModel ifNil: [ statsModel := FinalizationStatsModel on: ephemeronsCollection ]
 ]
 
 { #category : 'profiling' }

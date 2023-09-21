@@ -16,9 +16,9 @@ Class {
 		'objectClassesToIgnore',
 		'samplingRate'
 	],
-	#category : 'IllimaniAllocationProfiler-Core',
+	#category : 'IllimaniAllocationProfiler-Profiler',
 	#package : 'IllimaniAllocationProfiler',
-	#tag : 'Core'
+	#tag : 'Profiler'
 }
 
 { #category : 'evaluating' }
