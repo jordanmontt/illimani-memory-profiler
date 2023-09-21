@@ -86,16 +86,16 @@ IllFinalizationUnprocessedAllocationsProfiler >> open [
 { #category : 'profiling' }
 IllFinalizationUnprocessedAllocationsProfiler >> processFinalization: model atIndex: index [
 
-	model finalizationTime: (unprocessedAllocations at: index - 1)
+	model finalizationTime: (unprocessedFinalizations at: index - 1)
 ]
 
 { #category : 'profiling' }
 IllFinalizationUnprocessedAllocationsProfiler >> processInitialization: model atIndex: index [
 
 	model
-		allocatedObjectClass: (unprocessedFinalizations at: index - 1);
-		sizeInBytes: (unprocessedFinalizations at: index - 2);
-		initializationTime: (unprocessedFinalizations at: index - 3)
+		allocatedObjectClass: (unprocessedAllocations at: index - 1);
+		sizeInBytes: (unprocessedAllocations at: index - 2);
+		initializationTime: (unprocessedAllocations at: index - 3)
 ]
 
 { #category : 'profiling' }
