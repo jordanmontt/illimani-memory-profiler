@@ -20,7 +20,7 @@ The release version `v0.8` works on Pharo 11 and Pharo 10. To use it on Pharo 12
 ```smalltalk
 EpMonitor disableDuring: [
 	Metacello new
-		baseline: 'IllimaniAllocationProfiler';
+		baseline: 'IllAllocationProfiler';
 		repository: 'github://jordanmontt/illimani-memory-profiler:main';
 		load ].
 ```
@@ -30,7 +30,7 @@ EpMonitor disableDuring: [
 Start Playing:
 
 ```st
-profiler := IllimaniAllocationProfiler new.
+profiler := IllAllocationProfiler new.
 profiler
 	captureAllObjects;
 	profileFor: 5 seconds.
@@ -41,7 +41,7 @@ profiler open
 Example 1:
 
 ```st
-IllimaniAllocationProfiler new
+IllAllocationProfiler new
 	objectsToCapture: { ByteString . Array . String . OrderedCollection . ByteArray };
 	copyExecutionStack;
 	profileOn: [ 10000 timesRepeat: [ SpPresenter new ] ];
@@ -54,7 +54,7 @@ Example 2, capturing all but Morphic
 morphicPackages := RPackageOrganizer default packages select: [ :package | package name includesSubstring: 'morphic' caseSensitive: false  ].
 morphicClasses := morphicPackages flatCollect: #classes as: Set.
 
-profiler := IllimaniAllocationProfiler new
+profiler := IllAllocationProfiler new
 	captureAllObjects;
 	objectsToIgnore: morphicClasses;
 	profileFor: 5 seconds;
