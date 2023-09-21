@@ -61,13 +61,6 @@ IllFinalizationProfiler >> samplingRate: anInteger [
 	profilerHandler samplingRate: anInteger
 ]
 
-{ #category : 'profiling' }
-IllFinalizationProfiler >> startProfiling [
-
-	self initializeProfilingBasicStats.
-	self installMethodProxies
-]
-
 { #category : 'accessing - statistics' }
 IllFinalizationProfiler >> stats [
 

@@ -16,7 +16,7 @@ Class {
 IllProfilerMpHandlerTest >> setUp [
 
 	super setUp.
-	handler := IllProfilerMpHandler new
+	handler := IllAllocationProfilerMpHandler new
 ]
 
 { #category : 'tests' }

@@ -115,6 +115,13 @@ IllTAllocatorWrapper >> profileOn: aBlock [
 	nil ] ensure: [ self stopProfiling ]
 ]
 
+{ #category : 'profiling' }
+IllTAllocatorWrapper >> startProfiling [
+
+	self installMethodProxies.
+	self initializeProfilingBasicStats
+]
+
 { #category : 'accessing - statistics' }
 IllTAllocatorWrapper >> totalGCTime [
 

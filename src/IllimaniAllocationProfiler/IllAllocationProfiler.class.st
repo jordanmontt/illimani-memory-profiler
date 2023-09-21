@@ -88,12 +88,6 @@ IllAllocationProfiler >> captureAllObjects [
 	profilerHandler captureAllObjects
 ]
 
-{ #category : 'evaluating' }
-IllAllocationProfiler >> cleanProfilingData [
-
-	profilerHandler cleanObjectAllocations
-]
-
 { #category : 'api' }
 IllAllocationProfiler >> copyExecutionStack [
 
@@ -110,7 +104,7 @@ IllAllocationProfiler >> copyObjectIdentityHash [
 IllAllocationProfiler >> initialize [
 
 	super initialize.
-	profilerHandler := IllProfilerMpHandler new.
+	profilerHandler := IllAllocationProfilerMpHandler new.
 	illimaniAnnouncer := IllAnnouncer new.
 	self initializeMethodProxies: profilerHandler.
 ]
@@ -151,19 +145,12 @@ IllAllocationProfiler >> samplingRate: anInteger [
 	profilerHandler samplingRate: anInteger
 ]
 
-{ #category : 'evaluating' }
-IllAllocationProfiler >> startProfiling [
-
-	self cleanProfilingData.
-	self installMethodProxies.
-
-	self initializeProfilingBasicStats
-]
-
 { #category : 'accessing - statistics' }
 IllAllocationProfiler >> stats [
 
-	^ statisticsModel
+	^ statisticsModel ifNil: [
+		statisticsModel := AllocationStatistics new rawAllocations: profilerHandler objectAllocations.
+		statisticsModel ]
 ]
 
 { #category : 'evaluating' }
@@ -171,8 +158,5 @@ IllAllocationProfiler >> stopProfiling [
 
 	self uninstallMethodProxies.
 	self updateStatsWhenFinishingProfiling.
-	statisticsModel := AllocationStatistics new
-		rawAllocations: profilerHandler objectAllocations;
-		yourself.
 	self announceProfilerStopedProfiling
 ]

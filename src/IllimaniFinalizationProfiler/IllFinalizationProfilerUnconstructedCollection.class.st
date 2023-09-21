@@ -32,13 +32,6 @@ IllFinalizationProfilerUnconstructedCollection >> objectAllocations [
 	^ profilerHandler objectAllocations
 ]
 
-{ #category : 'profiling' }
-IllFinalizationProfilerUnconstructedCollection >> startProfiling [
-
-	self initializeProfilingBasicStats.
-	self installMethodProxies
-]
-
 { #category : 'accessing - statistics' }
 IllFinalizationProfilerUnconstructedCollection >> stats [
 

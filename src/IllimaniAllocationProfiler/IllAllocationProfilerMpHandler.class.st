@@ -4,7 +4,7 @@ I am a class that defines the logic to only registed an specific type of object.
 Please define my `classesToRegister` variable with the classes you want to capture or if you want to capture all use the message `captureAllObjects`
 "
 Class {
-	#name : 'IllProfilerMpHandler',
+	#name : 'IllAllocationProfilerMpHandler',
 	#superclass : 'MpHandler',
 	#instVars : [
 		'objectAllocations',
@@ -22,7 +22,7 @@ Class {
 }
 
 { #category : 'evaluating' }
-IllProfilerMpHandler >> afterExecutionWithReceiver: receiver arguments: arguments returnValue: newlyAllocatedObject [
+IllAllocationProfilerMpHandler >> afterExecutionWithReceiver: receiver arguments: arguments returnValue: newlyAllocatedObject [
 
 	"Sampling"
 	samplingCounter := samplingCounter + 1.
@@ -34,21 +34,14 @@ IllProfilerMpHandler >> afterExecutionWithReceiver: receiver arguments: argument
 ]
 
 { #category : 'api' }
-IllProfilerMpHandler >> captureAllObjects [
+IllAllocationProfilerMpHandler >> captureAllObjects [
 	"When this turned to true I will capture all the allocations of all the objects"
 
 	captureAllObjects := true
 ]
 
 { #category : 'api' }
-IllProfilerMpHandler >> cleanObjectAllocations [
-
-	objectAllocations removeAll.
-	samplingCounter := 0
-]
-
-{ #category : 'api' }
-IllProfilerMpHandler >> copyExecutionStack [
+IllAllocationProfilerMpHandler >> copyExecutionStack [
 	"When this is set to true, for each object allocationn the full execution stack from which
 	the method was created will be copied and store. This information will be available for
 	making analysis. Keep in mind that when there is a lot of allocations going the size of
@@ -58,11 +51,11 @@ IllProfilerMpHandler >> copyExecutionStack [
 ]
 
 { #category : 'initialization' }
-IllProfilerMpHandler >> defaultClassesToAvoidInTheContextSearch [
+IllAllocationProfilerMpHandler >> defaultClassesToAvoidInTheContextSearch [
 
 	^ {
 		  Process.
-		  IllProfilerMpHandler.
+		  IllAllocationProfilerMpHandler.
 		  MpMethodProxy.
 		  "BlockClosure."
 		  FullBlockClosure
@@ -70,21 +63,21 @@ IllProfilerMpHandler >> defaultClassesToAvoidInTheContextSearch [
 ]
 
 { #category : 'api' }
-IllProfilerMpHandler >> doNotCaptureAllObjects [
+IllAllocationProfilerMpHandler >> doNotCaptureAllObjects [
 	"See the comment of my opposite method"
 
 	captureAllObjects := false
 ]
 
 { #category : 'api' }
-IllProfilerMpHandler >> doNotCopyExecutionStack [
+IllAllocationProfilerMpHandler >> doNotCopyExecutionStack [
 	"See the comment of my opposite method"
 
 	copyExecutionStack := false
 ]
 
 { #category : 'evaluating' }
-IllProfilerMpHandler >> filterContext: aContext ignoringClass: aClass [
+IllAllocationProfilerMpHandler >> filterContext: aContext ignoringClass: aClass [
 
 	| sender |
 	sender := aContext sender.
@@ -97,7 +90,7 @@ IllProfilerMpHandler >> filterContext: aContext ignoringClass: aClass [
 ]
 
 { #category : 'evaluating' }
-IllProfilerMpHandler >> handleObjectAllocation: newlyAllocatedObject [
+IllAllocationProfilerMpHandler >> handleObjectAllocation: newlyAllocatedObject [
 
 	| filteredContext  allocationInformationHolder |
 
@@ -112,13 +105,13 @@ IllProfilerMpHandler >> handleObjectAllocation: newlyAllocatedObject [
 		allocatedObjectClass: newlyAllocatedObject class;
 		contextFingerprint: filteredContext;
 		sizeInBytes: newlyAllocatedObject sizeInMemory;
-		initializationTime: Time microsecondClockValue.
+		initializationTime: Time primUTCMicrosecondsClock.
 
 	objectAllocations add: allocationInformationHolder
 ]
 
 { #category : 'initialization' }
-IllProfilerMpHandler >> initialize [
+IllAllocationProfilerMpHandler >> initialize [
 
 	super initialize.
 
@@ -137,51 +130,44 @@ IllProfilerMpHandler >> initialize [
 	  , (self defaultClassesToAvoidInTheContextSearch collect: [ :aClass | aClass class ])
 ]
 
-{ #category : 'initialization' }
-IllProfilerMpHandler >> initializeClassesToAvoidInContextSearch [
-
-	classesToAvoidInTheContextSearch := self defaultClassesToAvoidInTheContextSearch ,
-		(self defaultClassesToAvoidInTheContextSearch collect: [ :aClass | aClass class ])
-]
-
 { #category : 'accessing' }
-IllProfilerMpHandler >> objectAllocations [
+IllAllocationProfilerMpHandler >> objectAllocations [
 
 	^ objectAllocations
 ]
 
 { #category : 'accessing' }
-IllProfilerMpHandler >> objectsToCapture [
+IllAllocationProfilerMpHandler >> objectsToCapture [
 
 	^ objectClassesToCapture
 ]
 
 { #category : 'accessing' }
-IllProfilerMpHandler >> objectsToCapture: aCollectionOfClasses [
+IllAllocationProfilerMpHandler >> objectsToCapture: aCollectionOfClasses [
 
 	objectClassesToCapture := aCollectionOfClasses
 ]
 
 { #category : 'accessing' }
-IllProfilerMpHandler >> objectsToIgnore [
+IllAllocationProfilerMpHandler >> objectsToIgnore [
 
 	^ objectClassesToIgnore
 ]
 
 { #category : 'accessing' }
-IllProfilerMpHandler >> objectsToIgnore: aCollectionOfClasses [
+IllAllocationProfilerMpHandler >> objectsToIgnore: aCollectionOfClasses [
 
 	objectClassesToIgnore := aCollectionOfClasses
 ]
 
 { #category : 'accessing' }
-IllProfilerMpHandler >> samplingCounter [
+IllAllocationProfilerMpHandler >> samplingCounter [
 
 	^ samplingCounter
 ]
 
 { #category : 'accessing' }
-IllProfilerMpHandler >> samplingCounter: anInteger [
+IllAllocationProfilerMpHandler >> samplingCounter: anInteger [
 	"This method is only for testing! As a user, you don't normally will need to use this
 	accessor"
 
@@ -189,19 +175,19 @@ IllProfilerMpHandler >> samplingCounter: anInteger [
 ]
 
 { #category : 'accessing' }
-IllProfilerMpHandler >> samplingRate [
+IllAllocationProfilerMpHandler >> samplingRate [
 	^ samplingRate
 ]
 
 { #category : 'api' }
-IllProfilerMpHandler >> samplingRate: anInteger [
+IllAllocationProfilerMpHandler >> samplingRate: anInteger [
 	"The anInteger needs to be an integer number between 1 and 100.  "
 
 	samplingRate := (100 / anInteger) asInteger
 ]
 
 { #category : 'testing' }
-IllProfilerMpHandler >> shouldICaptureTheObject: returnValue [
+IllAllocationProfilerMpHandler >> shouldICaptureTheObject: returnValue [
 
 	"Objects to ignore have the priority"
 	(objectClassesToIgnore includes: returnValue class) ifTrue: [ ^ false ].
