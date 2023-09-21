@@ -4,8 +4,7 @@ Class {
 	#instVars : [
 		'profiler',
 		'samplingCounter',
-		'samplingRate',
-		'objectAllocations'
+		'samplingRate'
 	],
 	#category : 'IllimaniFinalizationProfiler-MethodProxies-Handler',
 	#package : 'IllimaniFinalizationProfiler',
@@ -14,24 +13,12 @@ Class {
 
 { #category : 'evaluating' }
 IllFinalizationMpHandler >> afterExecutionWithReceiver: receiver arguments: arguments returnValue: newlyAllocatedObject [
-	
-	| objectFinalizationModel |
-	
+
 	"Sampling"
-	samplingCounter := samplingCounter + 1.
-	samplingCounter % samplingRate = 0 ifFalse: [ ^ newlyAllocatedObject ].
+	"samplingCounter := samplingCounter + 1.
+	samplingCounter % samplingRate = 0 ifFalse: [ ^ newlyAllocatedObject ]."
 	
-	"Handle object allocation"
-	objectFinalizationModel := BasicAllocationInfoModel new
-		initializationTime: Time microsecondClockValue;
-		sizeInBytes: newlyAllocatedObject sizeInMemory;
-		allocatedObjectClass: newlyAllocatedObject class;
-		yourself.
-
-	objectAllocations add: objectFinalizationModel.
-
-	"Finalization"
-	profiler addFinalizationFor: newlyAllocatedObject finalizer: objectFinalizationModel.
+	profiler registerAllocation: newlyAllocatedObject.
 	^ newlyAllocatedObject
 ]
 
@@ -39,22 +26,8 @@ IllFinalizationMpHandler >> afterExecutionWithReceiver: receiver arguments: argu
 IllFinalizationMpHandler >> initialize [
 
 	super initialize.
-
-	objectAllocations := OrderedCollection new.
 	samplingCounter := 0.
 	samplingRate := 1
-]
-
-{ #category : 'accessing' }
-IllFinalizationMpHandler >> objectAllocations [
-
-	^ objectAllocations
-]
-
-{ #category : 'accessing' }
-IllFinalizationMpHandler >> objectAllocations: anObject [
-
-	objectAllocations := anObject
 ]
 
 { #category : 'accessing' }
@@ -64,21 +37,9 @@ IllFinalizationMpHandler >> profiler [
 ]
 
 { #category : 'accessing' }
-IllFinalizationMpHandler >> profiler: anIllimaniFinalizationProfiler [
+IllFinalizationMpHandler >> profiler: anObject [
 
-	profiler := anIllimaniFinalizationProfiler
-]
-
-{ #category : 'accessing' }
-IllFinalizationMpHandler >> samplingCounter [
-
-	^ samplingCounter
-]
-
-{ #category : 'accessing' }
-IllFinalizationMpHandler >> samplingCounter: anObject [
-
-	samplingCounter := anObject
+	profiler := anObject
 ]
 
 { #category : 'accessing' }

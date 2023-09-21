@@ -4,9 +4,9 @@ Class {
 	#instVars : [
 		'finalizationProfiler'
 	],
-	#category : 'IllimaniAllocationProfiler-Tests-Profiler',
-	#package : 'IllimaniAllocationProfiler-Tests',
-	#tag : 'Profiler'
+	#category : 'IllimaniFinalizationProfiler-Tests',
+	#package : 'IllimaniFinalizationProfiler',
+	#tag : 'Tests'
 }
 
 { #category : 'running' }

@@ -24,7 +24,7 @@ IllFinalizationProfiler >> initialize [
 
 	super initialize.
 	ephemeronsCollection := OrderedCollection new: 10000000.
-	profilerHandler := IllFinalizationMpHandlerFast new
+	profilerHandler := IllFinalizationMpHandler new
 		profiler: self;
 		yourself.
 	self initializeMethodProxies: profilerHandler

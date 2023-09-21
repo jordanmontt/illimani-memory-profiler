@@ -17,8 +17,8 @@ Class {
 IllFinalizationMpHandlerUnconstructedCollection >> afterExecutionWithReceiver: receiver arguments: arguments returnValue: newlyAllocatedObject [
 
 	"Sampling"
-	samplingCounter := samplingCounter + 1.
-	samplingCounter % samplingRate = 0 ifFalse: [ ^ newlyAllocatedObject ].
+	"samplingCounter := samplingCounter + 1.
+	samplingCounter % samplingRate = 0 ifFalse: [ ^ newlyAllocatedObject ]."
 
 	allocationsUnconstructedCollection add: newlyAllocatedObject identityHash.
 	allocationsUnconstructedCollection add: Time primUTCMicrosecondsClock.
