@@ -10,9 +10,9 @@ Class {
 		'allocationNodesByMethod',
 		'didIWalk'
 	],
-	#category : 'IllimaniAllocationProfiler-Statistics-Model',
-	#package : 'IllimaniAllocationProfiler',
-	#tag : 'Statistics-Model'
+	#category : 'IllimaniProfiler-Model-Statistics',
+	#package : 'IllimaniProfiler',
+	#tag : 'Model-Statistics'
 }
 
 { #category : 'accessing' }

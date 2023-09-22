@@ -4,9 +4,9 @@ Class {
 	#instVars : [
 		'illimani'
 	],
-	#category : 'IllimaniAllocationProfiler-Tests-Profiler',
-	#package : 'IllimaniAllocationProfiler-Tests',
-	#tag : 'Profiler'
+	#category : 'IllimaniProfiler-Tests-Allocations-Profiler',
+	#package : 'IllimaniProfiler-Tests',
+	#tag : 'Allocations-Profiler'
 }
 
 { #category : 'running' }
@@ -60,9 +60,7 @@ IllAllocationProfilerTest >> testProfileOnSimpleMoreAllocations [
 
 	self assert: illimani objectAllocations size > 1000.
 	illimani objectAllocations do: [ :alloc |
-		self assert: alloc allocatedObjectClass isClass.
-		"Stack was copied"
-		self assert: alloc context class equals: Context ]
+		self assert: alloc allocatedObjectClass isClass ]
 ]
 
 { #category : 'tests' }

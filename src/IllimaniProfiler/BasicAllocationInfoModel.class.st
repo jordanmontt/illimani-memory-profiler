@@ -7,9 +7,9 @@ Class {
 		'finalizationTime',
 		'initializationTime'
 	],
-	#category : 'IllimaniAllocationProfiler-Model',
-	#package : 'IllimaniAllocationProfiler',
-	#tag : 'Model'
+	#category : 'IllimaniProfiler-Model-Allocation',
+	#package : 'IllimaniProfiler',
+	#tag : 'Model-Allocation'
 }
 
 { #category : 'accessing' }

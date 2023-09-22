@@ -1,8 +1,9 @@
 Class {
 	#name : 'MpNullMethodProxy',
 	#superclass : 'Object',
-	#category : 'IllimaniKernel',
-	#package : 'IllimaniKernel'
+	#category : 'IllimaniProfiler-Instrumentation',
+	#package : 'IllimaniProfiler',
+	#tag : 'Instrumentation'
 }
 
 { #category : 'instance creation' }

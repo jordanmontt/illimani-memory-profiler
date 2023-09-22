@@ -1,6 +1,6 @@
 Extension { #name : 'FinalizationRegistry' }
 
-{ #category : '*IllimaniFinalizationProfiler' }
+{ #category : '*IllimaniProfiler' }
 FinalizationRegistry >> finalizeAllEphemerons [
 
 	| node |

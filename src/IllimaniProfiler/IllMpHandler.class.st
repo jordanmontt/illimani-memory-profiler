@@ -4,8 +4,9 @@ Class {
 	#instVars : [
 		'profiler'
 	],
-	#category : 'IllimaniKernel',
-	#package : 'IllimaniKernel'
+	#category : 'IllimaniProfiler-Instrumentation',
+	#package : 'IllimaniProfiler',
+	#tag : 'Instrumentation'
 }
 
 { #category : 'evaluating' }

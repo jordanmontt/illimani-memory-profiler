@@ -8,9 +8,9 @@ Class {
 		'initializationTime',
 		'allocatedObjectClass'
 	],
-	#category : 'IllimaniFinalizationProfiler-Ephemerons',
-	#package : 'IllimaniFinalizationProfiler',
-	#tag : 'Ephemerons'
+	#category : 'IllimaniProfiler-Finalization-Ephemerons',
+	#package : 'IllimaniProfiler',
+	#tag : 'Finalization-Ephemerons'
 }
 
 { #category : 'accessing' }

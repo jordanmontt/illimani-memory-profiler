@@ -4,9 +4,9 @@ Class {
 	#instVars : [
 		'objectAllocations'
 	],
-	#category : 'IllimaniFinalizationProfiler-Profiler',
-	#package : 'IllimaniFinalizationProfiler',
-	#tag : 'Profiler'
+	#category : 'IllimaniProfiler-Model-Statistics',
+	#package : 'IllimaniProfiler',
+	#tag : 'Model-Statistics'
 }
 
 { #category : 'instance creation' }

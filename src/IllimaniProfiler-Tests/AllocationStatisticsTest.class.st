@@ -8,9 +8,9 @@ Class {
 		'fixture',
 		'statsModel'
 	],
-	#category : 'IllimaniAllocationProfiler-Tests-Statistics-Model',
-	#package : 'IllimaniAllocationProfiler-Tests',
-	#tag : 'Statistics-Model'
+	#category : 'IllimaniProfiler-Tests-Model-Statistics',
+	#package : 'IllimaniProfiler-Tests',
+	#tag : 'Model-Statistics'
 }
 
 { #category : 'running' }

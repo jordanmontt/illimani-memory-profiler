@@ -1,6 +1,6 @@
 Extension { #name : 'Duration' }
 
-{ #category : '*IllimaniKernel' }
+{ #category : '*IllimaniProfiler' }
 Duration >> asDeciSeconds [
 
 

@@ -5,9 +5,9 @@ Class {
 		'ephemeronsCollection',
 		'statsModel'
 	],
-	#category : 'IllimaniFinalizationProfiler-Profiler',
-	#package : 'IllimaniFinalizationProfiler',
-	#tag : 'Profiler'
+	#category : 'IllimaniProfiler-Finalization-Profiler',
+	#package : 'IllimaniProfiler',
+	#tag : 'Finalization-Profiler'
 }
 
 { #category : 'profiling' }
@@ -34,7 +34,7 @@ IllFinalizationProfiler >> internalRegisterAllocation: anObject [
 		yourself)
 ]
 
-{ #category : 'api' }
+{ #category : 'accessing' }
 IllFinalizationProfiler >> objectAllocations [
 
 	^ ephemeronsCollection

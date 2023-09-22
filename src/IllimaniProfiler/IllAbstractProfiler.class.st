@@ -15,8 +15,9 @@ Class {
 		'totalGCTime',
 		'endOfProfilingTime'
 	],
-	#category : 'IllimaniKernel',
-	#package : 'IllimaniKernel'
+	#category : 'IllimaniProfiler-Instrumentation',
+	#package : 'IllimaniProfiler',
+	#tag : 'Instrumentation'
 }
 
 { #category : 'accessing - statistics' }

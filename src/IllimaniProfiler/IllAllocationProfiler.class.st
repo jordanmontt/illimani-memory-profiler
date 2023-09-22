@@ -71,9 +71,9 @@ Class {
 		'classesToAvoidInTheContextSearch',
 		'objectAllocations'
 	],
-	#category : 'IllimaniAllocationProfiler-Profiler',
-	#package : 'IllimaniAllocationProfiler',
-	#tag : 'Profiler'
+	#category : 'IllimaniProfiler-Allocation-Profiler',
+	#package : 'IllimaniProfiler',
+	#tag : 'Allocation-Profiler'
 }
 
 { #category : 'announcements' }

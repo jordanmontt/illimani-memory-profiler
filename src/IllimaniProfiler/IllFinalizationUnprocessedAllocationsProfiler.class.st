@@ -7,9 +7,9 @@ Class {
 		'unprocessedFinalizations',
 		'unprocessedAllocations'
 	],
-	#category : 'IllimaniFinalizationProfiler-Profiler',
-	#package : 'IllimaniFinalizationProfiler',
-	#tag : 'Profiler'
+	#category : 'IllimaniProfiler-Finalization-Profiler',
+	#package : 'IllimaniProfiler',
+	#tag : 'Finalization-Profiler'
 }
 
 { #category : 'profiling' }
@@ -101,6 +101,12 @@ IllFinalizationUnprocessedAllocationsProfiler >> stopProfiling [
 
 	super stopProfiling.
 	self forceFinalizationOfObjects
+]
+
+{ #category : 'as yet unclassified' }
+IllFinalizationUnprocessedAllocationsProfiler >> uiClass [
+
+	^ IllFinalizationProfilerUI
 ]
 
 { #category : 'accessing' }

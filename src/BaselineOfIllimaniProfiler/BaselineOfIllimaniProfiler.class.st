@@ -14,18 +14,12 @@ BaselineOfIllimaniProfiler >> baseline: spec [
 	<baseline>
 	spec for: #common do: [
 		"Packages"
-		spec package: 'IllimaniKernel'
+		spec package: 'IllimaniProfiler'
 			with: [ spec requires: #( 'MethodProxies' ) ].
-		spec package: 'IllimaniAllocationProfiler'
-			with: [ spec requires: #( 'IllimaniKernel' 'MethodProxies' ) ].
-		spec package: 'IllimaniFinalizationProfiler'
-			with: [ spec requires: #( 'IllimaniKernel' 'IllimaniAllocationProfiler' 'MethodProxies' ) ].
 		spec package: 'IllimaniUI'
-			with: [ spec requires: #( 'IllimaniAllocationProfiler' 'IllimaniFinalizationProfiler' ) ].
-		spec package: 'IllimaniAllocationProfiler-Tests'
-			with: [ spec requires: #( 'IllimaniAllocationProfiler' ) ].
-		spec package: 'IllimaniFinalizationProfiler-Tests'
-			with: [ spec requires: #( 'IllimaniFinalizationProfiler' ) ].
+			with: [ spec requires: #( 'IllimaniProfiler' ) ].
+		spec package: 'IllimaniProfiler-Tests'
+			with: [ spec requires: #( 'IllimaniProfiler' ) ].
 
 		"External dependencies"
 		spec baseline: 'MethodProxies'
@@ -45,7 +39,7 @@ BaselineOfIllimaniProfiler >> baseline: spec [
 		"Groups"
 		spec group: 'default' with: #( 'core' 'tests' ).
 		spec group: 'core'
-			with: #( 'IllimaniAllocationProfiler' 'IllimaniUI' 'IllimaniFinalizationProfiler' 'IllimaniKernel' ).
+			with: #( 'IllimaniProfiler' 'IllimaniUI' ).
 		spec group: 'tests'
-			with: #( 'IllimaniAllocationProfiler-Tests' 'IllimaniFinalizationProfiler-Tests' ) ]
+			with: #( 'IllimaniProfiler-Tests' ) ]
 ]
