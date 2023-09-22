@@ -63,13 +63,13 @@ IllimaniAllocationProfiler new
 "
 Class {
 	#name : 'IllAllocationProfiler',
-	#superclass : 'Object',
-	#traits : 'IllTAllocatorWrapper',
-	#classTraits : 'IllTAllocatorWrapper classTrait',
+	#superclass : 'IllAbstractProfiler',
 	#instVars : [
-		'profilerHandler',
 		'statisticsModel',
-		'illimaniAnnouncer'
+		'illimaniAnnouncer',
+		'copyExecutionStack',
+		'classesToAvoidInTheContextSearch',
+		'objectAllocations'
 	],
 	#category : 'IllimaniAllocationProfiler-Profiler',
 	#package : 'IllimaniAllocationProfiler',
@@ -83,80 +83,105 @@ IllAllocationProfiler >> announceProfilerStopedProfiling [
 ]
 
 { #category : 'api' }
-IllAllocationProfiler >> captureAllObjects [
-
-	profilerHandler captureAllObjects
-]
-
-{ #category : 'api' }
 IllAllocationProfiler >> copyExecutionStack [
+	"When this is set to true, for each object allocationn the full execution stack from which
+	the method was created will be copied and store. This information will be available for
+	making analysis. Keep in mind that when there is a lot of allocations going the size of
+	the image can grow quickly and drastically."
 
-	profilerHandler copyExecutionStack
+	copyExecutionStack := true
+]
+
+{ #category : 'initialization' }
+IllAllocationProfiler >> defaultClassesToAvoidInTheContextSearch [
+
+	^ {
+		  Process.
+		  IllAllocationProfiler.
+		  IllAbstractProfiler.
+		  IllMpHandler.
+		  MpMethodProxy.
+		  "BlockClosure."
+		  FullBlockClosure
+		  "CompiledBlock" }
 ]
 
 { #category : 'api' }
-IllAllocationProfiler >> copyObjectIdentityHash [
+IllAllocationProfiler >> doNotCopyExecutionStack [
+	"See the comment of my opposite method"
 
-	profilerHandler copyObjectIdentityHash
+	copyExecutionStack := false
+]
+
+{ #category : 'evaluating' }
+IllAllocationProfiler >> filterContext: aContext ignoringClass: aClass [
+
+	| sender |
+	sender := aContext sender.
+	[
+	sender receiver class = aClass or: [
+		sender receiver class = aClass class or: [
+			classesToAvoidInTheContextSearch includes: sender receiver class ] ] ]
+		whileTrue: [ sender := sender sender ].
+	^ sender
+]
+
+{ #category : 'accessing' }
+IllAllocationProfiler >> illimaniAnnouncer [
+
+	^ illimaniAnnouncer
 ]
 
 { #category : 'initialization' }
 IllAllocationProfiler >> initialize [
 
 	super initialize.
-	profilerHandler := IllAllocationProfilerMpHandler new.
 	illimaniAnnouncer := IllAnnouncer new.
-	self initializeMethodProxies: profilerHandler.
+	objectAllocations := OrderedCollection new.
+	copyExecutionStack := false.
+	"classesToAvoidInContextSearch"
+	classesToAvoidInTheContextSearch := self defaultClassesToAvoidInTheContextSearch
+	  , (self defaultClassesToAvoidInTheContextSearch collect: [ :aClass | aClass class ])
 ]
 
-{ #category : 'api' }
-IllAllocationProfiler >> keepReferencesToAllocatedObjects [
+{ #category : 'profiling' }
+IllAllocationProfiler >> internalRegisterAllocation: newlyAllocatedObject [
 
-	profilerHandler keepReferencesToAllocatedObjects
+	| filteredContext  allocationInformationHolder |
+
+	allocationInformationHolder := AllocationSiteInfoModel new.
+	filteredContext := self filterContext: thisContext ignoringClass: newlyAllocatedObject class.
+
+	copyExecutionStack ifTrue: [ allocationInformationHolder context: filteredContext copyStack ].
+
+	allocationInformationHolder
+		allocatorClass: filteredContext receiver class;
+		allocatorMethod: filteredContext compiledCode method;
+		allocatedObjectClass: newlyAllocatedObject class;
+		contextFingerprint: filteredContext;
+		sizeInBytes: newlyAllocatedObject sizeInMemory;
+		initializationTime: Time primUTCMicrosecondsClock.
+
+	objectAllocations add: allocationInformationHolder
 ]
 
 { #category : 'accessing' }
 IllAllocationProfiler >> objectAllocations [
 
-	^ profilerHandler objectAllocations
-]
-
-{ #category : 'api' }
-IllAllocationProfiler >> objectsToCapture: aCollectionOfClasses [
-
-	profilerHandler objectsToCapture: aCollectionOfClasses
-]
-
-{ #category : 'api' }
-IllAllocationProfiler >> objectsToIgnore: aCollectionOfClasses [
-
-	profilerHandler objectsToIgnore: aCollectionOfClasses
-]
-
-{ #category : 'accessing' }
-IllAllocationProfiler >> profilerHandler [
-
-	^ profilerHandler
-]
-
-{ #category : 'api' }
-IllAllocationProfiler >> samplingRate: anInteger [
-
-	profilerHandler samplingRate: anInteger
+	^ objectAllocations
 ]
 
 { #category : 'accessing - statistics' }
 IllAllocationProfiler >> stats [
 
 	^ statisticsModel ifNil: [
-		statisticsModel := AllocationsStatsModel new rawAllocations: profilerHandler objectAllocations.
+		statisticsModel := AllocationsStatsModel new rawAllocations: objectAllocations.
 		statisticsModel ]
 ]
 
-{ #category : 'evaluating' }
+{ #category : 'profiling' }
 IllAllocationProfiler >> stopProfiling [
 
-	self uninstallMethodProxies.
-	self updateStatsWhenFinishingProfiling.
+	super stopProfiling.
 	self announceProfilerStopedProfiling
 ]

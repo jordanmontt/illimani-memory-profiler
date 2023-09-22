@@ -25,75 +25,42 @@ IllAllocationProfilerTest >> tearDown [
 ]
 
 { #category : 'tests' }
-IllAllocationProfilerTest >> testProfileOn [
+IllAllocationProfilerTest >> testProfileOnCopyExecutionStack [
 
 	illimani
-		captureAllObjects;
-		profileOn: [ OrderedCollection new.
-			OrderedCollection new.
-			OrderedCollection new.
-			Point new.
-			Rectangle new ].
+		copyExecutionStack;
+		profileOn: [ 10 timesRepeat: [ IllAllocationProfiler new ] ].
+
+	"Take one random allocation to check"
+	self assert: illimani objectAllocations last context class equals: Context.
+
+	self assert: illimani objectAllocations size > 100.
+	illimani objectAllocations do: [ :alloc | "Stack was copied"
+		self assert: alloc context class equals: Context ]
+]
+
+{ #category : 'tests' }
+IllAllocationProfilerTest >> testProfileOnSimple [
+
+	illimani profileOn: [
+		OrderedCollection new.
+		OrderedCollection new.
+		OrderedCollection new.
+		Point new.
+		Rectangle new ].
 
 	"Greater because the profiler makes 3 allocations"
 	self assert: illimani objectAllocations size > 5
 ]
 
 { #category : 'tests' }
-IllAllocationProfilerTest >> testProfileOnExample [
+IllAllocationProfilerTest >> testProfileOnSimpleMoreAllocations [
 
-	| objectsToCapture |
-	objectsToCapture := { ByteString. Array. String. OrderedCollection. ByteArray }.
-
-	illimani
-		objectsToCapture: objectsToCapture;
-		copyExecutionStack;
-		profileOn: [ 1000 timesRepeat: [ IllAllocationProfiler new ] ].
-	
-	self assert: illimani objectAllocations size > 1000.
-	illimani objectAllocations do: [ :alloc |
-		self assert: (objectsToCapture includes: alloc allocatedObjectClass).
-		"Stack was copied"
-		self assert: alloc context class equals: Context ]
-]
-
-{ #category : 'tests' }
-IllAllocationProfilerTest >> testProfileOnExampleCapturingAll [
-
-	illimani
-		captureAllObjects;
-		copyExecutionStack;
-		profileOn: [ 1000 timesRepeat: [ IllAllocationProfiler new ] ].
-
-	"Take one random allocation to check"
-	self assert: illimani objectAllocations last context class equals: Context.
+	illimani profileOn: [ 1000 timesRepeat: [ IllAllocationProfiler new ] ].
 
 	self assert: illimani objectAllocations size > 1000.
 	illimani objectAllocations do: [ :alloc |
-		"Stack was copied"
-		self assert: alloc context class equals: Context ]
-]
-
-{ #category : 'tests' }
-IllAllocationProfilerTest >> testProfileOnExampleCapturingAllAndIgnoringClasses [
-
-	| allocatorClassesToIgnore |
-	allocatorClassesToIgnore := { ByteString . OrderedCollection . Point . Array }.
-
-	illimani
-		captureAllObjects;
-		copyExecutionStack;
-		objectsToIgnore: allocatorClassesToIgnore;
-		profileOn: [ 
-			allocatorClassesToIgnore do: [ :aClass | aClass new ].
-			1000 timesRepeat: [ IllAllocationProfiler new ] ].
-
-	"Take one random allocation to check"
-	self assert: illimani objectAllocations last context class equals: Context.
-	
-	self assert: illimani objectAllocations size > 1000.
-	illimani objectAllocations do: [ :alloc |
-		self deny: (allocatorClassesToIgnore includes: alloc allocatedObjectClass).
+		self assert: alloc allocatedObjectClass isClass.
 		"Stack was copied"
 		self assert: alloc context class equals: Context ]
 ]
@@ -103,7 +70,6 @@ IllAllocationProfilerTest >> testSamplingRate [
 
 	| allocatedByteSrings |
 	illimani
-		captureAllObjects;
 		samplingRate: 33;
 		profileOn: [ 90 timesRepeat: [ ByteString new ] ].
 
@@ -114,4 +80,20 @@ IllAllocationProfilerTest >> testSamplingRate [
 	necessary for the profiler to work, like Durations objects. So we cannot chack that the
 	allocations are exacty 1/3 of the total."
 	self assert: (allocatedByteSrings >= 30) & (allocatedByteSrings < 40)
+]
+
+{ #category : 'tests' }
+IllAllocationProfilerTest >> testSamplingRateVariable [
+
+	"By default, do not sample"
+	self assert: illimani samplingRate equals: 1.
+	
+	"Sample at 20%"
+	illimani samplingRate: 20.
+	"Sample at 20% is the same as sample each 5 allocations"
+	self assert: illimani samplingRate equals: 5.
+	
+	"Do not sample. The same as sampling 100%".
+	illimani samplingRate: 100.
+	self assert: illimani samplingRate equals: 1.
 ]
