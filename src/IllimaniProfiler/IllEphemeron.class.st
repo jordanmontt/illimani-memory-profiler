@@ -8,9 +8,9 @@ Class {
 		'initializationTime',
 		'allocatedObjectClass'
 	],
-	#category : 'IllimaniProfiler-Finalization-Ephemerons',
+	#category : 'IllimaniProfiler-Finalization-Profiler',
 	#package : 'IllimaniProfiler',
-	#tag : 'Finalization-Ephemerons'
+	#tag : 'Finalization-Profiler'
 }
 
 { #category : 'accessing' }
@@ -47,6 +47,13 @@ IllEphemeron >> initializationTime [
 IllEphemeron >> initializationTime: anObject [
 
 	initializationTime := anObject
+]
+
+{ #category : 'initialization' }
+IllEphemeron >> initialize [
+
+	super initialize.
+	initializationTime := Time primUTCMicrosecondsClock
 ]
 
 { #category : 'inspector' }

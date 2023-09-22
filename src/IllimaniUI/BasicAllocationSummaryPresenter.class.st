@@ -12,7 +12,7 @@ Class {
 { #category : 'layout' }
 BasicAllocationSummaryPresenter >> defaultLayout [
 
-	| gcElements generalStatsElements tablePresenter tablePresenter2 |
+	| gcReport generalStatsElements tablePresenter |
 	generalStatsElements := self generalStatsAssociations.
 
 	tablePresenter := self newTable.
@@ -22,7 +22,12 @@ BasicAllocationSummaryPresenter >> defaultLayout [
 		items: generalStatsElements;
 		beResizable.
 
-	gcElements := {
+	gcReport := self newText
+		text: profiler reportVMStats;
+		beNotEditable;
+		yourself.
+	
+	"gcElements := {
 		'Total GC time during profiling' -> self totalGCTime.
 		'Incremental GC performed during profiling' -> self incrementalGCCount.
 		'Full GC performed during profiling' -> self fullGCCount }.
@@ -31,21 +36,18 @@ BasicAllocationSummaryPresenter >> defaultLayout [
 	tablePresenter2
 		addColumn: (SpStringTableColumn title: 'Name' evaluated: #key);
 		addColumn: (SpStringTableColumn title: 'Value' evaluated: #value);
-		items: gcElements;
-		beResizable.
+		items: gcReport;
+		beResizable."
 
-	^ SpBoxLayout newTopToBottom
-		add: 'General Statistics' expand: false;
-		add: tablePresenter;
-		add: 'Garbage Collection Data' expand: false;
-		add: tablePresenter2;
+	^ SpPanedLayout newTopToBottom
+		add: (SpBoxLayout newTopToBottom
+			add: 'General Statistics' expand: false;
+			add: tablePresenter;
+			yourself );
+		"add: 'Garbage Collection Data' expand: false;"
+		add: gcReport;
+		positionOfSlider: 0.25;
 		yourself
-]
-
-{ #category : 'accessing' }
-BasicAllocationSummaryPresenter >> fullGCCount [
-
-	^ profiler fullGCCount asString
 ]
 
 { #category : 'layout' }
@@ -53,28 +55,14 @@ BasicAllocationSummaryPresenter >> generalStatsAssociations [
 
 	^ {
 		  ('Total profiled time' -> self totalProfiledTime).
-		  ('Time difference between first and last allocation' -> self timeDifferenceBetweenFirstAndLastAllocation).
 		  ('Total allocated objects' -> self totalAllocatedObjects).
 		  ('Total allocated memory' -> self totalAllocatedMemory) }
-]
-
-{ #category : 'accessing' }
-BasicAllocationSummaryPresenter >> incrementalGCCount [
-
-	^ profiler incrementalGCCount asString
 ]
 
 { #category : 'accessing - model' }
 BasicAllocationSummaryPresenter >> setModelBeforeInitialization: aModel [
 
 	profiler := aModel
-]
-
-{ #category : 'accessing' }
-BasicAllocationSummaryPresenter >> timeDifferenceBetweenFirstAndLastAllocation [
-
-	^ (Duration microSeconds: profiler stats timeDifferenceBetweenFirstAndLastAllocation)
-		  humanReadableStringWithOnlySeconds
 ]
 
 { #category : 'accessing' }
@@ -87,12 +75,6 @@ BasicAllocationSummaryPresenter >> totalAllocatedMemory [
 BasicAllocationSummaryPresenter >> totalAllocatedObjects [
 
 	^ profiler stats totalAllocatedObjects asStringWithCommas
-]
-
-{ #category : 'accessing' }
-BasicAllocationSummaryPresenter >> totalGCTime [
-
-	^ profiler totalGCTime asDuration humanReadableStringWithOnlySeconds
 ]
 
 { #category : 'accessing' }

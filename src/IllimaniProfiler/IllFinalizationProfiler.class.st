@@ -28,7 +28,6 @@ IllFinalizationProfiler >> internalRegisterAllocation: anObject [
 	
 	ephemeronsCollection add: (IllEphemeron newPinned 
 		key: anObject value: nil;
-		initializationTime: Time primUTCMicrosecondsClock;
 		allocatedObjectClass: anObject class;
 		sizeInBytes: anObject sizeInMemory;
 		yourself)

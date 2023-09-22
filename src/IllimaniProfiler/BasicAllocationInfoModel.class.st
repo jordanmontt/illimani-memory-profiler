@@ -58,6 +58,33 @@ BasicAllocationInfoModel >> initializationTime: microsecondsAsInt [
 	initializationTime := microsecondsAsInt
 ]
 
+{ #category : 'inspector - extensions' }
+BasicAllocationInfoModel >> inspectableAssociations [
+
+	^ {
+		  ('Allocated Object Class' -> allocatedObjectClass).
+		  ('Memory Size' -> sizeInBytes humanReadableByteSizeString).
+		  ('Initialization timestamp' -> initializationTime).
+		  ('Finalization timestamp' -> finalizationTime).
+		  ('Object''s lifetime' -> self lifetimeAsString) }
+]
+
+{ #category : 'inspector - extensions' }
+BasicAllocationInfoModel >> inspectorExtension: aBuilder [
+
+	<inspectorPresentationOrder: 0 title: 'Overview'>
+	| tablePresenter elements items |
+	elements := self inspectableAssociations.
+	items := elements collect: [ :e | StInspectorAssociationNode hostObject: e ].
+	tablePresenter := aBuilder newTable.
+	tablePresenter
+		addColumn: (SpStringTableColumn title: 'Name' evaluated: #key);
+		addColumn: (SpStringTableColumn title: 'Value' evaluated: #value);
+		items: items;
+		beResizable.
+	^ tablePresenter
+]
+
 { #category : 'accessing' }
 BasicAllocationInfoModel >> lifetime [
 

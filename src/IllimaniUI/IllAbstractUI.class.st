@@ -120,7 +120,7 @@ IllAbstractUI >> initializeSummaryAndEvaluatorPresenter [
 	statsPresenter :=	self summaryStatsPresenter.
 
 	statsAndEvaluatorLayout := SpPanedLayout newTopToBottom
-		positionOfSlider: 0.75;
+		positionOfSlider: 0.8;
 		add: statsPresenter;
 		add: self codeEvaluator;
 		yourself.
@@ -157,7 +157,7 @@ IllAbstractUI >> initializeWindow: aWindowPresenter [
 
 	aWindowPresenter
 		title: self title;
-		initialExtent: 1000 @ 650
+		initialExtent: 1150 @ 700
 ]
 
 { #category : 'layout' }

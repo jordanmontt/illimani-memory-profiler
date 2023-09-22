@@ -81,6 +81,22 @@ AllocationSiteInfoModel >> getContextFingerprintStream: aContext [
 			iterator ifNil: [ ^ stream ] ] ]
 ]
 
+{ #category : 'inspector - extensions' }
+AllocationSiteInfoModel >> inspectableAssociations [
+
+	^ super inspectableAssociations , {
+		  ('Allocator Class' -> allocatorClass).
+		  ('Allocator Method' -> allocatorMethod).
+		  ('Context' -> context) }
+]
+
+{ #category : 'inspector - extensions' }
+AllocationSiteInfoModel >> inspectorExtensionContextFingerprint: aBuilder [
+
+	<inspectorPresentationOrder: 2 title: 'Context Fingerprint'>
+	^ contextFingerprint inspectionFullString
+]
+
 { #category : 'printing' }
 AllocationSiteInfoModel >> printOn: aStream [
 

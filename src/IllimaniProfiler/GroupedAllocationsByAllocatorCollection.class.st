@@ -32,6 +32,15 @@ GroupedAllocationsByAllocatorCollection >> initialize [
 	groupedNodesDictionary := Dictionary new
 ]
 
+{ #category : 'inspector - extensions' }
+GroupedAllocationsByAllocatorCollection >> inspectorExtension [
+
+	<inspectorPresentationOrder: 0 title: 'Title'>
+	^ SpListPresenter new
+		  items: self asOrderedCollection;
+		  yourself
+]
+
 { #category : 'api' }
 GroupedAllocationsByAllocatorCollection >> sort [
 

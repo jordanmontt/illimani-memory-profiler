@@ -1,9 +1,9 @@
 Class {
 	#name : 'IllFinalizationRegistry',
 	#superclass : 'FinalizationRegistry',
-	#category : 'IllimaniProfiler-Finalization-Ephemerons',
+	#category : 'IllimaniProfiler-Finalization-Profiler',
 	#package : 'IllimaniProfiler',
-	#tag : 'Finalization-Ephemerons'
+	#tag : 'Finalization-Profiler'
 }
 
 { #category : 'profiling' }
