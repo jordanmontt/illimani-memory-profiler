@@ -1,14 +1,9 @@
 Class {
 	#name : 'IllFinalizationUnprocessedAllocationsProfiler',
-	#superclass : 'Object',
-	#traits : 'IllTAllocatorWrapper',
-	#classTraits : 'IllTAllocatorWrapper classTrait',
+	#superclass : 'IllAbstractProfiler',
 	#instVars : [
 		'statsModel',
-		'handler',
 		'finalizationRegistry',
-		'samplingCounter',
-		'samplingRate',
 		'unprocessedFinalizations',
 		'unprocessedAllocations'
 	],
@@ -39,18 +34,25 @@ IllFinalizationUnprocessedAllocationsProfiler >> forceFinalizationOfObjects [
 IllFinalizationUnprocessedAllocationsProfiler >> initialize [
 
 	super initialize.
-	handler := IllFinalizationMpHandler new
-		profiler: self;
-		yourself.
+
 	finalizationRegistry := IllFinalizationRegistry new.
 	"We want an array big enough to be allocated directly into the old space"
 	unprocessedAllocations := OrderedCollection new: 6000000.
-	unprocessedFinalizations := OrderedCollection new: 4000000.
-	
-	samplingCounter := 0.
-	samplingRate := 1.
+	unprocessedFinalizations := OrderedCollection new: 4000000
+]
 
-	self initializeMethodProxies: handler
+{ #category : 'profiling' }
+IllFinalizationUnprocessedAllocationsProfiler >> internalRegisterAllocation: anObject [
+
+	unprocessedAllocations add: anObject identityHash.
+	unprocessedAllocations add: Time primUTCMicrosecondsClock.
+	unprocessedAllocations add: anObject sizeInMemory.
+	unprocessedAllocations add: anObject class.
+	"marker"
+	unprocessedAllocations add: -1.
+
+	"Finalization"
+	finalizationRegistry add: anObject finalizer: self
 ]
 
 { #category : 'profiling' }
@@ -73,14 +75,6 @@ IllFinalizationUnprocessedAllocationsProfiler >> objectAllocations [
 	^ allocationsDictionary values sorted: [ :a :b | a initializationTime < b initializationTime ]
 ]
 
-{ #category : 'testing' }
-IllFinalizationUnprocessedAllocationsProfiler >> open [
-
-	^ (IllFinalizationProfilerUI profiler: self announcer: IllAnnouncer new)
-		  open;
-		  yourself
-]
-
 { #category : 'profiling' }
 IllFinalizationUnprocessedAllocationsProfiler >> processFinalization: model atIndex: index [
 
@@ -96,24 +90,6 @@ IllFinalizationUnprocessedAllocationsProfiler >> processInitialization: model at
 		initializationTime: (unprocessedAllocations at: index - 3)
 ]
 
-{ #category : 'profiling' }
-IllFinalizationUnprocessedAllocationsProfiler >> registerAllocation: anObject [
-
-	"Sampling"
-	"samplingCounter := samplingCounter + 1.
-	samplingCounter % samplingRate = 0 ifFalse: [ ^ newlyAllocatedObject ]."
-
-	unprocessedAllocations add: anObject identityHash.
-	unprocessedAllocations add: Time primUTCMicrosecondsClock.
-	unprocessedAllocations add: anObject sizeInMemory.
-	unprocessedAllocations add: anObject class.
-	"marker"
-	unprocessedAllocations add: -1.
-
-	"Finalization"
-	finalizationRegistry add: anObject finalizer: self
-]
-
 { #category : 'accessing - statistics' }
 IllFinalizationUnprocessedAllocationsProfiler >> stats [
 
@@ -123,13 +99,18 @@ IllFinalizationUnprocessedAllocationsProfiler >> stats [
 { #category : 'profiling' }
 IllFinalizationUnprocessedAllocationsProfiler >> stopProfiling [
 
-	self uninstallMethodProxies.
-	self forceFinalizationOfObjects.
-	self updateStatsWhenFinishingProfiling
+	super stopProfiling.
+	self forceFinalizationOfObjects
 ]
 
 { #category : 'accessing' }
-IllFinalizationUnprocessedAllocationsProfiler >> unprocessedAllocationsCollection [
+IllFinalizationUnprocessedAllocationsProfiler >> unprocessedAllocations [
 
 	^ unprocessedAllocations
+]
+
+{ #category : 'accessing' }
+IllFinalizationUnprocessedAllocationsProfiler >> unprocessedFinalizations [
+
+	^ unprocessedFinalizations
 ]

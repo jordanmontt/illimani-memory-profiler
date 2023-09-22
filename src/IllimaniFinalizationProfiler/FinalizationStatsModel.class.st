@@ -1,7 +1,6 @@
 Class {
 	#name : 'FinalizationStatsModel',
 	#superclass : 'Object',
-	#classTraits : 'IllTAllocatorWrapper classTrait',
 	#instVars : [
 		'objectAllocations'
 	],
