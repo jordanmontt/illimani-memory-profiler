@@ -55,7 +55,7 @@ IllFinalizationUnprocessedAllocationsProfiler >> internalRegisterAllocation: anO
 	finalizationRegistry add: anObject finalizer: self
 ]
 
-{ #category : 'profiling' }
+{ #category : 'accessing' }
 IllFinalizationUnprocessedAllocationsProfiler >> objectAllocations [
 
 	| allocationsDictionary |
@@ -69,7 +69,7 @@ IllFinalizationUnprocessedAllocationsProfiler >> objectAllocations [
 	unprocessedFinalizations doWithIndex: [ :data :index |
 		data = -2 ifTrue: [
 			| model |
-			model := allocationsDictionary at: (unprocessedAllocations at: index - 2).
+			model := allocationsDictionary at: (unprocessedFinalizations at: index - 2).
 			self processFinalization: model atIndex: index ] ].
 
 	^ allocationsDictionary values sorted: [ :a :b | a initializationTime < b initializationTime ]
