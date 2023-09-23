@@ -2,7 +2,7 @@
 I am a table that shows the information of number of allocations and size in memory 
 "
 Class {
-	#name : 'TableMemoryInformationPresenter',
+	#name : 'GroupedAllocatorsTablePresenter',
 	#superclass : 'SpPresenter',
 	#instVars : [
 		'tablePresenter',
@@ -17,7 +17,7 @@ Class {
 }
 
 { #category : 'initialization' }
-TableMemoryInformationPresenter >> connectPresenters [
+GroupedAllocatorsTablePresenter >> connectPresenters [
 
 	textInput
 		whenTextChangedDo: [ :aText | self filterTable: aText ].
@@ -26,7 +26,7 @@ TableMemoryInformationPresenter >> connectPresenters [
 ]
 
 { #category : 'layout' }
-TableMemoryInformationPresenter >> defaultLayout [
+GroupedAllocatorsTablePresenter >> defaultLayout [
 
 	^ SpBoxLayout newTopToBottom
 		  spacing: 5;
@@ -36,7 +36,7 @@ TableMemoryInformationPresenter >> defaultLayout [
 ]
 
 { #category : 'accessing - model' }
-TableMemoryInformationPresenter >> filterTable: aText [
+GroupedAllocatorsTablePresenter >> filterTable: aText [
 
 	| newItems |
 	aText ifEmpty: [
@@ -48,7 +48,7 @@ TableMemoryInformationPresenter >> filterTable: aText [
 ]
 
 { #category : 'initialization' }
-TableMemoryInformationPresenter >> initializePresenters [
+GroupedAllocatorsTablePresenter >> initializePresenters [
 
 	textInput := self newTextInput
 		placeholder: 'Filter';
@@ -92,25 +92,25 @@ TableMemoryInformationPresenter >> initializePresenters [
 ]
 
 { #category : 'accessing - model' }
-TableMemoryInformationPresenter >> setModelBeforeInitialization: someTableItems [
+GroupedAllocatorsTablePresenter >> setModelBeforeInitialization: someTableItems [
 
 	tableItems := someTableItems
 ]
 
 { #category : 'accessing' }
-TableMemoryInformationPresenter >> sizeInBytes [
+GroupedAllocatorsTablePresenter >> sizeInBytes [
 
 	^ totalSizeInBytes ifNil: [ totalSizeInBytes := tableItems sum: [ :e | e sizeInBytes ] ]
 ]
 
 { #category : 'accessing - model' }
-TableMemoryInformationPresenter >> tableItems [
+GroupedAllocatorsTablePresenter >> tableItems [
 
 	^ tableItems
 ]
 
 { #category : 'accessing' }
-TableMemoryInformationPresenter >> totalAllocations [
+GroupedAllocatorsTablePresenter >> totalAllocations [
 
 	^ totalAllocations ifNil: [ totalAllocations := tableItems sum: [ :e | e totalAllocations ] ]
 ]

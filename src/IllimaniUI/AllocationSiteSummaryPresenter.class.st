@@ -3,7 +3,7 @@ I am a presenter class that shows basic statistics about the object allocations.
 "
 Class {
 	#name : 'AllocationSiteSummaryPresenter',
-	#superclass : 'BasicAllocationSummaryPresenter',
+	#superclass : 'AllocationSummaryPresenter',
 	#category : 'IllimaniUI-Widgets',
 	#package : 'IllimaniUI',
 	#tag : 'Widgets'
@@ -13,18 +13,6 @@ Class {
 AllocationSiteSummaryPresenter >> generalStatsAssociations [
 
 	^ super generalStatsAssociations , {
-		  ('Classes that allocate objects' -> self numberOfClasses).
-		  ('Methods that allocate objects' -> self numberOfMethods) }
-]
-
-{ #category : 'accessing' }
-AllocationSiteSummaryPresenter >> numberOfClasses [
-
-	^ profiler stats numberOfClasses asString
-]
-
-{ #category : 'accessing' }
-AllocationSiteSummaryPresenter >> numberOfMethods [
-
-	^ profiler stats numberOfMethods asString
+		  ('Classes that allocate objects' -> profiler stats numberOfClasses asString).
+		  ('Methods that allocate objects' -> profiler stats numberOfMethods asString) }
 ]

@@ -27,7 +27,7 @@ IllFinalizationProfilerUI >> densityChartPresenter [
 IllFinalizationProfilerUI >> initializeDensityChartPresenter [
 
 	| densityPlotBuilder densityChartByMemory densityChartByNumbOfAlloc |
-	densityPlotBuilder := IllDensityDistributionChart new
+	densityPlotBuilder := IllDensityDistributionChartBuilder new
 		objectAllocations: profiler objectAllocations;
 		xTitle: 'Lifetime in seconds';
 		yourself.
@@ -35,12 +35,12 @@ IllFinalizationProfilerUI >> initializeDensityChartPresenter [
 		beForMemory;
 		yTitle: 'Memory';
 		"yLog: true;"
-		densityChartPresenter.
+		buildDensityChartPresenter.
 	densityChartByNumbOfAlloc := densityPlotBuilder
 		beForNumberOfAllocations;
 		yTitle: 'Number of allocations';
 		"yLog: true;"
-		densityChartPresenter.
+		buildDensityChartPresenter.
 
 	densityChartPresenter := AlternatorPresenter new
 	   presenterOne: densityChartByMemory withName: 'memory';
@@ -56,7 +56,7 @@ IllFinalizationProfilerUI >> initializeLifetimesTable [
 		on: profiler objectAllocations
 ]
 
-{ #category : 'initialization - lazy presenters' }
+{ #category : 'initialization' }
 IllFinalizationProfilerUI >> initializeNotebook [
 
 	notebookPresenter := self newNotebook
@@ -79,14 +79,14 @@ IllFinalizationProfilerUI >> lifetimesTable [
 { #category : 'actions' }
 IllFinalizationProfilerUI >> refresh [
 
-	self layout: self defaultLayout.
-	densityChartPresenter := nil
+	densityChartPresenter := nil.
+	self layout: self defaultLayout
 ]
 
 { #category : 'initialization - lazy presenters' }
 IllFinalizationProfilerUI >> summaryStatsPresenter [
 
-	^ BasicAllocationSummaryPresenter on: profiler
+	^ AllocationSummaryPresenter on: profiler
 ]
 
 { #category : 'initialization' }

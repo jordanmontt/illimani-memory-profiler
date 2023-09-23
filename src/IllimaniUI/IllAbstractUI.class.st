@@ -7,8 +7,6 @@ Class {
 		'toolbarPresenter',
 		'profiler',
 		'illimaniAnnouncer',
-		'topCalculationsNumberInputPresenter',
-		'topCalculationsNumber',
 		'codeEvaluator',
 		'allocatedObjectsTablePresenter',
 		'summaryAndEvaluatorPresenter'
@@ -51,8 +49,7 @@ IllAbstractUI >> codeEvaluatorText [
 { #category : 'initialization' }
 IllAbstractUI >> connectPresenters [
 
-	refreshButton action: [ self refresh ].
-	topCalculationsNumberInputPresenter whenNumberChangedDo: [ :newValue | topCalculationsNumber := newValue ]
+	refreshButton action: [ self refresh ]
 ]
 
 { #category : 'layout' }
@@ -61,20 +58,20 @@ IllAbstractUI >> controlButtonsLayout [
 	^ SpBoxLayout newTopToBottom
 		  spacing: 5;
 		  add: toolbarPresenter expand: false;
-		  add: (SpBoxLayout newLeftToRight
-				   spacing: 5;
-				   add: 'Show visualizations for the top:' expand: false;
-				   add: topCalculationsNumberInputPresenter width: 50;
-				   yourself);
 		  yourself
 ]
 
 { #category : 'layout' }
 IllAbstractUI >> defaultLayout [
 
-	^ (profiler isNil or: [ profiler isProfilingStarted not ])
-		  ifTrue: [ self layoutWhenThereIsNotDataWithMessage: 'Profiler backend not set or not it didn''t start to profile.' ]
-		  ifFalse: [ self layoutWhenThereIsAProfiler ]
+	(profiler isProfilingStarted and: [ profiler isProfilingFinished not ]) ifTrue: [
+		^ self layoutWhenThereIsNotDataWithMessage: 'Still profiling' ].
+
+	(profiler isProfilingFinished and: [ profiler objectAllocations isEmpty ]) ifTrue: [
+		^ self layoutWhenThereIsNotDataWithMessage: 'Profiling finished without any allocations. No allocations were produced during this profiling' ].
+
+	(profiler isProfilingFinished and: [ profiler objectAllocations isNotEmpty ]) ifTrue: [
+		^ self layoutWhenThereIsData ]
 ]
 
 { #category : 'accessing' }
@@ -83,10 +80,18 @@ IllAbstractUI >> illimaniAnnouncer: aIllimaniAnnouncer [
 	illimaniAnnouncer := aIllimaniAnnouncer
 ]
 
+{ #category : 'initialization' }
+IllAbstractUI >> initialize [
+
+	super initialize.
+	self respondToAnnouncement
+]
+
 { #category : 'initialization - lazy presenters' }
 IllAbstractUI >> initializeAllocatedObjectsTablePresenter [
 
-	allocatedObjectsTablePresenter := self instantiate: (AllocatedObjectsTablePresenter on: profiler objectAllocations)
+	allocatedObjectsTablePresenter := self
+		instantiate: (AllocatedObjectsTablePresenter on: profiler objectAllocations)
 ]
 
 { #category : 'initialization - lazy presenters' }
@@ -98,7 +103,7 @@ IllAbstractUI >> initializeCodeEvaluator [
 		yourself
 ]
 
-{ #category : 'initialization - lazy presenters' }
+{ #category : 'initialization' }
 IllAbstractUI >> initializeNotebook [
 
 	self subclassResponsibility
@@ -108,9 +113,7 @@ IllAbstractUI >> initializeNotebook [
 IllAbstractUI >> initializePresenters [
 
 	self initializeToolbar.
-	self respondToAnnouncement.
-	topCalculationsNumber := 10.
-	self initializeTopCalculationsInputPresenter
+	self initializeNotebook
 ]
 
 { #category : 'initialization - lazy presenters' }
@@ -144,36 +147,11 @@ IllAbstractUI >> initializeToolbar [
 ]
 
 { #category : 'initialization' }
-IllAbstractUI >> initializeTopCalculationsInputPresenter [
-
-	topCalculationsNumberInputPresenter := self newNumberInput
-		number: topCalculationsNumber;
-		minimum: 1;
-		yourself
-]
-
-{ #category : 'initialization' }
 IllAbstractUI >> initializeWindow: aWindowPresenter [
 
 	aWindowPresenter
 		title: self title;
-		initialExtent: 1150 @ 700
-]
-
-{ #category : 'layout' }
-IllAbstractUI >> layoutWhenThereIsAProfiler [
-
-	| layoutToReturn |
-	(profiler isProfilingStarted and: [ profiler isProfilingFinished not ]) ifTrue: [
-		layoutToReturn := self layoutWhenThereIsNotDataWithMessage: 'Still profiling' ].
-
-	(profiler isProfilingFinished and: [ profiler objectAllocations isEmpty ]) ifTrue: [
-		layoutToReturn := self layoutWhenThereIsNotDataWithMessage: 'Profiling finished without any allocations. No allocations were produced during this profiling' ].
-
-	(profiler isProfilingFinished and: [ profiler objectAllocations isNotEmpty ]) ifTrue: [
-		layoutToReturn := self layoutWhenThereIsData ].
-
-	^ layoutToReturn
+		initialExtent: 850 @ 750
 ]
 
 { #category : 'layout' }
@@ -181,7 +159,7 @@ IllAbstractUI >> layoutWhenThereIsData [
 
 	^ SpBoxLayout newTopToBottom
 		add: self controlButtonsLayout expand: false;
-		add: self notebookPresenter;
+		add: notebookPresenter;
 		yourself
 ]
 
@@ -196,13 +174,6 @@ IllAbstractUI >> layoutWhenThereIsNotDataWithMessage: aString [
 				   add: aString;
 				   yourself);
 		  yourself
-]
-
-{ #category : 'accessing - lazy presenters' }
-IllAbstractUI >> notebookPresenter [
-
-	notebookPresenter ifNil: [ self initializeNotebook ].
-	^ notebookPresenter
 ]
 
 { #category : 'accessing' }

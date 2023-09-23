@@ -1,5 +1,5 @@
 Class {
-	#name : 'IllDensityDistributionChart',
+	#name : 'IllDensityDistributionChartBuilder',
 	#superclass : 'Object',
 	#instVars : [
 		'yTitle',
@@ -17,7 +17,7 @@ Class {
 }
 
 { #category : 'defaults' }
-IllDensityDistributionChart >> addChartTitles: chart [
+IllDensityDistributionChartBuilder >> addChartTitles: chart [
 
 	| completeYTitle |
 	chart xlabel: xTitle.
@@ -27,7 +27,7 @@ IllDensityDistributionChart >> addChartTitles: chart [
 ]
 
 { #category : 'defaults' }
-IllDensityDistributionChart >> addTickDecorations: chart [
+IllDensityDistributionChartBuilder >> addTickDecorations: chart [
 
 	"Horizontal ticks are always the same"
 	chart horizontalTick
@@ -43,39 +43,19 @@ IllDensityDistributionChart >> addTickDecorations: chart [
 ]
 
 { #category : 'api' }
-IllDensityDistributionChart >> beForMemory [
+IllDensityDistributionChartBuilder >> beForMemory [
 
 	isForMemory := true
 ]
 
 { #category : 'api' }
-IllDensityDistributionChart >> beForNumberOfAllocations [
+IllDensityDistributionChartBuilder >> beForNumberOfAllocations [
 
 	isForMemory := false
 ]
 
-{ #category : 'defaults' }
-IllDensityDistributionChart >> dataByMemory [
-
-	| dictionary |
-	dictionary := Dictionary newFrom: groupedDataBySeconds.
-	^ x collect: [ :index |
-		  dictionary at: index
-			  ifPresent: [ :collection | collection sum: [ :e | e sizeInBytes ] ]
-			  ifAbsent: [ 0 ] ]
-]
-
-{ #category : 'defaults' }
-IllDensityDistributionChart >> dataByNumberOfAllocations [
-
-	| dictionary |
-	dictionary := Dictionary newFrom: groupedDataBySeconds.
-	^ x collect: [ :index |
-		  dictionary at: index ifPresent: [ :collection | collection size ] ifAbsent: [ 0 ] ]
-]
-
 { #category : 'api' }
-IllDensityDistributionChart >> densityChartCanvas [
+IllDensityDistributionChartBuilder >> buildDensityChartCanvas [
 
 	| plot y chart |
 	chart := self initializeChart.
@@ -114,15 +94,35 @@ IllDensityDistributionChart >> densityChartCanvas [
 ]
 
 { #category : 'api' }
-IllDensityDistributionChart >> densityChartPresenter [
+IllDensityDistributionChartBuilder >> buildDensityChartPresenter [
 
 	^ SpRoassalPresenter new
-		canvas: self densityChartCanvas;
+		canvas: self buildDensityChartCanvas;
 		yourself
 ]
 
+{ #category : 'defaults' }
+IllDensityDistributionChartBuilder >> dataByMemory [
+
+	| dictionary |
+	dictionary := Dictionary newFrom: groupedDataBySeconds.
+	^ x collect: [ :index |
+		  dictionary at: index
+			  ifPresent: [ :collection | collection sum: [ :e | e sizeInBytes ] ]
+			  ifAbsent: [ 0 ] ]
+]
+
+{ #category : 'defaults' }
+IllDensityDistributionChartBuilder >> dataByNumberOfAllocations [
+
+	| dictionary |
+	dictionary := Dictionary newFrom: groupedDataBySeconds.
+	^ x collect: [ :index |
+		  dictionary at: index ifPresent: [ :collection | collection size ] ifAbsent: [ 0 ] ]
+]
+
 { #category : 'initialization' }
-IllDensityDistributionChart >> initialize [
+IllDensityDistributionChartBuilder >> initialize [
 
 	super initialize.
 
@@ -135,7 +135,7 @@ IllDensityDistributionChart >> initialize [
 ]
 
 { #category : 'initialization' }
-IllDensityDistributionChart >> initializeChart [
+IllDensityDistributionChartBuilder >> initializeChart [
 
 	^ RSCompositeChart new
 		colors: NSScale google20;
@@ -143,13 +143,13 @@ IllDensityDistributionChart >> initializeChart [
 ]
 
 { #category : 'api' }
-IllDensityDistributionChart >> numberOfTicks: anInteger [
+IllDensityDistributionChartBuilder >> numberOfTicks: anInteger [
 
 	numberOfTicks := anInteger
 ]
 
 { #category : 'api' }
-IllDensityDistributionChart >> objectAllocations: someObjectAllocations [
+IllDensityDistributionChartBuilder >> objectAllocations: someObjectAllocations [
 
 	groupedDataBySeconds := (someObjectAllocations groupedBy: [ :allocationModel |
 		allocationModel lifetimeAsDuration asSeconds ]) associations.
@@ -158,25 +158,25 @@ IllDensityDistributionChart >> objectAllocations: someObjectAllocations [
 ]
 
 { #category : 'api' }
-IllDensityDistributionChart >> title: aTitle [
+IllDensityDistributionChartBuilder >> title: aTitle [
 
 	title := aTitle
 ]
 
 { #category : 'api' }
-IllDensityDistributionChart >> xTitle: aTitle [
+IllDensityDistributionChartBuilder >> xTitle: aTitle [
 
 	xTitle := aTitle
 ]
 
 { #category : 'api' }
-IllDensityDistributionChart >> yLog: aBoolean [
+IllDensityDistributionChartBuilder >> yLog: aBoolean [
 
 	isYLog := aBoolean
 ]
 
 { #category : 'api' }
-IllDensityDistributionChart >> yTitle: aTitle [
+IllDensityDistributionChartBuilder >> yTitle: aTitle [
 
 	yTitle := aTitle
 ]

@@ -2,7 +2,7 @@
 I am a class that builds the canvas of the different visualizations.
 "
 Class {
-	#name : 'IllRoassalChartBuilder',
+	#name : 'IllRoassalSeveralChartBuilder',
 	#superclass : 'Object',
 	#instVars : [
 		'topCalculationsNumber',
@@ -14,7 +14,7 @@ Class {
 }
 
 { #category : 'instance creation' }
-IllRoassalChartBuilder class >> on: aModel [
+IllRoassalSeveralChartBuilder class >> on: aModel [
 
 	^ self new
 		  model: aModel;
@@ -22,20 +22,20 @@ IllRoassalChartBuilder class >> on: aModel [
 ]
 
 { #category : 'chart construction' }
-IllRoassalChartBuilder >> addLabelsX: xText y: yText forChart: chart [
+IllRoassalSeveralChartBuilder >> addLabelsX: xText y: yText forChart: chart [
 
 	(chart xlabel: xText) shape color: Color black.
 	(chart ylabel: yText) shape color: Color black
 ]
 
 { #category : 'chart construction' }
-IllRoassalChartBuilder >> addTicksToLabel: chart [
+IllRoassalSeveralChartBuilder >> addTicksToLabel: chart [
 
 	chart verticalTick labelConversion: [ :value | value asInteger asStringWithCommas ]
 ]
 
 { #category : 'api - line chart' }
-IllRoassalChartBuilder >> allocatedObjectsPerSecondLineChartCanvas [
+IllRoassalSeveralChartBuilder >> allocatedObjectsPerSecondLineChartCanvas [
 
 	| chart linePlot |
 	linePlot := self createLinePlotForAllocations: model objectAllocations.
@@ -50,21 +50,21 @@ IllRoassalChartBuilder >> allocatedObjectsPerSecondLineChartCanvas [
 ]
 
 { #category : 'api - line chart' }
-IllRoassalChartBuilder >> allocatedObjectsPerSecondPerClassLineChartCanvas [
+IllRoassalSeveralChartBuilder >> allocatedObjectsPerSecondPerClassLineChartCanvas [
 
 	^ self constructPerSecondLineChart:
 		  (model stats topNAllocationsByClass: topCalculationsNumber)
 ]
 
 { #category : 'api - line chart' }
-IllRoassalChartBuilder >> allocatedObjectsPerSecondPerMethodLineChartCanvas [
+IllRoassalSeveralChartBuilder >> allocatedObjectsPerSecondPerMethodLineChartCanvas [
 
 	^ self constructPerSecondLineChart:
 		  (model stats topNAllocationsByMethod: topCalculationsNumber)
 ]
 
 { #category : 'chart construction' }
-IllRoassalChartBuilder >> constructPerSecondLineChart: aCollection [
+IllRoassalSeveralChartBuilder >> constructPerSecondLineChart: aCollection [
 
 	| chart linePlot legend |
 
@@ -96,7 +96,7 @@ IllRoassalChartBuilder >> constructPerSecondLineChart: aCollection [
 ]
 
 { #category : 'chart construction' }
-IllRoassalChartBuilder >> createLinePlotForAllocations: someAllocations [
+IllRoassalSeveralChartBuilder >> createLinePlotForAllocations: someAllocations [
 
 	| times linePlot indices sortedByTime |
 	sortedByTime := someAllocations sorted: [ :a :b | a initializationTime < b initializationTime ].
@@ -112,25 +112,25 @@ IllRoassalChartBuilder >> createLinePlotForAllocations: someAllocations [
 ]
 
 { #category : 'api - heatmap' }
-IllRoassalChartBuilder >> heatmapAllocatorAllocatedCanvasByClass [
+IllRoassalSeveralChartBuilder >> heatmapAllocatorAllocatedCanvasByClass [
 
-	^ IllHeatmapRoassalBuilder new
+	^ IllHeatmapCanvasBuilder new
 		data: (model stats topNAllocationsByClass: topCalculationsNumber);
 		build;
 		canvas
 ]
 
 { #category : 'api - heatmap' }
-IllRoassalChartBuilder >> heatmapAllocatorAllocatedCanvasByMethod [
+IllRoassalSeveralChartBuilder >> heatmapAllocatorAllocatedCanvasByMethod [
 
-	^ IllHeatmapRoassalBuilder new
+	^ IllHeatmapCanvasBuilder new
 		data: (model stats topNAllocationsByMethod: topCalculationsNumber);
 		build;
 		canvas
 ]
 
 { #category : 'api - line chart' }
-IllRoassalChartBuilder >> initializeChart [
+IllRoassalSeveralChartBuilder >> initializeChart [
 
 	^ RSCompositeChart new
 		  colors: NSScale google20;
@@ -138,13 +138,13 @@ IllRoassalChartBuilder >> initializeChart [
 ]
 
 { #category : 'accessing' }
-IllRoassalChartBuilder >> model: aModel [
+IllRoassalSeveralChartBuilder >> model: aModel [
 
 	model := aModel
 ]
 
 { #category : 'accessing' }
-IllRoassalChartBuilder >> topCalculationsNumber: aNumber [
+IllRoassalSeveralChartBuilder >> topCalculationsNumber: aNumber [
 
 	topCalculationsNumber := aNumber
 ]

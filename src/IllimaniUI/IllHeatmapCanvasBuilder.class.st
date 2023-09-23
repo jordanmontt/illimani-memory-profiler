@@ -2,7 +2,7 @@
 I am a subclass of Roassal RSDSM presenter. I am a subclass because I define specific behavior for coloring the matrix and calculating the labels
 "
 Class {
-	#name : 'IllHeatmapRoassalBuilder',
+	#name : 'IllHeatmapCanvasBuilder',
 	#superclass : 'RSDSM',
 	#instVars : [
 		'scale',
@@ -16,7 +16,7 @@ Class {
 }
 
 { #category : 'hooks' }
-IllHeatmapRoassalBuilder >> computeColor: aTuple [
+IllHeatmapCanvasBuilder >> computeColor: aTuple [
 
 	^ scale scale: (self numberFor: aTuple)
 	"| aNumber |
@@ -30,7 +30,7 @@ IllHeatmapRoassalBuilder >> computeColor: aTuple [
 ]
 
 { #category : 'hooks' }
-IllHeatmapRoassalBuilder >> data: someData [
+IllHeatmapCanvasBuilder >> data: someData [
 
 	| allocatedSortedClasses |
 	data := someData.
@@ -51,7 +51,7 @@ IllHeatmapRoassalBuilder >> data: someData [
 ]
 
 { #category : 'initialization' }
-IllHeatmapRoassalBuilder >> initialize [
+IllHeatmapCanvasBuilder >> initialize [
 
 	super initialize.
 	self setShouldFeedY.
@@ -64,7 +64,7 @@ IllHeatmapRoassalBuilder >> initialize [
 ]
 
 { #category : 'hooks' }
-IllHeatmapRoassalBuilder >> initializeColorMultilinearScale [
+IllHeatmapCanvasBuilder >> initializeColorMultilinearScale [
 
 	| maxDataDomain |
 	maxDataDomain := (data collect: [ :tuple | tuple value totalAllocations ]) max.
@@ -82,7 +82,7 @@ IllHeatmapRoassalBuilder >> initializeColorMultilinearScale [
 ]
 
 { #category : 'hooks' }
-IllHeatmapRoassalBuilder >> labelX [
+IllHeatmapCanvasBuilder >> labelX [
 
 	| labelX |
 	labelX := RSLabel new
@@ -98,7 +98,7 @@ IllHeatmapRoassalBuilder >> labelX [
 ]
 
 { #category : 'hooks' }
-IllHeatmapRoassalBuilder >> labelY [
+IllHeatmapCanvasBuilder >> labelY [
 
 	| labelY |
 	labelY := RSLabel new
@@ -116,7 +116,7 @@ IllHeatmapRoassalBuilder >> labelY [
 ]
 
 { #category : 'hooks' }
-IllHeatmapRoassalBuilder >> numberFor: tuple [
+IllHeatmapCanvasBuilder >> numberFor: tuple [
 
 	| allocatorClass allocatedClass index |
 	allocatorClass := tuple key.
@@ -126,7 +126,7 @@ IllHeatmapRoassalBuilder >> numberFor: tuple [
 ]
 
 { #category : 'hooks' }
-IllHeatmapRoassalBuilder >> renderIn: aCanvas [
+IllHeatmapCanvasBuilder >> renderIn: aCanvas [
 
 	| labelY labelX |
 	super renderIn: aCanvas.
@@ -141,7 +141,7 @@ IllHeatmapRoassalBuilder >> renderIn: aCanvas [
 ]
 
 { #category : 'hooks' }
-IllHeatmapRoassalBuilder >> renderLegend: aCanvas [
+IllHeatmapCanvasBuilder >> renderLegend: aCanvas [
 
 	| box percentages paint legend boxScale lastColumn |
 	lastColumn := (self columnAt: objectsX size) asGroup.

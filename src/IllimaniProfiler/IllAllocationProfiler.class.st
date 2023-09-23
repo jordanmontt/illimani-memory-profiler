@@ -175,8 +175,7 @@ IllAllocationProfiler >> objectAllocations [
 IllAllocationProfiler >> stats [
 
 	^ statisticsModel ifNil: [
-		statisticsModel := AllocationsStatsModel new rawAllocations: objectAllocations.
-		statisticsModel ]
+		  statisticsModel := AllocationsStatsModel new rawAllocations: objectAllocations ]
 ]
 
 { #category : 'profiling' }

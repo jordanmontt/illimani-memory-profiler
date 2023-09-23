@@ -8,7 +8,9 @@ Class {
 		'heatmapPresenter',
 		'allocationsPerSecondPerAllocatorPresenter',
 		'allocatedObjectsPerSecondPresenter',
-		'memoryTablePresenter'
+		'memoryTablePresenter',
+		'topCalculationsNumberInputPresenter',
+		'topCalculationsNumber'
 	],
 	#category : 'IllimaniUI-Main Presenter',
 	#package : 'IllimaniUI',
@@ -19,7 +21,7 @@ Class {
 IllAllocationProfilerUI >> allocatedObjectsPerSecondPerClassPresenter [
 
 	^ SpRoassalPresenter new
-		canvas: (IllRoassalChartBuilder new
+		canvas: (IllRoassalSeveralChartBuilder new
 			model: profiler;
 			topCalculationsNumber: topCalculationsNumber;
 			allocatedObjectsPerSecondPerClassLineChartCanvas);
@@ -30,7 +32,7 @@ IllAllocationProfilerUI >> allocatedObjectsPerSecondPerClassPresenter [
 IllAllocationProfilerUI >> allocatedObjectsPerSecondPerMethodPresenter [
 
 	^ SpRoassalPresenter new
-		canvas: (IllRoassalChartBuilder new
+		canvas: (IllRoassalSeveralChartBuilder new
 			model: profiler;
 			topCalculationsNumber: topCalculationsNumber;
 			allocatedObjectsPerSecondPerMethodLineChartCanvas);
@@ -59,6 +61,25 @@ self stats allocationsByClass.
 self stats allocationsByMethod'
 ]
 
+{ #category : 'initialization' }
+IllAllocationProfilerUI >> connectPresenters [
+
+	super connectPresenters.
+	topCalculationsNumberInputPresenter whenNumberChangedDo: [ :newValue | topCalculationsNumber := newValue ]
+]
+
+{ #category : 'layout' }
+IllAllocationProfilerUI >> controlButtonsLayout [
+
+	^ super controlButtonsLayout
+		  add: (SpBoxLayout newLeftToRight
+				   spacing: 5;
+				   add: 'Show visualizations for the top:' expand: false;
+				   add: topCalculationsNumberInputPresenter width: 50;
+				   yourself);
+		  yourself
+]
+
 { #category : 'accessing - lazy roassal presenters' }
 IllAllocationProfilerUI >> heatMapPresenter [
 
@@ -70,7 +91,7 @@ IllAllocationProfilerUI >> heatMapPresenter [
 IllAllocationProfilerUI >> initializeAllocatedObjectsPerSecond [
 
 	allocatedObjectsPerSecondPresenter := SpRoassalPresenter new
-		canvas: (IllRoassalChartBuilder new
+		canvas: (IllRoassalSeveralChartBuilder new
 			model: profiler;
 			topCalculationsNumber: topCalculationsNumber;
 			allocatedObjectsPerSecondLineChartCanvas);
@@ -91,12 +112,12 @@ IllAllocationProfilerUI >> initializeHeatmapPresenter [
 
 	| roassalPresenterByClass roassalPresenterByMethod |
 	roassalPresenterByClass := self instantiate: SpRoassalPresenter.
-	roassalPresenterByClass canvas: (IllRoassalChartBuilder new
+	roassalPresenterByClass canvas: (IllRoassalSeveralChartBuilder new
 			 model: profiler;
 			 topCalculationsNumber: topCalculationsNumber;
 			 heatmapAllocatorAllocatedCanvasByClass).
 	roassalPresenterByMethod := self instantiate: SpRoassalPresenter.
-	roassalPresenterByMethod canvas: (IllRoassalChartBuilder new
+	roassalPresenterByMethod canvas: (IllRoassalSeveralChartBuilder new
 			 model: profiler;
 			 topCalculationsNumber: topCalculationsNumber;
 			 heatmapAllocatorAllocatedCanvasByMethod).
@@ -111,14 +132,14 @@ IllAllocationProfilerUI >> initializeHeatmapPresenter [
 IllAllocationProfilerUI >> initializeMemoryTablePresenter [
 
 	memoryTablePresenter := AlternatorPresenter new
-		presenterOne: (TableMemoryInformationPresenter owner: self on: profiler stats allocationsByClass)
+		presenterOne: (GroupedAllocatorsTablePresenter owner: self on: profiler stats allocationsByClass)
 		withName: 'Classes';
-		presenterTwo: (TableMemoryInformationPresenter owner: self on: profiler stats allocationsByMethod)
+		presenterTwo: (GroupedAllocatorsTablePresenter owner: self on: profiler stats allocationsByMethod)
 		withName: 'Methods';
 		yourself
 ]
 
-{ #category : 'initialization - lazy presenters' }
+{ #category : 'initialization' }
 IllAllocationProfilerUI >> initializeNotebook [
 
 	notebookPresenter := self newNotebook
@@ -135,6 +156,23 @@ IllAllocationProfilerUI >> initializeNotebook [
 		yourself
 ]
 
+{ #category : 'initialization' }
+IllAllocationProfilerUI >> initializePresenters [
+
+	super initializePresenters.
+	self initializeTopCalculationsInputPresenter
+]
+
+{ #category : 'initialization' }
+IllAllocationProfilerUI >> initializeTopCalculationsInputPresenter [
+
+	topCalculationsNumber := 10.
+	topCalculationsNumberInputPresenter := self newNumberInput
+		number: topCalculationsNumber;
+		minimum: 1;
+		yourself
+]
+
 { #category : 'accessing - lazy presenters' }
 IllAllocationProfilerUI >> memoryTablePresenter [
 
@@ -145,10 +183,10 @@ IllAllocationProfilerUI >> memoryTablePresenter [
 { #category : 'actions' }
 IllAllocationProfilerUI >> refresh [
 
-	self layout: self defaultLayout.
 	heatmapPresenter := nil.
 	allocationsPerSecondPerAllocatorPresenter := nil.
-	allocatedObjectsPerSecondPresenter := nil
+	allocatedObjectsPerSecondPresenter := nil.
+	self layout: self defaultLayout
 ]
 
 { #category : 'initialization - lazy presenters' }
