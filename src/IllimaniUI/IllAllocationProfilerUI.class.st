@@ -102,8 +102,8 @@ IllAllocationProfilerUI >> initializeAllocatedObjectsPerSecond [
 IllAllocationProfilerUI >> initializeAllocationsPerSecondPerAllocator [
 
 	allocationsPerSecondPerAllocatorPresenter := AlternatorPresenter new
-		  presenterOne: self allocatedObjectsPerSecondPerClassPresenter withName: 'Classes';
-		  presenterTwo: self allocatedObjectsPerSecondPerMethodPresenter withName: 'Methods';
+		  presenterOne: self allocatedObjectsPerSecondPerClassPresenter withName: 'Group by Classes';
+		  presenterTwo: self allocatedObjectsPerSecondPerMethodPresenter withName: 'Group by Methods';
 		  yourself
 ]
 
@@ -123,8 +123,8 @@ IllAllocationProfilerUI >> initializeHeatmapPresenter [
 			 heatmapAllocatorAllocatedCanvasByMethod).
 
 	heatmapPresenter :=( self instantiate: AlternatorPresenter)
-		presenterOne: roassalPresenterByClass withName: 'Classes';
-		presenterTwo: roassalPresenterByMethod  withName: 'Methods';
+		presenterOne: roassalPresenterByClass withName: 'Group by Classes';
+		presenterTwo: roassalPresenterByMethod  withName: 'Group by Methods';
 		yourself
 ]
 
@@ -133,9 +133,9 @@ IllAllocationProfilerUI >> initializeMemoryTablePresenter [
 
 	memoryTablePresenter := AlternatorPresenter new
 		presenterOne: (GroupedAllocatorsTablePresenter owner: self on: profiler stats allocationsByClass)
-		withName: 'Classes';
+		withName: 'Group by Classes';
 		presenterTwo: (GroupedAllocatorsTablePresenter owner: self on: profiler stats allocationsByMethod)
-		withName: 'Methods';
+		withName: 'Group by Methods';
 		yourself
 ]
 

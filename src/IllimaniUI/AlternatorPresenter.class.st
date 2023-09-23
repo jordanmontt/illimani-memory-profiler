@@ -77,8 +77,8 @@ AlternatorPresenter >> initializePresenters [
 AlternatorPresenter >> labelForToggleButton [
 
 	^ isForPresenterOne
-		ifTrue: [ 'Group by ' , presenterTwoName ]
-		ifFalse: [ 'Group by ', presenterOneName  ]
+		ifTrue: [ presenterTwoName ]
+		ifFalse: [ presenterOneName ]
 ]
 
 { #category : 'accessing' }

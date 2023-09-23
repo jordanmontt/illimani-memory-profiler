@@ -43,8 +43,8 @@ IllFinalizationProfilerUI >> initializeDensityChartPresenter [
 		buildDensityChartPresenter.
 
 	densityChartPresenter := AlternatorPresenter new
-	   presenterOne: densityChartByMemory withName: 'memory';
-		presenterTwo: densityChartByNumbOfAlloc withName: 'number of allocations';
+	   presenterOne: densityChartByMemory withName: 'Group by memory';
+		presenterTwo: densityChartByNumbOfAlloc withName: 'Group by number of allocations';
 		yourself
 ]
 
