@@ -47,7 +47,10 @@ AlternatorPresenter >> defaultLayout [
 	^ SpBoxLayout newTopToBottom
 		  spacing: 5;
 		  add: (SpBoxLayout newLeftToRight
-				   add: toggleChartButton;
+				   vAlignCenter;
+				   hAlignEnd;
+				   add: 'Alternate: ' expand: false;
+				   add: toggleChartButton width: 150;
 				   yourself)
 		  expand: false;
 		  add: self activePresenter expand: true;

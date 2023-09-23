@@ -50,7 +50,7 @@ AllocatedObjectsTablePresenter >> initializePresenters [
 		alternateRowsColor;
 		addColumn: (SpIndexTableColumn new
 			title: 'Index';
-			beNotExpandable;
+			width: 60;
 			yourself);
 		addColumn: (SpStringTableColumn
 			title: 'Allocated object class'
