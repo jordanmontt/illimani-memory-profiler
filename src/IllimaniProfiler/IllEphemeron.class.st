@@ -6,7 +6,11 @@ Class {
 		'finalizationTime',
 		'sizeInBytes',
 		'initializationTime',
-		'allocatedObjectClass'
+		'allocatedObjectClass',
+		'scavengesAtStart',
+		'fullGCsAtStart',
+		'survivedScavenges',
+		'survivedFullGC'
 	],
 	#category : 'IllimaniProfiler-Finalization-Profiler',
 	#package : 'IllimaniProfiler',
@@ -53,7 +57,9 @@ IllEphemeron >> initializationTime: anObject [
 IllEphemeron >> initialize [
 
 	super initialize.
-	initializationTime := Time primUTCMicrosecondsClock
+	initializationTime := Time primUTCMicrosecondsClock.
+	scavengesAtStart := Smalltalk vm incrementalGCCount.
+	fullGCsAtStart := Smalltalk vm fullGCCount
 ]
 
 { #category : 'inspector' }
@@ -66,7 +72,9 @@ IllEphemeron >> inspectorExtension: aBuilder [
 		('Memory Size' -> sizeInBytes humanReadableByteSizeString).
 	 	('Initialization time' -> initializationTime).
 		('Finalization time' -> finalizationTime).
-		('Object''s lifetime' -> self lifetimeAsDuration humanReadablePrintString) }.
+		('Object''s lifetime' -> self lifetimeAsDuration humanReadablePrintString).
+		('Survived # of scavenges' -> survivedScavenges).
+		('Survived # of full GCs' -> survivedFullGC). }.
 	items := elements collect: [ :e | StInspectorAssociationNode hostObject: e ].
 	tablePresenter := aBuilder newTable.
 	tablePresenter
@@ -89,7 +97,9 @@ IllEphemeron >> mourn [
 	key ifNil: [ ^ self ].
 
 	key := nil.
-	finalizationTime := Time primUTCMicrosecondsClock
+	finalizationTime := Time primUTCMicrosecondsClock.
+	survivedScavenges := Smalltalk vm incrementalGCCount - scavengesAtStart.
+	survivedFullGC := Smalltalk vm fullGCCount - fullGCsAtStart
 ]
 
 { #category : 'printing' }

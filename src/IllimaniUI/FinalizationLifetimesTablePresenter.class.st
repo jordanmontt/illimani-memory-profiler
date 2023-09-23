@@ -13,6 +13,12 @@ Class {
 }
 
 { #category : 'initialization' }
+FinalizationLifetimesTablePresenter >> connectPresenters [
+
+	tablePresenter whenSelectedDo: [ :item | item value inspect ]
+]
+
+{ #category : 'initialization' }
 FinalizationLifetimesTablePresenter >> convertToPercentageString: aNumber [
 
 	^ (aNumber * 100 printShowingDecimalPlaces: 2) , '%'
@@ -30,6 +36,7 @@ FinalizationLifetimesTablePresenter >> defaultLayout [
 FinalizationLifetimesTablePresenter >> initializePresenters [
 
 	tablePresenter := self newTable
+		activateOnSingleClick;
 		items: groupedAllocationsBySeconds;
 		alternateRowsColor;
 		addColumn: (SpStringTableColumn

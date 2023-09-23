@@ -19,10 +19,8 @@ Class {
 { #category : 'initialization' }
 GroupedAllocatorsTablePresenter >> connectPresenters [
 
-	textInput
-		whenTextChangedDo: [ :aText | self filterTable: aText ].
-	tablePresenter
-		whenSelectedDo: [ :item | item inspect ]
+	textInput whenTextChangedDo: [ :aText | self filterTable: aText ].
+	tablePresenter whenSelectedDo: [ :item | item inspect ]
 ]
 
 { #category : 'layout' }
@@ -56,7 +54,7 @@ GroupedAllocatorsTablePresenter >> initializePresenters [
 	tablePresenter := self newTable.
 	tablePresenter
 		alternateRowsColor;
-		activateOnDoubleClick;
+		activateOnSingleClick;
 		addColumn: (SpIndexTableColumn new
 			title: 'Index';
 			width: 60;
