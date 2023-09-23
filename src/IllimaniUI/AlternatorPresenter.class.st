@@ -48,9 +48,11 @@ AlternatorPresenter >> defaultLayout [
 		  spacing: 5;
 		  add: (SpBoxLayout newLeftToRight
 				   vAlignCenter;
-				   hAlignEnd;
 				   add: 'Alternate: ' expand: false;
-				   add: toggleChartButton width: 150;
+				   add: toggleChartButton;
+				   add: self newNullPresenter;
+				   add: self newNullPresenter;
+				   add: self newNullPresenter;
 				   yourself)
 		  expand: false;
 		  add: self activePresenter expand: true;
@@ -70,7 +72,9 @@ AlternatorPresenter >> initializePresenters [
 	toggleChartButton := self newButton
 		label: self labelForToggleButton;
 		iconName: #glamorousOver;
-		yourself
+		yourself.
+	self focusOrder
+		add: toggleChartButton
 ]
 
 { #category : 'accessing' }
