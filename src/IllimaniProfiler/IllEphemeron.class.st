@@ -90,7 +90,8 @@ IllEphemeron >> inspectorExtension: aBuilder [
 		('Finalization time' -> finalizationTime).
 		('Object''s lifetime' -> self lifetimeAsDuration humanReadablePrintString).
 		('Survived # of scavenges' -> survivedScavenges).
-		('Survived # of full GCs' -> survivedFullGC). }.
+		('Survived # of full GCs' -> survivedFullGC).
+		('Finalization was forced?' -> forcedFinalization) }.
 	items := elements collect: [ :e | StInspectorAssociationNode hostObject: e ].
 	tablePresenter := aBuilder newTable.
 	tablePresenter
