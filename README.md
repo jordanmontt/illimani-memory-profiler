@@ -61,7 +61,7 @@ Example 2, finalization profiler on a code snippet:
 
 ```st
 IllFinalizationProfiler new.
-	profileOn: [ 15 timesRepeat: [StPlaygroundPresenter open close ] ] ;
+	profileOn: [ 15 timesRepeat: [ StPlaygroundPresenter open close ] ] ;
 	open;
 	yourself
 ```
@@ -118,7 +118,7 @@ Without the UI, because the profiler is independent from the UI, you can access 
 
 ## Implementation details
 
-- Illimani uses [method proxies](https://github.com/pharo-contributions/MethodProxies) library to capture the allocations. It insert a proxy in `Behavior>>basicNew:`, `Behavior>>basicNew` and `Array>>#new:`.
+- Illimani uses [method proxies](https://github.com/pharo-contributions/MethodProxies) library to capture the allocations. It inserts a proxy in `Behavior>>basicNew:`, `Behavior>>basicNew` and `Array>>#new:`.
 - It uses Ephemerons to know when an object is about to be finalized.
 - It has an statistics model that helps with the calculations of allocations grouping them by classes and methods and sorting them by number of allocations. 
 - The UI is independent of the profiler. It can be used without it. You will have access to all allocations and to the same statistics.
