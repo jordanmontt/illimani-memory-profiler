@@ -103,12 +103,6 @@ IllFinalizationUnprocessedAllocationsProfiler >> stopProfiling [
 	self forceFinalizationOfObjects
 ]
 
-{ #category : 'as yet unclassified' }
-IllFinalizationUnprocessedAllocationsProfiler >> uiClass [
-
-	^ IllFinalizationProfilerUI
-]
-
 { #category : 'accessing' }
 IllFinalizationUnprocessedAllocationsProfiler >> unprocessedAllocations [
 
