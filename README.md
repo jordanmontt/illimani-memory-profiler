@@ -32,7 +32,6 @@ Start Playing:
 ```st
 profiler := IllAllocationProfiler new.
 profiler
-	captureAllObjects;
 	profileFor: 5 seconds.
 	
 profiler open
@@ -42,21 +41,16 @@ Example 1:
 
 ```st
 IllAllocationProfiler new
-	objectsToCapture: { ByteString . Array . String . OrderedCollection . ByteArray };
 	copyExecutionStack;
-	profileOn: [ 10000 timesRepeat: [ SpPresenter new ] ];
+	profileOn: [ 1000 timesRepeat: [ SpPresenter new ] ];
 	open
 ```
 
-Example 2, capturing all but Morphic
+Example 2, capturing all while interacting with the Pharo IDE
 
 ```st
-morphicPackages := RPackageOrganizer default packages select: [ :package | package name includesSubstring: 'morphic' caseSensitive: false  ].
-morphicClasses := morphicPackages flatCollect: #classes as: Set.
 
 profiler := IllAllocationProfiler new
-	captureAllObjects;
-	objectsToIgnore: morphicClasses;
 	profileFor: 5 seconds;
 	yourself.
 	
@@ -102,19 +96,6 @@ You can open the ui at any time with the message `open` (even if the profiler is
 
 ```st
 profiler open.
-```
-
-If you want to capture all the allocations of objects but ignoring some of them, you can use 
-
-```st
-profiler objectsToIgnore: { ByteString . ByteArray }.
-```
-
-You can keep the allocated objects. This is useful is for example you want to know how many equal objects did you allocated.
-Note that this will affect the GC statistics since the GC will not be able to free memory since the objects are being referencered (!)
-
-```st
-profiler keepTheAllocatedObjects.
 ```
 
 ### Sampling
