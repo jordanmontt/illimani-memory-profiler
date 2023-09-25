@@ -11,7 +11,8 @@ Class {
 		'proxyArrayClass',
 		'vmStats',
 		'totalTime',
-		'startTime'
+		'startTime',
+		'proxyCopy'
 	],
 	#category : 'IllimaniProfiler-Instrumentation',
 	#package : 'IllimaniProfiler',
@@ -56,10 +57,11 @@ IllAbstractProfiler >> initializeMethodProxies: aHandler [
 	proxyBasicNew := MpMethodProxy onMethod: Behavior >> #basicNew handler: aHandler.
 	proxyBasicNewKeyword := MpMethodProxy onMethod: Behavior >> #basicNew: handler: aHandler.
 
-	"Not wrapping the method Number>>#@ because is always by far the must allocator method and
+	"Not wrapping the method Number>>#@ because it's always by far the must allocator method and
 	it pollutes the results."
 	proxyArrobas := MpNullMethodProxy onMethod: Number >> #@ handler: aHandler.
-
+	
+	proxyCopy := MpMethodProxy onMethod: Object >> #shallowCopy handler: aHandler. 
 	proxyArrayClass := MpMethodProxy onMethod: Array class >> #new: handler: aHandler
 ]
 
@@ -76,7 +78,8 @@ IllAbstractProfiler >> installMethodProxies [
 	proxyBasicNew install.
 	proxyBasicNewKeyword install.
 	proxyArrobas install.
-	proxyArrayClass install
+	proxyArrayClass install.
+	proxyCopy install
 ]
 
 { #category : 'profiling' }
@@ -123,12 +126,6 @@ IllAbstractProfiler >> profileOn: aBlock [
 	[
 	aBlock value.
 	nil ] ensure: [ self stopProfiling ]
-]
-
-{ #category : 'accessing' }
-IllAbstractProfiler >> profilerHandler [
-
-	^ handler
 ]
 
 { #category : 'profiling' }
@@ -261,7 +258,8 @@ IllAbstractProfiler >> uninstallMethodProxies [
 	proxyBasicNew uninstall.
 	proxyBasicNewKeyword uninstall.
 	proxyArrobas uninstall.
-	proxyArrayClass uninstall
+	proxyArrayClass uninstall.
+	proxyCopy uninstall
 ]
 
 { #category : 'profiling' }
