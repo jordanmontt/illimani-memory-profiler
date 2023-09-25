@@ -13,9 +13,9 @@
   <em>The Illimani mountain in La Paz, Bolivia</em>
 </p>
 
-The release version `v0.8` works on Pharo 11 and Pharo 10. To use it on Pharo 12, please use the version that is on the `main` branch.
+The release version works on Pharo 10, 11 and Pharo 12. But, keep in mind that the profiler should be faster in Pharo 12. This is because there were some optimizations done in Pharo 12 to make the instrumentation faster.
 
-## How to install it (`main` version for Pharo 12)
+## How to install it
 
 ```smalltalk
 EpMonitor disableDuring: [
