@@ -58,8 +58,8 @@ IllEphemeron >> initialize [
 
 	super initialize.
 	initializationTime := Time primUTCMicrosecondsClock.
-	scavengesAtStart := Smalltalk vm incrementalGCCount.
-	fullGCsAtStart := Smalltalk vm fullGCCount
+	survivedScavenges := Smalltalk vm incrementalGCCount.
+	survivedFullGC := Smalltalk vm fullGCCount
 ]
 
 { #category : 'inspector' }
@@ -98,8 +98,8 @@ IllEphemeron >> mourn [
 
 	key := nil.
 	finalizationTime := Time primUTCMicrosecondsClock.
-	survivedScavenges := Smalltalk vm incrementalGCCount - scavengesAtStart.
-	survivedFullGC := Smalltalk vm fullGCCount - fullGCsAtStart
+	survivedScavenges := Smalltalk vm incrementalGCCount - survivedScavenges.
+	survivedFullGC := Smalltalk vm fullGCCount - survivedFullGC
 ]
 
 { #category : 'printing' }
@@ -120,4 +120,16 @@ IllEphemeron >> sizeInBytes [
 IllEphemeron >> sizeInBytes: anObject [
 
 	sizeInBytes := anObject
+]
+
+{ #category : 'accessing' }
+IllEphemeron >> survivedFullGC [
+
+	^ survivedFullGC
+]
+
+{ #category : 'accessing' }
+IllEphemeron >> survivedScavenges [
+
+	^ survivedScavenges
 ]

@@ -3,7 +3,8 @@ Class {
 	#superclass : 'IllAbstractUI',
 	#instVars : [
 		'densityChartPresenter',
-		'lifetimesTable'
+		'lifetimesTable',
+		'gcCyclesTable'
 	],
 	#category : 'IllimaniUI-Main Presenter',
 	#package : 'IllimaniUI',
@@ -21,6 +22,13 @@ IllFinalizationProfilerUI >> densityChartPresenter [
 
 	densityChartPresenter ifNil: [ self initializeDensityChartPresenter ].
 	^ densityChartPresenter
+]
+
+{ #category : 'accessing - lazy presenters' }
+IllFinalizationProfilerUI >> gcCyclesTable [
+
+	gcCyclesTable ifNil: [ self initializeGCCyclesTable ].
+	^ gcCyclesTable
 ]
 
 { #category : 'initialization - lazy presenters' }
@@ -49,6 +57,17 @@ IllFinalizationProfilerUI >> initializeDensityChartPresenter [
 ]
 
 { #category : 'initialization - lazy presenters' }
+IllFinalizationProfilerUI >> initializeGCCyclesTable [
+
+	gcCyclesTable := AlternatorPresenter new
+	   presenterOne: (FinalizationScavengesCyclesTablePresenter on: profiler objectAllocations)
+		withName: 'Group by scavenges';
+		presenterTwo: (FinalizationFullGCCyclesTablePresenter on: profiler objectAllocations)
+		withName: 'Group by full GCs';
+		yourself
+]
+
+{ #category : 'initialization - lazy presenters' }
 IllFinalizationProfilerUI >> initializeLifetimesTable [
 
 	lifetimesTable := self
@@ -61,8 +80,9 @@ IllFinalizationProfilerUI >> initializeNotebook [
 
 	notebookPresenter := self newNotebook
 		addPageTitle: 'Summary' provider: [ self summaryAndEvaluatorPresenter ];
-		addPageTitle: 'Allocated Objects' provider: [ self allocatedObjectsTablePresenter ];
 		addPageTitle: 'Lifetimes Table' provider: [ self lifetimesTable ];
+		addPageTitle: 'Survived GC cycles' provider: [ self gcCyclesTable ];
+		addPageTitle: 'Allocated Objects' provider: [ self allocatedObjectsTablePresenter ];
 		addPageTitle: 'Lifetimes Density' provider: [ self densityChartPresenter ];
 
 		addPageTitle: 'Evaluator' provider: [ self codeEvaluator ];
