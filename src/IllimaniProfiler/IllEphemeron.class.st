@@ -7,10 +7,9 @@ Class {
 		'sizeInBytes',
 		'initializationTime',
 		'allocatedObjectClass',
-		'scavengesAtStart',
-		'fullGCsAtStart',
 		'survivedScavenges',
-		'survivedFullGC'
+		'survivedFullGC',
+		'forcedFinalization'
 	],
 	#category : 'IllimaniProfiler-Finalization-Profiler',
 	#package : 'IllimaniProfiler',
@@ -41,6 +40,22 @@ IllEphemeron >> finalizationTime: anObject [
 	finalizationTime := anObject
 ]
 
+{ #category : 'finalization' }
+IllEphemeron >> forceFinalization [
+
+	"If already finalized"
+	key ifNil: [ ^ self ].
+
+	forcedFinalization := true.
+	self mourn
+]
+
+{ #category : 'accessing' }
+IllEphemeron >> forcedFinalization [
+
+	^ forcedFinalization
+]
+
 { #category : 'accessing' }
 IllEphemeron >> initializationTime [
 
@@ -59,7 +74,8 @@ IllEphemeron >> initialize [
 	super initialize.
 	initializationTime := Time primUTCMicrosecondsClock.
 	survivedScavenges := Smalltalk vm incrementalGCCount.
-	survivedFullGC := Smalltalk vm fullGCCount
+	survivedFullGC := Smalltalk vm fullGCCount.
+	forcedFinalization := false
 ]
 
 { #category : 'inspector' }
@@ -94,11 +110,11 @@ IllEphemeron >> lifetimeAsDuration [
 { #category : 'finalization' }
 IllEphemeron >> mourn [
 
-	key ifNil: [ ^ self ].
-
 	key := nil.
 	finalizationTime := Time primUTCMicrosecondsClock.
-	survivedScavenges := Smalltalk vm incrementalGCCount - survivedScavenges.
+	"When the vm calls the method mourn, it is right before of the collection of the object.
+	So we need to add 1 to the counter of scavenges."
+	survivedScavenges := (Smalltalk vm incrementalGCCount - survivedScavenges) + 1.
 	survivedFullGC := Smalltalk vm fullGCCount - survivedFullGC
 ]
 

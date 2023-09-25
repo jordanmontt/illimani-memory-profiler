@@ -13,7 +13,7 @@ Class {
 { #category : 'profiling' }
 IllFinalizationProfiler >> forceFinalizationOfObjects [
 
-	ephemeronsCollection do: [ :e | e mourn ]
+	ephemeronsCollection do: [ :e | e forceFinalization ]
 ]
 
 { #category : 'initialization' }
