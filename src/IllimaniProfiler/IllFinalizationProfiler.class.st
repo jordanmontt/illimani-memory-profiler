@@ -3,7 +3,8 @@ Class {
 	#superclass : 'IllAbstractProfiler',
 	#instVars : [
 		'ephemeronsCollection',
-		'statsModel'
+		'statsModel',
+		'gcProcess'
 	],
 	#category : 'IllimaniProfiler-Finalization-Profiler',
 	#package : 'IllimaniProfiler',
@@ -13,6 +14,10 @@ Class {
 { #category : 'profiling' }
 IllFinalizationProfiler >> forceFinalizationOfObjects [
 
+	"First, run several GCs to collect the non referenced objects.
+	We need to run some GCs because there can be nested dependencies between Ephemerons."
+	25 timesRepeat: [ Smalltalk garbageCollect ].
+	"Then, force the finalization of the unfinalized Ephemerons"
 	ephemeronsCollection do: [ :e | e forceFinalization ]
 ]
 
@@ -39,6 +44,22 @@ IllFinalizationProfiler >> objectAllocations [
 	^ ephemeronsCollection
 ]
 
+{ #category : 'profiling' }
+IllFinalizationProfiler >> startGCProcess [
+
+	gcProcess := [
+	[ true ] whileTrue: [
+		Smalltalk garbageCollect.
+		500 milliSeconds wait ] ] fork
+]
+
+{ #category : 'profiling' }
+IllFinalizationProfiler >> startProfiling [
+
+	super startProfiling.
+	self startGCProcess
+]
+
 { #category : 'accessing - statistics' }
 IllFinalizationProfiler >> stats [
 
@@ -46,8 +67,15 @@ IllFinalizationProfiler >> stats [
 ]
 
 { #category : 'profiling' }
+IllFinalizationProfiler >> stopGCProcess [
+
+	gcProcess terminate
+]
+
+{ #category : 'profiling' }
 IllFinalizationProfiler >> stopProfiling [
 
 	super stopProfiling.
+	self stopGCProcess.
 	self forceFinalizationOfObjects
 ]
