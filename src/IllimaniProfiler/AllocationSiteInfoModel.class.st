@@ -1,6 +1,6 @@
 Class {
 	#name : 'AllocationSiteInfoModel',
-	#superclass : 'BasicAllocationInfoModel',
+	#superclass : 'AllocationFinalizationInfoModel',
 	#instVars : [
 		'context',
 		'allocatorClass',

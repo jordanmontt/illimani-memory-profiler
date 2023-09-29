@@ -85,7 +85,7 @@ IllFinalizationProfilerUnconstructedCollectionTest >> testObjectAllocations [
 	profiler registerAllocation: allocation.
 	profiler finalize: allocation.
 	
-	allocationHolderExpected := BasicAllocationInfoModel new
+	allocationHolderExpected := AllocationFinalizationInfoModel new
 		allocatedObjectClass: allocation class;
 		sizeInBytes: allocation sizeInMemory;
 		yourself.
@@ -101,7 +101,7 @@ IllFinalizationProfilerUnconstructedCollectionTest >> testObjectAllocationsTwoOb
 	allocation := Array new.
 	profiler registerAllocation: allocation.
 	profiler finalize: allocation.
-	allocationHolderExpected1 := BasicAllocationInfoModel new
+	allocationHolderExpected1 := AllocationFinalizationInfoModel new
 		allocatedObjectClass: allocation class;
 		sizeInBytes: allocation sizeInMemory;
 		yourself.
@@ -109,7 +109,7 @@ IllFinalizationProfilerUnconstructedCollectionTest >> testObjectAllocationsTwoOb
 	allocation := OrderedCollection new.
 	profiler registerAllocation: allocation.
 	profiler finalize: allocation.
-	allocationHolderExpected2 := BasicAllocationInfoModel new
+	allocationHolderExpected2 := AllocationFinalizationInfoModel new
 		allocatedObjectClass: allocation class;
 		sizeInBytes: allocation sizeInMemory;
 		yourself.
@@ -125,7 +125,7 @@ IllFinalizationProfilerUnconstructedCollectionTest >> testObjectAllocationsTwoOb
 	allocation := Array new.
 	profiler registerAllocation: allocation.
 	profiler finalize: allocation.
-	allocationHolderExpected1 := BasicAllocationInfoModel new
+	allocationHolderExpected1 := AllocationFinalizationInfoModel new
 		allocatedObjectClass: allocation class;
 		sizeInBytes: allocation sizeInMemory;
 		yourself.
@@ -133,7 +133,7 @@ IllFinalizationProfilerUnconstructedCollectionTest >> testObjectAllocationsTwoOb
 	allocation := OrderedCollection new.
 	profiler registerAllocation: allocation.
 	profiler finalize: allocation.
-	allocationHolderExpected2 := BasicAllocationInfoModel new
+	allocationHolderExpected2 := AllocationFinalizationInfoModel new
 		allocatedObjectClass: allocation class;
 		sizeInBytes: allocation sizeInMemory;
 		yourself.
@@ -151,7 +151,7 @@ IllFinalizationProfilerUnconstructedCollectionTest >> testObjectAllocationsWithT
 	profiler registerAllocation: allocation.
 	profiler finalize: allocation.
 	
-	allocationHolderExpected := BasicAllocationInfoModel new
+	allocationHolderExpected := AllocationFinalizationInfoModel new
 		allocatedObjectClass: allocation class;
 		sizeInBytes: allocation sizeInMemory;
 		yourself.

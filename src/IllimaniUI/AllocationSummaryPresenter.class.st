@@ -10,6 +10,21 @@ Class {
 }
 
 { #category : 'layout' }
+AllocationSummaryPresenter >> allocatedMemoryRateString [
+
+	^ profiler stats allocatedMemoryRatePerSecond asInteger humanReadableByteSizeString
+	  , ' per second'
+]
+
+{ #category : 'layout' }
+AllocationSummaryPresenter >> allocationRateString [
+
+	| rate |
+	rate := profiler stats allocationRatePerSecond.
+	^ rate asInteger asStringWithCommas , ' allocations per second'
+]
+
+{ #category : 'layout' }
 AllocationSummaryPresenter >> buildTablePresenterOn: associations [ 
 
 	^ self newTable
@@ -44,11 +59,14 @@ AllocationSummaryPresenter >> defaultLayout [
 { #category : 'layout' }
 AllocationSummaryPresenter >> generalStatsAssociations [
 
-	^ {		('Total profiled time' -> (Duration microSeconds: profiler totalProfiledTime)
-				humanReadableStringWithOnlySeconds).
-			('Total allocated objects' -> profiler stats totalAllocatedObjects asStringWithCommas).
-			('Total allocated memory' -> profiler stats
-				totalAllocatedMemory humanReadableByteSizeString) }
+	^ {
+		('Total profiled time' ->
+			(Duration microSeconds: profiler totalProfiledTime) humanReadableStringWithOnlySeconds).
+		('Total allocated objects' -> profiler stats totalAllocatedObjects asStringWithCommas).
+		('Allocations rate' -> self allocationRateString ).
+		('Total allocated memory' ->
+			profiler stats totalAllocatedMemory humanReadableByteSizeString).
+		('Allocated memory rate' -> self allocatedMemoryRateString)}
 ]
 
 { #category : 'accessing - model' }

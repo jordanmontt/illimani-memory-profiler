@@ -63,7 +63,7 @@ IllFinalizationUnprocessedAllocationsProfiler >> objectAllocations [
 	unprocessedAllocations doWithIndex: [ :data :index |
 		data = -1 ifTrue: [
 			| model |
-			model := allocationsDictionary at: (unprocessedAllocations at: index - 4) ifAbsentPut: [ BasicAllocationInfoModel new ].
+			model := allocationsDictionary at: (unprocessedAllocations at: index - 4) ifAbsentPut: [ AllocationFinalizationInfoModel new ].
 			self processInitialization: model atIndex: index ] ].
 	
 	unprocessedFinalizations doWithIndex: [ :data :index |

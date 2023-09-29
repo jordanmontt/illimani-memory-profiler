@@ -11,5 +11,5 @@ IllAbstractProfiler >> open [
 { #category : '*IllimaniUI' }
 IllAbstractProfiler >> uiClass [
 
-	^ self subclassResponsibility
+	^ IllAllocationStatisticsProfilerUI
 ]
