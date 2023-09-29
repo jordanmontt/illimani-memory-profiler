@@ -26,3 +26,13 @@ IllAllocationProfilerTest >> testProfileOnCopyExecutionStack [
 	profiler objectAllocations do: [ :alloc | "Stack was copied"
 		self assert: alloc context class equals: Context ]
 ]
+
+{ #category : 'tests' }
+IllAllocationProfilerTest >> testProfileOnSimpleMoreAllocations [
+
+	profiler profileOn: [ 1000 timesRepeat: [ self profilerClass new ] ].
+
+	self assert: profiler objectAllocations size > 1000.
+	profiler objectAllocations do: [ :alloc |
+		self assert: alloc allocatedObjectClass isClass ]
+]
