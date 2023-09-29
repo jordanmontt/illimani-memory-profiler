@@ -16,7 +16,7 @@ IllFinalizationProfiler >> forceFinalizationOfObjects [
 
 	"First, run several GCs to collect the non referenced objects.
 	We need to run some GCs because there can be nested dependencies between Ephemerons."
-	25 timesRepeat: [ Smalltalk garbageCollect ].
+	"25 timesRepeat: [ Smalltalk garbageCollect ]."
 	"Then, force the finalization of the unfinalized Ephemerons"
 	ephemeronsCollection do: [ :e | e forceFinalization ]
 ]

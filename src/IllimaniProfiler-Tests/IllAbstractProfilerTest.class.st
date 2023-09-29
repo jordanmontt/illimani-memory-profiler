@@ -52,6 +52,16 @@ IllAbstractProfilerTest >> testProfileOnSimple [
 ]
 
 { #category : 'tests' }
+IllAbstractProfilerTest >> testProfileOnSimpleMoreAllocations [
+
+	profiler profileOn: [ 1000 timesRepeat: [ self profilerClass new ] ].
+
+	self assert: profiler objectAllocations size > 1000.
+	profiler objectAllocations do: [ :alloc |
+		self assert: alloc allocatedObjectClass isClass ]
+]
+
+{ #category : 'tests' }
 IllAbstractProfilerTest >> testSamplingRate [
 
 	| allocatedByteSrings |
