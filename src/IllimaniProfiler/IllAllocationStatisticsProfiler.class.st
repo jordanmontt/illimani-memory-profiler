@@ -10,20 +10,6 @@ Class {
 	#tag : 'Allocation-Profiler'
 }
 
-{ #category : 'accessing - statistics' }
-IllAllocationStatisticsProfiler >> allocatedMemoryRatePerSecond [
-
-	^ self stats totalAllocatedMemory
-	  / (Duration microSeconds: totalTime) totalSeconds asFloat
-]
-
-{ #category : 'accessing - statistics' }
-IllAllocationStatisticsProfiler >> allocationRatePerSecond [
-
-	^ self stats totalAllocatedObjects
-	  / (Duration microSeconds: totalTime) totalSeconds asFloat
-]
-
 { #category : 'initialization' }
 IllAllocationStatisticsProfiler >> initialize [
 

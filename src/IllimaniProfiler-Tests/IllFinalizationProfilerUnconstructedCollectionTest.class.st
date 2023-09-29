@@ -1,9 +1,6 @@
 Class {
 	#name : 'IllFinalizationProfilerUnconstructedCollectionTest',
-	#superclass : 'TestCase',
-	#instVars : [
-		'profiler'
-	],
+	#superclass : 'IllAbstractProfilerTest',
 	#category : 'IllimaniProfiler-Tests-Finalization-Profiler',
 	#package : 'IllimaniProfiler-Tests',
 	#tag : 'Finalization-Profiler'
@@ -18,18 +15,9 @@ IllFinalizationProfilerUnconstructedCollectionTest >> assertAllocationResult: al
 ]
 
 { #category : 'running' }
-IllFinalizationProfilerUnconstructedCollectionTest >> setUp [
+IllFinalizationProfilerUnconstructedCollectionTest >> profilerClass [
 
-	super setUp.
-	profiler := IllFinalizationUnprocessedAllocationsProfiler new
-]
-
-{ #category : 'running' }
-IllFinalizationProfilerUnconstructedCollectionTest >> tearDown [
-
-	profiler forceUninstall.
-	profiler := nil.
-	super tearDown
+	^ IllFinalizationUnprocessedAllocationsProfiler
 ]
 
 { #category : 'tests' }

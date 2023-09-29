@@ -20,6 +20,20 @@ Class {
 }
 
 { #category : 'accessing - statistics' }
+IllAbstractProfiler >> allocatedMemoryRatePerSecond [
+
+	^ self stats totalAllocatedMemory
+	  / (Duration microSeconds: totalTime) totalSeconds asFloat
+]
+
+{ #category : 'accessing - statistics' }
+IllAbstractProfiler >> allocationRatePerSecond [
+
+	^ self stats totalAllocatedObjects
+	  / (Duration microSeconds: totalTime) totalSeconds asFloat
+]
+
+{ #category : 'accessing - statistics' }
 IllAbstractProfiler >> beginningOfProfilingTime [
 
 	^ startTime
