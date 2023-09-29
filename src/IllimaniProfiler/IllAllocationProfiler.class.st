@@ -1,18 +1,10 @@
 "
-I am a Memory Profiler.
+I am a Memory Allocation Sites Profiler. I provide information about the allocation sites of the allocated objects of your application. Information such as who is the allocator class, allocator method, the context in where the allocation was made, etc.
 
-I will put a proxy method  inside the methods: `basicNew` and `basicNew:` of the Behavior class.
-First, you need to specify which classes do you want to capture. For example, let's say that you can to register the allocations of Color objects:
-
-```
-profiler :=  IllimaniAllocationProfiler new.
-profiler classesToRegister: { Color }.
-```
-
-Or if you want to capture all type of objects
+I will ìnstall method proxies inside some allocator methods to capture the allocations
 
 ```
-profiler captureAllObjects
+profiler :=  IllimaniAllocationProfiler new.	
 ```
 
 To profile a code block:
@@ -24,10 +16,10 @@ profiler profileOn: [ anObject performSomeAction ]
 To monitor the image for a given duration a code block:
 
 ```
-profiler profileFor: 2 seconds
+profiler profileFor: 5 seconds
 ```
 
-You can open the ui at any time with the message `open`
+You can open the ui at any time with the message `open`, even if the profiling is still being made.
 
 ```
 profiler open
@@ -44,9 +36,7 @@ Keep in mind that your image can get slow and big. The Pharo image allocate thou
 Example 1:
 
 ```
-IllimaniAllocationProfiler new
-	copyExecutionStack
-	classesToRegister: { Rectangle };
+IllAllocationProfiler new
 	profileFor: 3 seconds;
 	open.
 ```
@@ -54,8 +44,7 @@ IllimaniAllocationProfiler new
 Example 2:
 
 ```
-IllimaniAllocationProfiler new
-	captureAllObjects;
+IllAllocationProfiler new
 	copyExecutionStack;
 	profileOn: [ 1000 timesRepeat: [ Object new ] ];
 	open
