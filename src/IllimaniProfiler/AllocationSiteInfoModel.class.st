@@ -94,7 +94,7 @@ AllocationSiteInfoModel >> inspectableAssociations [
 AllocationSiteInfoModel >> inspectorExtensionContextFingerprint: aBuilder [
 
 	<inspectorPresentationOrder: 2 title: 'Context Fingerprint'>
-	^ contextFingerprint inspectionFullString
+	^ contextFingerprint contents inspectionFullString
 ]
 
 { #category : 'printing' }
