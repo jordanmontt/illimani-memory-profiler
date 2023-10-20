@@ -92,15 +92,15 @@ IllAbstractProfilerTest >> testSamplingRateVariable [
 
 	"By default, do not sample"
 	self assert: profiler samplingRate equals: 1.
-	
+
 	"Sample at 20%"
 	profiler samplingRate: 20.
 	self assert: profiler samplingRate equals: 20 / 100.
-	
+
 	"Sample at 75%"
 	profiler samplingRate: 75.
 	self assert: profiler samplingRate equals: 75 / 100.
-	
+
 	"Do not sample. The same as sampling 100%".
 	profiler samplingRate: 100.
 	self assert: profiler samplingRate equals: 1.
