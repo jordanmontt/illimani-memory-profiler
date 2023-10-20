@@ -145,11 +145,17 @@ IllAbstractProfiler >> profileOn: aBlock [
 { #category : 'profiling' }
 IllAbstractProfiler >> registerAllocation: anObject [
 
-	"Sampling"
-	"samplingCounter := samplingCounter + 1.
-	samplingCounter % samplingRate = 0 ifFalse: [ ^ anObject ]."
-	
-	self internalRegisterAllocation: anObject
+	samplingRate = 1 ifTrue: [
+		"Sampling 100% capture all"
+		self internalRegisterAllocation: anObject.
+		^ self ].
+
+	samplingCounter := samplingCounter + 1.
+	samplingCounter > 100 ifTrue: [ samplingCounter := 1 ].
+
+	(samplingCounter / 100) / samplingRate <= 1
+		ifTrue: [ self internalRegisterAllocation: anObject ]
+		ifFalse: [ ^ self ]
 ]
 
 { #category : 'accessing - statistics' }
@@ -237,7 +243,7 @@ IllAbstractProfiler >> samplingRate [
 IllAbstractProfiler >> samplingRate: anInteger [
 	"The anInteger needs to be an integer number between 1 and 100.  "
 
-	samplingRate := (100 / anInteger) asInteger
+	samplingRate := (anInteger / 100)
 ]
 
 { #category : 'profiling' }

@@ -55,13 +55,10 @@ IllAbstractProfilerTest >> testProfileOnSimple [
 IllAbstractProfilerTest >> testSamplingRate [
 
 	| allocatedByteSrings |
-	"Sampling is not enable for the moment"
-	self flag: 'Skip'.
-	self skip.
 	
 	profiler
 		samplingRate: 33;
-		profileOn: [ 90 timesRepeat: [ ByteString new ] ].
+		profileOn: [ 100 timesRepeat: [ ByteString new ] ].
 
 	allocatedByteSrings := (profiler objectAllocations select:
 		[ :e | e allocatedObjectClass = ByteString ]) size.
@@ -69,7 +66,25 @@ IllAbstractProfilerTest >> testSamplingRate [
 	"We are cheking in this range becase the profiler makes some allocations that are
 	necessary for the profiler to work, like Durations objects. So we cannot chack that the
 	allocations are exacty 1/3 of the total."
-	self assert: (allocatedByteSrings >= 30) & (allocatedByteSrings < 40)
+	self assert: (allocatedByteSrings >= 33) & (allocatedByteSrings < 40)
+]
+
+{ #category : 'tests' }
+IllAbstractProfilerTest >> testSamplingRateOtherPercentage [
+
+	| allocatedByteSrings |
+	
+	profiler
+		samplingRate: 75;
+		profileOn: [ 100 timesRepeat: [ ByteString new ] ].
+
+	allocatedByteSrings := (profiler objectAllocations select:
+		[ :e | e allocatedObjectClass = ByteString ]) size.
+
+	"We are cheking in this range becase the profiler makes some allocations that are
+	necessary for the profiler to work, like Durations objects. So we cannot chack that the
+	allocations are exacty 1/3 of the total."
+	self assert: (allocatedByteSrings >= 75) & (allocatedByteSrings < 80)
 ]
 
 { #category : 'tests' }
@@ -80,8 +95,11 @@ IllAbstractProfilerTest >> testSamplingRateVariable [
 	
 	"Sample at 20%"
 	profiler samplingRate: 20.
-	"Sample at 20% is the same as sample each 5 allocations"
-	self assert: profiler samplingRate equals: 5.
+	self assert: profiler samplingRate equals: 20 / 100.
+	
+	"Sample at 75%"
+	profiler samplingRate: 75.
+	self assert: profiler samplingRate equals: 75 / 100.
 	
 	"Do not sample. The same as sampling 100%".
 	profiler samplingRate: 100.
