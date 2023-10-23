@@ -62,7 +62,7 @@ IllAbstractProfiler >> initialize [
 		yourself.
 	self initializeMethodProxies: handler.
 	samplingCounter := 0.
-	samplingRate := 1
+	samplingRate := 100
 ]
 
 { #category : 'initialization' }
@@ -145,7 +145,7 @@ IllAbstractProfiler >> profileOn: aBlock [
 { #category : 'profiling' }
 IllAbstractProfiler >> registerAllocation: anObject [
 
-	samplingRate = 1 ifTrue: [
+	samplingRate = 100 ifTrue: [
 		"Sampling 100% capture all"
 		self internalRegisterAllocation: anObject.
 		^ self ].
@@ -153,7 +153,7 @@ IllAbstractProfiler >> registerAllocation: anObject [
 	samplingCounter := samplingCounter + 1.
 	samplingCounter > 100 ifTrue: [ samplingCounter := 1 ].
 
-	(samplingCounter / 100) / samplingRate <= 1
+	samplingCounter <= samplingRate
 		ifTrue: [ self internalRegisterAllocation: anObject ]
 		ifFalse: [ ^ self ]
 ]
@@ -241,9 +241,10 @@ IllAbstractProfiler >> samplingRate [
 
 { #category : 'api' }
 IllAbstractProfiler >> samplingRate: anInteger [
-	"The anInteger needs to be an integer number between 1 and 100.  "
+	"The anInteger needs to be an integer number between 1 and 100. This number represents the
+	sampling rate *percentage*"
 
-	samplingRate := (anInteger / 100)
+	samplingRate := anInteger
 ]
 
 { #category : 'profiling' }

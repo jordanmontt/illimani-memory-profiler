@@ -64,7 +64,7 @@ IllAbstractProfilerTest >> testSamplingRate [
 		[ :e | e allocatedObjectClass = ByteString ]) size.
 
 	"We are cheking in this range becase the profiler makes some allocations that are
-	necessary for the profiler to work, like Durations objects. So we cannot chack that the
+	necessary for the profiler to work, like Durations objects. So we cannot check that the
 	allocations are exacty 1/3 of the total."
 	self assert: (allocatedByteSrings >= 33) & (allocatedByteSrings < 40)
 ]
@@ -91,17 +91,17 @@ IllAbstractProfilerTest >> testSamplingRateOtherPercentage [
 IllAbstractProfilerTest >> testSamplingRateVariable [
 
 	"By default, do not sample"
-	self assert: profiler samplingRate equals: 1.
+	self assert: profiler samplingRate equals: 100.
 
 	"Sample at 20%"
 	profiler samplingRate: 20.
-	self assert: profiler samplingRate equals: 20 / 100.
+	self assert: profiler samplingRate equals: 20.
 
 	"Sample at 75%"
 	profiler samplingRate: 75.
-	self assert: profiler samplingRate equals: 75 / 100.
+	self assert: profiler samplingRate equals: 75.
 
 	"Do not sample. The same as sampling 100%".
 	profiler samplingRate: 100.
-	self assert: profiler samplingRate equals: 1.
+	self assert: profiler samplingRate equals: 100.
 ]

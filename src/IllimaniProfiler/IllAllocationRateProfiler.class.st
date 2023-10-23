@@ -2,7 +2,8 @@ Class {
 	#name : 'IllAllocationRateProfiler',
 	#superclass : 'IllAbstractProfiler',
 	#instVars : [
-		'allocationsRegistry',
+		'numberOfAllocatios',
+		'totalAllocatedMemory',
 		'objectAllocations'
 	],
 	#category : 'IllimaniProfiler-Allocation-Profiler',
@@ -14,22 +15,23 @@ Class {
 IllAllocationRateProfiler >> initialize [
 
 	super initialize.
-	allocationsRegistry := OrderedCollection new: 3000000
+	numberOfAllocatios := 0.
+	totalAllocatedMemory := 0
 ]
 
 { #category : 'profiling' }
 IllAllocationRateProfiler >> internalRegisterAllocation: anObject [
 
-	allocationsRegistry add: anObject class -> anObject sizeInMemory
+	numberOfAllocatios := numberOfAllocatios + 1.
+	totalAllocatedMemory := totalAllocatedMemory + anObject sizeInMemory
 ]
 
 { #category : 'accessing' }
 IllAllocationRateProfiler >> objectAllocations [
 
 	objectAllocations ifNil: [
-		objectAllocations := allocationsRegistry collect: [ :assoc |
+		objectAllocations := (1 to: numberOfAllocatios) collect: [ :assoc |
 			AllocationBasicInfoModel new
-				allocatedObjectClass: assoc key;
 				sizeInBytes: assoc value;
 				yourself ] ].
 	^ objectAllocations
@@ -50,5 +52,5 @@ IllAllocationRateProfiler >> totalAllocatedMemory [
 { #category : 'accessing' }
 IllAllocationRateProfiler >> totalAllocatedObjects [
 
-	^ allocationsRegistry size
+	^ numberOfAllocatios
 ]
