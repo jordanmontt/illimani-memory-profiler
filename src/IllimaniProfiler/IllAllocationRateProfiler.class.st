@@ -26,17 +26,6 @@ IllAllocationRateProfiler >> internalRegisterAllocation: anObject [
 	totalAllocatedMemory := totalAllocatedMemory + anObject sizeInMemory
 ]
 
-{ #category : 'accessing' }
-IllAllocationRateProfiler >> objectAllocations [
-
-	objectAllocations ifNil: [
-		objectAllocations := (1 to: numberOfAllocatios) collect: [ :assoc |
-			AllocationBasicInfoModel new
-				sizeInBytes: assoc value;
-				yourself ] ].
-	^ objectAllocations
-]
-
 { #category : 'accessing - statistics' }
 IllAllocationRateProfiler >> stats [
 
@@ -46,7 +35,7 @@ IllAllocationRateProfiler >> stats [
 { #category : 'accessing' }
 IllAllocationRateProfiler >> totalAllocatedMemory [
 
-	^ self objectAllocations sum: #sizeInBytes
+	^ totalAllocatedMemory
 ]
 
 { #category : 'accessing' }
