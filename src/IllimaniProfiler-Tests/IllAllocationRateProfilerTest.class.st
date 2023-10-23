@@ -1,5 +1,5 @@
 Class {
-	#name : 'IllAllocationStatisticsProfilerTest',
+	#name : 'IllAllocationRateProfilerTest',
 	#superclass : 'IllAbstractProfilerTest',
 	#category : 'IllimaniProfiler-Tests-Finalization-Profiler',
 	#package : 'IllimaniProfiler-Tests',
@@ -7,7 +7,7 @@ Class {
 }
 
 { #category : 'running' }
-IllAllocationStatisticsProfilerTest >> profilerClass [
+IllAllocationRateProfilerTest >> profilerClass [
 
-	^ IllAllocationStatisticsProfiler
+	^ IllAllocationRateProfiler
 ]
