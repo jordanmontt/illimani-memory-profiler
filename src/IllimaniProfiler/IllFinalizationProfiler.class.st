@@ -14,10 +14,6 @@ Class {
 { #category : 'profiling' }
 IllFinalizationProfiler >> forceFinalizationOfObjects [
 
-	"First, run several GCs to collect the non referenced objects.
-	We need to run some GCs because there can be nested dependencies between Ephemerons."
-	"25 timesRepeat: [ Smalltalk garbageCollect ]."
-	"Then, force the finalization of the unfinalized Ephemerons"
 	ephemeronsCollection do: [ :e | e forceFinalization ]
 ]
 
@@ -33,8 +29,6 @@ IllFinalizationProfiler >> internalRegisterAllocation: anObject [
 	
 	ephemeronsCollection add: (IllEphemeron newPinned 
 		key: anObject value: nil;
-		allocatedObjectClass: anObject class;
-		sizeInBytes: anObject sizeInMemory;
 		yourself)
 ]
 
@@ -50,7 +44,7 @@ IllFinalizationProfiler >> startGCProcess [
 	gcProcess := [
 	[ true ] whileTrue: [
 		Smalltalk garbageCollect.
-		500 milliSeconds wait ] ] fork
+		1000 milliSeconds wait ] ] fork
 ]
 
 { #category : 'profiling' }
@@ -77,5 +71,6 @@ IllFinalizationProfiler >> stopProfiling [
 
 	super stopProfiling.
 	self stopGCProcess.
+	Smalltalk garbageCollect.
 	self forceFinalizationOfObjects
 ]
