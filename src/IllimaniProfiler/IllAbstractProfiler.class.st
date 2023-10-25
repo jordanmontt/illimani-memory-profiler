@@ -71,8 +71,7 @@ IllAbstractProfiler >> initializeMethodProxies: aHandler [
 	proxyBasicNew := MpMethodProxy onMethod: Behavior >> #basicNew handler: aHandler.
 	proxyBasicNewKeyword := MpMethodProxy onMethod: Behavior >> #basicNew: handler: aHandler.
 
-	"Not wrapping the method Number>>#@ because it's always by far the must allocator method and
-	it pollutes the results."
+	"Not wrapping the method Number>>#@ because the interpreter has an optimization that will never do the message sending. In the JIT compiler, there is no implementation of the primitive, so it always calls the callback code which does a new. So, for the interpreter there is never a message send and with the jit we already capture the allocation with basicNew."
 	proxyArrobas := MpNullMethodProxy onMethod: Number >> #@ handler: aHandler.
 	
 	proxyCopy := MpMethodProxy onMethod: Object >> #shallowCopy handler: aHandler. 
