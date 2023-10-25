@@ -111,11 +111,17 @@ IllEphemeron >> lifetimeAsDuration [
 { #category : 'finalization' }
 IllEphemeron >> mourn [
 
+	"key ifNil: [ ^ self ]."
+
+	allocatedObjectClass := key class.
+	sizeInBytes := key sizeInMemory.
+
 	key := nil.
+
 	finalizationTime := Time primUTCMicrosecondsClock.
 	"When the vm calls the method mourn, it is right before of the collection of the object.
 	So we need to add 1 to the counter of scavenges."
-	survivedScavenges := (Smalltalk vm incrementalGCCount - survivedScavenges) + 1.
+	survivedScavenges := Smalltalk vm incrementalGCCount - survivedScavenges + 1.
 	survivedFullGC := Smalltalk vm fullGCCount - survivedFullGC
 ]
 
