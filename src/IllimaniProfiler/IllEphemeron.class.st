@@ -40,6 +40,19 @@ IllEphemeron >> finalizationTime: anObject [
 	finalizationTime := anObject
 ]
 
+{ #category : 'serialization' }
+IllEphemeron >> flatInstanceVariables [
+
+	^ {
+		  finalizationTime asString.
+		  sizeInBytes asString.
+		  initializationTime asString.
+		  allocatedObjectClass asString.
+		  survivedScavenges asString.
+		  survivedFullGC asString.
+		  forcedFinalization asString }
+]
+
 { #category : 'finalization' }
 IllEphemeron >> forceFinalization [
 
@@ -54,6 +67,13 @@ IllEphemeron >> forceFinalization [
 IllEphemeron >> forcedFinalization [
 
 	^ forcedFinalization
+]
+
+{ #category : 'serialization' }
+IllEphemeron >> headerToExportCSV [
+
+	^ #( #finalizationTime #sizeInBytes #initializationTime #allocatedObjectClass
+	     #survivedScavenges #survivedFullGC #forcedFinalization )
 ]
 
 { #category : 'accessing' }

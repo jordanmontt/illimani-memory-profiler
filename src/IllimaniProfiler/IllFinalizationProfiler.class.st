@@ -11,6 +11,21 @@ Class {
 	#tag : 'Finalization-Profiler'
 }
 
+{ #category : 'serialization' }
+IllFinalizationProfiler >> exportData [
+
+	| writer csvFile fileName |
+	fileName := DateAndTime now asString , '.csv'.
+	csvFile := fileName asFileReference createFile writeStream.
+	writer := NeoCSVWriter on: csvFile.
+	writer writeHeader: ephemeronsCollection first headerToExportCSV.
+	
+	ephemeronsCollection do: [ :anIllEphemeron | 
+		writer nextPut: anIllEphemeron flatInstanceVariables ].
+	
+	writer close
+]
+
 { #category : 'profiling' }
 IllFinalizationProfiler >> forceFinalizationOfObjects [
 
