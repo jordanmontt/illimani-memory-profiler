@@ -15,7 +15,12 @@ Class {
 IllFinalizationProfiler >> exportData [
 
 	| writer csvFile fileName |
-	fileName := DateAndTime now asString , '.csv'.
+	fileName := DateAndTime now asStringYMDHM.
+	fileName	replaceAll: Character space with: $H;
+		replaceAll: $: with: $m.
+	fileName := fileName , '-samplingRate-', samplingRate asString.
+	fileName := fileName , '.csv'.
+
 	csvFile := fileName asFileReference createFile writeStream.
 	writer := NeoCSVWriter on: csvFile.
 	writer writeHeader: ephemeronsCollection first headerToExportCSV.
