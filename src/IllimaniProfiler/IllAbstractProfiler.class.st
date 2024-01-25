@@ -267,9 +267,21 @@ IllAbstractProfiler >> stopProfiling [
 ]
 
 { #category : 'accessing - statistics' }
+IllAbstractProfiler >> totalFullGCs [
+
+	^ vmStats at: 7
+]
+
+{ #category : 'accessing - statistics' }
 IllAbstractProfiler >> totalProfiledTime [
 
 	^ totalTime
+]
+
+{ #category : 'accessing - statistics' }
+IllAbstractProfiler >> totalScavenges [
+
+	^ vmStats at: 9
 ]
 
 { #category : 'profiling' }

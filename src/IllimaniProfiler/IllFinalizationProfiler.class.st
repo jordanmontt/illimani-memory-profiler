@@ -11,24 +11,47 @@ Class {
 	#tag : 'Finalization-Profiler'
 }
 
-{ #category : 'serialization' }
+{ #category : 'export' }
 IllFinalizationProfiler >> exportData [
 
-	| writer csvFile fileName |
-	fileName := DateAndTime now asStringYMDHM.
-	fileName	replaceAll: Character space with: $H;
-		replaceAll: $: with: $m.
-	fileName := fileName , '-samplingRate-', samplingRate asString.
-	fileName := fileName , '.csv'.
+	| writer writeStream fileName |
+	fileName := self fileNameToExport.
+	self exportMetaData: fileName , '.json'.
 
-	csvFile := fileName asFileReference createFile writeStream.
-	writer := NeoCSVWriter on: csvFile.
+	writeStream := (fileName , '.csv') asFileReference createFile writeStream.
+	writer := NeoCSVWriter on: writeStream.
+
 	writer writeHeader: ephemeronsCollection first headerToExportCSV.
-	
 	ephemeronsCollection do: [ :anIllEphemeron | 
 		writer nextPut: anIllEphemeron flatInstanceVariables ].
-	
+
 	writer close
+]
+
+{ #category : 'export' }
+IllFinalizationProfiler >> exportMetaData: fileName [
+
+	| tempDict jsonString  writeStream |
+	tempDict := { ('totalExecutionTime' -> totalTime).
+		('totalFullGCs' -> self totalFullGCs).
+		('totalScavenges' -> self totalScavenges).
+		('sampligRate' -> samplingRate) } asDictionary.
+	jsonString := NeoJSONWriter toStringPretty: tempDict.
+
+	writeStream := fileName asFileReference createFile writeStream.
+	writeStream nextPutAll: jsonString.
+	writeStream close
+]
+
+{ #category : 'export' }
+IllFinalizationProfiler >> fileNameToExport [
+
+	| fileName |
+	fileName := DateAndTime now asStringYMDHM.
+	fileName
+		replaceAll: Character space with: $H;
+		replaceAll: $: with: $m.
+	^ fileName
 ]
 
 { #category : 'profiling' }
