@@ -11,7 +11,7 @@ Class {
 	#tag : 'Finalization-Profiler'
 }
 
-{ #category : 'export' }
+{ #category : 'exporting' }
 IllFinalizationProfiler >> exportData [
 
 	| writer writeStream fileName |
@@ -28,7 +28,7 @@ IllFinalizationProfiler >> exportData [
 	writer close
 ]
 
-{ #category : 'export' }
+{ #category : 'exporting' }
 IllFinalizationProfiler >> exportMetaData: fileName [
 
 	| tempDict jsonString  writeStream |
@@ -43,7 +43,7 @@ IllFinalizationProfiler >> exportMetaData: fileName [
 	writeStream close
 ]
 
-{ #category : 'export' }
+{ #category : 'exporting' }
 IllFinalizationProfiler >> fileNameToExport [
 
 	| fileName |

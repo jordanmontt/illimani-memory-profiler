@@ -85,13 +85,13 @@ IllAllocationProfiler >> copyExecutionStack [
 IllAllocationProfiler >> defaultClassesToAvoidInTheContextSearch [
 
 	^ {
-		  Process.
+		  "Process."
 		  IllAllocationProfiler.
 		  IllAbstractProfiler.
 		  IllMpHandler.
-		  MpMethodProxy.
+		  "MpMethodProxy."
 		  "BlockClosure."
-		  FullBlockClosure
+		  "FullBlockClosure"
 		  "CompiledBlock" }
 ]
 
@@ -128,7 +128,6 @@ IllAllocationProfiler >> initialize [
 	illimaniAnnouncer := IllAnnouncer new.
 	objectAllocations := OrderedCollection new.
 	copyExecutionStack := false.
-	"classesToAvoidInContextSearch"
 	classesToAvoidInTheContextSearch := self defaultClassesToAvoidInTheContextSearch
 	  , (self defaultClassesToAvoidInTheContextSearch collect: [ :aClass | aClass class ])
 ]
@@ -147,7 +146,7 @@ IllAllocationProfiler >> internalRegisterAllocation: newlyAllocatedObject [
 		allocatorClass: filteredContext receiver class;
 		allocatorMethod: filteredContext compiledCode method;
 		allocatedObjectClass: newlyAllocatedObject class;
-		contextFingerprint: filteredContext;
+		"contextFingerprint: filteredContext;"
 		sizeInBytes: newlyAllocatedObject sizeInMemory;
 		initializationTime: Time primUTCMicrosecondsClock.
 

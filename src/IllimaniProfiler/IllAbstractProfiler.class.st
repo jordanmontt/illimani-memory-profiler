@@ -7,7 +7,6 @@ Class {
 		'handler',
 		'proxyBasicNew',
 		'proxyBasicNewKeyword',
-		'proxyArrobas',
 		'proxyArrayClass',
 		'vmStats',
 		'totalTime',
@@ -70,10 +69,6 @@ IllAbstractProfiler >> initializeMethodProxies: aHandler [
 
 	proxyBasicNew := MpMethodProxy onMethod: Behavior >> #basicNew handler: aHandler.
 	proxyBasicNewKeyword := MpMethodProxy onMethod: Behavior >> #basicNew: handler: aHandler.
-
-	"Not wrapping the method Number>>#@ because the interpreter has an optimization that will never do the message sending. In the JIT compiler, there is no implementation of the primitive, so it always calls the callback code which does a new. So, for the interpreter there is never a message send and with the jit we already capture the allocation with basicNew."
-	proxyArrobas := MpNullMethodProxy onMethod: Number >> #@ handler: aHandler.
-	
 	proxyCopy := MpMethodProxy onMethod: Object >> #shallowCopy handler: aHandler. 
 	proxyArrayClass := MpMethodProxy onMethod: Array class >> #new: handler: aHandler
 ]
@@ -88,9 +83,8 @@ IllAbstractProfiler >> initializeVMStats [
 { #category : 'profiling' }
 IllAbstractProfiler >> installMethodProxies [
 
-	proxyBasicNew install.
 	proxyBasicNewKeyword install.
-	proxyArrobas install.
+	proxyBasicNew install.
 	proxyArrayClass install.
 	proxyCopy install
 ]
@@ -289,7 +283,6 @@ IllAbstractProfiler >> uninstallMethodProxies [
 
 	proxyBasicNew uninstall.
 	proxyBasicNewKeyword uninstall.
-	proxyArrobas uninstall.
 	proxyArrayClass uninstall.
 	proxyCopy uninstall
 ]

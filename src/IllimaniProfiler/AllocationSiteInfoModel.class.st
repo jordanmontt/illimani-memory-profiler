@@ -3,9 +3,8 @@ Class {
 	#superclass : 'AllocationFinalizationInfoModel',
 	#instVars : [
 		'context',
-		'allocatorClass',
 		'allocatorMethod',
-		'contextFingerprint'
+		'allocatorClass'
 	],
 	#category : 'IllimaniProfiler-Model-Allocation',
 	#package : 'IllimaniProfiler',
@@ -51,13 +50,7 @@ AllocationSiteInfoModel >> context: anObject [
 { #category : 'accessing' }
 AllocationSiteInfoModel >> contextFingerprint [
 
-	^ contextFingerprint
-]
-
-{ #category : 'accessing' }
-AllocationSiteInfoModel >> contextFingerprint: aContext [
-
-	contextFingerprint := self getContextFingerprintStream: aContext
+	^ ''
 ]
 
 { #category : 'accessing' }
@@ -69,7 +62,7 @@ AllocationSiteInfoModel >> fullMethodName [
 { #category : 'initialization' }
 AllocationSiteInfoModel >> getContextFingerprintStream: aContext [
 
-	self flag: 'This is the first "naive" implementation of the context fingerprint'.
+	self flag: 'This is the first "naive" implementation of the context fingerprint. It breaks in Pharo 12'.
 
 	^ String streamContents: [ :stream |
 		| iterator |
@@ -93,8 +86,8 @@ AllocationSiteInfoModel >> inspectableAssociations [
 { #category : 'inspector - extensions' }
 AllocationSiteInfoModel >> inspectorExtensionContextFingerprint: aBuilder [
 
-	<inspectorPresentationOrder: 2 title: 'Context Fingerprint'>
-	^ contextFingerprint contents inspectionFullString
+	"<inspectorPresentationOrder: 2 title: 'Context Fingerprint'>"
+	^ self contextFingerprint contents inspectionFullString
 ]
 
 { #category : 'printing' }
