@@ -34,6 +34,7 @@ IllFinalizationProfiler >> exportMetaData: fileName [
 	| tempDict jsonString  writeStream |
 	tempDict := { ('totalExecutionTime' -> totalTime).
 		('totalFullGCs' -> self totalFullGCs).
+		('profiledCode' -> profiledCode).
 		('totalScavenges' -> self totalScavenges).
 		('sampligRate' -> samplingRate) } asDictionary.
 	jsonString := NeoJSONWriter toStringPretty: tempDict.

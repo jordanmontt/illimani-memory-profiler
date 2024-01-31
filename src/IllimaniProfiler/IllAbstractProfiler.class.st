@@ -11,7 +11,8 @@ Class {
 		'vmStats',
 		'totalTime',
 		'startTime',
-		'proxyCopy'
+		'proxyCopy',
+		'profiledCode'
 	],
 	#category : 'IllimaniProfiler-Instrumentation',
 	#package : 'IllimaniProfiler',
@@ -126,6 +127,7 @@ IllAbstractProfiler >> profileFor: aDuration [
 { #category : 'api' }
 IllAbstractProfiler >> profileOn: aBlock [
 
+	profiledCode := aBlock asString.
 	self startProfiling.
 	"The nil at the end is necessary because else the value of the block is referenced inside
 	the ensure: method. We don't want to keep the reference because it avoids the object from
