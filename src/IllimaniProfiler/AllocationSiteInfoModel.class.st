@@ -57,19 +57,13 @@ AllocationSiteInfoModel >> contextFingerprint [
 { #category : 'accessing' }
 AllocationSiteInfoModel >> contextFingerprint: aContext [
 
-	contextFingerprint := self getContextFingerprint: aContext
+	contextFingerprint := String streamContents: [ :stream | aContext debugStack: 5 on: stream ]
 ]
 
 { #category : 'accessing' }
 AllocationSiteInfoModel >> fullMethodName [
 
 	^ allocatorMethod name
-]
-
-{ #category : 'initialization' }
-AllocationSiteInfoModel >> getContextFingerprint: aContext [
-
-	^ "String streamContents: [ :stream | aContext debugStack: 2 on: stream ]" aContext asString
 ]
 
 { #category : 'inspector - extensions' }
