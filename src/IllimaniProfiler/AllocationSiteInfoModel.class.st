@@ -4,7 +4,8 @@ Class {
 	#instVars : [
 		'context',
 		'allocatorMethod',
-		'allocatorClass'
+		'allocatorClass',
+		'contextFingerprint'
 	],
 	#category : 'IllimaniProfiler-Model-Allocation',
 	#package : 'IllimaniProfiler',
@@ -50,7 +51,13 @@ AllocationSiteInfoModel >> context: anObject [
 { #category : 'accessing' }
 AllocationSiteInfoModel >> contextFingerprint [
 
-	^ ''
+	^ contextFingerprint
+]
+
+{ #category : 'accessing' }
+AllocationSiteInfoModel >> contextFingerprint: aContext [
+
+	contextFingerprint := self getContextFingerprint: aContext
 ]
 
 { #category : 'accessing' }
@@ -60,18 +67,9 @@ AllocationSiteInfoModel >> fullMethodName [
 ]
 
 { #category : 'initialization' }
-AllocationSiteInfoModel >> getContextFingerprintStream: aContext [
+AllocationSiteInfoModel >> getContextFingerprint: aContext [
 
-	self flag: 'This is the first "naive" implementation of the context fingerprint. It breaks in Pharo 12'.
-
-	^ String streamContents: [ :stream |
-		| iterator |
-		iterator := aContext.
-		1 to: 10 do: [ :index |
-			iterator printOn: stream.
-			stream << String cr.
-			iterator := iterator sender.
-			iterator ifNil: [ ^ stream ] ] ]
+	^ "String streamContents: [ :stream | aContext debugStack: 2 on: stream ]" aContext asString
 ]
 
 { #category : 'inspector - extensions' }
