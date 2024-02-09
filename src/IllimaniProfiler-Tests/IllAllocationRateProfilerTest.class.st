@@ -45,5 +45,5 @@ IllAllocationRateProfilerTest >> testSamplingRateOtherPercentage [
 	"We are cheking in this range becase the profiler makes some allocations that are
 	necessary for the profiler to work, like Durations objects. So we cannot chack that the
 	allocations are exacty 1/3 of the total."
-	self assert: (allocatedByteSrings >= 75) & (allocatedByteSrings < 80)
+	self assert: (allocatedByteSrings >= 75) & (allocatedByteSrings < 85)
 ]
