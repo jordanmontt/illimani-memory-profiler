@@ -4,7 +4,7 @@ Class {
 	#instVars : [
 		'ephemeronsCollection',
 		'statsModel',
-		'gcProcess'
+		'gcLogger'
 	],
 	#category : 'IllimaniProfiler-Finalization-Profiler',
 	#package : 'IllimaniProfiler',
@@ -83,19 +83,10 @@ IllFinalizationProfiler >> objectAllocations [
 ]
 
 { #category : 'profiling' }
-IllFinalizationProfiler >> startGCProcess [
-
-	gcProcess := [
-	[ true ] whileTrue: [
-		Smalltalk garbageCollect.
-		1000 milliSeconds wait ] ] fork
-]
-
-{ #category : 'profiling' }
 IllFinalizationProfiler >> startProfiling [
 
 	super startProfiling.
-	self startGCProcess
+	gcLogger := GCLogger new run
 ]
 
 { #category : 'accessing - statistics' }
@@ -105,16 +96,9 @@ IllFinalizationProfiler >> stats [
 ]
 
 { #category : 'profiling' }
-IllFinalizationProfiler >> stopGCProcess [
-
-	gcProcess terminate
-]
-
-{ #category : 'profiling' }
 IllFinalizationProfiler >> stopProfiling [
 
 	super stopProfiling.
-	self stopGCProcess.
-	Smalltalk garbageCollect.
+	gcLogger terminate.
 	self forceFinalizationOfObjects
 ]
