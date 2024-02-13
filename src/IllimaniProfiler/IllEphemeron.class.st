@@ -44,13 +44,13 @@ IllEphemeron >> finalizationTime: anObject [
 IllEphemeron >> flatInstanceVariables [
 
 	^ {
-		  finalizationTime asString.
-		  sizeInBytes asString.
-		  initializationTime asString.
-		  allocatedObjectClass asString.
-		  survivedScavenges asString.
-		  survivedFullGC asString.
-		  forcedFinalization asString }
+		  finalizationTime.
+		  sizeInBytes.
+		  initializationTime.
+		  allocatedObjectClass.
+		  survivedScavenges.
+		  survivedFullGC.
+		  forcedFinalization }
 ]
 
 { #category : 'finalization' }

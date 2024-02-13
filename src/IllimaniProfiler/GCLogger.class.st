@@ -15,14 +15,11 @@ Class {
 { #category : 'exporting' }
 GCLogger >> export: writeStream data: someData header: aHeaderInCollection [
 
-	| writer  |
-	writer := NeoCSVWriter on: writeStream.
-
-	writer writeHeader: #( #fullGCsBySecond ).
-	fullGCs do: [ :aNumber | 
-		writer nextPut: aNumber ].
-
-	writer close
+	(NeoCSVWriter on: writeStream)
+		writeHeader: #( #fullGCsBySecond );
+		fieldWriter: #raw;
+		nextPut: someData;
+		close
 ]
 
 { #category : 'exporting' }

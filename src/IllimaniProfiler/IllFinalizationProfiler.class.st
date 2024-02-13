@@ -27,9 +27,11 @@ IllFinalizationProfiler >> exportEphemerons: fileName [
 
 	| writeStream writer |
 	writeStream := fileName asFileReference createFile writeStream.
-	writer := NeoCSVWriter on: writeStream.
-
-	writer writeHeader: ephemeronsCollection first headerToExportCSV.
+	writer := (NeoCSVWriter on: writeStream)
+		writeHeader: ephemeronsCollection first headerToExportCSV;
+		fieldWriter: #raw;
+		yourself.
+	
 	ephemeronsCollection do: [ :anIllEphemeron |
 		writer nextPut: anIllEphemeron flatInstanceVariables ].
 
@@ -99,8 +101,8 @@ IllFinalizationProfiler >> objectAllocations [
 { #category : 'profiling' }
 IllFinalizationProfiler >> startProfiling [
 
+	gcLogger := GCLogger new run.
 	super startProfiling.
-	gcLogger := GCLogger new run
 ]
 
 { #category : 'accessing - statistics' }
