@@ -14,18 +14,32 @@ Class {
 { #category : 'exporting' }
 IllFinalizationProfiler >> exportData [
 
-	| writer writeStream fileName |
-	fileName := self fileNameToExport.
-	self exportMetaData: fileName , '.json'.
+	| baseFileName |
+	baseFileName := self fileNameToExport.
+	
+	self exportMetaData: baseFileName , '.json'.
+	self exportEphemerons: baseFileName , '.csv'.
+	self exportGCActivity: baseFileName
+]
 
-	writeStream := (fileName , '.csv') asFileReference createFile writeStream.
+{ #category : 'exporting' }
+IllFinalizationProfiler >> exportEphemerons: fileName [
+
+	| writeStream writer |
+	writeStream := fileName asFileReference createFile writeStream.
 	writer := NeoCSVWriter on: writeStream.
 
 	writer writeHeader: ephemeronsCollection first headerToExportCSV.
-	ephemeronsCollection do: [ :anIllEphemeron | 
+	ephemeronsCollection do: [ :anIllEphemeron |
 		writer nextPut: anIllEphemeron flatInstanceVariables ].
 
 	writer close
+]
+
+{ #category : 'exporting' }
+IllFinalizationProfiler >> exportGCActivity: baseFileName [
+
+	gcLogger exportData: baseFileName
 ]
 
 { #category : 'exporting' }

@@ -3,21 +3,57 @@ Class {
 	#superclass : 'Object',
 	#instVars : [
 		'fullGCs',
-		'scavengers',
 		'process',
-		'waitingTime'
+		'waitingTime',
+		'scavenges'
 	],
 	#category : 'IllimaniProfiler-Model-Statistics',
 	#package : 'IllimaniProfiler',
 	#tag : 'Model-Statistics'
 }
 
+{ #category : 'exporting' }
+GCLogger >> export: writeStream data: someData header: aHeaderInCollection [
+
+	| writer  |
+	writer := NeoCSVWriter on: writeStream.
+
+	writer writeHeader: #( #fullGCsBySecond ).
+	fullGCs do: [ :aNumber | 
+		writer nextPut: aNumber ].
+
+	writer close
+]
+
+{ #category : 'exporting' }
+GCLogger >> exportData: baseFileName [
+
+	| writeStream |
+	
+	writeStream := (baseFileName , '-full-gcs' , '.csv') asFileReference createFile writeStream.
+	self exportFullGCs: writeStream.
+	writeStream := (baseFileName , '-scavenges' , '.csv') asFileReference createFile writeStream.
+	self exportScavengesGCs: writeStream.
+]
+
+{ #category : 'exporting' }
+GCLogger >> exportFullGCs: writeStream [
+
+	self export: writeStream data: fullGCs header: #( #fullGCsBySecond )
+]
+
+{ #category : 'exporting' }
+GCLogger >> exportScavengesGCs: writeStream [
+
+	self export: writeStream data: scavenges header: #( #scavengesBySecond )
+]
+
 { #category : 'initialization' }
 GCLogger >> initialize [
 
 	super initialize.
 	fullGCs := OrderedCollection new: 10000.
-	scavengers := OrderedCollection new: 10000.
+	scavenges := OrderedCollection new: 10000.
 	waitingTime := 1 second
 ]
 
@@ -25,7 +61,7 @@ GCLogger >> initialize [
 GCLogger >> registerStats [
 
 	fullGCs add: Smalltalk vm fullGCCount.
-	scavengers add: Smalltalk vm incrementalGCCount
+	scavenges add: Smalltalk vm incrementalGCCount
 ]
 
 { #category : 'api' }
