@@ -40,7 +40,7 @@ IllEphemeron >> finalizationTime: anObject [
 	finalizationTime := anObject
 ]
 
-{ #category : 'serialization' }
+{ #category : 'exporting' }
 IllEphemeron >> flatInstanceVariables [
 
 	^ {
@@ -69,7 +69,7 @@ IllEphemeron >> forcedFinalization [
 	^ forcedFinalization
 ]
 
-{ #category : 'serialization' }
+{ #category : 'exporting' }
 IllEphemeron >> headerToExportCSV [
 
 	^ #( #finalizationTime #sizeInBytes #initializationTime #allocatedObjectClass
@@ -98,30 +98,6 @@ IllEphemeron >> initialize [
 	forcedFinalization := false
 ]
 
-{ #category : 'inspector' }
-IllEphemeron >> inspectorExtension: aBuilder [
-
-	<inspectorPresentationOrder: 0 title: 'Overview'>
-	| tablePresenter elements items |
-	elements := {
-		('Allocated Object Class' -> allocatedObjectClass ).
-		('Memory Size' -> sizeInBytes humanReadableByteSizeString).
-	 	('Initialization time' -> initializationTime).
-		('Finalization time' -> finalizationTime).
-		('Object''s lifetime' -> self lifetimeAsDuration humanReadablePrintString).
-		('Survived scavenges' -> survivedScavenges).
-		('Survived full GCs' -> survivedFullGC).
-		('Finalization was forced?' -> forcedFinalization) }.
-	items := elements collect: [ :e | StInspectorAssociationNode hostObject: e ].
-	tablePresenter := aBuilder newTable.
-	tablePresenter
-		addColumn: (SpStringTableColumn title: 'Name' evaluated: #key);
-		addColumn: (SpStringTableColumn title: 'Value' evaluated: #value);
-		items: items;
-		beResizable.
-	^ tablePresenter
-]
-
 { #category : 'accessing' }
 IllEphemeron >> lifetimeAsDuration [
 
@@ -131,7 +107,7 @@ IllEphemeron >> lifetimeAsDuration [
 { #category : 'finalization' }
 IllEphemeron >> mourn [
 
-	"key ifNil: [ ^ self ]."
+	key ifNil: [ ^ self ].
 
 	allocatedObjectClass := key class.
 	sizeInBytes := key sizeInMemory.

@@ -137,6 +137,12 @@ IllAbstractProfiler >> profileOn: aBlock [
 	nil ] ensure: [ self stopProfiling ]
 ]
 
+{ #category : 'accessing' }
+IllAbstractProfiler >> profiledCode [
+
+	^ profiledCode
+]
+
 { #category : 'profiling' }
 IllAbstractProfiler >> registerAllocation: anObject [
 
@@ -278,6 +284,12 @@ IllAbstractProfiler >> totalProfiledTime [
 IllAbstractProfiler >> totalScavenges [
 
 	^ vmStats at: 9
+]
+
+{ #category : 'accessing' }
+IllAbstractProfiler >> totalTime [
+
+	^ totalTime
 ]
 
 { #category : 'profiling' }

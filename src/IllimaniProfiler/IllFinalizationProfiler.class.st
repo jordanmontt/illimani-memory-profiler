@@ -4,77 +4,35 @@ Class {
 	#instVars : [
 		'ephemeronsCollection',
 		'statsModel',
-		'gcLogger'
+		'gcActivityMonitor'
 	],
 	#category : 'IllimaniProfiler-Finalization-Profiler',
 	#package : 'IllimaniProfiler',
 	#tag : 'Finalization-Profiler'
 }
 
+{ #category : 'accessing' }
+IllFinalizationProfiler >> ephemeronsCollection [
+
+	^ ephemeronsCollection
+]
+
 { #category : 'exporting' }
 IllFinalizationProfiler >> exportData [
 
-	| baseFileName |
-	baseFileName := self fileNameToExport.
-	
-	self exportMetaData: baseFileName , '.json'.
-	self exportEphemerons: baseFileName , '.csv'.
-	self exportGCActivity: baseFileName
-]
-
-{ #category : 'exporting' }
-IllFinalizationProfiler >> exportEphemerons: fileName [
-
-	| writeStream writer |
-	writeStream := fileName asFileReference createFile writeStream.
-	writer := (NeoCSVWriter on: writeStream)
-		writeHeader: ephemeronsCollection first headerToExportCSV;
-		fieldWriter: #raw;
-		yourself.
-	
-	ephemeronsCollection do: [ :anIllEphemeron |
-		writer nextPut: anIllEphemeron flatInstanceVariables ].
-
-	writer close
-]
-
-{ #category : 'exporting' }
-IllFinalizationProfiler >> exportGCActivity: baseFileName [
-
-	gcLogger exportData: baseFileName
-]
-
-{ #category : 'exporting' }
-IllFinalizationProfiler >> exportMetaData: fileName [
-
-	| tempDict jsonString  writeStream |
-	tempDict := { ('totalExecutionTime' -> totalTime).
-		('totalFullGCs' -> self totalFullGCs).
-		('profiledCode' -> profiledCode).
-		('totalScavenges' -> self totalScavenges).
-		('sampligRate' -> samplingRate) } asDictionary.
-	jsonString := NeoJSONWriter toStringPretty: tempDict.
-
-	writeStream := fileName asFileReference createFile writeStream.
-	writeStream nextPutAll: jsonString.
-	writeStream close
-]
-
-{ #category : 'exporting' }
-IllFinalizationProfiler >> fileNameToExport [
-
-	| fileName |
-	fileName := DateAndTime now asStringYMDHM.
-	fileName
-		replaceAll: Character space with: $H;
-		replaceAll: $: with: $m.
-	^ fileName
+	(IllFinalizationExporter on: self) exportData
 ]
 
 { #category : 'profiling' }
 IllFinalizationProfiler >> forceFinalizationOfObjects [
 
 	ephemeronsCollection do: [ :e | e forceFinalization ]
+]
+
+{ #category : 'accessing' }
+IllFinalizationProfiler >> gcActivityMonitor [
+
+	^ gcActivityMonitor
 ]
 
 { #category : 'initialization' }
@@ -101,7 +59,7 @@ IllFinalizationProfiler >> objectAllocations [
 { #category : 'profiling' }
 IllFinalizationProfiler >> startProfiling [
 
-	gcLogger := GCLogger new run.
+	gcActivityMonitor := GCActivityMonitor new run.
 	super startProfiling.
 ]
 
@@ -115,6 +73,6 @@ IllFinalizationProfiler >> stats [
 IllFinalizationProfiler >> stopProfiling [
 
 	super stopProfiling.
-	gcLogger terminate.
+	gcActivityMonitor terminate.
 	self forceFinalizationOfObjects
 ]
