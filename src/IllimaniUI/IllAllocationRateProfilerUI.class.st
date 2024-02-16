@@ -1,5 +1,5 @@
 Class {
-	#name : 'IllAllocationStatisticsProfilerUI',
+	#name : 'IllAllocationRateProfilerUI',
 	#superclass : 'IllAbstractUI',
 	#category : 'IllimaniUI-Main Presenter',
 	#package : 'IllimaniUI',
@@ -7,24 +7,35 @@ Class {
 }
 
 { #category : 'accessing' }
-IllAllocationStatisticsProfilerUI >> codeEvaluatorText [
+IllAllocationRateProfilerUI >> codeEvaluatorText [
 
-	^ 'self objectAllocations'
+	^ 'self'
 ]
 
 { #category : 'initialization' }
-IllAllocationStatisticsProfilerUI >> initializeNotebook [
+IllAllocationRateProfilerUI >> initializeNotebook [
 
 	notebookPresenter := self newNotebook
 		addPageTitle: 'Summary' provider: [ self summaryAndEvaluatorPresenter ];
-		addPageTitle: 'Allocated Objects' provider: [ self allocatedObjectsTablePresenter ];
-
 		addPageTitle: 'Evaluator' provider: [ self codeEvaluator ];
 		yourself
 ]
 
+{ #category : 'actions' }
+IllAllocationRateProfilerUI >> refresh [
+	"Don't do nothing as there is nothing to refresh"
+
+	^ self
+]
+
 { #category : 'initialization - lazy presenters' }
-IllAllocationStatisticsProfilerUI >> summaryStatsPresenter [
+IllAllocationRateProfilerUI >> summaryStatsPresenter [
 
 	^ AllocationSummaryPresenter on: profiler
+]
+
+{ #category : 'initialization' }
+IllAllocationRateProfilerUI >> title [
+
+	^ 'Illimani Allocation Rate Memory Profiler'
 ]

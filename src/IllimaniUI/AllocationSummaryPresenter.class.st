@@ -66,7 +66,8 @@ AllocationSummaryPresenter >> generalStatsAssociations [
 		('Allocations rate' -> self allocationRateString ).
 		('Total allocated memory' ->
 			profiler stats totalAllocatedMemory humanReadableByteSizeString).
-		('Allocated memory rate' -> self allocatedMemoryRateString)}
+		('Allocated memory rate' -> self allocatedMemoryRateString).
+		('Profiled code' -> profiler profiledCode) }
 ]
 
 { #category : 'accessing - model' }

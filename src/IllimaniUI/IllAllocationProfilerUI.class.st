@@ -198,5 +198,5 @@ IllAllocationProfilerUI >> summaryStatsPresenter [
 { #category : 'initialization' }
 IllAllocationProfilerUI >> title [
 
-	^ 'Illimani Allocation Sites Memory Profiler'
+	^ 'Illimani Allocation Site Memory Profiler'
 ]
