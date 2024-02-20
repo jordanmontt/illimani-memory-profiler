@@ -1,16 +1,31 @@
 Class {
 	#name : 'AllocationSiteInfoModel',
-	#superclass : 'AllocationFinalizationInfoModel',
+	#superclass : 'Object',
 	#instVars : [
+		'allocatedObjectClass',
+		'sizeInBytes',
 		'context',
 		'allocatorMethod',
 		'allocatorClass',
-		'contextFingerprint'
+		'contextFingerprint',
+		'initializationTime'
 	],
-	#category : 'IllimaniProfiler-Model-Allocation',
+	#category : 'IllimaniProfiler-Allocation-Profiler',
 	#package : 'IllimaniProfiler',
-	#tag : 'Model-Allocation'
+	#tag : 'Allocation-Profiler'
 }
+
+{ #category : 'accessing' }
+AllocationSiteInfoModel >> allocatedObjectClass [
+
+	^ allocatedObjectClass
+]
+
+{ #category : 'accessing' }
+AllocationSiteInfoModel >> allocatedObjectClass: anObject [
+
+	allocatedObjectClass := anObject
+]
 
 { #category : 'accessing' }
 AllocationSiteInfoModel >> allocatorClass [
@@ -77,13 +92,46 @@ AllocationSiteInfoModel >> fullMethodName [
 	^ allocatorMethod name
 ]
 
+{ #category : 'accessing' }
+AllocationSiteInfoModel >> initializationTime [
+	"In microseconds"
+
+	^ initializationTime
+]
+
+{ #category : 'accessing' }
+AllocationSiteInfoModel >> initializationTime: microsecondsAsInt [
+	"In microseconds"
+
+	initializationTime := microsecondsAsInt
+]
+
 { #category : 'inspector - extensions' }
 AllocationSiteInfoModel >> inspectableAssociations [
 
 	^ super inspectableAssociations , {
+		  ('Allocated Object Class' -> allocatedObjectClass).
+		  ('Memory Size' -> sizeInBytes humanReadableByteSizeString).
+		  ('Initialization timestamp' -> initializationTime).
 		  ('Allocator Class' -> allocatorClass).
 		  ('Allocator Method' -> allocatorMethod).
 		  ('Context' -> context) }
+]
+
+{ #category : 'inspector - extensions' }
+AllocationSiteInfoModel >> inspectorExtension: aBuilder [
+
+	<inspectorPresentationOrder: 0 title: 'Overview'>
+	| tablePresenter elements items |
+	elements := self inspectableAssociations.
+	items := elements collect: [ :e | StInspectorAssociationNode hostObject: e ].
+	tablePresenter := aBuilder newTable.
+	tablePresenter
+		addColumn: (SpStringTableColumn title: 'Name' evaluated: #key);
+		addColumn: (SpStringTableColumn title: 'Value' evaluated: #value);
+		items: items;
+		beResizable.
+	^ tablePresenter
 ]
 
 { #category : 'inspector - extensions' }
@@ -100,4 +148,23 @@ AllocationSiteInfoModel >> printOn: aStream [
 	<< ' that weights '.
 	sizeInBytes ifNil: [ aStream << ' - ' ]
 		ifNotNil: [ aStream << sizeInBytes humanReadableByteSizeString ]
+]
+
+{ #category : 'accessing' }
+AllocationSiteInfoModel >> sizeInBytes [
+	"Returns the size in memory in bytes"
+
+	^ sizeInBytes
+]
+
+{ #category : 'accessing' }
+AllocationSiteInfoModel >> sizeInBytes: aNumber [
+
+	sizeInBytes := aNumber
+]
+
+{ #category : 'accessing' }
+AllocationSiteInfoModel >> timeAsSeconds [
+
+	^ initializationTime / 1000000
 ]

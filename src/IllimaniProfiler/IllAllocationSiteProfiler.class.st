@@ -51,7 +51,7 @@ IllAllocationProfiler new
 ```
 "
 Class {
-	#name : 'IllAllocationProfiler',
+	#name : 'IllAllocationSiteProfiler',
 	#superclass : 'IllAbstractProfiler',
 	#instVars : [
 		'statisticsModel',
@@ -66,13 +66,13 @@ Class {
 }
 
 { #category : 'announcements' }
-IllAllocationProfiler >> announceProfilerStopedProfiling [
+IllAllocationSiteProfiler >> announceProfilerStopedProfiling [
 
 	illimaniAnnouncer announce: IllStopedProfilingAnnouncement
 ]
 
 { #category : 'api' }
-IllAllocationProfiler >> copyExecutionStack [
+IllAllocationSiteProfiler >> copyExecutionStack [
 	"When this is set to true, for each object allocationn the full execution stack from which
 	the method was created will be copied and store. This information will be available for
 	making analysis. Keep in mind that when there is a lot of allocations going the size of
@@ -82,11 +82,11 @@ IllAllocationProfiler >> copyExecutionStack [
 ]
 
 { #category : 'initialization' }
-IllAllocationProfiler >> defaultClassesToAvoidInTheContextSearch [
+IllAllocationSiteProfiler >> defaultClassesToAvoidInTheContextSearch [
 
 	^ {
 		  "Process."
-		  IllAllocationProfiler.
+		  IllAllocationSiteProfiler.
 		  IllAbstractProfiler.
 		  IllMpHandler.
 		  "MpMethodProxy."
@@ -96,20 +96,20 @@ IllAllocationProfiler >> defaultClassesToAvoidInTheContextSearch [
 ]
 
 { #category : 'api' }
-IllAllocationProfiler >> doNotCopyExecutionStack [
+IllAllocationSiteProfiler >> doNotCopyExecutionStack [
 	"See the comment of my opposite method"
 
 	copyExecutionStack := false
 ]
 
 { #category : 'exporting' }
-IllAllocationProfiler >> exporterClass [
+IllAllocationSiteProfiler >> exporterClass [
 
 	^ IllAllocationSiteExporter
 ]
 
 { #category : 'evaluating' }
-IllAllocationProfiler >> filterContext: aContext ignoringClass: aClass [
+IllAllocationSiteProfiler >> filterContext: aContext ignoringClass: aClass [
 
 	| sender |
 	sender := aContext sender.
@@ -122,13 +122,13 @@ IllAllocationProfiler >> filterContext: aContext ignoringClass: aClass [
 ]
 
 { #category : 'accessing' }
-IllAllocationProfiler >> illimaniAnnouncer [
+IllAllocationSiteProfiler >> illimaniAnnouncer [
 
 	^ illimaniAnnouncer
 ]
 
 { #category : 'initialization' }
-IllAllocationProfiler >> initialize [
+IllAllocationSiteProfiler >> initialize [
 
 	super initialize.
 	illimaniAnnouncer := IllAnnouncer new.
@@ -139,7 +139,7 @@ IllAllocationProfiler >> initialize [
 ]
 
 { #category : 'profiling' }
-IllAllocationProfiler >> internalRegisterAllocation: newlyAllocatedObject [
+IllAllocationSiteProfiler >> internalRegisterAllocation: newlyAllocatedObject [
 
 	| filteredContext  allocationInformationHolder |
 
@@ -160,20 +160,20 @@ IllAllocationProfiler >> internalRegisterAllocation: newlyAllocatedObject [
 ]
 
 { #category : 'accessing' }
-IllAllocationProfiler >> objectAllocations [
+IllAllocationSiteProfiler >> objectAllocations [
 
 	^ objectAllocations
 ]
 
 { #category : 'accessing - statistics' }
-IllAllocationProfiler >> stats [
+IllAllocationSiteProfiler >> stats [
 
 	^ statisticsModel ifNil: [
 		  statisticsModel := AllocationsStatsModel new rawAllocations: objectAllocations ]
 ]
 
 { #category : 'profiling' }
-IllAllocationProfiler >> stopProfiling [
+IllAllocationSiteProfiler >> stopProfiling [
 
 	super stopProfiling.
 	self announceProfilerStopedProfiling

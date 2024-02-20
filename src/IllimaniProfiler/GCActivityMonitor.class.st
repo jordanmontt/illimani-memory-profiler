@@ -7,9 +7,9 @@ Class {
 		'waitingTime',
 		'scavenges'
 	],
-	#category : 'IllimaniProfiler-Model-Statistics',
+	#category : 'IllimaniProfiler-GC-Monitor',
 	#package : 'IllimaniProfiler',
-	#tag : 'Model-Statistics'
+	#tag : 'GC-Monitor'
 }
 
 { #category : 'exporting' }
