@@ -60,6 +60,17 @@ AllocationSiteInfoModel >> contextFingerprint: aContext [
 	contextFingerprint := String streamContents: [ :stream | aContext debugStack: 5 on: stream ]
 ]
 
+{ #category : 'exporting' }
+AllocationSiteInfoModel >> flattenedInstanceVariables [
+
+	^ {
+		  allocatedObjectClass.
+		  sizeInBytes.
+		  initializationTime.
+		  allocatorClass.
+		  allocatorMethod name }
+]
+
 { #category : 'accessing' }
 AllocationSiteInfoModel >> fullMethodName [
 

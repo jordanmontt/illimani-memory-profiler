@@ -39,6 +39,18 @@ IllAbstractProfiler >> beginningOfProfilingTime [
 	^ startTime
 ]
 
+{ #category : 'exporting' }
+IllAbstractProfiler >> exportData [
+
+	(self exporterClass on: self) exportData
+]
+
+{ #category : 'exporting' }
+IllAbstractProfiler >> exporterClass [
+
+	^ self subclassResponsibility
+]
+
 { #category : 'api' }
 IllAbstractProfiler >> forceUninstall [
 	"Warning, do not use unless you cannot start the profiler because you have the

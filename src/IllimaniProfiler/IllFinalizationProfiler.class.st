@@ -11,16 +11,10 @@ Class {
 	#tag : 'Finalization-Profiler'
 }
 
-{ #category : 'accessing' }
-IllFinalizationProfiler >> ephemeronsCollection [
-
-	^ ephemeronsCollection
-]
-
 { #category : 'exporting' }
-IllFinalizationProfiler >> exportData [
+IllFinalizationProfiler >> exporterClass [
 
-	(IllFinalizationExporter on: self) exportData
+	^ IllFinalizationExporter
 ]
 
 { #category : 'profiling' }

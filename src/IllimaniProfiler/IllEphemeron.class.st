@@ -41,7 +41,7 @@ IllEphemeron >> finalizationTime: anObject [
 ]
 
 { #category : 'exporting' }
-IllEphemeron >> flatInstanceVariables [
+IllEphemeron >> flattenedInstanceVariables [
 
 	^ {
 		  finalizationTime.
@@ -67,13 +67,6 @@ IllEphemeron >> forceFinalization [
 IllEphemeron >> forcedFinalization [
 
 	^ forcedFinalization
-]
-
-{ #category : 'exporting' }
-IllEphemeron >> headerToExportCSV [
-
-	^ #( #finalizationTime #sizeInBytes #initializationTime #allocatedObjectClass
-	     #survivedScavenges #survivedFullGC #forcedFinalization )
 ]
 
 { #category : 'accessing' }

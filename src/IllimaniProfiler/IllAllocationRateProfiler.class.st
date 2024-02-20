@@ -10,6 +10,12 @@ Class {
 	#tag : 'Allocation-Profiler'
 }
 
+{ #category : 'exporting' }
+IllAllocationRateProfiler >> exporterClass [
+
+	self error: 'There is not an exporter class for this profiler'
+]
+
 { #category : 'initialization' }
 IllAllocationRateProfiler >> initialize [
 

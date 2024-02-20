@@ -102,6 +102,12 @@ IllAllocationProfiler >> doNotCopyExecutionStack [
 	copyExecutionStack := false
 ]
 
+{ #category : 'exporting' }
+IllAllocationProfiler >> exporterClass [
+
+	^ IllAllocationSiteExporter
+]
+
 { #category : 'evaluating' }
 IllAllocationProfiler >> filterContext: aContext ignoringClass: aClass [
 
