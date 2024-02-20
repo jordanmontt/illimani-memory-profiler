@@ -50,7 +50,7 @@ profiler
 Example 1, allocation profiler for profiling the Pharo IDE activity
 
 ```st
-IllAllocationProfiler new
+IllAllocationSiteProfiler new
 	copyExecutionStack;
 	profileFor: 6 seconds;
 	open;
@@ -98,7 +98,15 @@ By default, the profiler captures all the object allocations. You can configure 
 profiler samplingRate: 33.
 ```
 
-## Allocation profiler
+You can export the data to csv and json files by doing:
+
+```st
+profiler exportData
+```
+
+This will create a csv file with all the information about the allocated objects, and some other auxiliary files in json and csv. This auxiliary files can be the meta data about the total profiled time, the gc activity, etc.
+
+## Allocation Site profiler
 
 ![GIF1](https://github.com/jordanmontt/illimani-memory-profiler/assets/33934979/fd915e86-a251-48c9-a087-3929d74509e7)
 
@@ -118,7 +126,7 @@ Without the UI, because the profiler is independent from the UI, you can access 
 
 ## Implementation details
 
-- Illimani uses [method proxies](https://github.com/pharo-contributions/MethodProxies) library to capture the allocations. It inserts a proxy in `Behavior>>basicNew:`, `Behavior>>basicNew` and `Array>>#new:`.
+- Illimani uses [method proxies](https://github.com/pharo-contributions/MethodProxies) library to capture the allocations. It inserts a proxy in `Behavior>>basicNew:`, `Behavior>>basicNew`, `Array>>#new:`, and `Object >> #shallowCopy`.
 - It uses Ephemerons to know when an object is about to be finalized.
 - It has an statistics model that helps with the calculations of allocations grouping them by classes and methods and sorting them by number of allocations. 
 - The UI is independent of the profiler. It can be used without it. You will have access to all allocations and to the same statistics.
