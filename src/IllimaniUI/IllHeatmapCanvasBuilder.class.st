@@ -125,7 +125,7 @@ IllHeatmapCanvasBuilder >> numberFor: tuple [
 	^ (data at: index) allocationsOf: allocatedClass
 ]
 
-{ #category : 'hooks' }
+{ #category : 'rendering' }
 IllHeatmapCanvasBuilder >> renderIn: aCanvas [
 
 	| labelY labelX |
