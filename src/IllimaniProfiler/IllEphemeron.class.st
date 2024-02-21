@@ -92,6 +92,12 @@ IllEphemeron >> initialize [
 ]
 
 { #category : 'accessing' }
+IllEphemeron >> lifetime [
+
+	^ finalizationTime - initializationTime
+]
+
+{ #category : 'accessing' }
 IllEphemeron >> lifetimeAsDuration [
 
 	^ Duration microSeconds: finalizationTime - initializationTime

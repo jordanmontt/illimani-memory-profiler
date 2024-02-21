@@ -34,26 +34,9 @@ IllFinalizationProfilerUI >> gcCyclesTable [
 { #category : 'initialization - lazy presenters' }
 IllFinalizationProfilerUI >> initializeDensityChartPresenter [
 
-	| densityPlotBuilder densityChartByMemory densityChartByNumbOfAlloc |
-	densityPlotBuilder := IllDensityDistributionChartBuilder new
-		objectAllocations: profiler objectAllocations;
-		xTitle: 'Lifetime in seconds';
-		yourself.
-	densityChartByMemory := densityPlotBuilder
-		beForMemory;
-		yTitle: 'Memory';
-		"yLog: true;"
-		buildDensityChartPresenter.
-	densityChartByNumbOfAlloc := densityPlotBuilder
-		beForNumberOfAllocations;
-		yTitle: 'Number of allocations';
-		"yLog: true;"
-		buildDensityChartPresenter.
-
-	densityChartPresenter := AlternatorPresenter new
-	   presenterOne: densityChartByMemory withName: 'Group by memory';
-		presenterTwo: densityChartByNumbOfAlloc withName: 'Group by number of allocations';
-		yourself
+	densityChartPresenter := IllDensityDistributionChartBuilder new
+		objectAllocations: profiler objectAllocations totalProfiledTime: profiler totalTime;
+		buildDensityChartPresenter
 ]
 
 { #category : 'initialization - lazy presenters' }
@@ -83,7 +66,7 @@ IllFinalizationProfilerUI >> initializeNotebook [
 		addPageTitle: 'Lifetimes Table' provider: [ self lifetimesTable ];
 		addPageTitle: 'Survived GC cycles' provider: [ self gcCyclesTable ];
 		addPageTitle: 'Allocated Objects' provider: [ self allocatedObjectsTablePresenter ];
-		addPageTitle: 'Lifetimes Density' provider: [ self densityChartPresenter ];
+		addPageTitle: 'KDE Density' provider: [ self densityChartPresenter ];
 
 		addPageTitle: 'Evaluator' provider: [ self codeEvaluator ];
 		yourself

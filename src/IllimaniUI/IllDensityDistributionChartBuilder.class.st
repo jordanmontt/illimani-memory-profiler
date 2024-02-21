@@ -6,10 +6,7 @@ Class {
 		'xTitle',
 		'title',
 		'numberOfTicks',
-		'groupedDataBySeconds',
-		'isForMemory',
-		'x',
-		'isYLog'
+		'data'
 	],
 	#category : 'IllimaniUI-Roassal',
 	#package : 'IllimaniUI',
@@ -19,77 +16,23 @@ Class {
 { #category : 'defaults' }
 IllDensityDistributionChartBuilder >> addChartTitles: chart [
 
-	| completeYTitle |
 	chart xlabel: xTitle.
-	completeYTitle := isYLog ifTrue: [ yTitle , ' (log scale)' ] ifFalse: [ yTitle ].
-	chart ylabel: completeYTitle.
+	chart ylabel: yTitle.
 	chart title: title
-]
-
-{ #category : 'defaults' }
-IllDensityDistributionChartBuilder >> addTickDecorations: chart [
-
-	"Horizontal ticks are always the same"
-	chart horizontalTick
-		numberOfTicks: numberOfTicks;
-		labelConversion: [ :e | e asInteger printString ].
-
-	chart verticalTick numberOfTicks: numberOfTicks.
-	isForMemory 
-		ifTrue: [
-			chart verticalTick labelConversion: [ :e | e asInteger humanReadableByteSizeString ] ]
-		ifFalse: [ 
-			chart verticalTick labelConversion: [ :e | e asInteger asStringWithCommas ] ]
-]
-
-{ #category : 'api' }
-IllDensityDistributionChartBuilder >> beForMemory [
-
-	isForMemory := true
-]
-
-{ #category : 'api' }
-IllDensityDistributionChartBuilder >> beForNumberOfAllocations [
-
-	isForMemory := false
 ]
 
 { #category : 'api' }
 IllDensityDistributionChartBuilder >> buildDensityChartCanvas [
 
-	| plot y chart |
+	| densityPlot chart |
 	chart := self initializeChart.
-	y := isForMemory ifTrue: [ self dataByMemory ] ifFalse: [ self dataByNumberOfAllocations ].
-	plot := RSLinePlot new
-		color: (Color fromHexString: '#CD5C5C');
-		x: x y: y;
-		yourself.
+	densityPlot := RSDensityPlot data: data.
+	densityPlot color: (NSScale google20 scale: 1).
 
-	chart add: plot.
-	"marker := RSXMarkerDecoration new
-		sumUpTo: 0.77 ""0.75"";
-		color: Color blue;
-		width: 0.6;
-		yourself.
-	chart addDecoration: marker."
-	self addTickDecorations: chart.
-	chart minChartValueX: -1.
+	chart add: densityPlot.
+	
 	self addChartTitles: chart.
-	
-	isYLog ifTrue: [ chart yLog ].
-	
 	chart build.
-	"marker lines do: [ :line |
-		| label |
-		label := RSLabel new
-			""text: '75%';"" text: '60%';
-			color: Color blue;
-			fontSize: 6;
-			yourself.
-		RSLocation new
-			above;
-			move: label on: line.
-		chart canvas add: label ]."
 	^ chart canvas
 ]
 
@@ -101,37 +44,14 @@ IllDensityDistributionChartBuilder >> buildDensityChartPresenter [
 		yourself
 ]
 
-{ #category : 'defaults' }
-IllDensityDistributionChartBuilder >> dataByMemory [
-
-	| dictionary |
-	dictionary := Dictionary newFrom: groupedDataBySeconds.
-	^ x collect: [ :index |
-		  dictionary at: index
-			  ifPresent: [ :collection | collection sum: [ :e | e sizeInBytes ] ]
-			  ifAbsent: [ 0 ] ]
-]
-
-{ #category : 'defaults' }
-IllDensityDistributionChartBuilder >> dataByNumberOfAllocations [
-
-	| dictionary |
-	dictionary := Dictionary newFrom: groupedDataBySeconds.
-	^ x collect: [ :index |
-		  dictionary at: index ifPresent: [ :collection | collection size ] ifAbsent: [ 0 ] ]
-]
-
 { #category : 'initialization' }
 IllDensityDistributionChartBuilder >> initialize [
 
 	super initialize.
 
-	xTitle := 'Lifetime in seconds'.
-	yTitle := ''.
-	title := ''.
-	numberOfTicks := 10.
-	isForMemory := true.
-	isYLog := false
+	xTitle := 'Execution time'.
+	yTitle := 'Density'.
+	title := 'KDE Density plot'
 ]
 
 { #category : 'initialization' }
@@ -149,12 +69,18 @@ IllDensityDistributionChartBuilder >> numberOfTicks: anInteger [
 ]
 
 { #category : 'api' }
-IllDensityDistributionChartBuilder >> objectAllocations: someObjectAllocations [
+IllDensityDistributionChartBuilder >> objectAllocations: someObjectAllocations totalProfiledTime: totalTime [
 
-	groupedDataBySeconds := (someObjectAllocations groupedBy: [ :allocationModel |
-		allocationModel lifetimeAsDuration asSeconds ]) associations.
-	groupedDataBySeconds sort: [ :a :b | a key < b key ].
-	x := 0 to: groupedDataBySeconds last key asInteger.
+	| helperDict |
+	helperDict := (0 to: (totalTime / 1000000 "convert to seconds") asInteger)
+		collect: [ :idx | idx -> 0] as: Dictionary.
+
+	someObjectAllocations do: [ :e |
+	helperDict
+		at: ( e lifetime / 1000000 "convert to seconds") asInteger
+		update: [ :count | count + 1 ] ].
+
+	data := helperDict keysSortedSafely collect: [ :key | helperDict at: key ]
 ]
 
 { #category : 'api' }
@@ -167,12 +93,6 @@ IllDensityDistributionChartBuilder >> title: aTitle [
 IllDensityDistributionChartBuilder >> xTitle: aTitle [
 
 	xTitle := aTitle
-]
-
-{ #category : 'api' }
-IllDensityDistributionChartBuilder >> yLog: aBoolean [
-
-	isYLog := aBoolean
 ]
 
 { #category : 'api' }

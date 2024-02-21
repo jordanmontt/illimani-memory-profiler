@@ -12,9 +12,9 @@ Class {
 		'presenterOneName',
 		'presenterTwoName'
 	],
-	#category : 'IllimaniUI-Widgets',
+	#category : 'IllimaniUI-Widgets-Utilities',
 	#package : 'IllimaniUI',
-	#tag : 'Widgets'
+	#tag : 'Widgets-Utilities'
 }
 
 { #category : 'accessing' }
