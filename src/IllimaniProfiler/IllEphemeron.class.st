@@ -138,10 +138,7 @@ IllEphemeron >> mourn [
 	key := nil.
 
 	finalizationTime := Time primUTCMicrosecondsClock.
-	"When the vm calls the method mourn, it is right before of the collection of the object.
-	So we need to add 1 to the counter of scavenges."
-	survivedScavenges := Smalltalk vm incrementalGCCount - survivedScavenges + 1.
-	survivedFullGC := Smalltalk vm fullGCCount - survivedFullGC
+	self updateStatistics
 ]
 
 { #category : 'printing' }
@@ -174,4 +171,13 @@ IllEphemeron >> survivedFullGC [
 IllEphemeron >> survivedScavenges [
 
 	^ survivedScavenges
+]
+
+{ #category : 'finalization' }
+IllEphemeron >> updateStatistics [
+	"When the vm calls the method mourn, it is right before of the collection of the object.
+	So we need to add 1 to the counter of scavenges."
+
+	survivedScavenges := Smalltalk vm incrementalGCCount - survivedScavenges + 1.
+	survivedFullGC := Smalltalk vm fullGCCount - survivedFullGC
 ]

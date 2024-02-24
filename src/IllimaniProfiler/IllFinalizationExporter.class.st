@@ -18,5 +18,5 @@ IllFinalizationExporter class >> on: aProfiler [
 IllFinalizationExporter >> headerOfAllocationModel [ 
 
 	^ #( #finalizationTimeInMicroSeconds #sizeInBytes #initializationTimeInMicroSeconds #allocatedObjectClass
-	     #survivedScavenges #survivedFullGC #forcedFinalization )
+	     #survivedScavenges #survivedFullGCs #forcedFinalization )
 ]
