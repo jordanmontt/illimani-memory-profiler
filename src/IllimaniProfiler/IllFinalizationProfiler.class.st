@@ -3,8 +3,7 @@ Class {
 	#superclass : 'IllAbstractProfiler',
 	#instVars : [
 		'ephemeronsCollection',
-		'statsModel',
-		'gcActivityMonitor'
+		'statsModel'
 	],
 	#category : 'IllimaniProfiler-Finalization-Profiler',
 	#package : 'IllimaniProfiler',
@@ -21,12 +20,6 @@ IllFinalizationProfiler >> exporterClass [
 IllFinalizationProfiler >> forceFinalizationOfObjects [
 
 	ephemeronsCollection do: [ :e | e forceFinalization ]
-]
-
-{ #category : 'accessing' }
-IllFinalizationProfiler >> gcActivityMonitor [
-
-	^ gcActivityMonitor
 ]
 
 { #category : 'initialization' }
@@ -50,13 +43,6 @@ IllFinalizationProfiler >> objectAllocations [
 	^ ephemeronsCollection
 ]
 
-{ #category : 'profiling' }
-IllFinalizationProfiler >> startProfiling [
-
-	gcActivityMonitor := GCActivityMonitor new run.
-	super startProfiling.
-]
-
 { #category : 'accessing - statistics' }
 IllFinalizationProfiler >> stats [
 
@@ -67,6 +53,5 @@ IllFinalizationProfiler >> stats [
 IllFinalizationProfiler >> stopProfiling [
 
 	super stopProfiling.
-	gcActivityMonitor terminate.
 	self forceFinalizationOfObjects
 ]

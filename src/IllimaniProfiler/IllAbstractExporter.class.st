@@ -32,7 +32,14 @@ IllAbstractExporter >> exportData [
 	baseFileName := self fileNameToExport.
 	
 	self exportMetaData: baseFileName , '.json'.
-	self exportAllocationModelCollection: baseFileName , '.csv'
+	self exportAllocationModelCollection: baseFileName , '.csv'.
+	self exportGCActivity
+]
+
+{ #category : 'exporting' }
+IllAbstractExporter >> exportGCActivity [
+
+	profiler gcActivityMonitor exportData: baseFileName
 ]
 
 { #category : 'exporting' }

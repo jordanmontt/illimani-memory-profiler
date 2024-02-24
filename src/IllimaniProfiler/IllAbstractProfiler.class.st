@@ -12,7 +12,8 @@ Class {
 		'totalTime',
 		'startTime',
 		'proxyCopy',
-		'profiledCode'
+		'profiledCode',
+		'gcActivityMonitor'
 	],
 	#category : 'IllimaniProfiler-Instrumentation',
 	#package : 'IllimaniProfiler',
@@ -60,6 +61,12 @@ IllAbstractProfiler >> forceUninstall [
 ]
 
 { #category : 'accessing' }
+IllAbstractProfiler >> gcActivityMonitor [
+
+	^ gcActivityMonitor
+]
+
+{ #category : 'accessing' }
 IllAbstractProfiler >> illimaniAnnouncer [
 
 	^ IllAnnouncer new
@@ -74,7 +81,8 @@ IllAbstractProfiler >> initialize [
 		yourself.
 	self initializeMethodProxies: handler.
 	samplingCounter := 0.
-	samplingRate := 100
+	samplingRate := 100.
+	gcActivityMonitor := NullGCActivityMonitor new
 ]
 
 { #category : 'initialization' }
@@ -118,6 +126,14 @@ IllAbstractProfiler >> isProfilingFinished [
 IllAbstractProfiler >> isProfilingStarted [
 
 	^ startTime isNotNil
+]
+
+{ #category : 'api' }
+IllAbstractProfiler >> monitorGCActivity [
+	"This instantiates a monitor that will run a process that will log the gc activity once per
+	second"
+
+	gcActivityMonitor := GCActivityMonitor new
 ]
 
 { #category : 'accessing' }
@@ -263,6 +279,7 @@ IllAbstractProfiler >> samplingRate: anInteger [
 { #category : 'profiling' }
 IllAbstractProfiler >> startProfiling [
 
+	gcActivityMonitor run.
 	self installMethodProxies.
 	self initializeVMStats
 ]
@@ -277,7 +294,8 @@ IllAbstractProfiler >> stats [
 IllAbstractProfiler >> stopProfiling [
 
 	self uninstallMethodProxies.
-	self updateVMStats
+	self updateVMStats.
+	gcActivityMonitor terminate
 ]
 
 { #category : 'accessing - statistics' }

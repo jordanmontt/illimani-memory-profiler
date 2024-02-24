@@ -15,19 +15,6 @@ IllFinalizationExporter class >> on: aProfiler [
 ]
 
 { #category : 'exporting' }
-IllFinalizationExporter >> exportData [
-
-	super exportData.
-	self exportGCActivity
-]
-
-{ #category : 'exporting' }
-IllFinalizationExporter >> exportGCActivity [
-
-	profiler gcActivityMonitor exportData: baseFileName
-]
-
-{ #category : 'exporting' }
 IllFinalizationExporter >> headerOfAllocationModel [ 
 
 	^ #( #finalizationTimeInMicroSeconds #sizeInBytes #initializationTimeInMicroSeconds #allocatedObjectClass
