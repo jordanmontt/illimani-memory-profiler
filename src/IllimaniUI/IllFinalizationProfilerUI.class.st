@@ -1,10 +1,11 @@
 Class {
 	#name : 'IllFinalizationProfilerUI',
 	#superclass : 'IllAbstractUI',
+	#classTraits : '{} + TraitedClass',
 	#instVars : [
-		'densityChartPresenter',
 		'lifetimesTable',
-		'gcCyclesTable'
+		'gcCyclesTable',
+		'frequencyHistogramPresenter'
 	],
 	#category : 'IllimaniUI-Main Presenter',
 	#package : 'IllimaniUI',
@@ -18,10 +19,10 @@ IllFinalizationProfilerUI >> codeEvaluatorText [
 ]
 
 { #category : 'accessing - lazy presenters' }
-IllFinalizationProfilerUI >> densityChartPresenter [
+IllFinalizationProfilerUI >> frequencyHistogramPresenter [
 
-	densityChartPresenter ifNil: [ self initializeDensityChartPresenter ].
-	^ densityChartPresenter
+	frequencyHistogramPresenter ifNil: [ self initializeFrequencyHistogramPresenter ].
+	^ frequencyHistogramPresenter
 ]
 
 { #category : 'accessing - lazy presenters' }
@@ -32,11 +33,9 @@ IllFinalizationProfilerUI >> gcCyclesTable [
 ]
 
 { #category : 'initialization - lazy presenters' }
-IllFinalizationProfilerUI >> initializeDensityChartPresenter [
+IllFinalizationProfilerUI >> initializeFrequencyHistogramPresenter [
 
-	densityChartPresenter := IllDensityDistributionChartBuilder new
-		objectAllocations: profiler objectAllocations totalProfiledTime: profiler totalTime;
-		buildDensityChartPresenter
+	frequencyHistogramPresenter := IllFrequencyHistogramPresenter on: profiler
 ]
 
 { #category : 'initialization - lazy presenters' }
@@ -63,10 +62,10 @@ IllFinalizationProfilerUI >> initializeNotebook [
 
 	notebookPresenter := self newNotebook
 		addPageTitle: 'Summary' provider: [ self summaryAndEvaluatorPresenter ];
-		addPageTitle: 'Lifetimes Table' provider: [ self lifetimesTable ];
+		addPageTitle: 'Lifetimes table' provider: [ self lifetimesTable ];
 		addPageTitle: 'Survived GC cycles' provider: [ self gcCyclesTable ];
-		addPageTitle: 'Allocated Objects' provider: [ self allocatedObjectsTablePresenter ];
-		addPageTitle: 'KDE Density' provider: [ self densityChartPresenter ];
+		addPageTitle: 'Allocated objects' provider: [ self allocatedObjectsTablePresenter ];
+		addPageTitle: 'Relative frequencies' provider: [ self frequencyHistogramPresenter ];
 
 		addPageTitle: 'Evaluator' provider: [ self codeEvaluator ];
 		yourself
@@ -82,7 +81,7 @@ IllFinalizationProfilerUI >> lifetimesTable [
 { #category : 'actions' }
 IllFinalizationProfilerUI >> refresh [
 
-	densityChartPresenter := nil.
+	frequencyHistogramPresenter := nil.
 	self layout: self defaultLayout
 ]
 
