@@ -8,8 +8,7 @@ Class {
 
 { #category : 'accessing' }
 IllAllocationRateProfilerUI >> codeEvaluatorText [
-
-	^ 'self'
+    ^ 'self'
 ]
 
 { #category : 'initialization' }
