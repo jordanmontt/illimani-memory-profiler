@@ -1,7 +1,7 @@
 Class {
 	#name : 'IllAnnouncer',
 	#superclass : 'Announcer',
-	#category : 'IllimaniProfiler-Instrumentation',
+	#category : 'IllimaniProfiler-Announcement',
 	#package : 'IllimaniProfiler',
-	#tag : 'Instrumentation'
+	#tag : 'Announcement'
 }
