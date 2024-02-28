@@ -17,7 +17,7 @@ BaselineOfIllimaniProfiler >> baseline: spec [
 		spec package: 'IllimaniUI'
 			with: [ spec requires: #( 'IllimaniProfiler' ) ].
 		spec package: 'IllimaniProfiler-Tests'
-			with: [ spec requires: #( 'IllimaniProfiler' ) ].
+			with: [ spec requires: #( 'IllimaniProfiler' 'IllimaniUI' ) ].
 		
 		"External dependencies"
 
