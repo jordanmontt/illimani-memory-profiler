@@ -153,8 +153,7 @@ IllAllocationSiteProfiler >> internalRegisterAllocation: newlyAllocatedObject [
 		allocatorMethod: filteredContext compiledCode method;
 		allocatedObjectClass: newlyAllocatedObject class;
 		"contextFingerprint: filteredContext;"
-		sizeInBytes: newlyAllocatedObject sizeInMemory;
-		initializationTime: Time primUTCMicrosecondsClock.
+		sizeInBytes: newlyAllocatedObject sizeInMemory.
 
 	objectAllocations add: allocationInformationHolder
 ]

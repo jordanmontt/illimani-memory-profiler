@@ -99,11 +99,11 @@ AllocationSiteInfoModel >> initializationTime [
 	^ initializationTime
 ]
 
-{ #category : 'accessing' }
-AllocationSiteInfoModel >> initializationTime: microsecondsAsInt [
-	"In microseconds"
+{ #category : 'initialization' }
+AllocationSiteInfoModel >> initialize [
 
-	initializationTime := microsecondsAsInt
+	super initialize.
+	initializationTime := Time primUTCMicrosecondsClock
 ]
 
 { #category : 'inspector - extensions' }
