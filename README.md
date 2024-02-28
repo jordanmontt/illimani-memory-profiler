@@ -116,6 +116,10 @@ You can monitor the GC activity while the profiler is profiling with the message
 profiler monitorGCActivity
 ```
 
+## Implement your own memory profiler
+
+Illimani is also a profiling framework. A user can implement his own profiler by subclassing the `IllAbstractProfiler` class and defining the few missing methods. Especially, the `internalRegisterAllocation:` method. The `internalRegisterAllocation:` method will be called each time that an allocation is produced (or when sampling, each time that the sampling rates matches) with the newly allocated object as a parameter. You can the `IllAllocationRateProfiler` class as an example of a very simple memory profiler.
+
 ## Allocation Site profiler
 
 ![GIF1](https://github.com/jordanmontt/illimani-memory-profiler/assets/33934979/fd915e86-a251-48c9-a087-3929d74509e7)
