@@ -4,8 +4,9 @@ An IllFinalizationExporterTest is a test class for testing the behavior of IllFi
 Class {
 	#name : 'IllFinalizationExporterTest',
 	#superclass : 'IllAbstractExporterTest',
-	#category : 'IllimaniProfiler-Tests',
-	#package : 'IllimaniProfiler-Tests'
+	#category : 'IllimaniProfiler-Tests-Exporters',
+	#package : 'IllimaniProfiler-Tests',
+	#tag : 'Exporters'
 }
 
 { #category : 'asserting' }

@@ -6,8 +6,9 @@ Class {
 		'mockProfiler',
 		'mockGCMonitor'
 	],
-	#category : 'IllimaniProfiler-Tests',
-	#package : 'IllimaniProfiler-Tests'
+	#category : 'IllimaniProfiler-Tests-Exporters',
+	#package : 'IllimaniProfiler-Tests',
+	#tag : 'Exporters'
 }
 
 { #category : 'testing' }
