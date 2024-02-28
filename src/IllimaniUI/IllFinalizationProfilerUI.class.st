@@ -14,6 +14,8 @@ Class {
 
 { #category : 'accessing' }
 IllFinalizationProfilerUI >> codeEvaluatorText [
+
+	^ 'self objectAllocations'
 ]
 
 { #category : 'accessing - lazy presenters' }
