@@ -5,15 +5,7 @@
 [![Pharo version](https://img.shields.io/badge/Pharo-11-%23aac9ff.svg)](https://pharo.org/download)
 [![Pharo version](https://img.shields.io/badge/Pharo-10-%23aac9ff.svg)](https://pharo.org/download)
 
-<p align="center">
-  <img src="https://cdn.fstoppers.com/styles/full/s3/photos/171592/10/30/1d2b5ac3df32b99cd9a22454527e04ff.jpg" width="500">
-</p>
-
-<p align="center">
-  <em>The Illimani mountain in La Paz, Bolivia</em>
-</p>
-
-The release version works on Pharo 10, 11 and Pharo 12. But, keep in mind that the profiler should be faster in Pharo 12. This is because there were some optimizations done in Pharo 12 to make the instrumentation faster.
+It works on Pharo 10, 11 and Pharo 12. But, keep in mind that the profiler should be faster in Pharo 12. This is because there were some optimizations done in Pharo 12 to make the instrumentation faster.
 
 Illimani is a library of memory profilers. It provides a memory allocation profiler and a finalization profiler. The allocation profiler gives you information about the allocation sites and where the objects where produced in your application. The finalization profiler gives you information about how much time did the objects lived, and about how many GC cycles (both scavenges and full GC) they survived.
 
@@ -68,6 +60,8 @@ IllFinalizationProfiler new.
 
 ## How to use
 
+### Profile a code snippet or the Pharo IDE
+
 You can decide both to profile a given method block or just watching the activity of the image for some time.
 
 ```st
@@ -78,12 +72,16 @@ profiler profileOn: [ anObject performSomeAction ].
 profiler profileFor: 2 seconds.
 ```
 
-For starting the stoping the profiling manually. This can be useful if you don't know how long your program will run.
+### Profiler manual API
+
+For starting the stoping the profiling manually. This can be useful if you don't know how long your program will run and you need to interact with the Pharo's IDE.
 
 ```st
 profiler startProfiling.
 profiler stopProfiling.
 ```
+
+### Open the GUI
 
 You can open the ui at any time with the message `open` (even if the profiler is still profiling)
 
@@ -91,12 +89,16 @@ You can open the ui at any time with the message `open` (even if the profiler is
 profiler open.
 ```
 
+### Sample the allocations
+
 By default, the profiler captures all the object allocations. You can configure it to sample the samples. This can be useful for reducing the overhead when your application makes lots of allocations.
 
 ```st
-"Capture only 33% of the allocations"
-profiler samplingRate: 33.
+"Capture only 10% of the allocations"
+profiler samplingRate: 10.
 ```
+
+### Export the profiled data to files
 
 You can export the data to csv and json files by doing:
 
@@ -105,6 +107,14 @@ profiler exportData
 ```
 
 This will create a csv file with all the information about the allocated objects, and some other auxiliary files in json and csv. This auxiliary files can be the meta data about the total profiled time, the gc activity, etc.
+
+### Monitor the GC activity
+
+You can monitor the GC activity while the profiler is profiling with the message `monitorGCActivity`. This will fork a process that will take GC statistics once per second. Then, when exporting the profiler data, two csv files will be exported containing both the scavenges and full GCs.
+
+```st
+profiler monitorGCActivity
+```
 
 ## Allocation Site profiler
 
