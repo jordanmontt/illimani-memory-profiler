@@ -1,7 +1,6 @@
 Class {
 	#name : 'IllFinalizationProfilerUI',
 	#superclass : 'IllAbstractUI',
-	#classTraits : '{} + TraitedClass',
 	#instVars : [
 		'lifetimesTable',
 		'gcCyclesTable',
