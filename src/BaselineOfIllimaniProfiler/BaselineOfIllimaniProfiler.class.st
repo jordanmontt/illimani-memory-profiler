@@ -18,7 +18,7 @@ BaselineOfIllimaniProfiler >> baseline: spec [
 			with: [ spec requires: #( 'IllimaniProfiler' ) ].
 		spec package: 'IllimaniProfiler-Tests'
 			with: [ spec requires: #( 'IllimaniProfiler' 'IllimaniUI' ) ].
-		
+
 		"External dependencies"
 
 		"Load NeoCSV and NeoJSON to export the data"
@@ -31,11 +31,11 @@ BaselineOfIllimaniProfiler >> baseline: spec [
 			spec baseline: 'MethodProxies'
 				with: [ spec repository: 'github://pharo-contributions/MethodProxies' ].
 			spec package: 'IllimaniProfiler' with: [ spec requires: #('MethodProxies') ] ].
-		
+
 		"Load Roassal and a fixed release of MethodProxies for Pharo 10 and 11"
 		spec for: #(#'pharo10.x' #'pharo11.x') do: [
-			spec baseline: 'Roassal3' with: [ spec repository: 'github://ObjectProfile/Roassal3:v1.01/src' ].
-			spec package: 'IllimaniUI' with: [ spec requires: #('Roassal3') ].
+			spec baseline: 'Roassal' with: [ spec repository: 'github://pharo-graphics/Roassal/src' ].
+			spec package: 'IllimaniUI' with: [ spec requires: #('Roassal') ].
 			spec baseline: 'MethodProxies'
 				with: [ spec repository: 'github://pharo-contributions/MethodProxies:a3204024eba7fce4f92db7f521425d3d0d869afc/src' ].
 			spec package: 'IllimaniProfiler' with: [ spec requires: #('MethodProxies') ] ].
