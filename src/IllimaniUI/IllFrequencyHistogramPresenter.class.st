@@ -1,7 +1,6 @@
 Class {
 	#name : 'IllFrequencyHistogramPresenter',
 	#superclass : 'SpPresenter',
-	#classTraits : '{} + TraitedClass',
 	#instVars : [
 		'data',
 		'histogramPresenter'
