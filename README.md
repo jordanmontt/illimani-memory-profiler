@@ -3,7 +3,6 @@
 
 [![Pharo version](https://img.shields.io/badge/Pharo-12-%23aac9ff.svg)](https://pharo.org/download)
 [![Pharo version](https://img.shields.io/badge/Pharo-11-%23aac9ff.svg)](https://pharo.org/download)
-[![Pharo version](https://img.shields.io/badge/Pharo-10-%23aac9ff.svg)](https://pharo.org/download)
 
 It works on Pharo 10, 11 and Pharo 12. But, keep in mind that the profiler should be faster in Pharo 12. This is because there were some optimizations done in Pharo 12 to make the instrumentation faster.
 
