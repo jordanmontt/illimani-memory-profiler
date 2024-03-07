@@ -75,6 +75,6 @@ IllAbstractExporterTest >> testExportData [
 	
 	self assertHeader: csvReader.
 	self assertCSVContent: csvReader.
-	
-	createdFile delete
+
+	createdFile ensureDelete
 ]
