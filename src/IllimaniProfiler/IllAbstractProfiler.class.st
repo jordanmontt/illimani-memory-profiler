@@ -81,7 +81,7 @@ IllAbstractProfiler >> initialize [
 		yourself.
 	self initializeMethodProxies: handler.
 	samplingCounter := 0.
-	samplingRate := 100.
+	samplingRate := 1.
 	gcActivityMonitor := NullGCActivityMonitor new
 ]
 
@@ -174,15 +174,15 @@ IllAbstractProfiler >> profiledCode [
 { #category : 'profiling' }
 IllAbstractProfiler >> registerAllocation: anObject [
 
-	samplingRate = 100 ifTrue: [
+	samplingRate = 1 ifTrue: [
 		"Sampling 100% capture all"
 		self internalRegisterAllocation: anObject.
 		^ self ].
 
 	samplingCounter := samplingCounter + 1.
-	samplingCounter > 100 ifTrue: [ samplingCounter := 1 ].
+	samplingCounter > samplingRate denominator ifTrue: [ samplingCounter := 1 ].
 
-	samplingCounter <= samplingRate
+	samplingCounter <= samplingRate numerator
 		ifTrue: [ self internalRegisterAllocation: anObject ]
 		ifFalse: [ ^ self ]
 ]
@@ -269,11 +269,11 @@ IllAbstractProfiler >> samplingRate [
 ]
 
 { #category : 'api' }
-IllAbstractProfiler >> samplingRate: anInteger [
-	"The anInteger needs to be an integer number between 1 and 100. This number represents the
-	sampling rate *percentage*"
+IllAbstractProfiler >> samplingRate: aFraction [
+	"I expect my argument to be a fraction. For example 4 / 5. That will mean that I will
+	register 4 out of 5 allocations."
 
-	samplingRate := anInteger
+	samplingRate := aFraction
 ]
 
 { #category : 'profiling' }
