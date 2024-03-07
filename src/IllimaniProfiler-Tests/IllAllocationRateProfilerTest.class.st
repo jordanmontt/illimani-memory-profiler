@@ -18,7 +18,7 @@ IllAllocationRateProfilerTest >> testSamplingRate [
 	| allocatedByteSrings |
 	
 	profiler
-		samplingRate: 33;
+		samplingRate: 33 / 100;
 		profileOn: [ 100 timesRepeat: [ ByteString new ] ].
 
 	"We don't have the classes on this profiler"
@@ -31,12 +31,28 @@ IllAllocationRateProfilerTest >> testSamplingRate [
 ]
 
 { #category : 'tests' }
+IllAllocationRateProfilerTest >> testSamplingRate1in1000 [
+
+	| allocatedByteSrings |
+	
+	profiler
+		samplingRate: 1/1000;
+		profileOn: [ 1000 timesRepeat: [ ByteString new ] ].
+
+	allocatedByteSrings := profiler objectAllocations size.
+
+	"We are cheking in this range becase the profiler makes some allocations that are
+	necessary for the profiler to work, like Durations objects."
+	self assert: (allocatedByteSrings >= 1) & (allocatedByteSrings < 4)
+]
+
+{ #category : 'tests' }
 IllAllocationRateProfilerTest >> testSamplingRateOtherPercentage [
 
 	| allocatedByteSrings |
 	
 	profiler
-		samplingRate: 75;
+		samplingRate: 75 / 100;
 		profileOn: [ 100 timesRepeat: [ ByteString new ] ].
 
 	"We don't have the class on this profiler"

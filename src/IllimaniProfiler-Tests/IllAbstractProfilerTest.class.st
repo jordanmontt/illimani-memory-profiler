@@ -57,7 +57,7 @@ IllAbstractProfilerTest >> testSamplingRate [
 	| allocatedByteSrings |
 	
 	profiler
-		samplingRate: 33;
+		samplingRate: 33 / 100;
 		profileOn: [ 100 timesRepeat: [ ByteString new ] ].
 
 	allocatedByteSrings := (profiler objectAllocations select:
@@ -70,12 +70,29 @@ IllAbstractProfilerTest >> testSamplingRate [
 ]
 
 { #category : 'tests' }
+IllAbstractProfilerTest >> testSamplingRate1in1000 [
+
+	| allocatedByteSrings |
+	
+	profiler
+		samplingRate: 1/1000;
+		profileOn: [ 1000 timesRepeat: [ ByteString new ] ].
+
+	allocatedByteSrings := (profiler objectAllocations select:
+		[ :e | e allocatedObjectClass = ByteString ]) size.
+
+	"We are cheking in this range becase the profiler makes some allocations that are
+	necessary for the profiler to work, like Durations objects."
+	self assert: (allocatedByteSrings >= 1) & (allocatedByteSrings < 4)
+]
+
+{ #category : 'tests' }
 IllAbstractProfilerTest >> testSamplingRateOtherPercentage [
 
 	| allocatedByteSrings |
 	
 	profiler
-		samplingRate: 75;
+		samplingRate: 75 / 100;
 		profileOn: [ 100 timesRepeat: [ ByteString new ] ].
 
 	allocatedByteSrings := (profiler objectAllocations select:
@@ -91,17 +108,17 @@ IllAbstractProfilerTest >> testSamplingRateOtherPercentage [
 IllAbstractProfilerTest >> testSamplingRateVariable [
 
 	"By default, do not sample"
-	self assert: profiler samplingRate equals: 100.
+	self assert: profiler samplingRate equals: 1.
 
 	"Sample at 20%"
-	profiler samplingRate: 20.
-	self assert: profiler samplingRate equals: 20.
+	profiler samplingRate: 20 / 100.
+	self assert: profiler samplingRate equals: (20 / 100).
 
 	"Sample at 75%"
-	profiler samplingRate: 75.
-	self assert: profiler samplingRate equals: 75.
+	profiler samplingRate: 75 / 100.
+	self assert: profiler samplingRate equals: (75 / 100).
 
-	"Do not sample. The same as sampling 100%".
-	profiler samplingRate: 100.
-	self assert: profiler samplingRate equals: 100.
+	"Do not sample. The same as sampling 100%"
+	profiler samplingRate: 1.
+	self assert: profiler samplingRate equals: 1.
 ]
