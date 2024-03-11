@@ -21,7 +21,7 @@ IllFinalizationInstanceKeeper >> classesToKeepReferenced: aCollection [
 IllFinalizationInstanceKeeper >> initialize [
 
 	super initialize.
-	keptInstances := OrderedCollection new: 1000000.
+	keptInstances := OrderedCollection new: 100000000.
 	classesToIncreaseLifetime := {  }
 ]
 

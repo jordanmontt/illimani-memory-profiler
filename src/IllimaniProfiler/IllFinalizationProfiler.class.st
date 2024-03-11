@@ -26,7 +26,7 @@ IllFinalizationProfiler >> forceFinalizationOfObjects [
 IllFinalizationProfiler >> initialize [
 
 	super initialize.
-	ephemeronsCollection := OrderedCollection new: 10000000
+	ephemeronsCollection := OrderedCollection new: 100000000
 ]
 
 { #category : 'profiling' }
