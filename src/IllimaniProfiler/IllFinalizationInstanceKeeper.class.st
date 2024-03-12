@@ -21,15 +21,20 @@ IllFinalizationInstanceKeeper >> classesToKeepReferenced: aCollection [
 IllFinalizationInstanceKeeper >> initialize [
 
 	super initialize.
-	keptInstances := OrderedCollection new: 100000000.
-	classesToIncreaseLifetime := {  }
+	keptInstances := OrderedCollection new: 100000000
 ]
 
 { #category : 'profiling' }
 IllFinalizationInstanceKeeper >> internalRegisterAllocation: anObject [
+
+	"Optimization"
+	classesToIncreaseLifetime ifNil: [
+		super internalRegisterAllocation: anObject.
+		^ self ].
 	
-	(classesToIncreaseLifetime includes: anObject class) ifTrue: [ keptInstances add: anObject ].
-	
+	(classesToIncreaseLifetime includes: anObject class) ifTrue: [
+		keptInstances add: anObject ].
+
 	super internalRegisterAllocation: anObject
 ]
 
