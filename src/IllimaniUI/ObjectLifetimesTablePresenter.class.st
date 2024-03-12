@@ -7,7 +7,8 @@ Class {
 		'totalAllocations',
 		'inputPresenter',
 		'totalLifetime',
-		'groupedAllocations'
+		'groupedAllocations',
+		'totalMemory'
 	],
 	#category : 'IllimaniUI-Widgets',
 	#package : 'IllimaniUI',
@@ -63,11 +64,14 @@ ObjectLifetimesTablePresenter >> initializeTablePresenter [
 				 yourself);
 		addColumn: (SpStringTableColumn title: 'Allocated object class' evaluated: #first);
 		addColumn: (SpStringTableColumn
-				title: 'Lifetime %'
+				title: '% Lifetime'
 				evaluated: [ :e | self toPrettyPercentage: e third ]);
 		addColumn: (SpStringTableColumn
-				title: 'Allocations %'
+				title: '% Allocations'
 				evaluated: [ :e | self toPrettyPercentage: e second ]);
+		addColumn: (SpStringTableColumn
+				title: '% Memory'
+				evaluated: [ :e | self toPrettyPercentage: e fourth ]);
 		items: groupedAllocations
 ]
 
@@ -87,18 +91,28 @@ ObjectLifetimesTablePresenter >> relativeLifetimeFor: assoc [
 	^ relativeLifetimes average
 ]
 
+{ #category : 'initialization' }
+ObjectLifetimesTablePresenter >> relativeMemoryFor: assoc [
+
+	| totalGroupMemory |
+	totalGroupMemory := assoc value sum: [ :e | e sizeInBytes ].
+	^ totalGroupMemory / totalMemory * 100
+]
+
 { #category : 'accessing - model' }
 ObjectLifetimesTablePresenter >> setModelBeforeInitialization: aProfiler [
 
 	| objectAllocations |
 	totalAllocations := aProfiler objectAllocations size.
 	totalLifetime := aProfiler totalTime.
+	totalMemory := aProfiler objectAllocations sum: #sizeInBytes.
 	
 	objectAllocations := (aProfiler objectAllocations groupedBy: #allocatedObjectClass) associations.
 	groupedAllocations := objectAllocations collect: [ : assoc |
 		{ assoc key.
 		self relativeAllocationsFor: assoc.
-		self relativeLifetimeFor: assoc } 
+		self relativeLifetimeFor: assoc.
+		self relativeMemoryFor: assoc } 
 		 ].
 	groupedAllocations sort: [ :a :b | a second > b second ]
 ]
