@@ -67,8 +67,8 @@ AllocatedObjectsTablePresenter >> initializePresenters [
 ]
 
 { #category : 'accessing - model' }
-AllocatedObjectsTablePresenter >> setModelBeforeInitialization: aModel [
+AllocatedObjectsTablePresenter >> setModelBeforeInitialization: allocations [
 
-	objectAllocations := (aModel collect: #allocatedObjectClass as: Bag) sortedCounts.
+	objectAllocations := (allocations collect: #allocatedObjectClass as: Bag) sortedCounts.
 	totalAllocations := objectAllocations sum: [ :a | a key ]
 ]

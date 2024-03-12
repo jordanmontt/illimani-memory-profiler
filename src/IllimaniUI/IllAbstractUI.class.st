@@ -1,6 +1,7 @@
 Class {
 	#name : 'IllAbstractUI',
 	#superclass : 'SpPresenter',
+	#classTraits : '{} + TraitedClass',
 	#instVars : [
 		'notebookPresenter',
 		'refreshButton',
@@ -8,7 +9,6 @@ Class {
 		'profiler',
 		'illimaniAnnouncer',
 		'codeEvaluator',
-		'allocatedObjectsTablePresenter',
 		'summaryAndEvaluatorPresenter'
 	],
 	#category : 'IllimaniUI-Main Presenter',
@@ -24,13 +24,6 @@ IllAbstractUI class >> profiler: aProfiler announcer: anIllimaniAnnouncer [
 		illimaniAnnouncer: anIllimaniAnnouncer;
 		initialize;
 		yourself
-]
-
-{ #category : 'accessing - lazy presenters' }
-IllAbstractUI >> allocatedObjectsTablePresenter [
-
-	allocatedObjectsTablePresenter ifNil: [ self initializeAllocatedObjectsTablePresenter ].
-	^ allocatedObjectsTablePresenter
 ]
 
 { #category : 'accessing - lazy presenters' }
@@ -85,13 +78,6 @@ IllAbstractUI >> initialize [
 
 	super initialize.
 	self respondToAnnouncement
-]
-
-{ #category : 'initialization - lazy presenters' }
-IllAbstractUI >> initializeAllocatedObjectsTablePresenter [
-
-	allocatedObjectsTablePresenter := self
-		instantiate: (AllocatedObjectsTablePresenter on: profiler objectAllocations)
 ]
 
 { #category : 'initialization - lazy presenters' }

@@ -2,14 +2,22 @@ Class {
 	#name : 'IllFinalizationProfilerUI',
 	#superclass : 'IllAbstractUI',
 	#instVars : [
-		'lifetimesTable',
 		'gcCyclesTable',
-		'frequencyHistogramPresenter'
+		'frequencyHistogramPresenter',
+		'relativeFrequenciesTable',
+		'avgLifetimesTablePresenter'
 	],
 	#category : 'IllimaniUI-Main Presenter',
 	#package : 'IllimaniUI',
 	#tag : 'Main Presenter'
 }
+
+{ #category : 'initialization' }
+IllFinalizationProfilerUI >> avgLifetimesTablePresenter [
+
+	avgLifetimesTablePresenter ifNil: [ self initializeAvgLifetimesTablePresenter ].
+	^ avgLifetimesTablePresenter
+]
 
 { #category : 'accessing' }
 IllFinalizationProfilerUI >> codeEvaluatorText [
@@ -31,6 +39,12 @@ IllFinalizationProfilerUI >> gcCyclesTable [
 	^ gcCyclesTable
 ]
 
+{ #category : 'initialization' }
+IllFinalizationProfilerUI >> initializeAvgLifetimesTablePresenter [
+
+	avgLifetimesTablePresenter := ObjectLifetimesTablePresenter on: profiler
+]
+
 { #category : 'initialization - lazy presenters' }
 IllFinalizationProfilerUI >> initializeFrequencyHistogramPresenter [
 
@@ -48,33 +62,33 @@ IllFinalizationProfilerUI >> initializeGCCyclesTable [
 		yourself
 ]
 
-{ #category : 'initialization - lazy presenters' }
-IllFinalizationProfilerUI >> initializeLifetimesTable [
-
-	lifetimesTable := self
-		instantiate: FinalizationLifetimesTablePresenter
-		on: profiler objectAllocations
-]
-
 { #category : 'initialization' }
 IllFinalizationProfilerUI >> initializeNotebook [
 
 	notebookPresenter := self newNotebook
 		addPageTitle: 'Summary' provider: [ self summaryAndEvaluatorPresenter ];
-		addPageTitle: 'Lifetimes table' provider: [ self lifetimesTable ];
+		addPageTitle: 'Avg Lifetimes' provider: [ self avgLifetimesTablePresenter ];
 		addPageTitle: 'Survived GC cycles' provider: [ self gcCyclesTable ];
-		addPageTitle: 'Allocated objects' provider: [ self allocatedObjectsTablePresenter ];
+		addPageTitle: 'Relative Frequencies Table' provider: [ self lifetimesTable ];
 		addPageTitle: 'Relative frequencies' provider: [ self frequencyHistogramPresenter ];
-
+		
 		addPageTitle: 'Evaluator' provider: [ self codeEvaluator ];
 		yourself
+]
+
+{ #category : 'initialization - lazy presenters' }
+IllFinalizationProfilerUI >> initializeRelativeFrequenciesTable [
+
+	relativeFrequenciesTable := self
+		instantiate: FinalizationLifetimesTablePresenter
+		on: profiler objectAllocations
 ]
 
 { #category : 'accessing - lazy presenters' }
 IllFinalizationProfilerUI >> lifetimesTable [
 
-	lifetimesTable ifNil: [ self initializeLifetimesTable ].
-	^ lifetimesTable
+	relativeFrequenciesTable ifNil: [ self initializeRelativeFrequenciesTable ].
+	^ relativeFrequenciesTable
 ]
 
 { #category : 'actions' }

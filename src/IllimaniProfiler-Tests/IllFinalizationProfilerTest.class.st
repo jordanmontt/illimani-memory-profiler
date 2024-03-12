@@ -20,7 +20,7 @@ IllFinalizationProfilerTest >> testProfileOn [
 	"We let the GC run for N times to clean the not referenced objects. Because of the
 	implementation of ephemerons, they can have hard references between them so it is
 	necessary to run the GC several times  "
-	10 timesRepeat: [ Smalltalk garbageCollect ].
+	3 timesRepeat: [ Smalltalk garbageCollect ].
 
 	self assert: profiler objectAllocations size > 10
 ]
@@ -36,7 +36,7 @@ IllFinalizationProfilerTest >> testProfileOnFinalizesCorrectly [
 	"We let the GC run for N times to clean the not referenced objects. Because of the
 	implementation of ephemerons, they can have hard references between them so it is
 	necessary to run the GC several times  "
-	10 timesRepeat: [ Smalltalk garbageCollect ].
+	3 timesRepeat: [ Smalltalk garbageCollect ].
 	
 	self
 		assert: profiler objectAllocations size

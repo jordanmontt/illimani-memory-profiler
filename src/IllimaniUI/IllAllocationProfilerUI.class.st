@@ -4,13 +4,15 @@ I am a user interface for my profiling. My implementation is independent from th
 Class {
 	#name : 'IllAllocationProfilerUI',
 	#superclass : 'IllAbstractUI',
+	#classTraits : '{} + TraitedClass',
 	#instVars : [
 		'heatmapPresenter',
 		'allocationsPerSecondPerAllocatorPresenter',
 		'allocatedObjectsPerSecondPresenter',
 		'memoryTablePresenter',
 		'topCalculationsNumberInputPresenter',
-		'topCalculationsNumber'
+		'topCalculationsNumber',
+		'allocatedObjectsTablePresenter'
 	],
 	#category : 'IllimaniUI-Main Presenter',
 	#package : 'IllimaniUI',
@@ -44,6 +46,13 @@ IllAllocationProfilerUI >> allocatedObjectsPerSecondPresenter [
 
 	allocatedObjectsPerSecondPresenter ifNil: [ self initializeAllocatedObjectsPerSecond ].
 	^ allocatedObjectsPerSecondPresenter
+]
+
+{ #category : 'accessing - lazy presenters' }
+IllAllocationProfilerUI >> allocatedObjectsTablePresenter [
+
+	allocatedObjectsTablePresenter ifNil: [ self initializeAllocatedObjectsTablePresenter ].
+	^ allocatedObjectsTablePresenter
 ]
 
 { #category : 'accessing - lazy roassal presenters' }
@@ -95,6 +104,13 @@ IllAllocationProfilerUI >> initializeAllocatedObjectsPerSecond [
 			topCalculationsNumber: topCalculationsNumber;
 			allocatedObjectsPerSecondLineChartCanvas);
 		yourself
+]
+
+{ #category : 'initialization - lazy presenters' }
+IllAllocationProfilerUI >> initializeAllocatedObjectsTablePresenter [
+
+	allocatedObjectsTablePresenter := self
+		instantiate: (AllocatedObjectsTablePresenter on: profiler objectAllocations)
 ]
 
 { #category : 'initialization - lazy roassal presenters' }
