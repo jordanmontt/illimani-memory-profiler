@@ -4,7 +4,6 @@ I am a user interface for my profiling. My implementation is independent from th
 Class {
 	#name : 'IllAllocationProfilerUI',
 	#superclass : 'IllAbstractUI',
-	#classTraits : '{} + TraitedClass',
 	#instVars : [
 		'heatmapPresenter',
 		'allocationsPerSecondPerAllocatorPresenter',
