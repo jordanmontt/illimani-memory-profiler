@@ -1,7 +1,6 @@
 Class {
 	#name : 'ObjectLifetimesTablePresenter',
 	#superclass : 'SpPresenter',
-	#classTraits : '{} + TraitedClass',
 	#instVars : [
 		'tablePresenter',
 		'totalAllocations',
