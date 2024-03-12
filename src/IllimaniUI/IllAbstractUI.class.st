@@ -1,7 +1,6 @@
 Class {
 	#name : 'IllAbstractUI',
 	#superclass : 'SpPresenter',
-	#classTraits : '{} + TraitedClass',
 	#instVars : [
 		'notebookPresenter',
 		'refreshButton',
