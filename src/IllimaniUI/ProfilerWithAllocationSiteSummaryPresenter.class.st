@@ -2,15 +2,15 @@
 I am a presenter class that shows basic statistics about the object allocations.
 "
 Class {
-	#name : 'AllocationSiteSummaryPresenter',
-	#superclass : 'AllocationSummaryPresenter',
+	#name : 'ProfilerWithAllocationSiteSummaryPresenter',
+	#superclass : 'ProfilerSummaryPresenter',
 	#category : 'IllimaniUI-Widgets',
 	#package : 'IllimaniUI',
 	#tag : 'Widgets'
 }
 
 { #category : 'layout' }
-AllocationSiteSummaryPresenter >> generalStatsAssociations [
+ProfilerWithAllocationSiteSummaryPresenter >> generalStatsAssociations [
 
 	^ super generalStatsAssociations , {
 		  ('Classes that allocate objects' -> profiler stats numberOfClasses asString).

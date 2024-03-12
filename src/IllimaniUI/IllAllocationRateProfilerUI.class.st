@@ -20,17 +20,17 @@ IllAllocationRateProfilerUI >> initializeNotebook [
 		yourself
 ]
 
+{ #category : 'initialization - lazy presenters' }
+IllAllocationRateProfilerUI >> profilerSummaryPresenter [
+
+	^ ProfilerSummaryPresenter on: profiler
+]
+
 { #category : 'actions' }
 IllAllocationRateProfilerUI >> refresh [
 	"Don't do nothing as there is nothing to refresh"
 
 	^ self
-]
-
-{ #category : 'initialization - lazy presenters' }
-IllAllocationRateProfilerUI >> summaryStatsPresenter [
-
-	^ AllocationSummaryPresenter on: profiler
 ]
 
 { #category : 'initialization' }

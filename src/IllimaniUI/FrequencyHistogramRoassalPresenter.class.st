@@ -1,5 +1,5 @@
 Class {
-	#name : 'IllFrequencyHistogramPresenter',
+	#name : 'FrequencyHistogramRoassalPresenter',
 	#superclass : 'SpPresenter',
 	#instVars : [
 		'data',
@@ -11,7 +11,7 @@ Class {
 }
 
 { #category : 'adding' }
-IllFrequencyHistogramPresenter >> addChartTitles: chart [
+FrequencyHistogramRoassalPresenter >> addChartTitles: chart [
 
 	chart xlabel: 'Relative execution time'.
 	chart ylabel: 'Percent'.
@@ -19,7 +19,7 @@ IllFrequencyHistogramPresenter >> addChartTitles: chart [
 ]
 
 { #category : 'api' }
-IllFrequencyHistogramPresenter >> buildFrequencyHistogramCanvas [
+FrequencyHistogramRoassalPresenter >> buildFrequencyHistogramCanvas [
 
 	| chart plot |
 	chart :=	chart := RSCompositeChart new.
@@ -32,7 +32,7 @@ IllFrequencyHistogramPresenter >> buildFrequencyHistogramCanvas [
 ]
 
 { #category : 'layout' }
-IllFrequencyHistogramPresenter >> defaultLayout [
+FrequencyHistogramRoassalPresenter >> defaultLayout [
 
 	^ SpBoxLayout newTopToBottom
 		  add: histogramPresenter;
@@ -40,7 +40,7 @@ IllFrequencyHistogramPresenter >> defaultLayout [
 ]
 
 { #category : 'initialization' }
-IllFrequencyHistogramPresenter >> initializePresenters [
+FrequencyHistogramRoassalPresenter >> initializePresenters [
 
 	histogramPresenter := SpRoassalPresenter new
 		canvas: self buildFrequencyHistogramCanvas;
@@ -48,7 +48,7 @@ IllFrequencyHistogramPresenter >> initializePresenters [
 ]
 
 { #category : 'accessing - model' }
-IllFrequencyHistogramPresenter >> setModelBeforeInitialization: aProfiler [
+FrequencyHistogramRoassalPresenter >> setModelBeforeInitialization: aProfiler [
 
 	| totalExecutionTime relativeLifetimes |
 	totalExecutionTime := aProfiler totalTime.

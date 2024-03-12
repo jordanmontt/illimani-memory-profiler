@@ -1,5 +1,5 @@
 Class {
-	#name : 'IllMpHandler',
+	#name : 'IllHandler',
 	#superclass : 'MpHandler',
 	#instVars : [
 		'profiler'
@@ -10,20 +10,20 @@ Class {
 }
 
 { #category : 'evaluating' }
-IllMpHandler >> afterExecutionWithReceiver: receiver arguments: arguments returnValue: newlyAllocatedObject [
+IllHandler >> afterExecutionWithReceiver: receiver arguments: arguments returnValue: newlyAllocatedObject [
 	
 	profiler registerAllocation: newlyAllocatedObject.
 	^ newlyAllocatedObject
 ]
 
 { #category : 'accessing' }
-IllMpHandler >> profiler [
+IllHandler >> profiler [
 
 	^ profiler
 ]
 
 { #category : 'accessing' }
-IllMpHandler >> profiler: anObject [
+IllHandler >> profiler: anObject [
 
 	profiler := anObject
 ]

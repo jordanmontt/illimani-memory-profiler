@@ -1,5 +1,5 @@
 Class {
-	#name : 'FinalizationScavengesCyclesTablePresenter',
+	#name : 'RelativeLifetimeeByScavengesCyclesTablePresenter',
 	#superclass : 'AllocationsGroupedByTablePresenter',
 	#category : 'IllimaniUI-Widgets',
 	#package : 'IllimaniUI',
@@ -7,14 +7,14 @@ Class {
 }
 
 { #category : 'accessing - model' }
-FinalizationScavengesCyclesTablePresenter >> groupAllocations: someObjectAllocations [
+RelativeLifetimeeByScavengesCyclesTablePresenter >> groupAllocations: someObjectAllocations [
 
 	^ (someObjectAllocations groupedBy: [ :allocationModel |
 		   allocationModel survivedScavenges ]) associations
 ]
 
 { #category : 'initialization' }
-FinalizationScavengesCyclesTablePresenter >> titleForGroupingColumn [
+RelativeLifetimeeByScavengesCyclesTablePresenter >> titleForGroupingColumn [
 
 	^ '# of scavenges survived'
 ]

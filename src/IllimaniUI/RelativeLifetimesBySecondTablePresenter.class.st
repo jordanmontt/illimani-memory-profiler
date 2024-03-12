@@ -1,5 +1,5 @@
 Class {
-	#name : 'FinalizationLifetimesTablePresenter',
+	#name : 'RelativeLifetimesBySecondTablePresenter',
 	#superclass : 'AllocationsGroupedByTablePresenter',
 	#category : 'IllimaniUI-Widgets',
 	#package : 'IllimaniUI',
@@ -7,14 +7,14 @@ Class {
 }
 
 { #category : 'accessing - model' }
-FinalizationLifetimesTablePresenter >> groupAllocations: someObjectAllocations [
+RelativeLifetimesBySecondTablePresenter >> groupAllocations: someObjectAllocations [
 
 	^ (someObjectAllocations groupedBy: [ :allocationModel |
 		 allocationModel lifetimeAsDuration asSeconds ]) associations
 ]
 
 { #category : 'initialization' }
-FinalizationLifetimesTablePresenter >> titleForGroupingColumn [
+RelativeLifetimesBySecondTablePresenter >> titleForGroupingColumn [
 
 	^ 'Lifetime duration (seconds)'
 ]

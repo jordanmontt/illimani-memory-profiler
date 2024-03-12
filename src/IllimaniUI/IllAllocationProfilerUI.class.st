@@ -23,7 +23,7 @@ Class {
 IllAllocationProfilerUI >> allocatedObjectsPerSecondPerClassPresenter [
 
 	^ SpRoassalPresenter new
-		canvas: (IllRoassalSeveralChartBuilder new
+		canvas: (RoassaHelperChartBuilder new
 			model: profiler;
 			topCalculationsNumber: topCalculationsNumber;
 			allocatedObjectsPerSecondPerClassLineChartCanvas);
@@ -34,7 +34,7 @@ IllAllocationProfilerUI >> allocatedObjectsPerSecondPerClassPresenter [
 IllAllocationProfilerUI >> allocatedObjectsPerSecondPerMethodPresenter [
 
 	^ SpRoassalPresenter new
-		canvas: (IllRoassalSeveralChartBuilder new
+		canvas: (RoassaHelperChartBuilder new
 			model: profiler;
 			topCalculationsNumber: topCalculationsNumber;
 			allocatedObjectsPerSecondPerMethodLineChartCanvas);
@@ -99,7 +99,7 @@ IllAllocationProfilerUI >> heatMapPresenter [
 IllAllocationProfilerUI >> initializeAllocatedObjectsPerSecond [
 
 	allocatedObjectsPerSecondPresenter := SpRoassalPresenter new
-		canvas: (IllRoassalSeveralChartBuilder new
+		canvas: (RoassaHelperChartBuilder new
 			model: profiler;
 			topCalculationsNumber: topCalculationsNumber;
 			allocatedObjectsPerSecondLineChartCanvas);
@@ -127,12 +127,12 @@ IllAllocationProfilerUI >> initializeHeatmapPresenter [
 
 	| roassalPresenterByClass roassalPresenterByMethod |
 	roassalPresenterByClass := self instantiate: SpRoassalPresenter.
-	roassalPresenterByClass canvas: (IllRoassalSeveralChartBuilder new
+	roassalPresenterByClass canvas: (RoassaHelperChartBuilder new
 			 model: profiler;
 			 topCalculationsNumber: topCalculationsNumber;
 			 heatmapAllocatorAllocatedCanvasByClass).
 	roassalPresenterByMethod := self instantiate: SpRoassalPresenter.
-	roassalPresenterByMethod canvas: (IllRoassalSeveralChartBuilder new
+	roassalPresenterByMethod canvas: (RoassaHelperChartBuilder new
 			 model: profiler;
 			 topCalculationsNumber: topCalculationsNumber;
 			 heatmapAllocatorAllocatedCanvasByMethod).
@@ -147,9 +147,9 @@ IllAllocationProfilerUI >> initializeHeatmapPresenter [
 IllAllocationProfilerUI >> initializeMemoryTablePresenter [
 
 	memoryTablePresenter := AlternatorPresenter new
-		presenterOne: (GroupedAllocatorsTablePresenter owner: self on: profiler stats allocationsByClass)
+		presenterOne: (AllocationsByAllocatorTablePresenter owner: self on: profiler stats allocationsByClass)
 		withName: 'Group by Classes';
-		presenterTwo: (GroupedAllocatorsTablePresenter owner: self on: profiler stats allocationsByMethod)
+		presenterTwo: (AllocationsByAllocatorTablePresenter owner: self on: profiler stats allocationsByMethod)
 		withName: 'Group by Methods';
 		yourself
 ]
@@ -195,6 +195,12 @@ IllAllocationProfilerUI >> memoryTablePresenter [
 	^ memoryTablePresenter
 ]
 
+{ #category : 'initialization - lazy presenters' }
+IllAllocationProfilerUI >> profilerSummaryPresenter [
+
+	^ ProfilerWithAllocationSiteSummaryPresenter on: profiler
+]
+
 { #category : 'actions' }
 IllAllocationProfilerUI >> refresh [
 
@@ -202,12 +208,6 @@ IllAllocationProfilerUI >> refresh [
 	allocationsPerSecondPerAllocatorPresenter := nil.
 	allocatedObjectsPerSecondPresenter := nil.
 	self layout: self defaultLayout
-]
-
-{ #category : 'initialization - lazy presenters' }
-IllAllocationProfilerUI >> summaryStatsPresenter [
-
-	^ AllocationSiteSummaryPresenter on: profiler
 ]
 
 { #category : 'initialization' }

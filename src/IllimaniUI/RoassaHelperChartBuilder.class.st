@@ -2,7 +2,7 @@
 I am a class that builds the canvas of the different visualizations.
 "
 Class {
-	#name : 'IllRoassalSeveralChartBuilder',
+	#name : 'RoassaHelperChartBuilder',
 	#superclass : 'Object',
 	#instVars : [
 		'topCalculationsNumber',
@@ -14,7 +14,7 @@ Class {
 }
 
 { #category : 'instance creation' }
-IllRoassalSeveralChartBuilder class >> on: aModel [
+RoassaHelperChartBuilder class >> on: aModel [
 
 	^ self new
 		  model: aModel;
@@ -22,20 +22,20 @@ IllRoassalSeveralChartBuilder class >> on: aModel [
 ]
 
 { #category : 'chart construction' }
-IllRoassalSeveralChartBuilder >> addLabelsX: xText y: yText forChart: chart [
+RoassaHelperChartBuilder >> addLabelsX: xText y: yText forChart: chart [
 
 	(chart xlabel: xText) shape color: Color black.
 	(chart ylabel: yText) shape color: Color black
 ]
 
 { #category : 'chart construction' }
-IllRoassalSeveralChartBuilder >> addTicksToLabel: chart [
+RoassaHelperChartBuilder >> addTicksToLabel: chart [
 
 	chart verticalTick labelConversion: [ :value | value asInteger asStringWithCommas ]
 ]
 
 { #category : 'api - line chart' }
-IllRoassalSeveralChartBuilder >> allocatedObjectsPerSecondLineChartCanvas [
+RoassaHelperChartBuilder >> allocatedObjectsPerSecondLineChartCanvas [
 
 	| chart linePlot |
 	linePlot := self createLinePlotForAllocations: model objectAllocations.
@@ -50,21 +50,21 @@ IllRoassalSeveralChartBuilder >> allocatedObjectsPerSecondLineChartCanvas [
 ]
 
 { #category : 'api - line chart' }
-IllRoassalSeveralChartBuilder >> allocatedObjectsPerSecondPerClassLineChartCanvas [
+RoassaHelperChartBuilder >> allocatedObjectsPerSecondPerClassLineChartCanvas [
 
 	^ self constructPerSecondLineChart:
 		  (model stats topNAllocationsByClass: topCalculationsNumber)
 ]
 
 { #category : 'api - line chart' }
-IllRoassalSeveralChartBuilder >> allocatedObjectsPerSecondPerMethodLineChartCanvas [
+RoassaHelperChartBuilder >> allocatedObjectsPerSecondPerMethodLineChartCanvas [
 
 	^ self constructPerSecondLineChart:
 		  (model stats topNAllocationsByMethod: topCalculationsNumber)
 ]
 
 { #category : 'chart construction' }
-IllRoassalSeveralChartBuilder >> constructPerSecondLineChart: aCollection [
+RoassaHelperChartBuilder >> constructPerSecondLineChart: aCollection [
 
 	| chart linePlot legend |
 
@@ -96,7 +96,7 @@ IllRoassalSeveralChartBuilder >> constructPerSecondLineChart: aCollection [
 ]
 
 { #category : 'chart construction' }
-IllRoassalSeveralChartBuilder >> createLinePlotForAllocations: someAllocations [
+RoassaHelperChartBuilder >> createLinePlotForAllocations: someAllocations [
 
 	| times linePlot indices sortedByTime |
 	sortedByTime := someAllocations sorted: [ :a :b | a initializationTime < b initializationTime ].
@@ -112,25 +112,25 @@ IllRoassalSeveralChartBuilder >> createLinePlotForAllocations: someAllocations [
 ]
 
 { #category : 'api - heatmap' }
-IllRoassalSeveralChartBuilder >> heatmapAllocatorAllocatedCanvasByClass [
+RoassaHelperChartBuilder >> heatmapAllocatorAllocatedCanvasByClass [
 
-	^ IllHeatmapCanvasBuilder new
+	^ HeatmapRoassalBuilder new
 		data: (model stats topNAllocationsByClass: topCalculationsNumber);
 		build;
 		canvas
 ]
 
 { #category : 'api - heatmap' }
-IllRoassalSeveralChartBuilder >> heatmapAllocatorAllocatedCanvasByMethod [
+RoassaHelperChartBuilder >> heatmapAllocatorAllocatedCanvasByMethod [
 
-	^ IllHeatmapCanvasBuilder new
+	^ HeatmapRoassalBuilder new
 		data: (model stats topNAllocationsByMethod: topCalculationsNumber);
 		build;
 		canvas
 ]
 
 { #category : 'api - line chart' }
-IllRoassalSeveralChartBuilder >> initializeChart [
+RoassaHelperChartBuilder >> initializeChart [
 
 	^ RSCompositeChart new
 		  colors: NSScale google20;
@@ -138,13 +138,13 @@ IllRoassalSeveralChartBuilder >> initializeChart [
 ]
 
 { #category : 'accessing' }
-IllRoassalSeveralChartBuilder >> model: aModel [
+RoassaHelperChartBuilder >> model: aModel [
 
 	model := aModel
 ]
 
 { #category : 'accessing' }
-IllRoassalSeveralChartBuilder >> topCalculationsNumber: aNumber [
+RoassaHelperChartBuilder >> topCalculationsNumber: aNumber [
 
 	topCalculationsNumber := aNumber
 ]

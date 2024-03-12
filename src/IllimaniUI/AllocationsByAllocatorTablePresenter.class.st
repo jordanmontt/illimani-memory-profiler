@@ -2,7 +2,7 @@
 I am a table that shows the information of number of allocations and size in memory 
 "
 Class {
-	#name : 'GroupedAllocatorsTablePresenter',
+	#name : 'AllocationsByAllocatorTablePresenter',
 	#superclass : 'SpPresenter',
 	#instVars : [
 		'tablePresenter',
@@ -17,14 +17,14 @@ Class {
 }
 
 { #category : 'initialization' }
-GroupedAllocatorsTablePresenter >> connectPresenters [
+AllocationsByAllocatorTablePresenter >> connectPresenters [
 
 	textInput whenTextChangedDo: [ :aText | self filterTable: aText ].
 	tablePresenter whenSelectedDo: [ :item | item inspect ]
 ]
 
 { #category : 'layout' }
-GroupedAllocatorsTablePresenter >> defaultLayout [
+AllocationsByAllocatorTablePresenter >> defaultLayout [
 
 	^ SpBoxLayout newTopToBottom
 		  spacing: 5;
@@ -34,7 +34,7 @@ GroupedAllocatorsTablePresenter >> defaultLayout [
 ]
 
 { #category : 'accessing - model' }
-GroupedAllocatorsTablePresenter >> filterTable: aText [
+AllocationsByAllocatorTablePresenter >> filterTable: aText [
 
 	| newItems |
 	aText ifEmpty: [
@@ -46,7 +46,7 @@ GroupedAllocatorsTablePresenter >> filterTable: aText [
 ]
 
 { #category : 'initialization' }
-GroupedAllocatorsTablePresenter >> initializePresenters [
+AllocationsByAllocatorTablePresenter >> initializePresenters [
 
 	textInput := self newTextInput
 		placeholder: 'Filter';
@@ -90,25 +90,25 @@ GroupedAllocatorsTablePresenter >> initializePresenters [
 ]
 
 { #category : 'accessing - model' }
-GroupedAllocatorsTablePresenter >> setModelBeforeInitialization: someTableItems [
+AllocationsByAllocatorTablePresenter >> setModelBeforeInitialization: someTableItems [
 
 	tableItems := someTableItems
 ]
 
 { #category : 'accessing' }
-GroupedAllocatorsTablePresenter >> sizeInBytes [
+AllocationsByAllocatorTablePresenter >> sizeInBytes [
 
 	^ totalSizeInBytes ifNil: [ totalSizeInBytes := tableItems sum: [ :e | e sizeInBytes ] ]
 ]
 
 { #category : 'accessing - model' }
-GroupedAllocatorsTablePresenter >> tableItems [
+AllocationsByAllocatorTablePresenter >> tableItems [
 
 	^ tableItems
 ]
 
 { #category : 'accessing' }
-GroupedAllocatorsTablePresenter >> totalAllocations [
+AllocationsByAllocatorTablePresenter >> totalAllocations [
 
 	^ totalAllocations ifNil: [ totalAllocations := tableItems sum: [ :e | e totalAllocations ] ]
 ]

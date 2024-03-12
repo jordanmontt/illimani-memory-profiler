@@ -1,5 +1,5 @@
 Class {
-	#name : 'AllocationSummaryPresenter',
+	#name : 'ProfilerSummaryPresenter',
 	#superclass : 'SpPresenter',
 	#instVars : [
 		'profiler'
@@ -10,14 +10,14 @@ Class {
 }
 
 { #category : 'layout' }
-AllocationSummaryPresenter >> allocatedMemoryRateString [
+ProfilerSummaryPresenter >> allocatedMemoryRateString [
 
 	^ profiler allocatedMemoryRatePerSecond asInteger humanReadableByteSizeString
 	  , ' per second'
 ]
 
 { #category : 'layout' }
-AllocationSummaryPresenter >> allocationRateString [
+ProfilerSummaryPresenter >> allocationRateString [
 
 	| rate |
 	rate := profiler allocationRatePerSecond.
@@ -25,7 +25,7 @@ AllocationSummaryPresenter >> allocationRateString [
 ]
 
 { #category : 'layout' }
-AllocationSummaryPresenter >> buildTablePresenterOn: associations [ 
+ProfilerSummaryPresenter >> buildTablePresenterOn: associations [ 
 
 	^ self newTable
 		addColumn: (SpStringTableColumn title: 'Name' evaluated: #key);
@@ -36,7 +36,7 @@ AllocationSummaryPresenter >> buildTablePresenterOn: associations [
 ]
 
 { #category : 'layout' }
-AllocationSummaryPresenter >> defaultLayout [
+ProfilerSummaryPresenter >> defaultLayout [
 
 	| gcReport generalStatsTable | 
 	generalStatsTable := self buildTablePresenterOn: self generalStatsAssociations. 
@@ -57,7 +57,7 @@ AllocationSummaryPresenter >> defaultLayout [
 ]
 
 { #category : 'layout' }
-AllocationSummaryPresenter >> generalStatsAssociations [
+ProfilerSummaryPresenter >> generalStatsAssociations [
 
 	^ {
 		('Total profiled time' ->
@@ -71,7 +71,7 @@ AllocationSummaryPresenter >> generalStatsAssociations [
 ]
 
 { #category : 'accessing - model' }
-AllocationSummaryPresenter >> setModelBeforeInitialization: aModel [
+ProfilerSummaryPresenter >> setModelBeforeInitialization: aModel [
 
 	profiler := aModel
 ]

@@ -1,5 +1,5 @@
 Class {
-	#name : 'MpNullMethodProxy',
+	#name : 'IllNullMethodProxy',
 	#superclass : 'Object',
 	#category : 'IllimaniProfiler-Instrumentation',
 	#package : 'IllimaniProfiler',
@@ -7,21 +7,21 @@ Class {
 }
 
 { #category : 'instance creation' }
-MpNullMethodProxy class >> onMethod: aMethod handler: aHandler [
+IllNullMethodProxy class >> onMethod: aMethod handler: aHandler [
 
 	^ self new
 ]
 
 { #category : 'installation' }
-MpNullMethodProxy >> install [
+IllNullMethodProxy >> install [
 ]
 
 { #category : 'installation' }
-MpNullMethodProxy >> shouldWrap: aMethod [
+IllNullMethodProxy >> shouldWrap: aMethod [
 
 	^ false
 ]
 
 { #category : 'installation' }
-MpNullMethodProxy >> uninstall [
+IllNullMethodProxy >> uninstall [
 ]

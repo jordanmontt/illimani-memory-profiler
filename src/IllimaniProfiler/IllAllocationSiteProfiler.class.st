@@ -88,7 +88,7 @@ IllAllocationSiteProfiler >> defaultClassesToAvoidInTheContextSearch [
 		  "Process."
 		  IllAllocationSiteProfiler.
 		  IllAbstractProfiler.
-		  IllMpHandler.
+		  IllHandler.
 		  "MpMethodProxy."
 		  "BlockClosure."
 		  "FullBlockClosure"

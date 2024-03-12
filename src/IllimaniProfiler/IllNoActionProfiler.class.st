@@ -15,7 +15,7 @@ IllNoActionProfiler >> initialize [
 	super initialize.
 	"As we call super before, we are re-doing the initialization of the method proxies.
 	But, it's not a problem since we didn't start instrumenting."
-	handler := IllMpNoActionHandler new
+	handler := IllNoActionHandler new
 		profiler: self;
 		yourself.
 	self initializeMethodProxies: handler

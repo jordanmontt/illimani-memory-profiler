@@ -48,16 +48,16 @@ IllFinalizationProfilerUI >> initializeAvgLifetimesTablePresenter [
 { #category : 'initialization - lazy presenters' }
 IllFinalizationProfilerUI >> initializeFrequencyHistogramPresenter [
 
-	frequencyHistogramPresenter := IllFrequencyHistogramPresenter on: profiler
+	frequencyHistogramPresenter := FrequencyHistogramRoassalPresenter on: profiler
 ]
 
 { #category : 'initialization - lazy presenters' }
 IllFinalizationProfilerUI >> initializeGCCyclesTable [
 
 	gcCyclesTable := AlternatorPresenter new
-	   presenterTwo: (FinalizationScavengesCyclesTablePresenter on: profiler objectAllocations)
+	   presenterTwo: (RelativeLifetimeeByScavengesCyclesTablePresenter on: profiler objectAllocations)
 		withName: 'Group by scavenges';
-		presenterOne: (FinalizationFullGCCyclesTablePresenter on: profiler objectAllocations)
+		presenterOne: (RelativeLifetimeeByFullGCCyclesTablePresenter on: profiler objectAllocations)
 		withName: 'Group by full GCs';
 		yourself
 ]
@@ -80,7 +80,7 @@ IllFinalizationProfilerUI >> initializeNotebook [
 IllFinalizationProfilerUI >> initializeRelativeFrequenciesTable [
 
 	relativeFrequenciesTable := self
-		instantiate: FinalizationLifetimesTablePresenter
+		instantiate: RelativeLifetimesBySecondTablePresenter
 		on: profiler objectAllocations
 ]
 
@@ -91,17 +91,17 @@ IllFinalizationProfilerUI >> lifetimesTable [
 	^ relativeFrequenciesTable
 ]
 
+{ #category : 'initialization - lazy presenters' }
+IllFinalizationProfilerUI >> profilerSummaryPresenter [
+
+	^ ProfilerSummaryPresenter on: profiler
+]
+
 { #category : 'actions' }
 IllFinalizationProfilerUI >> refresh [
 
 	frequencyHistogramPresenter := nil.
 	self layout: self defaultLayout
-]
-
-{ #category : 'initialization - lazy presenters' }
-IllFinalizationProfilerUI >> summaryStatsPresenter [
-
-	^ AllocationSummaryPresenter on: profiler
 ]
 
 { #category : 'initialization' }

@@ -76,7 +76,7 @@ IllAbstractProfiler >> illimaniAnnouncer [
 IllAbstractProfiler >> initialize [
 
 	super initialize.
-	handler := IllMpHandler new
+	handler := IllHandler new
 		profiler: self;
 		yourself.
 	self initializeMethodProxies: handler.

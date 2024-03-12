@@ -106,7 +106,7 @@ IllAbstractUI >> initializePresenters [
 IllAbstractUI >> initializeSummaryAndEvaluatorPresenter [
 
 	| statsAndEvaluatorLayout statsPresenter |
-	statsPresenter :=	self summaryStatsPresenter.
+	statsPresenter :=	self profilerSummaryPresenter.
 
 	statsAndEvaluatorLayout := SpPanedLayout newTopToBottom
 		positionOfSlider: 0.8;
@@ -168,6 +168,12 @@ IllAbstractUI >> profiler: aProfiler [
 	profiler := aProfiler
 ]
 
+{ #category : 'initialization - lazy presenters' }
+IllAbstractUI >> profilerSummaryPresenter [
+
+	^ self subclassResponsibility
+]
+
 { #category : 'actions' }
 IllAbstractUI >> refresh [
 
@@ -187,12 +193,6 @@ IllAbstractUI >> summaryAndEvaluatorPresenter [
 
 	summaryAndEvaluatorPresenter ifNil: [ self initializeSummaryAndEvaluatorPresenter ].
 	^ summaryAndEvaluatorPresenter
-]
-
-{ #category : 'initialization - lazy presenters' }
-IllAbstractUI >> summaryStatsPresenter [
-
-	^ self subclassResponsibility
 ]
 
 { #category : 'initialization' }
