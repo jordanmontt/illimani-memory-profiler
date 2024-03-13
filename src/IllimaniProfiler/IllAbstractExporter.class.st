@@ -50,7 +50,7 @@ IllAbstractExporter >> exportMetaData: fileName [
 		('totalFullGCs' -> profiler totalFullGCs).
 		('profiledCode' -> profiler profiledCode).
 		('totalScavenges' -> profiler totalScavenges).
-		('sampligRate' -> profiler samplingRate).
+		('samplingRate' -> profiler samplingRate).
 		('profiler' -> profiler class name) } asDictionary.
 	jsonString := NeoJSONWriter toStringPretty: tempDict.
 

@@ -31,6 +31,17 @@ IllAbstractExporterTest >> assertHeader: csvReader [
 	self assert: self expectedCSVHeader equals: actualHeader
 ]
 
+{ #category : 'asserting' }
+IllAbstractExporterTest >> assertJSONMetaData: jsonDictionary [
+
+	self assert: (jsonDictionary at: #profiledCode) equals: mockProfiler profiledCode.
+	self assert: (jsonDictionary at: #samplingRate) equals: mockProfiler samplingRate.
+	self assert: (jsonDictionary at: #profiler) equals: mockProfiler class asString.
+	self assert: (jsonDictionary at: #totalFullGCs) equals: mockProfiler totalFullGCs.
+	self assert: (jsonDictionary at: #totalScavenges) equals: mockProfiler totalScavenges.
+	self assert: (jsonDictionary at: #totalExecutionTime) equals: mockProfiler totalTime
+]
+
 { #category : 'tests' }
 IllAbstractExporterTest >> expectedCSVHeader [
 
@@ -66,15 +77,22 @@ IllAbstractExporterTest >> setUp [
 { #category : 'tests' }
 IllAbstractExporterTest >> testExportData [
 
-	| csvReader createdFile |
+	| csvReader createdCSVFile createdJSONFile jsonDictionary |
 	exporter exportData.
-	createdFile := (exporter baseFileName , '.csv') asFileReference.
-	self assert: createdFile exists.
 	
-	csvReader := NeoCSVReader on: createdFile readStream.
+	createdCSVFile := (exporter baseFileName , '.csv') asFileReference.
+	self assert: createdCSVFile exists.
 	
+	createdJSONFile := (exporter baseFileName , '.json') asFileReference.
+	self assert: createdJSONFile exists.
+	
+	csvReader := NeoCSVReader on: createdCSVFile readStream.
 	self assertHeader: csvReader.
 	self assertCSVContent: csvReader.
+	
+	jsonDictionary := NeoJSONReader fromString: createdJSONFile readStream contents.
+	self assertJSONMetaData: jsonDictionary.
 
-	createdFile ensureDelete
+	createdCSVFile ensureDelete.
+	createdJSONFile ensureDelete.
 ]

@@ -15,7 +15,7 @@ IllAllocationSiteExporterTest >> assertCSVContent: csvReader [
 	self assert: line second asInteger equals: 100. "size"
 	self assert: line third asInteger > 100000000.
 	self assert: (line fourth asClassInEnvironment: Smalltalk globals) isClass.
-	self assert: line last isString "method name"
+	self assert: line fifth isString "method name"
 ]
 
 { #category : 'tests' }
