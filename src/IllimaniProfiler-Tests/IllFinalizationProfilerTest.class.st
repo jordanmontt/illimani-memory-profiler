@@ -15,6 +15,9 @@ IllFinalizationProfilerTest >> profilerClass [
 { #category : 'tests' }
 IllFinalizationProfilerTest >> testProfileOn [
 
+	"Increasing the test time. This is due to CI failures. As the profiler pre-allocates a very big collection, the GCs take time."
+	self timeLimit: 1 minute.
+
 	profiler profileOn: [ 10 timesRepeat: [ IllFinalizationProfiler new ] ].
 
 	"We let the GC run for N times to clean the not referenced objects. Because of the
