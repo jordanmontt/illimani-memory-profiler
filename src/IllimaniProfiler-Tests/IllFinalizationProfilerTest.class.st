@@ -13,6 +13,16 @@ IllFinalizationProfilerTest >> profilerClass [
 ]
 
 { #category : 'tests' }
+IllFinalizationProfilerTest >> testOpen [
+	
+	"Increasing the test time. This is due to CI failures. As the profiler pre-allocates a very
+	big collection, the GCs take time."
+	self timeLimit: 1 minute.
+
+	super testOpen
+]
+
+{ #category : 'tests' }
 IllFinalizationProfilerTest >> testProfileOn [
 
 	"Increasing the test time. This is due to CI failures. As the profiler pre-allocates a very
