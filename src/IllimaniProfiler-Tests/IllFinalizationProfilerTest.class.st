@@ -32,6 +32,8 @@ IllFinalizationProfilerTest >> testProfileOn [
 IllFinalizationProfilerTest >> testProfileOnFinalizesCorrectly [
 
 	| timeNow |
+		"Increasing the test time. This is due to CI failures. As the profiler pre-allocates a very big collection, the GCs take time."
+	self timeLimit: 1 minute.
 	
 	timeNow := Time microsecondClockValue.
 	profiler profileOn: [ 10 timesRepeat: [ IllFinalizationProfiler new ] ].
