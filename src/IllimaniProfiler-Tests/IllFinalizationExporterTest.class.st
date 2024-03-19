@@ -14,10 +14,12 @@ IllFinalizationExporterTest >> assertCSVContent: csvReader [
 
 	| line |
 	line := csvReader next.
-	self assert: line first asInteger > 100000000.
 	self assert: line second asInteger equals: 100. "size"
-	self assert: (line fourth asClassInEnvironment: Smalltalk globals) isClass.
-	self assert: line last equals: 'false'
+	self assert: line first asInteger > line third asInteger. " finalizationTime > initializationTime"
+	self assert: (line fourth asClassInEnvironment: Smalltalk globals) isClass. "allocatedClass"
+	self assert: line fifth asInteger >= 0. "survived scavenges"
+	self assert: line sixth asInteger >= 0. "survived full gcs"
+	self assert: line seventh equals: 'false' "forced finalization"
 ]
 
 { #category : 'tests' }
