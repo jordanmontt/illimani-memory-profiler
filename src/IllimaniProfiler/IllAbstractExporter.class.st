@@ -62,12 +62,7 @@ IllAbstractExporter >> exportMetaData: fileName [
 { #category : 'exporting' }
 IllAbstractExporter >> fileNameToExport [
 
-	| fileName |
-	fileName := DateAndTime now asStringYMDHM.
-	fileName
-		replaceAll: Character space with: $H;
-		replaceAll: $: with: $m.
-	^ fileName
+	^ DateAndTime now asStringYMDHMS
 ]
 
 { #category : 'exporting' }
