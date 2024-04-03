@@ -41,7 +41,7 @@ profiler
 Example 1, allocation profiler for profiling the Pharo IDE activity
 
 ```st
-IllAllocationSiteProfiler new
+IllAllocationProfiler new
 	copyExecutionStack;
 	profileFor: 6 seconds;
 	open;
