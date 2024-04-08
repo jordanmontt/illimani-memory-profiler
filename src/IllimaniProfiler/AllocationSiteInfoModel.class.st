@@ -103,19 +103,20 @@ AllocationSiteInfoModel >> initializationTime [
 AllocationSiteInfoModel >> initialize [
 
 	super initialize.
+	"always in micro-seconds"
 	initializationTime := Time primUTCMicrosecondsClock
 ]
 
 { #category : 'inspector - extensions' }
 AllocationSiteInfoModel >> inspectableAssociations [
 
-	^ super inspectableAssociations , {
-		  ('Allocated Object Class' -> allocatedObjectClass).
-		  ('Memory Size' -> sizeInBytes humanReadableByteSizeString).
-		  ('Initialization timestamp' -> initializationTime).
-		  ('Allocator Class' -> allocatorClass).
-		  ('Allocator Method' -> allocatorMethod).
-		  ('Context' -> context) }
+	^ {
+		  ('Allocated object class' -> allocatedObjectClass).
+		  ('Memory size' -> sizeInBytes humanReadableByteSizeString).
+		  ('Allocator class' -> allocatorClass).
+		  ('Allocator method' -> allocatorMethod).
+		  ('Context' -> context).
+		  ('Initialization timestamp' -> initializationTime) }
 ]
 
 { #category : 'inspector - extensions' }
