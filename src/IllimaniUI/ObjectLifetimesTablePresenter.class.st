@@ -17,7 +17,8 @@ Class {
 { #category : 'initialization' }
 ObjectLifetimesTablePresenter >> connectPresenters [
 
-	inputPresenter whenTextChangedDo: [ :text | self filterTable: text ]
+	inputPresenter whenTextChangedDo: [ :text | self filterTable: text ].
+	tablePresenter whenSelectedDo: [ :item | item value inspect ]
 ]
 
 { #category : 'layout' }
@@ -57,20 +58,21 @@ ObjectLifetimesTablePresenter >> initializeTablePresenter [
 	tablePresenter := self newTable.
 	tablePresenter
 		alternateRowsColor;
+		activateOnSingleClick;
 		addColumn: (SpIndexTableColumn new
 				 title: 'Index';
 				 width: 60;
 				 yourself);
-		addColumn: (SpStringTableColumn title: 'Allocated object class' evaluated: #first);
+		addColumn: (SpStringTableColumn title: 'Allocated object class' evaluated: #key);
 		addColumn: (SpStringTableColumn
 				title: '% Lifetime'
-				evaluated: [ :e | self toPrettyPercentage: e third ]);
+				evaluated: [ :e | self toPrettyPercentage: (self relativeLifetimeFor: e) ]);
 		addColumn: (SpStringTableColumn
 				title: '% Allocations'
-				evaluated: [ :e | self toPrettyPercentage: e second ]);
+				evaluated: [ :e | self toPrettyPercentage: (self relativeAllocationsFor: e) ]);
 		addColumn: (SpStringTableColumn
 				title: '% Memory'
-				evaluated: [ :e | self toPrettyPercentage: e fourth ]);
+				evaluated: [ :e | self toPrettyPercentage: (self relativeMemoryFor: e) ]);
 		items: groupedAllocations
 ]
 
@@ -101,19 +103,14 @@ ObjectLifetimesTablePresenter >> relativeMemoryFor: assoc [
 { #category : 'accessing - model' }
 ObjectLifetimesTablePresenter >> setModelBeforeInitialization: aProfiler [
 
-	| objectAllocations |
 	totalAllocations := aProfiler objectAllocations size.
 	totalLifetime := aProfiler totalTime.
 	totalMemory := aProfiler objectAllocations sum: #sizeInBytes.
 	
-	objectAllocations := (aProfiler objectAllocations groupedBy: #allocatedObjectClass) associations.
-	groupedAllocations := objectAllocations collect: [ : assoc |
-		{ assoc key.
-		self relativeAllocationsFor: assoc.
-		self relativeLifetimeFor: assoc.
-		self relativeMemoryFor: assoc } 
-		 ].
-	groupedAllocations sort: [ :a :b | a second > b second ]
+	groupedAllocations := (aProfiler objectAllocations groupedBy: #allocatedObjectClass) associations.
+	groupedAllocations := groupedAllocations sort: [ :a :b | 
+		(self relativeAllocationsFor: a) > (self relativeAllocationsFor: b) ]
+	
 ]
 
 { #category : 'initialization' }
