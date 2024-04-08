@@ -1,5 +1,5 @@
 Class {
-	#name : 'RelativeLifetimeeByFullGCCyclesTablePresenter',
+	#name : 'RelativeLifetimesByFullGCsTablePresenter',
 	#superclass : 'AllocationsGroupedByTablePresenter',
 	#category : 'IllimaniUI-Widgets',
 	#package : 'IllimaniUI',
@@ -7,14 +7,14 @@ Class {
 }
 
 { #category : 'accessing - model' }
-RelativeLifetimeeByFullGCCyclesTablePresenter >> groupAllocations: someObjectAllocations [
+RelativeLifetimesByFullGCsTablePresenter >> groupAllocations: someObjectAllocations [
 
 	^ (someObjectAllocations groupedBy: [ :allocationModel |
 		   allocationModel survivedFullGC ]) associations
 ]
 
 { #category : 'initialization' }
-RelativeLifetimeeByFullGCCyclesTablePresenter >> titleForGroupingColumn [
+RelativeLifetimesByFullGCsTablePresenter >> titleForGroupingColumn [
 
 	^ '# of full GCs survived'
 ]

@@ -15,7 +15,8 @@ Class {
 { #category : 'initialization' }
 AllocatedObjectsTablePresenter >> connectPresenters [
 
-	inputPresenter whenTextChangedDo: [ :text | self filterTable: text ]
+	inputPresenter whenTextChangedDo: [ :text | self filterTable: text ].
+	tablePresenter whenSelectedDo: [ :item | item value inspect ]
 ]
 
 { #category : 'layout' }
@@ -48,20 +49,21 @@ AllocatedObjectsTablePresenter >> initializePresenters [
 		yourself.
 	tablePresenter := self newTable
 		alternateRowsColor;
+		activateOnSingleClick;
 		addColumn: (SpIndexTableColumn new
 			title: 'Index';
 			width: 60;
 			yourself);
 		addColumn: (SpStringTableColumn
 			title: 'Allocated object class'
-			evaluated: #value);
+			evaluated: #key);
 		addColumn: (SpStringTableColumn
 			title: 'Allocations'
-			evaluated: [ :e | e key asStringWithCommas ]);
+			evaluated: [ :e | e value size asStringWithCommas ]);
 		addColumn: (SpStringTableColumn
 			title: '%'
 			evaluated: [:e |
-				(((e key / totalAllocations) * 100) asFloat printShowingDecimalPlaces: 2) , '%']);
+				(((e value size / totalAllocations) * 100) asFloat printShowingDecimalPlaces: 2) , '%']);
 		items: objectAllocations;
 		yourself
 ]
@@ -69,6 +71,12 @@ AllocatedObjectsTablePresenter >> initializePresenters [
 { #category : 'accessing - model' }
 AllocatedObjectsTablePresenter >> setModelBeforeInitialization: allocations [
 
-	objectAllocations := (allocations collect: #allocatedObjectClass as: Bag) sortedCounts.
-	totalAllocations := objectAllocations sum: [ :a | a key ]
+	objectAllocations := Dictionary new.
+	allocations do: [ :e |
+		objectAllocations
+			at: e allocatedObjectClass
+			update: [ :collection | collection add: e; yourself ]
+			initial: [ OrderedCollection with: e ] ].
+	objectAllocations := objectAllocations associations sorted: [ :a :b | a value size > b value size ].
+	totalAllocations := allocations size
 ]

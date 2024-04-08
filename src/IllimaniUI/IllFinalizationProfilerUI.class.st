@@ -55,9 +55,9 @@ IllFinalizationProfilerUI >> initializeFrequencyHistogramPresenter [
 IllFinalizationProfilerUI >> initializeGCCyclesTable [
 
 	gcCyclesTable := AlternatorPresenter new
-	   presenterTwo: (RelativeLifetimeeByScavengesCyclesTablePresenter on: profiler objectAllocations)
+	   presenterTwo: (RelativeLifetimesByScavengesTablePresenter on: profiler objectAllocations)
 		withName: 'Group by scavenges';
-		presenterOne: (RelativeLifetimeeByFullGCCyclesTablePresenter on: profiler objectAllocations)
+		presenterOne: (RelativeLifetimesByFullGCsTablePresenter on: profiler objectAllocations)
 		withName: 'Group by full GCs';
 		yourself
 ]
