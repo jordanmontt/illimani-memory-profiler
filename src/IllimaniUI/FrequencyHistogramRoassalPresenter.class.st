@@ -23,7 +23,10 @@ FrequencyHistogramRoassalPresenter >> buildFrequencyHistogramCanvas [
 
 	| chart plot |
 	chart :=	chart := RSCompositeChart new.
-	plot := RSHistogramPlot new x: data.
+	plot := RSHistogramPlot new
+		x: data;
+		relativeVerticalTicks;
+		yourself.
 	chart add: plot.
 
 	self addChartTitles: chart.
