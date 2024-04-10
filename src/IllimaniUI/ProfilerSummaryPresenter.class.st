@@ -62,10 +62,10 @@ ProfilerSummaryPresenter >> generalStatsAssociations [
 	^ {
 		('Total profiled time' ->
 			(Duration microSeconds: profiler totalProfiledTime) humanReadableStringWithOnlySeconds).
-		('Total allocated objects' -> profiler stats totalAllocatedObjects asStringWithCommas).
+		('Total allocated objects' -> profiler allocationsStats totalAllocatedObjects asStringWithCommas).
 		('Allocations rate' -> self allocationRateString ).
 		('Total allocated memory' ->
-			profiler stats totalAllocatedMemory humanReadableByteSizeString).
+			profiler allocationsStats totalAllocatedMemory humanReadableByteSizeString).
 		('Allocated memory rate' -> self allocatedMemoryRateString).
 		('Profiled code' -> profiler profiledCode) }
 ]

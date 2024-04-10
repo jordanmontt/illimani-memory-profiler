@@ -13,6 +13,6 @@ Class {
 ProfilerWithAllocationSiteSummaryPresenter >> generalStatsAssociations [
 
 	^ super generalStatsAssociations , {
-		  ('Classes that allocate objects' -> profiler stats numberOfClasses asString).
-		  ('Methods that allocate objects' -> profiler stats numberOfMethods asString) }
+		  ('Classes that allocate objects' -> profiler allocationsStats numberOfClasses asString).
+		  ('Methods that allocate objects' -> profiler allocationsStats numberOfMethods asString) }
 ]

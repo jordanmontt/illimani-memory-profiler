@@ -10,6 +10,12 @@ Class {
 	#tag : 'Finalization-Profiler'
 }
 
+{ #category : 'accessing - statistics' }
+IllFinalizationProfiler >> allocationsStats [
+
+	^ statsModel ifNil: [ statsModel := FinalizationStatsModel on: ephemeronsCollection ]
+]
+
 { #category : 'exporting' }
 IllFinalizationProfiler >> exporterClass [
 
@@ -41,12 +47,6 @@ IllFinalizationProfiler >> internalRegisterAllocation: anObject [
 IllFinalizationProfiler >> objectAllocations [
 
 	^ ephemeronsCollection
-]
-
-{ #category : 'accessing - statistics' }
-IllFinalizationProfiler >> stats [
-
-	^ statsModel ifNil: [ statsModel := FinalizationStatsModel on: ephemeronsCollection ]
 ]
 
 { #category : 'profiling' }

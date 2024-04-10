@@ -10,6 +10,12 @@ Class {
 	#tag : 'Allocation-Profiler'
 }
 
+{ #category : 'accessing - statistics' }
+IllAllocationRateProfiler >> allocationsStats [
+
+	^ self
+]
+
 { #category : 'exporting' }
 IllAllocationRateProfiler >> exporterClass [
 
@@ -35,12 +41,6 @@ IllAllocationRateProfiler >> internalRegisterAllocation: anObject [
 IllAllocationRateProfiler >> objectAllocations [
 
 	^ 1 to: numberOfAllocations
-]
-
-{ #category : 'accessing - statistics' }
-IllAllocationRateProfiler >> stats [
-
-	^ self
 ]
 
 { #category : 'accessing' }

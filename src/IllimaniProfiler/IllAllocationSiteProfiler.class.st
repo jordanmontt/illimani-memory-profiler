@@ -55,7 +55,6 @@ Class {
 	#superclass : 'IllAbstractProfiler',
 	#instVars : [
 		'statisticsModel',
-		'illimaniAnnouncer',
 		'copyExecutionStack',
 		'classesToAvoidInTheContextSearch',
 		'objectAllocations'
@@ -65,10 +64,11 @@ Class {
 	#tag : 'Allocation-Profiler'
 }
 
-{ #category : 'announcements' }
-IllAllocationSiteProfiler >> announceProfilerStopedProfiling [
+{ #category : 'as yet unclassified' }
+IllAllocationSiteProfiler >> allocationsStats [
 
-	illimaniAnnouncer announce: IllStopedProfilingAnnouncement
+	^ statisticsModel ifNil: [
+		  statisticsModel := AllocationsStatsModel new rawAllocations: objectAllocations ]
 ]
 
 { #category : 'api' }
@@ -108,7 +108,7 @@ IllAllocationSiteProfiler >> exporterClass [
 	^ IllAllocationSiteExporter
 ]
 
-{ #category : 'evaluating' }
+{ #category : 'as yet unclassified' }
 IllAllocationSiteProfiler >> filterContext: aContext ignoringClass: aClass [
 
 	| sender |
@@ -121,17 +121,10 @@ IllAllocationSiteProfiler >> filterContext: aContext ignoringClass: aClass [
 	^ sender
 ]
 
-{ #category : 'accessing' }
-IllAllocationSiteProfiler >> illimaniAnnouncer [
-
-	^ illimaniAnnouncer
-]
-
 { #category : 'initialization' }
 IllAllocationSiteProfiler >> initialize [
 
 	super initialize.
-	illimaniAnnouncer := IllAnnouncer new.
 	objectAllocations := OrderedCollection new.
 	copyExecutionStack := false.
 	classesToAvoidInTheContextSearch := self defaultClassesToAvoidInTheContextSearch
@@ -162,18 +155,4 @@ IllAllocationSiteProfiler >> internalRegisterAllocation: newlyAllocatedObject [
 IllAllocationSiteProfiler >> objectAllocations [
 
 	^ objectAllocations
-]
-
-{ #category : 'accessing - statistics' }
-IllAllocationSiteProfiler >> stats [
-
-	^ statisticsModel ifNil: [
-		  statisticsModel := AllocationsStatsModel new rawAllocations: objectAllocations ]
-]
-
-{ #category : 'profiling' }
-IllAllocationSiteProfiler >> stopProfiling [
-
-	super stopProfiling.
-	self announceProfilerStopedProfiling
 ]
