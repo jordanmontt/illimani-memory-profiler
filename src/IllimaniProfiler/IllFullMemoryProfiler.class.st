@@ -55,7 +55,6 @@ Class {
 	#superclass : 'IllAbstractProfiler',
 	#instVars : [
 		'statisticsModel',
-		'illimaniAnnouncer',
 		'classesToAvoidInTheContextSearch',
 		'objectAllocations'
 	],
@@ -63,12 +62,6 @@ Class {
 	#package : 'IllimaniProfiler',
 	#tag : 'Allocation-Profiler'
 }
-
-{ #category : 'announcements' }
-IllFullMemoryProfiler >> announceProfilerStopedProfiling [
-
-	illimaniAnnouncer announce: IllStopedProfilingAnnouncement
-]
 
 { #category : 'initialization' }
 IllFullMemoryProfiler >> defaultClassesToAvoidInTheContextSearch [
@@ -110,17 +103,10 @@ IllFullMemoryProfiler >> forceFinalizationOfObjects [
 	objectAllocations do: [ :e | e forceFinalization ]
 ]
 
-{ #category : 'accessing' }
-IllFullMemoryProfiler >> illimaniAnnouncer [
-
-	^ illimaniAnnouncer
-]
-
 { #category : 'initialization' }
 IllFullMemoryProfiler >> initialize [
 
 	super initialize.
-	illimaniAnnouncer := IllAnnouncer new.
 	objectAllocations := OrderedCollection new: 100000000.
 	classesToAvoidInTheContextSearch := self defaultClassesToAvoidInTheContextSearch
 	  , (self defaultClassesToAvoidInTheContextSearch collect: [ :aClass | aClass class ])
