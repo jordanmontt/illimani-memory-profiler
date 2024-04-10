@@ -64,7 +64,7 @@ Class {
 	#tag : 'Allocation-Profiler'
 }
 
-{ #category : 'as yet unclassified' }
+{ #category : 'accessing - statistics' }
 IllAllocationSiteProfiler >> allocationsStats [
 
 	^ statisticsModel ifNil: [
@@ -108,7 +108,7 @@ IllAllocationSiteProfiler >> exporterClass [
 	^ IllAllocationSiteExporter
 ]
 
-{ #category : 'as yet unclassified' }
+{ #category : 'profiling' }
 IllAllocationSiteProfiler >> filterContext: aContext ignoringClass: aClass [
 
 	| sender |

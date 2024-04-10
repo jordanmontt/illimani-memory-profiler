@@ -1,3 +1,6 @@
+"
+I am the abstract class that proviedes infrastructure for all the profilers. You can subclass me to craft your own custom profiler.
+"
 Class {
 	#name : 'IllAbstractProfiler',
 	#superclass : 'Object',
