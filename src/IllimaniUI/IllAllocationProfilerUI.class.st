@@ -146,9 +146,9 @@ IllAllocationProfilerUI >> initializeHeatmapPresenter [
 IllAllocationProfilerUI >> initializeMemoryTablePresenter [
 
 	memoryTablePresenter := AlternatorPresenter new
-		presenterOne: (AllocationsByAllocatorTablePresenter owner: self on: profiler stats allocationsByClass)
+		presenterOne: (AllocationsByAllocatorTablePresenter owner: self on: profiler allocationsStats allocationsByClass)
 		withName: 'Group by Classes';
-		presenterTwo: (AllocationsByAllocatorTablePresenter owner: self on: profiler stats allocationsByMethod)
+		presenterTwo: (AllocationsByAllocatorTablePresenter owner: self on: profiler allocationsStats allocationsByMethod)
 		withName: 'Group by Methods';
 		yourself
 ]

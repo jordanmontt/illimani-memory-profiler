@@ -1,3 +1,6 @@
+"
+I am the abstract class that proviedes infrastructure for all the profilers. You can subclass me to craft your own custom profiler.
+"
 Class {
 	#name : 'IllAbstractProfiler',
 	#superclass : 'Object',
@@ -13,7 +16,8 @@ Class {
 		'startTime',
 		'proxyCopy',
 		'profiledCode',
-		'gcActivityMonitor'
+		'gcActivityMonitor',
+		'illimaniAnnouncer'
 	],
 	#category : 'IllimaniProfiler-Instrumentation',
 	#package : 'IllimaniProfiler',
@@ -23,15 +27,27 @@ Class {
 { #category : 'accessing - statistics' }
 IllAbstractProfiler >> allocatedMemoryRatePerSecond [
 
-	^ self stats totalAllocatedMemory
+	^ self allocationsStats totalAllocatedMemory
 	  / (Duration microSeconds: totalTime) totalSeconds asFloat
 ]
 
 { #category : 'accessing - statistics' }
 IllAbstractProfiler >> allocationRatePerSecond [
 
-	^ self stats totalAllocatedObjects
+	^ self allocationsStats totalAllocatedObjects
 	  / (Duration microSeconds: totalTime) totalSeconds asFloat
+]
+
+{ #category : 'accessing - statistics' }
+IllAbstractProfiler >> allocationsStats [
+
+	^ self subclassResponsibility
+]
+
+{ #category : 'announcements' }
+IllAbstractProfiler >> announceProfilerStopedProfiling [
+
+	illimaniAnnouncer announce: IllStopedProfilingAnnouncement
 ]
 
 { #category : 'accessing - statistics' }
@@ -69,7 +85,7 @@ IllAbstractProfiler >> gcActivityMonitor [
 { #category : 'accessing' }
 IllAbstractProfiler >> illimaniAnnouncer [
 
-	^ IllAnnouncer new
+	^ illimaniAnnouncer
 ]
 
 { #category : 'initialization' }
@@ -79,6 +95,7 @@ IllAbstractProfiler >> initialize [
 	handler := IllHandler new
 		profiler: self;
 		yourself.
+	illimaniAnnouncer := IllAnnouncer new.
 	self initializeMethodProxies: handler.
 	samplingCounter := 0.
 	samplingRate := 1.
@@ -148,7 +165,7 @@ IllAbstractProfiler >> profileFor: aDuration [
 
 	self startProfiling.
 	[
-	(Delay forDuration: aDuration) wait.
+	(Delay forMilliseconds: aDuration asMilliSeconds) wait.
 	self stopProfiling ] fork
 ]
 
@@ -284,18 +301,13 @@ IllAbstractProfiler >> startProfiling [
 	self initializeVMStats
 ]
 
-{ #category : 'accessing - statistics' }
-IllAbstractProfiler >> stats [
-
-	^ self subclassResponsibility
-]
-
 { #category : 'profiling' }
 IllAbstractProfiler >> stopProfiling [
 
 	self uninstallMethodProxies.
 	self updateVMStats.
-	gcActivityMonitor terminate
+	gcActivityMonitor terminate.
+	self announceProfilerStopedProfiling
 ]
 
 { #category : 'accessing - statistics' }
