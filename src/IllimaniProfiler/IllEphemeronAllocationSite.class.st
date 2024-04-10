@@ -6,9 +6,9 @@ Class {
 		'allocatorClass',
 		'allocatorMethod'
 	],
-	#category : 'IllimaniProfiler-Finalization-Profiler',
+	#category : 'IllimaniProfiler-Allocation-Site-Plus-Finalization',
 	#package : 'IllimaniProfiler',
-	#tag : 'Finalization-Profiler'
+	#tag : 'Allocation-Site-Plus-Finalization'
 }
 
 { #category : 'accessing' }

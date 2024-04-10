@@ -51,20 +51,20 @@ IllAllocationProfiler new
 ```
 "
 Class {
-	#name : 'IllFullMemoryProfiler',
+	#name : 'IllAllocationSitePlusFinalizationProfiler',
 	#superclass : 'IllAbstractProfiler',
 	#instVars : [
 		'statisticsModel',
 		'classesToAvoidInTheContextSearch',
 		'objectAllocations'
 	],
-	#category : 'IllimaniProfiler-Allocation-Profiler',
+	#category : 'IllimaniProfiler-Allocation-Site-Plus-Finalization',
 	#package : 'IllimaniProfiler',
-	#tag : 'Allocation-Profiler'
+	#tag : 'Allocation-Site-Plus-Finalization'
 }
 
 { #category : 'initialization' }
-IllFullMemoryProfiler >> defaultClassesToAvoidInTheContextSearch [
+IllAllocationSitePlusFinalizationProfiler >> defaultClassesToAvoidInTheContextSearch [
 
 	^ {
 		  "Process."
@@ -78,14 +78,13 @@ IllFullMemoryProfiler >> defaultClassesToAvoidInTheContextSearch [
 ]
 
 { #category : 'exporting' }
-IllFullMemoryProfiler >> exporterClass [
+IllAllocationSitePlusFinalizationProfiler >> exporterClass [
 
-	self flag: 'change exporter'.
-	^ IllAllocationSiteExporter
+	^ IllAllocationSitePlusFinalizationExporter
 ]
 
 { #category : 'evaluating' }
-IllFullMemoryProfiler >> filterContext: aContext ignoringClass: aClass [
+IllAllocationSitePlusFinalizationProfiler >> filterContext: aContext ignoringClass: aClass [
 
 	| sender |
 	sender := aContext sender.
@@ -97,14 +96,14 @@ IllFullMemoryProfiler >> filterContext: aContext ignoringClass: aClass [
 	^ sender
 ]
 
-{ #category : 'accessing - statistics' }
-IllFullMemoryProfiler >> forceFinalizationOfObjects [
+{ #category : 'profiling' }
+IllAllocationSitePlusFinalizationProfiler >> forceFinalizationOfObjects [
 
 	objectAllocations do: [ :e | e forceFinalization ]
 ]
 
 { #category : 'initialization' }
-IllFullMemoryProfiler >> initialize [
+IllAllocationSitePlusFinalizationProfiler >> initialize [
 
 	super initialize.
 	objectAllocations := OrderedCollection new: 100000000.
@@ -113,7 +112,7 @@ IllFullMemoryProfiler >> initialize [
 ]
 
 { #category : 'profiling' }
-IllFullMemoryProfiler >> internalRegisterAllocation: newlyAllocatedObject [
+IllAllocationSitePlusFinalizationProfiler >> internalRegisterAllocation: newlyAllocatedObject [
 
 	| filteredContext  allocationSiteEphemeron |
 
@@ -128,22 +127,29 @@ IllFullMemoryProfiler >> internalRegisterAllocation: newlyAllocatedObject [
 ]
 
 { #category : 'accessing' }
-IllFullMemoryProfiler >> objectAllocations [
+IllAllocationSitePlusFinalizationProfiler >> objectAllocations [
 
 	^ objectAllocations
 ]
 
 { #category : 'accessing - statistics' }
-IllFullMemoryProfiler >> stats [
+IllAllocationSitePlusFinalizationProfiler >> open [
 
-	self flag: 'Need to change this'.
+	self flag: 'UI not yet implemented'.
+	^ self notYetImplemented
+]
+
+{ #category : 'accessing - statistics' }
+IllAllocationSitePlusFinalizationProfiler >> stats [
+
+	self flag: 'Need to change this. Needed for the UI'.
 	self notYetImplemented.
 	^ statisticsModel ifNil: [
 		  statisticsModel := AllocationsStatsModel new rawAllocations: objectAllocations ]
 ]
 
 { #category : 'profiling' }
-IllFullMemoryProfiler >> stopProfiling [
+IllAllocationSitePlusFinalizationProfiler >> stopProfiling [
 
 	super stopProfiling.
 	self forceFinalizationOfObjects.
