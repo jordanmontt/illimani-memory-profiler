@@ -92,20 +92,25 @@ IllEphemeron >> initialize [
 ]
 
 { #category : 'inspector - extensions' }
+IllEphemeron >> inspectionElements [
+
+	^ {
+		  ('Allocated Object Class' -> allocatedObjectClass).
+		  ('Memory Size' -> sizeInBytes humanReadableByteSizeString).
+		  ('Initialization time' -> initializationTime).
+		  ('Finalization time' -> finalizationTime).
+		  ('Object''s lifetime' -> self lifetimeAsDuration humanReadablePrintString).
+		  ('Survived scavenges' -> survivedScavenges).
+		  ('Survived full GCs' -> survivedFullGC).
+		  ('Finalization was forced?' -> forcedFinalization) }
+]
+
+{ #category : 'inspector - extensions' }
 IllEphemeron >> inspectorExtension: aBuilder [
 
 	<inspectorPresentationOrder: 0 title: 'Overview'>
-	| tablePresenter elements items |
-	elements := {
-		('Allocated Object Class' -> allocatedObjectClass ).
-		('Memory Size' -> sizeInBytes humanReadableByteSizeString).
-	 	('Initialization time' -> initializationTime).
-		('Finalization time' -> finalizationTime).
-		('Object''s lifetime' -> self lifetimeAsDuration humanReadablePrintString).
-		('Survived scavenges' -> survivedScavenges).
-		('Survived full GCs' -> survivedFullGC).
-		('Finalization was forced?' -> forcedFinalization) }.
-	items := elements collect: [ :e | StInspectorAssociationNode hostObject: e ].
+	| tablePresenter  items |
+	items := self inspectionElements collect: [ :e | StInspectorAssociationNode hostObject: e ].
 	tablePresenter := aBuilder newTable.
 	tablePresenter
 		addColumn: (SpStringTableColumn title: 'Name' evaluated: #key);
