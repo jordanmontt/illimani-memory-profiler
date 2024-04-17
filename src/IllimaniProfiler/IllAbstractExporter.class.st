@@ -49,21 +49,12 @@ IllAbstractExporter >> exportGCActivity [
 { #category : 'exporting' }
 IllAbstractExporter >> exportMetaData [
 
-	| tempDict jsonString  writeStream avgLifetimes fileName |
+	| tempDict jsonString  writeStream fileName |
 	
 	baseFileName ifNil: [ baseFileName := self fileNameToExport ].
 	fileName := baseFileName , '.json'.
-	
-	avgLifetimes := ((profiler objectAllocations sum: #lifetime)
-		/ profiler objectAllocations size) asFloat.
 
-	tempDict := { ('totalExecutionTime' -> profiler totalTime).
-		('totalFullGCs' -> profiler totalFullGCs).
-		('profiledCode' -> profiler profiledCode).
-		('totalScavenges' -> profiler totalScavenges).
-		('samplingRate' -> profiler samplingRate).
-		('profiler' -> profiler class name).
-		('averageLifetimes' -> avgLifetimes) } asDictionary.
+	tempDict := self jsonDictionary.
 	jsonString := NeoJSONWriter toStringPretty: tempDict.
 
 	writeStream := fileName asFileReference createFile writeStream.
@@ -81,6 +72,18 @@ IllAbstractExporter >> fileNameToExport [
 IllAbstractExporter >> headerOfAllocationModel [
 
 	^ self subclassResponsibility
+]
+
+{ #category : 'exporting' }
+IllAbstractExporter >> jsonDictionary [
+
+	^ {
+		  ('totalExecutionTime' -> profiler totalTime).
+		  ('totalFullGCs' -> profiler totalFullGCs).
+		  ('profiledCode' -> profiler profiledCode).
+		  ('totalScavenges' -> profiler totalScavenges).
+		  ('samplingRate' -> profiler samplingRate).
+		  ('profiler' -> profiler class name) } asDictionary
 ]
 
 { #category : 'accessing' }

@@ -20,3 +20,15 @@ IllFinalizationExporter >> headerOfAllocationModel [
 	^ #( #finalizationTimeInMicroSeconds #sizeInBytes #initializationTimeInMicroSeconds #allocatedObjectClass
 	     #survivedScavenges #survivedFullGCs #forcedFinalization )
 ]
+
+{ #category : 'exporting' }
+IllFinalizationExporter >> jsonDictionary [
+
+	| avgLifetimes |
+	avgLifetimes := ((profiler objectAllocations sum: #lifetime)
+	                 / profiler objectAllocations size) asFloat.
+
+	^ super jsonDictionary
+		add: 'averageLifetimes' -> avgLifetimes;
+		yourself
+]
