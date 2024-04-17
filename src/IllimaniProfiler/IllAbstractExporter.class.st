@@ -11,9 +11,13 @@ Class {
 }
 
 { #category : 'exporting' }
-IllAbstractExporter >> exportAllocationModelCollection: fileName [
+IllAbstractExporter >> exportAllocationModelCollection [
 
-	| writeStream writer |
+	| writeStream writer fileName |
+	
+	baseFileName ifNil: [ baseFileName := self fileNameToExport ].
+	fileName := baseFileName , '.csv'.
+	
 	writeStream := fileName asFileReference createFile writeStream.
 	writer := (NeoCSVWriter on: writeStream)
 		writeHeader: self headerOfAllocationModel;
@@ -31,8 +35,8 @@ IllAbstractExporter >> exportData [
 
 	baseFileName := self fileNameToExport.
 	
-	self exportMetaData: baseFileName , '.json'.
-	self exportAllocationModelCollection: baseFileName , '.csv'.
+	self exportMetaData.
+	self exportAllocationModelCollection.
 	self exportGCActivity
 ]
 
@@ -43,15 +47,23 @@ IllAbstractExporter >> exportGCActivity [
 ]
 
 { #category : 'exporting' }
-IllAbstractExporter >> exportMetaData: fileName [
+IllAbstractExporter >> exportMetaData [
 
-	| tempDict jsonString  writeStream |
+	| tempDict jsonString  writeStream avgLifetimes fileName |
+	
+	baseFileName ifNil: [ baseFileName := self fileNameToExport ].
+	fileName := baseFileName , '.json'.
+	
+	avgLifetimes := ((profiler objectAllocations sum: #lifetime)
+		/ profiler objectAllocations size) asFloat.
+
 	tempDict := { ('totalExecutionTime' -> profiler totalTime).
 		('totalFullGCs' -> profiler totalFullGCs).
 		('profiledCode' -> profiler profiledCode).
 		('totalScavenges' -> profiler totalScavenges).
 		('samplingRate' -> profiler samplingRate).
-		('profiler' -> profiler class name) } asDictionary.
+		('profiler' -> profiler class name).
+		('averageLifetimes' -> avgLifetimes) } asDictionary.
 	jsonString := NeoJSONWriter toStringPretty: tempDict.
 
 	writeStream := fileName asFileReference createFile writeStream.

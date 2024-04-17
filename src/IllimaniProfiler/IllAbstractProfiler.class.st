@@ -58,8 +58,16 @@ IllAbstractProfiler >> beginningOfProfilingTime [
 
 { #category : 'exporting' }
 IllAbstractProfiler >> exportData [
+	"This exports BOTH the metadata AND the raw allocations"
 
 	(self exporterClass on: self) exportData
+]
+
+{ #category : 'exporting' }
+IllAbstractProfiler >> exportMetaData [
+	"This exports ONLY the medata data, not the raw allocations"
+
+	(self exporterClass on: self) exportMetaData
 ]
 
 { #category : 'exporting' }
