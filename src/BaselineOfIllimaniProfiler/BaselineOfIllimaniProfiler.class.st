@@ -24,12 +24,8 @@ BaselineOfIllimaniProfiler >> baseline: spec [
 		"Load NeoCSV and NeoJSON to export the data"
 		spec baseline: 'NeoJSON' with: [ spec repository: 'github://svenvc/NeoJSON/repository' ].
 		spec baseline: 'NeoCSV' with: [ spec repository: 'github://svenvc/NeoCSV/repository' ].
-		spec package: 'IllimaniProfiler' with: [ spec requires: #('NeoJSON' 'NeoCSV') ].
-
-		spec for: #common do: [
-			spec baseline: 'MethodProxies'
-				with: [ spec repository: 'github://pharo-contributions/MethodProxies' ].
-			spec package: 'IllimaniProfiler' with: [ spec requires: #('MethodProxies') ] ].
+		spec baseline: 'MethodProxies' with: [ spec repository: 'github://pharo-contributions/MethodProxies' ].
+		spec package: 'IllimaniProfiler' with: [ spec requires: #('NeoJSON' 'NeoCSV' 'MethodProxies') ].
 
 		"Load Roassal and a fixed release of MethodProxies for Pharo 10 and 11"
 		"Load a fixed version of MethodProxies for Pharo 11 or lower. Note that the latest changes of MethodProxies require Pharo 12 or >"
