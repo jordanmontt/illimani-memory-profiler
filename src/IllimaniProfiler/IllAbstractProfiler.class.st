@@ -106,7 +106,7 @@ IllAbstractProfiler >> initialize [
 	illimaniAnnouncer := IllAnnouncer new.
 	self initializeMethodProxies: handler.
 	samplingCounter := 0.
-	samplingRate := 1.
+	samplingRate := 1/100.
 	gcActivityMonitor := NullGCActivityMonitor new
 ]
 
@@ -297,6 +297,7 @@ IllAbstractProfiler >> samplingRate [
 IllAbstractProfiler >> samplingRate: aFraction [
 	"I expect my argument to be a fraction. For example 4 / 5. That will mean that I will
 	register 4 out of 5 allocations."
+	"The default sampling rate is 1%, which, by our evaluations, still gives precise results and does not sacrifice too much performance"
 
 	samplingRate := aFraction
 ]
