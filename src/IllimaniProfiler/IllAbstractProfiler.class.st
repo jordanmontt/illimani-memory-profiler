@@ -7,17 +7,13 @@ Class {
 	#instVars : [
 		'samplingCounter',
 		'samplingRate',
-		'handler',
-		'proxyBasicNew',
-		'proxyBasicNewKeyword',
-		'proxyArrayClass',
 		'vmStats',
 		'totalTime',
 		'startTime',
-		'proxyCopy',
 		'profiledCode',
 		'gcActivityMonitor',
-		'illimaniAnnouncer'
+		'illimaniAnnouncer',
+		'instrumentator'
 	],
 	#category : 'IllimaniProfiler-Instrumentation',
 	#package : 'IllimaniProfiler',
@@ -100,23 +96,11 @@ IllAbstractProfiler >> illimaniAnnouncer [
 IllAbstractProfiler >> initialize [
 
 	super initialize.
-	handler := IllHandler new
-		profiler: self;
-		yourself.
 	illimaniAnnouncer := IllAnnouncer new.
-	self initializeMethodProxies: handler.
+	instrumentator := IllInstrumentator onProfiler: self.
 	samplingCounter := 0.
-	samplingRate := 1/100.
+	self samplingRate: 1/100.
 	gcActivityMonitor := NullGCActivityMonitor new
-]
-
-{ #category : 'initialization' }
-IllAbstractProfiler >> initializeMethodProxies: aHandler [
-
-	proxyBasicNew := MpMethodProxy onMethod: Behavior >> #basicNew handler: aHandler.
-	proxyBasicNewKeyword := MpMethodProxy onMethod: Behavior >> #basicNew: handler: aHandler.
-	proxyCopy := MpMethodProxy onMethod: Object >> #shallowCopy handler: aHandler. 
-	proxyArrayClass := MpMethodProxy onMethod: Array class >> #new: handler: aHandler
 ]
 
 { #category : 'profiling' }
@@ -129,10 +113,7 @@ IllAbstractProfiler >> initializeVMStats [
 { #category : 'profiling' }
 IllAbstractProfiler >> installMethodProxies [
 
-	proxyBasicNewKeyword install.
-	proxyBasicNew install.
-	proxyArrayClass install.
-	proxyCopy install
+	instrumentator install
 ]
 
 { #category : 'profiling' }
@@ -346,10 +327,7 @@ IllAbstractProfiler >> totalTime [
 { #category : 'profiling' }
 IllAbstractProfiler >> uninstallMethodProxies [
 
-	proxyBasicNew uninstall.
-	proxyBasicNewKeyword uninstall.
-	proxyArrayClass uninstall.
-	proxyCopy uninstall
+	instrumentator uninstall
 ]
 
 { #category : 'profiling' }
