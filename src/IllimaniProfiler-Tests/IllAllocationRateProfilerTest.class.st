@@ -15,19 +15,19 @@ IllAllocationRateProfilerTest >> profilerClass [
 { #category : 'tests' }
 IllAllocationRateProfilerTest >> testSamplingRate [
 
-	| allocatedByteSrings |
+	| allocatedObjects |
 	
 	profiler
 		samplingRate: 33 / 100;
-		profileOn: [ 100 timesRepeat: [ ByteString new ] ].
+		profileOn: [ 100 timesRepeat: [ Object new ] ].
 
 	"We don't have the classes on this profiler"
-	allocatedByteSrings := profiler objectAllocations size.
+	allocatedObjects := profiler objectAllocations size.
 
 	"We are cheking in this range becase the profiler makes some allocations that are
 	necessary for the profiler to work, like Durations objects. So we cannot check that the
 	allocations are exacty 1/3 of the total."
-	self assert: (allocatedByteSrings >= 33) & (allocatedByteSrings < 40)
+	self assert: (allocatedObjects >= 33) & (allocatedObjects < 40)
 ]
 
 { #category : 'tests' }

@@ -47,8 +47,10 @@ IllAbstractProfilerTest >> testOpen [
 { #category : 'tests' }
 IllAbstractProfilerTest >> testProfileOnSimple [
 
-	profiler profileOn: [ 10 timesRepeat: [ IllFinalizationProfiler new ] ].
-	self assert: profiler objectAllocations size > 10
+	"Default sampling rate is 1/100"
+	profiler profileOn: [ 1000 timesRepeat: [ Object new ] ].
+	self assert: profiler objectAllocations size > 10.
+	self assert: profiler objectAllocations size < 20
 ]
 
 { #category : 'tests' }
@@ -108,7 +110,7 @@ IllAbstractProfilerTest >> testSamplingRateOtherPercentage [
 IllAbstractProfilerTest >> testSamplingRateVariable [
 
 	"By default, do not sample"
-	self assert: profiler samplingRate equals: 1.
+	self assert: profiler samplingRate equals: 1/100.
 
 	"Sample at 20%"
 	profiler samplingRate: 20 / 100.

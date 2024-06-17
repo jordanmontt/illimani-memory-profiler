@@ -16,13 +16,14 @@ IllAllocationSiteProfilerTest >> profilerClass [
 IllAllocationSiteProfilerTest >> testProfileOnCopyExecutionStack [
 
 	profiler
+		samplingRate: 1;
 		copyExecutionStack;
-		profileOn: [ 10 timesRepeat: [ IllAllocationSiteProfiler new ] ].
+		profileOn: [ 100 timesRepeat: [ Object new ] ].
 
 	"Take one random allocation to check"
 	self assert: profiler objectAllocations last context class equals: Context.
 
-	self assert: profiler objectAllocations size > 100.
+	self assert: profiler objectAllocations size >= 100.
 	profiler objectAllocations do: [ :alloc | "Stack was copied"
 		self assert: alloc context class equals: Context ]
 ]
@@ -30,9 +31,11 @@ IllAllocationSiteProfilerTest >> testProfileOnCopyExecutionStack [
 { #category : 'tests' }
 IllAllocationSiteProfilerTest >> testProfileOnSimpleMoreAllocations [
 
-	profiler profileOn: [ 1000 timesRepeat: [ self profilerClass new ] ].
+	profiler
+		samplingRate: 1;
+		profileOn: [ 1000 timesRepeat: [ Object new ] ].
 
-	self assert: profiler objectAllocations size > 1000.
+	self assert: profiler objectAllocations size >= 1000.
 	profiler objectAllocations do: [ :alloc |
 		self assert: alloc allocatedObjectClass isClass ]
 ]
