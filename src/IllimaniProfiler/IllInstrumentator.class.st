@@ -82,10 +82,7 @@ IllInstrumentator >> initializeMethodProxies [
 { #category : 'initialization' }
 IllInstrumentator >> install [
 
-	"Using reflexion to install the proxies"
-
-	1 to: self class slots size do: [ :index |
-		(self instVarAt: index) install ]
+	self proxyVariables do: #install
 ]
 
 { #category : 'initialization' }
@@ -95,10 +92,29 @@ IllInstrumentator >> profiler: aProfiler [
 ]
 
 { #category : 'initialization' }
+IllInstrumentator >> proxyVariables [
+
+	self flag:
+		'Important: Each time that a new proxy instance variable is added, one needs to add it to this array too.'.
+	^ {
+		  proxyBasicNew.
+		  proxyBasicNewKeyword.
+		  proxyNewPinned.
+		  proxyNewPinnedKeyword.
+		  proxyNewTenured.
+		  proxyNewTenuredKeyword.
+		  proxyArrayClass.
+		  proxyIntervalNew.
+		  proxyArobas.
+		  proxyCopy.
+		  proxyClone.
+		  proxyCompiledCodeClone.
+		  proxyExternalAddressClone.
+		  proxyFixedBitWidthRegisterCopy }
+]
+
+{ #category : 'initialization' }
 IllInstrumentator >> uninstall [
 
-	"Using reflexion to uninstall the proxies"
-
-	1 to: self class slots size do: [ :index |
-		(self instVarAt: index) uninstall ]
+	self proxyVariables do: #uninstall
 ]
