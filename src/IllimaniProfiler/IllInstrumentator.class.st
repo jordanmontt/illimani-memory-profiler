@@ -1,3 +1,6 @@
+"
+I am an object that is used to instrument the allocator method. I only serve for instrumenting and uninstrumenting the allocator methods. I am used by the profiler.
+"
 Class {
 	#name : 'IllInstrumentator',
 	#superclass : 'Object',

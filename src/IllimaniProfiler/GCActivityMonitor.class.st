@@ -1,3 +1,6 @@
+"
+I am a garbage collector monitor that register the garbage collector activity. To see how often I register the GC activity, see the method `defaultWaitingTime`.
+"
 Class {
 	#name : 'GCActivityMonitor',
 	#superclass : 'Object',
@@ -11,6 +14,12 @@ Class {
 	#package : 'IllimaniProfiler',
 	#tag : 'GC-Monitor'
 }
+
+{ #category : 'initialization' }
+GCActivityMonitor >> defaultWaitingTime [
+
+	^ 1 second
+]
 
 { #category : 'exporting' }
 GCActivityMonitor >> exportData: baseFileName [
@@ -30,7 +39,7 @@ GCActivityMonitor >> initialize [
 	super initialize.
 	fullGCs := OrderedCollection new: 10000.
 	scavenges := OrderedCollection new: 10000.
-	waitingTime := 1 second
+	waitingTime := self defaultWaitingTime
 ]
 
 { #category : 'api' }

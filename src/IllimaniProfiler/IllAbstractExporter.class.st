@@ -1,3 +1,6 @@
+"
+I am the abstract class for the exporters. What I do is basically provide logic for exporting the profiling data as json and csv files.
+"
 Class {
 	#name : 'IllAbstractExporter',
 	#superclass : 'Object',

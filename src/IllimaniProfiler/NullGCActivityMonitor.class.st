@@ -1,3 +1,6 @@
+"
+I am a null-object desing pattern for the GC monitor.
+"
 Class {
 	#name : 'NullGCActivityMonitor',
 	#superclass : 'Object',
