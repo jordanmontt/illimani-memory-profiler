@@ -1,3 +1,6 @@
+"
+I am the object lifetimes profiler that *keeps* a reference to all the captured allocated objects. Normally, users should not use me. I am usefult for doing experiments.
+"
 Class {
 	#name : 'IllObjectLifetimesInstanceKeeper',
 	#superclass : 'IllObjectLifetimesProfiler',

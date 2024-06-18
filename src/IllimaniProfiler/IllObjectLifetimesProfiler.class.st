@@ -1,3 +1,6 @@
+"
+I am an object lifetimes profiler. I profile how much time do the objects live. I use finalization (ephemerons) in my implementation.
+"
 Class {
 	#name : 'IllObjectLifetimesProfiler',
 	#superclass : 'IllAbstractProfiler',
