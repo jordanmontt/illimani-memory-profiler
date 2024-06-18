@@ -41,7 +41,7 @@ IllObjectLifetimesProfiler >> initialize [
 { #category : 'profiling' }
 IllObjectLifetimesProfiler >> internalRegisterAllocation: anObject [
 	
-	ephemeronsCollection add: (IllEphemeron newPinned 
+	ephemeronsCollection add: (IllEphemeron newTenured 
 		key: anObject value: nil;
 		yourself)
 ]
