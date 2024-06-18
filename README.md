@@ -122,7 +122,7 @@ Illimani is also a profiling framework. A user can implement his own profiler by
 
 ## Allocation Site profiler
 
-![GIF1](https://github.com/jordanmontt/illimani-memory-profiler/assets/33934979/fd915e86-a251-48c9-a087-3929d74509e7)
+![allo](https://github.com/jordanmontt/illimani-memory-profiler/assets/33934979/c83ab37b-3ec3-4f19-b4de-02110cd837af)
 
 It is also possible to copy the execution stack of *each* of the allocated objects with the message.
 This is very useful when you to make analysis, for example indentify in which context the allocations were prodoced, etc.
@@ -136,7 +136,7 @@ Without the UI, because the profiler is independent from the UI, you can access 
 
 ## Object lifetimes profiler
 
-![GIF2](https://github.com/jordanmontt/illimani-memory-profiler/assets/33934979/b1bfd2fd-80d9-4a5b-8c12-0f637f5cfeb5)
+![fina](https://github.com/jordanmontt/illimani-memory-profiler/assets/33934979/e0c3cf6e-5105-45dc-84ba-26a5513a6710)
 
 ## Implementation details
 
