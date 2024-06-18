@@ -11,9 +11,9 @@ Class {
 		'survivedFullGC',
 		'forcedFinalization'
 	],
-	#category : 'IllimaniProfiler-Finalization-Profiler',
+	#category : 'IllimaniProfiler-Object-Lifetimes-Profiler',
 	#package : 'IllimaniProfiler',
-	#tag : 'Finalization-Profiler'
+	#tag : 'Object-Lifetimes-Profiler'
 }
 
 { #category : 'accessing' }

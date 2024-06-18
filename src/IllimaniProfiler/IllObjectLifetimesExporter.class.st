@@ -1,5 +1,5 @@
 Class {
-	#name : 'IllFinalizationExporter',
+	#name : 'IllObjectLifetimesExporter',
 	#superclass : 'IllAbstractExporter',
 	#category : 'IllimaniProfiler-File-Exporters',
 	#package : 'IllimaniProfiler',
@@ -7,7 +7,7 @@ Class {
 }
 
 { #category : 'instance creation' }
-IllFinalizationExporter class >> on: aProfiler [
+IllObjectLifetimesExporter class >> on: aProfiler [
 
 	^ self new
 		profiler: aProfiler;
@@ -15,14 +15,14 @@ IllFinalizationExporter class >> on: aProfiler [
 ]
 
 { #category : 'exporting' }
-IllFinalizationExporter >> headerOfAllocationModel [ 
+IllObjectLifetimesExporter >> headerOfAllocationModel [ 
 
 	^ #( #finalizationTimeInMicroSeconds #sizeInBytes #initializationTimeInMicroSeconds #allocatedObjectClass
 	     #survivedScavenges #survivedFullGCs #forcedFinalization )
 ]
 
 { #category : 'exporting' }
-IllFinalizationExporter >> jsonDictionary [
+IllObjectLifetimesExporter >> jsonDictionary [
 
 	| avgLifetimes |
 	avgLifetimes := ((profiler objectAllocations sum: #lifetime)
