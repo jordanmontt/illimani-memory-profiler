@@ -14,7 +14,7 @@ Class {
 FrequencyHistogramRoassalPresenter >> addChartTitles: chart [
 
 	chart xlabel: 'Relative execution time'.
-	chart ylabel: 'Percent'.
+	chart ylabel: 'Allocated objects'.
 	chart title: 'Relative frequencies histogram'
 ]
 
