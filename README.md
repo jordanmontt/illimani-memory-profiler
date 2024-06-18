@@ -49,7 +49,7 @@ IllAllocationSiteProfiler new
 Example 2, object lifetimes profiler on a code snippet:
 
 ```st
-IllObjectLifetimesProfiler new.
+IllObjectLifetimesProfiler new
 	profileOn: [ 15 timesRepeat: [ StPlaygroundPresenter open close ] ] ;
 	open;
 	yourself
