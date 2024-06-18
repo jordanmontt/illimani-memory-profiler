@@ -138,6 +138,11 @@ Without the UI, because the profiler is independent from the UI, you can access 
 
 ![fina](https://github.com/jordanmontt/illimani-memory-profiler/assets/33934979/e0c3cf6e-5105-45dc-84ba-26a5513a6710)
 
+## Related papers
+
+ - [ILLIMANI Memory Profiler - A Technical Report. Jordan Montaño S., Polito G., Ducasse S., Tesone P. 2023. Technical Report.](https://hal.science/hal-04225251/file/conference_101719.pdf)
+ - [Evaluating Finalization-Based Object Lifetime Profiling. Jordan Montaño S., Polito G., Ducasse S., Tesone P., 2024, ISMM.](https://hal.science/hal-04581342v1/document)
+
 ## Implementation details
 
 - Illimani uses [method proxies](https://github.com/pharo-contributions/MethodProxies) library to capture the allocations. It instruments all the allocator methods in Pharo.
