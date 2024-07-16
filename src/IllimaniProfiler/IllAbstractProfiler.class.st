@@ -82,10 +82,8 @@ IllAbstractProfiler >> exporterClass [
 
 { #category : 'api' }
 IllAbstractProfiler >> forceUninstall [
-	"Warning, do not use unless you cannot start the profiler because you have the
-	MpCannotInstall exception"
 
-	MpMethodProxy allInstances do: #uninstall
+	instrumentator forceUninstall
 ]
 
 { #category : 'accessing' }

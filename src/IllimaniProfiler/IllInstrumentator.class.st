@@ -54,6 +54,14 @@ IllInstrumentator >> enableInstrumentation [
 	MpMethodProxy enableInstrumentation
 ]
 
+{ #category : 'api' }
+IllInstrumentator >> forceUninstall [
+	"Warning, do not use unless you cannot start the profiler because you have the
+	MpCannotInstall exception"
+
+	MpMethodProxy allInstances do: #uninstall
+]
+
 { #category : 'initialization' }
 IllInstrumentator >> initialize [
 
