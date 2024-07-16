@@ -119,9 +119,9 @@ IllAbstractProfiler >> initializeVMStats [
 ]
 
 { #category : 'profiling' }
-IllAbstractProfiler >> installMethodProxies [
+IllAbstractProfiler >> instrument [
 
-	instrumentator install
+	instrumentator instrument
 ]
 
 { #category : 'profiling' }
@@ -295,14 +295,14 @@ IllAbstractProfiler >> samplingRate: aFraction [
 IllAbstractProfiler >> startProfiling [
 
 	gcActivityMonitor run.
-	self installMethodProxies.
-	self initializeVMStats
+	self initializeVMStats.
+	self instrument
 ]
 
 { #category : 'profiling' }
 IllAbstractProfiler >> stopProfiling [
 
-	self uninstallMethodProxies.
+	self uninstrument.
 	self updateVMStats.
 	gcActivityMonitor terminate.
 	self announceProfilerStopedProfiling
@@ -333,9 +333,9 @@ IllAbstractProfiler >> totalTime [
 ]
 
 { #category : 'profiling' }
-IllAbstractProfiler >> uninstallMethodProxies [
+IllAbstractProfiler >> uninstrument [
 
-	instrumentator uninstall
+	instrumentator uninstrument
 ]
 
 { #category : 'profiling' }

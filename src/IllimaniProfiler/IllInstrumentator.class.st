@@ -42,6 +42,18 @@ IllInstrumentator class >> onProfiler: aProfiler [
 		yourself
 ]
 
+{ #category : 'instrumentation' }
+IllInstrumentator >> disableInstrumentation [
+
+	MpMethodProxy disableInstrumentation
+]
+
+{ #category : 'instrumentation' }
+IllInstrumentator >> enableInstrumentation [
+
+	MpMethodProxy enableInstrumentation
+]
+
 { #category : 'initialization' }
 IllInstrumentator >> initialize [
 
@@ -82,19 +94,26 @@ IllInstrumentator >> initializeMethodProxies [
 	proxyFixedBitWidthRegisterCopy := MpMethodProxy onMethod: FixedBitWidthRegister >> #copy handler: handler
 ]
 
-{ #category : 'initialization' }
+{ #category : 'instrumentation' }
 IllInstrumentator >> install [
 
 	self proxyVariables do: #install
 ]
 
-{ #category : 'initialization' }
+{ #category : 'api' }
+IllInstrumentator >> instrument [
+
+	self install.
+	self enableInstrumentation
+]
+
+{ #category : 'api' }
 IllInstrumentator >> profiler: aProfiler [
 
 	profiler := aProfiler
 ]
 
-{ #category : 'initialization' }
+{ #category : 'instrumentation' }
 IllInstrumentator >> proxyVariables [
 
 	self flag:
@@ -116,8 +135,15 @@ IllInstrumentator >> proxyVariables [
 		  proxyFixedBitWidthRegisterCopy }
 ]
 
-{ #category : 'initialization' }
+{ #category : 'instrumentation' }
 IllInstrumentator >> uninstall [
 
 	self proxyVariables do: #uninstall
+]
+
+{ #category : 'api' }
+IllInstrumentator >> uninstrument [
+
+	self disableInstrumentation.
+	self uninstall
 ]
