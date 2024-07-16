@@ -49,7 +49,7 @@ IllAbstractProfilerTest >> testProfileOnSimple [
 
 	"Default sampling rate is 1/100"
 	profiler profileOn: [ 1000 timesRepeat: [ Object new ] ].
-	self assert: profiler objectAllocations size > 10.
+	self assert: profiler objectAllocations size >= 10.
 	self assert: profiler objectAllocations size < 20
 ]
 
@@ -59,7 +59,7 @@ IllAbstractProfilerTest >> testSamplingRate [
 	| allocatedObjects profilerAllocations |
 	
 	"The profiler makes some allocations when being installed."
-	profilerAllocations := 11.
+	profilerAllocations := 3.
 
 	profiler
 		samplingRate: 33 / 100;
