@@ -77,6 +77,7 @@ AllocationSiteInfoModel >> contextFingerprint: aContext [
 	sender := aContext.
 	"10 is the size of the arrat of contextFingerPrint"
 	1 to: 10 do: [ :i |
+		sender ifNil: [ ^ self ].
 		contextFingerprint at: i put: sender method.
 		sender := sender sender ]
 ]
@@ -148,7 +149,7 @@ AllocationSiteInfoModel >> inspectorExtensionContextFingerprint: aBuilder [
 	<inspectorPresentationOrder: 2 title: 'Context Fingerprint'>
 	^ aBuilder newList
 		items: contextFingerprint;
-		display: [ :aMethod | aMethod name ];
+		display: [ :aMethod | "we ask the method because of the compiled blocks" aMethod method name ];
 		yourself
 ]
 
