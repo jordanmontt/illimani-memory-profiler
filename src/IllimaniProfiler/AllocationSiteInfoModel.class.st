@@ -72,7 +72,13 @@ AllocationSiteInfoModel >> contextFingerprint [
 { #category : 'accessing' }
 AllocationSiteInfoModel >> contextFingerprint: aContext [
 
-	contextFingerprint := String streamContents: [ :stream | aContext debugStack: 5 on: stream ]
+	| sender |
+	"Using #to:do: because of performance"
+	sender := aContext.
+	"10 is the size of the arrat of contextFingerPrint"
+	1 to: 10 do: [ :i |
+		contextFingerprint at: i put: sender method.
+		sender := sender sender ]
 ]
 
 { #category : 'exporting' }
@@ -104,7 +110,8 @@ AllocationSiteInfoModel >> initialize [
 
 	super initialize.
 	"always in micro-seconds"
-	initializationTime := Time primUTCMicrosecondsClock
+	initializationTime := Time primUTCMicrosecondsClock.
+	contextFingerprint := Array new: 10
 ]
 
 { #category : 'inspector - extensions' }
@@ -138,8 +145,11 @@ AllocationSiteInfoModel >> inspectorExtension: aBuilder [
 { #category : 'inspector - extensions' }
 AllocationSiteInfoModel >> inspectorExtensionContextFingerprint: aBuilder [
 
-	"<inspectorPresentationOrder: 2 title: 'Context Fingerprint'>"
-	^ self contextFingerprint contents inspectionFullString
+	<inspectorPresentationOrder: 2 title: 'Context Fingerprint'>
+	^ aBuilder newList
+		items: contextFingerprint;
+		display: [ :aMethod | aMethod name ];
+		yourself
 ]
 
 { #category : 'printing' }

@@ -145,7 +145,7 @@ IllAllocationSiteProfiler >> internalRegisterAllocation: newlyAllocatedObject [
 		allocatorClass: filteredContext receiver class;
 		allocatorMethod: filteredContext compiledCode method;
 		allocatedObjectClass: newlyAllocatedObject class;
-		"contextFingerprint: filteredContext;"
+		contextFingerprint: filteredContext;
 		sizeInBytes: newlyAllocatedObject sizeInMemory.
 
 	objectAllocations add: allocationInformationHolder
