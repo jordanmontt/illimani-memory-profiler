@@ -114,9 +114,8 @@ IllAllocationSiteProfiler >> filterContext: aContext ignoringClass: aClass [
 	| sender |
 	sender := aContext sender.
 	[
-	sender receiver class = aClass or: [
-		sender receiver class = aClass class or: [
-			classesToAvoidInTheContextSearch includes: sender receiver class ] ] ]
+	sender receiver class = aClass class or: [
+		classesToAvoidInTheContextSearch includes: sender receiver class ] ]
 		whileTrue: [ sender := sender sender ].
 	^ sender
 ]
@@ -128,7 +127,6 @@ IllAllocationSiteProfiler >> initialize [
 	objectAllocations := OrderedCollection new.
 	copyExecutionStack := false.
 	classesToAvoidInTheContextSearch := self defaultClassesToAvoidInTheContextSearch
-	  , (self defaultClassesToAvoidInTheContextSearch collect: [ :aClass | aClass class ])
 ]
 
 { #category : 'profiling' }

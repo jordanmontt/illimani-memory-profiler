@@ -13,6 +13,22 @@ IllAllocationSiteProfilerTest >> profilerClass [
 ]
 
 { #category : 'tests' }
+IllAllocationSiteProfilerTest >> testFilterContextIgnoringClass [
+
+	profiler
+		instrumentator: (IllMockInstrumentator onProfiler: profiler);
+		copyExecutionStack;
+		samplingRate: 1;
+		startProfiling.
+		
+	Object illNew.
+	
+	self assert: profiler objectAllocations first context receiver class equals: self class.
+	self assert: profiler objectAllocations first context homeMethod
+		equals: self class >> #testFilterContextIgnoringClass
+]
+
+{ #category : 'tests' }
 IllAllocationSiteProfilerTest >> testProfileOnCopyExecutionStack [
 
 	profiler
