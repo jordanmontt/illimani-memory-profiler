@@ -50,13 +50,6 @@ RoassaHelperChartBuilder >> allocatedObjectsPerSecondLineChartCanvas [
 ]
 
 { #category : 'api - line chart' }
-RoassaHelperChartBuilder >> allocatedObjectsPerSecondPerClassLineChartCanvas [
-
-	^ self constructPerSecondLineChart:
-		  (model allocationsStats topNAllocationsByClass: topCalculationsNumber)
-]
-
-{ #category : 'api - line chart' }
 RoassaHelperChartBuilder >> allocatedObjectsPerSecondPerMethodLineChartCanvas [
 
 	^ self constructPerSecondLineChart:
@@ -76,7 +69,7 @@ RoassaHelperChartBuilder >> constructPerSecondLineChart: aCollection [
 	aCollection do: [ :anAllocationNode |
 		linePlot := self createLinePlotForAllocations: anAllocationNode sortedGroupedAllocations.
 		chart add: linePlot.
-		legend text: anAllocationNode allocator asString withBoxColor: linePlot computeColor ].
+		legend text: anAllocationNode allocator name withBoxColor: linePlot computeColor ].
 
 	self addTicksToLabel: chart.
 	self addLabelsX: 'Seconds' y: 'Allocations' forChart: chart.
@@ -109,15 +102,6 @@ RoassaHelperChartBuilder >> createLinePlotForAllocations: someAllocations [
 	indices := 1 to: times size.
 	linePlot := RSLinePlot new x: times y: indices.
 	^ linePlot
-]
-
-{ #category : 'api - heatmap' }
-RoassaHelperChartBuilder >> heatmapAllocatorAllocatedCanvasByClass [
-
-	^ HeatmapRoassalBuilder new
-		data: (model allocationsStats topNAllocationsByClass: topCalculationsNumber);
-		build;
-		canvas
 ]
 
 { #category : 'api - heatmap' }

@@ -6,7 +6,6 @@ Class {
 	#superclass : 'Object',
 	#instVars : [
 		'rawAllocations',
-		'allocationNodesByClass',
 		'allocationNodesByMethod',
 		'didIWalk'
 	],
@@ -24,13 +23,6 @@ AllocationsStatsModel class >> allocations: someAllocations [
 ]
 
 { #category : 'statistics' }
-AllocationsStatsModel >> allocationsByClass [
-
-	didIWalk ifFalse: [ self walkAllocations ].
-	^ allocationNodesByClass sortedByTotalAllocations
-]
-
-{ #category : 'statistics' }
 AllocationsStatsModel >> allocationsByMethod [
 
 	didIWalk ifFalse: [ self walkAllocations ].
@@ -41,7 +33,6 @@ AllocationsStatsModel >> allocationsByMethod [
 AllocationsStatsModel >> initialize [
 
 	super initialize.
-	allocationNodesByClass := GroupedAllocationsByAllocatorCollection new.
 	allocationNodesByMethod := GroupedAllocationsByAllocatorCollection new.
 	didIWalk := false
 ]
@@ -49,7 +40,7 @@ AllocationsStatsModel >> initialize [
 { #category : 'statistics' }
 AllocationsStatsModel >> numberOfClasses [
 
-	^ self allocationsByClass size
+	^ (self allocationsByMethod collect: [ :e | e allocator methodClass ] as: Set) size
 ]
 
 { #category : 'statistics' }
@@ -77,14 +68,6 @@ AllocationsStatsModel >> timeDifferenceBetweenFirstAndLastAllocation [
 ]
 
 { #category : 'statistics' }
-AllocationsStatsModel >> topNAllocationsByClass: n [
-
-	| allocationsOrderedByClass |
-	allocationsOrderedByClass := self allocationsByClass.
-	^ allocationsOrderedByClass first: (n min: allocationsOrderedByClass size)
-]
-
-{ #category : 'statistics' }
 AllocationsStatsModel >> topNAllocationsByMethod: n [
 
 	| allocationsOrderedByMethod |
@@ -108,11 +91,8 @@ AllocationsStatsModel >> totalAllocatedObjects [
 AllocationsStatsModel >> walkAllocations [
 
 	rawAllocations do: [ :allocationHolder |
-		allocationNodesByClass
-			updateAllocationForAllocator: allocationHolder allocatorClass
-			allocation: allocationHolder.
 		allocationNodesByMethod
-			updateAllocationForAllocator: allocationHolder fullMethodName
+			updateAllocationForAllocator: allocationHolder allocatorMethod
 			allocation: allocationHolder ].
 
 	didIWalk := true

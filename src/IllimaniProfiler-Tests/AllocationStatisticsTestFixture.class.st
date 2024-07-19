@@ -46,22 +46,22 @@ AllocationStatisticsTestFixture >> allocationsOne [
 				 sizeInBytes: 48;
 				 yourself);
 		add: (AllocationSiteInfoModel new
-				 allocatorMethod: Object >> #'->';
+				 allocatorMethod: Margin >> #asMargin;
 				 allocatedObjectClass: ByteString;
 				 sizeInBytes: 100;
 				 yourself);
 		add: (AllocationSiteInfoModel new
-				 allocatorMethod: Object >> #'->';
+				 allocatorMethod: Margin >> #asMargin;
 				 allocatedObjectClass: ByteString;
 				 sizeInBytes: 55;
 				 yourself);
 		add: (AllocationSiteInfoModel new
-				 allocatorMethod: Object >> #'->';
+				 allocatorMethod: Margin >> #asMargin;
 				 allocatedObjectClass: Color;
 				 sizeInBytes: 60;
 				 yourself);
 		add: (AllocationSiteInfoModel new
-				 allocatorMethod: Object >> #'->';
+				 allocatorMethod: Margin >> #asMargin;
 				 allocatedObjectClass: Color;
 				 sizeInBytes: 16;
 				 yourself).
@@ -134,8 +134,8 @@ AllocationStatisticsTestFixture >> groupAndSortByAllocatedObjectClassAllocations
 { #category : 'fixture' }
 AllocationStatisticsTestFixture >> groupedAndSortedByClassAllocations [
 
-	^ self groupedAndSortedByClassAllocationsOne , self groupedAndSortedByClassAllocationsTwo
-	  , self groupedAndSortedByClassAllocationsThree
+	^ (self groupedAndSortedByClassAllocationsOne , self groupedAndSortedByClassAllocationsTwo
+	  , self groupedAndSortedByClassAllocationsThree)
 ]
 
 { #category : 'fixture' }
@@ -167,7 +167,7 @@ AllocationStatisticsTestFixture >> groupedAndSortedByMethodAllocations [
 
 	self mockedAllocations do: [ :allo |
 		dict
-			at: allo fullMethodName
+			at: allo allocatorMethod
 			update: [ :e |
 				e
 					add: allo;
