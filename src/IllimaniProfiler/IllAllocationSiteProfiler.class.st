@@ -71,16 +71,6 @@ IllAllocationSiteProfiler >> allocationsStats [
 		  statisticsModel := AllocationsStatsModel new rawAllocations: objectAllocations ]
 ]
 
-{ #category : 'api' }
-IllAllocationSiteProfiler >> copyExecutionStack [
-	"When this is set to true, for each object allocationn the full execution stack from which
-	the method was created will be copied and store. This information will be available for
-	making analysis. Keep in mind that when there is a lot of allocations going the size of
-	the image can grow quickly and drastically."
-
-	copyExecutionStack := true
-]
-
 { #category : 'initialization' }
 IllAllocationSiteProfiler >> defaultClassesToAvoidInTheContextSearch [
 
@@ -95,29 +85,10 @@ IllAllocationSiteProfiler >> defaultClassesToAvoidInTheContextSearch [
 		  "CompiledBlock" }
 ]
 
-{ #category : 'api' }
-IllAllocationSiteProfiler >> doNotCopyExecutionStack [
-	"See the comment of my opposite method"
-
-	copyExecutionStack := false
-]
-
 { #category : 'exporting' }
 IllAllocationSiteProfiler >> exporterClass [
 
 	^ IllAllocationSiteExporter
-]
-
-{ #category : 'profiling' }
-IllAllocationSiteProfiler >> filterContext: aContext ignoringClass: aClass [
-
-	| sender |
-	sender := aContext sender.
-	[
-	sender receiver class = aClass class or: [
-		classesToAvoidInTheContextSearch includes: sender receiver class ] ]
-		whileTrue: [ sender := sender sender ].
-	^ sender
 ]
 
 { #category : 'initialization' }
@@ -132,17 +103,20 @@ IllAllocationSiteProfiler >> initialize [
 { #category : 'profiling' }
 IllAllocationSiteProfiler >> internalRegisterAllocation: newlyAllocatedObject [
 
-	| filteredContext  allocationInformationHolder |
+	| filteredContext  allocationInformationHolder allocatedObjectClass |
 
 	allocationInformationHolder := AllocationSiteInfoModel new.
-	filteredContext := self filterContext: thisContext ignoringClass: newlyAllocatedObject class.
-
-	copyExecutionStack ifTrue: [ allocationInformationHolder context: filteredContext copyStack ].
+	allocatedObjectClass := newlyAllocatedObject class.
+	
+	filteredContext := thisContext.
+	[
+	filteredContext receiver class = allocatedObjectClass class or: [
+		classesToAvoidInTheContextSearch includes: filteredContext receiver class ] ]
+		whileTrue: [ filteredContext := filteredContext sender ].
 
 	allocationInformationHolder
-		allocatorClass: filteredContext receiver class;
-		allocatorMethod: filteredContext compiledCode method;
-		allocatedObjectClass: newlyAllocatedObject class;
+		allocatorMethod: filteredContext homeMethod;
+		allocatedObjectClass: allocatedObjectClass;
 		contextFingerprint: filteredContext;
 		sizeInBytes: newlyAllocatedObject sizeInMemory.
 

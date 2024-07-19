@@ -4,9 +4,7 @@ Class {
 	#instVars : [
 		'allocatedObjectClass',
 		'sizeInBytes',
-		'context',
 		'allocatorMethod',
-		'allocatorClass',
 		'contextFingerprint',
 		'initializationTime'
 	],
@@ -30,13 +28,7 @@ AllocationSiteInfoModel >> allocatedObjectClass: anObject [
 { #category : 'accessing' }
 AllocationSiteInfoModel >> allocatorClass [
 
-	^ allocatorClass
-]
-
-{ #category : 'accessing' }
-AllocationSiteInfoModel >> allocatorClass: anObject [
-
-	allocatorClass := anObject
+	^ allocatorMethod methodClass
 ]
 
 { #category : 'accessing' }
@@ -52,18 +44,6 @@ AllocationSiteInfoModel >> allocatorMethod: aCompiledMethod [
 ]
 
 { #category : 'accessing' }
-AllocationSiteInfoModel >> context [
-
-	^ context
-]
-
-{ #category : 'accessing' }
-AllocationSiteInfoModel >> context: anObject [
-
-	context := anObject
-]
-
-{ #category : 'accessing' }
 AllocationSiteInfoModel >> contextFingerprint [
 
 	^ contextFingerprint
@@ -75,7 +55,7 @@ AllocationSiteInfoModel >> contextFingerprint: aContext [
 	| sender |
 	"Using #to:do: because of performance"
 	sender := aContext.
-	"10 is the size of the arrat of contextFingerPrint"
+	"10 is the size of the array of contextFingerPrint"
 	1 to: 10 do: [ :i |
 		sender ifNil: [ ^ self ].
 		contextFingerprint at: i put: sender method.
@@ -89,7 +69,7 @@ AllocationSiteInfoModel >> flattenedInstanceVariables [
 		  allocatedObjectClass.
 		  sizeInBytes.
 		  initializationTime.
-		  allocatorClass.
+		  self allocatorClass.
 		  allocatorMethod name }
 ]
 
@@ -121,9 +101,8 @@ AllocationSiteInfoModel >> inspectableAssociations [
 	^ {
 		  ('Allocated object class' -> allocatedObjectClass).
 		  ('Memory size' -> sizeInBytes humanReadableByteSizeString).
-		  ('Allocator class' -> allocatorClass).
+		  ('Allocator class' -> self allocatorClass).
 		  ('Allocator method' -> allocatorMethod).
-		  ('Context' -> context).
 		  ('Initialization timestamp' -> initializationTime) }
 ]
 
