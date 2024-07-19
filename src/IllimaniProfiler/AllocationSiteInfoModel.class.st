@@ -127,7 +127,8 @@ AllocationSiteInfoModel >> inspectorExtensionContextFingerprint: aBuilder [
 
 	<inspectorPresentationOrder: 2 title: 'Context Fingerprint'>
 	^ aBuilder newList
-		items: contextFingerprint;
+		"filter nil values"
+		items: (contextFingerprint reject: #isNil);
 		display: [ :aMethod | "we ask the method because of the compiled blocks" aMethod method name ];
 		yourself
 ]
