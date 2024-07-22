@@ -95,7 +95,7 @@ IllAllocationSiteProfiler >> exporterClass [
 IllAllocationSiteProfiler >> initialize [
 
 	super initialize.
-	objectAllocations := OrderedCollection new.
+	objectAllocations := OrderedCollection new: 10000000.
 	copyExecutionStack := false.
 	classesToAvoidInTheContextSearch := self defaultClassesToAvoidInTheContextSearch
 ]
@@ -103,21 +103,34 @@ IllAllocationSiteProfiler >> initialize [
 { #category : 'profiling' }
 IllAllocationSiteProfiler >> internalRegisterAllocation: newlyAllocatedObject [
 
-	| filteredContext  allocationInformationHolder allocatedObjectClass |
+	| filteredContext  allocationInformationHolder allocatedObjectClass sender senders index metaClass |
 
 	allocationInformationHolder := AllocationSiteInfoModel new.
 	allocatedObjectClass := newlyAllocatedObject class.
-	
-	filteredContext := thisContext.
-	[
-	filteredContext receiver class = allocatedObjectClass class or: [
-		classesToAvoidInTheContextSearch includes: filteredContext receiver class ] ]
-		whileTrue: [ filteredContext := filteredContext sender ].
+	metaClass := allocatedObjectClass class.
+
+	filteredContext := thisContext
+		sender "this is me, this profiler"
+		sender "this is the AbstractProfiler (my super class)"
+		sender "this is the IllHandler"
+		sender "this is the trapped instrumented method".
+
+	[ "get out of the receiver. E.g. the new method"
+	filteredContext receiver class = metaClass ] whileTrue:
+		[ filteredContext := filteredContext sender ].
+
+	senders := Array new: 1000.
+	index := 1.
+	sender := filteredContext.
+	[ sender isNotNil. ] whileTrue: [
+		senders at: index put: sender method.
+		index := index + 1.
+		sender := sender sender ].
 
 	allocationInformationHolder
-		allocatorMethod: filteredContext homeMethod;
+		allocatorMethod: filteredContext method;
 		allocatedObjectClass: allocatedObjectClass;
-		contextFingerprint: filteredContext;
+		senders: senders;
 		sizeInBytes: newlyAllocatedObject sizeInMemory.
 
 	objectAllocations add: allocationInformationHolder

@@ -5,8 +5,8 @@ Class {
 		'allocatedObjectClass',
 		'sizeInBytes',
 		'allocatorMethod',
-		'contextFingerprint',
-		'initializationTime'
+		'initializationTime',
+		'senders'
 	],
 	#category : 'IllimaniProfiler-Allocation-Profiler',
 	#package : 'IllimaniProfiler',
@@ -43,25 +43,6 @@ AllocationSiteInfoModel >> allocatorMethod: aCompiledMethod [
 	allocatorMethod := aCompiledMethod
 ]
 
-{ #category : 'accessing' }
-AllocationSiteInfoModel >> contextFingerprint [
-
-	^ contextFingerprint
-]
-
-{ #category : 'accessing' }
-AllocationSiteInfoModel >> contextFingerprint: aContext [
-
-	| sender |
-	"Using #to:do: because of performance"
-	sender := aContext.
-	"10 is the size of the array of contextFingerPrint"
-	1 to: 10 do: [ :i |
-		sender ifNil: [ ^ self ].
-		contextFingerprint at: i put: sender method.
-		sender := sender sender ]
-]
-
 { #category : 'exporting' }
 AllocationSiteInfoModel >> flattenedInstanceVariables [
 
@@ -92,7 +73,7 @@ AllocationSiteInfoModel >> initialize [
 	super initialize.
 	"always in micro-seconds"
 	initializationTime := Time primUTCMicrosecondsClock.
-	contextFingerprint := Array new: 10
+	senders := Array new: 10
 ]
 
 { #category : 'inspector - extensions' }
@@ -102,7 +83,7 @@ AllocationSiteInfoModel >> inspectableAssociations [
 		  ('Allocated object class' -> allocatedObjectClass).
 		  ('Memory size' -> sizeInBytes humanReadableByteSizeString).
 		  ('Allocator class' -> self allocatorClass).
-		  ('Allocator method' -> allocatorMethod).
+		  ('Allocator method' -> allocatorMethod name).
 		  ('Initialization timestamp' -> initializationTime) }
 ]
 
@@ -123,12 +104,11 @@ AllocationSiteInfoModel >> inspectorExtension: aBuilder [
 ]
 
 { #category : 'inspector - extensions' }
-AllocationSiteInfoModel >> inspectorExtensionContextFingerprint: aBuilder [
+AllocationSiteInfoModel >> inspectorExtensionSenders: aBuilder [
 
-	<inspectorPresentationOrder: 2 title: 'Context Fingerprint'>
+	<inspectorPresentationOrder: 2 title: 'Senders'>
 	^ aBuilder newList
-		"filter nil values"
-		items: (contextFingerprint reject: #isNil);
+		items: (senders reject: #isNil);
 		display: [ :aMethod | "we ask the method because of the compiled blocks" aMethod method name ];
 		yourself
 ]
@@ -140,6 +120,18 @@ AllocationSiteInfoModel >> printOn: aStream [
 	<< ' that weights '.
 	sizeInBytes ifNil: [ aStream << ' - ' ]
 		ifNotNil: [ aStream << sizeInBytes humanReadableByteSizeString ]
+]
+
+{ #category : 'accessing' }
+AllocationSiteInfoModel >> senders [
+
+	^ senders
+]
+
+{ #category : 'accessing' }
+AllocationSiteInfoModel >> senders: anArray [
+
+	senders := anArray
 ]
 
 { #category : 'accessing' }

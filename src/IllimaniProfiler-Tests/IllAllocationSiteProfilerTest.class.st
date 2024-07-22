@@ -22,8 +22,8 @@ IllAllocationSiteProfilerTest >> testFilterContextIgnoringClass [
 
 	Object illNew.
 
-	self assert: profiler objectAllocations first contextFingerprint first methodClass equals: self class.
-	self assert: profiler objectAllocations first contextFingerprint first
+	self assert: profiler objectAllocations first senders first methodClass equals: self class.
+	self assert: profiler objectAllocations first senders first
 		equals: self class >> #testFilterContextIgnoringClass
 ]
 
