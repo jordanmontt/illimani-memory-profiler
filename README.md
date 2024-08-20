@@ -124,14 +124,6 @@ Illimani is also a profiling framework. A user can implement his own profiler by
 
 ![allo](https://github.com/jordanmontt/illimani-memory-profiler/assets/33934979/c83ab37b-3ec3-4f19-b4de-02110cd837af)
 
-It is also possible to copy the execution stack of *each* of the allocated objects with the message.
-This is very useful when you to make analysis, for example indentify in which context the allocations were prodoced, etc.
-Keep in mind that with a lot of allocations, copying the stack can cause the image to grow in size rapidly and making it slow to use.
-
-```st
-profiler copyExecutionStack.
-```
-
 Without the UI, because the profiler is independent from the UI, you can access to some statistics. See the protocol `accessing - statistics` in the profiler to see the methods. Also, the profiler has a statistics model that groups and sorts the allocation by class and by methods. For example check 'profiler stats allocationsByClass.'
 
 ## Object lifetimes profiler
