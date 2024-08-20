@@ -69,7 +69,7 @@ RoassaHelperChartBuilder >> constructPerSecondLineChart: aCollection [
 	aCollection do: [ :anAllocationNode |
 		linePlot := self createLinePlotForAllocations: anAllocationNode sortedGroupedAllocations.
 		chart add: linePlot.
-		legend text: anAllocationNode allocator name withBoxColor: linePlot computeColor ].
+		legend text: anAllocationNode allocator method name withBoxColor: linePlot computeColor ].
 
 	self addTicksToLabel: chart.
 	self addLabelsX: 'Seconds' y: 'Allocations' forChart: chart.

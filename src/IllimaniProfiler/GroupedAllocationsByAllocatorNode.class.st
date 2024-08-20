@@ -67,7 +67,7 @@ GroupedAllocationsByAllocatorNode >> inspectorExtension: aBuilder [
 
 	<inspectorPresentationOrder: 0 title: 'Summary'>
 	| elements tablePresenter |
-	elements := { 'Allocator' -> allocator name . 'Total allocations' -> self totalAllocations . 'Total size in memory' -> self sizeInBytes }.
+	elements := { 'Allocator' -> "because of block closures" allocator method name . 'Total allocations' -> self totalAllocations . 'Total size in memory' -> self sizeInBytes }.
 	tablePresenter := aBuilder newTable.
 	tablePresenter
 		addColumn: (SpStringTableColumn title: 'Name' evaluated: #key);
