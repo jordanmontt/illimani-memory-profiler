@@ -55,7 +55,6 @@ Class {
 	#superclass : 'IllAbstractProfiler',
 	#instVars : [
 		'statisticsModel',
-		'copyExecutionStack',
 		'objectAllocations'
 	],
 	#category : 'IllimaniProfiler-Allocation-Profiler',
