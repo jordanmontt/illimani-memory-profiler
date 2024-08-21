@@ -1,12 +1,13 @@
 Class {
-	#name : 'FinalizationStatsModel',
+	#name : 'IllStatsModel',
 	#superclass : 'Object',
 	#instVars : [
 		'objectAllocations',
 		'allocationNodesByMethod',
 		'didIWalk',
 		'totalAllocatedMemory',
-		'numberOfAllocatorClasses'
+		'numberOfAllocatorClasses',
+		'totalProfiledTime'
 	],
 	#category : 'IllimaniProfiler-Model-Statistics',
 	#package : 'IllimaniProfiler',
@@ -14,7 +15,16 @@ Class {
 }
 
 { #category : 'instance creation' }
-FinalizationStatsModel class >> on: objectAllocations [
+IllStatsModel class >> objectAllocations: objectAllocations totalProfiledTime: totalTime [
+
+	^ self new
+		  objectAllocations: objectAllocations;
+		  totalProfiledTime: totalTime;
+		  yourself
+]
+
+{ #category : 'instance creation' }
+IllStatsModel class >> on: objectAllocations [
 
 	^ self new
 		  objectAllocations: objectAllocations;
@@ -22,14 +32,28 @@ FinalizationStatsModel class >> on: objectAllocations [
 ]
 
 { #category : 'accessing - statistics' }
-FinalizationStatsModel >> allocationsByMethod [
+IllStatsModel >> allocatedMemoryRatePerSecond [
+
+	^ self totalAllocatedMemory
+	  / (Duration microSeconds: totalProfiledTime) totalSeconds asFloat
+]
+
+{ #category : 'accessing - statistics' }
+IllStatsModel >> allocationRatePerSecond [
+
+	^ self totalAllocatedObjects
+	  / (Duration microSeconds: totalProfiledTime) totalSeconds asFloat
+]
+
+{ #category : 'accessing - statistics' }
+IllStatsModel >> allocationsByMethod [
 
 	didIWalk ifFalse: [ self walkAllocations ].
 	^ allocationNodesByMethod sortedByTotalAllocations
 ]
 
 { #category : 'initialization' }
-FinalizationStatsModel >> initialize [
+IllStatsModel >> initialize [
 
 	super initialize.
 	allocationNodesByMethod := GroupedAllocationsByAllocatorCollection new.
@@ -37,38 +61,38 @@ FinalizationStatsModel >> initialize [
 ]
 
 { #category : 'accessing - statistics' }
-FinalizationStatsModel >> numberOfAllocatorClasses [
+IllStatsModel >> numberOfAllocatorClasses [
 
 	didIWalk ifFalse: [ self walkAllocations ].
 	^ numberOfAllocatorClasses
 ]
 
 { #category : 'accessing - statistics' }
-FinalizationStatsModel >> numberOfAllocatorMethods [
+IllStatsModel >> numberOfAllocatorMethods [
 
 	^ self allocationsByMethod size
 ]
 
 { #category : 'accessing' }
-FinalizationStatsModel >> objectAllocations [
+IllStatsModel >> objectAllocations [
 
 	^ objectAllocations
 ]
 
 { #category : 'accessing' }
-FinalizationStatsModel >> objectAllocations: anObject [
+IllStatsModel >> objectAllocations: anObject [
 
 	objectAllocations := anObject
 ]
 
 { #category : 'accessing - statistics' }
-FinalizationStatsModel >> timeDifferenceBetweenFirstAndLastAllocation [
+IllStatsModel >> timeDifferenceBetweenFirstAndLastAllocation [
 
 	^ self objectAllocations last initializationTime - self objectAllocations first initializationTime
 ]
 
 { #category : 'accessing - statistics' }
-FinalizationStatsModel >> topNAllocationsByMethod: n [
+IllStatsModel >> topNAllocationsByMethod: n [
 
 	| allocationsOrderedByMethod |
 	allocationsOrderedByMethod := self allocationsByMethod.
@@ -76,20 +100,26 @@ FinalizationStatsModel >> topNAllocationsByMethod: n [
 ]
 
 { #category : 'accessing - statistics' }
-FinalizationStatsModel >> totalAllocatedMemory [
+IllStatsModel >> totalAllocatedMemory [
 
 	didIWalk ifFalse: [ self walkAllocations ].
 	^ totalAllocatedMemory
 ]
 
 { #category : 'accessing - statistics' }
-FinalizationStatsModel >> totalAllocatedObjects [
+IllStatsModel >> totalAllocatedObjects [
 
 	^ objectAllocations size
 ]
 
+{ #category : 'accessing' }
+IllStatsModel >> totalProfiledTime: totalTime [
+
+	totalProfiledTime := totalTime
+]
+
 { #category : 'calculating' }
-FinalizationStatsModel >> walkAllocations [
+IllStatsModel >> walkAllocations [
 
 	objectAllocations do: [ :allocationHolder |
 		allocationNodesByMethod
@@ -100,8 +130,7 @@ FinalizationStatsModel >> walkAllocations [
 		inject: 0
 		into: [ :sum : elem | sum + elem sizeInBytes ].
 		
-	numberOfAllocatorClasses := (allocationNodesByMethod sortedByTotalAllocations
-		collect: [ :e | e allocator methodClass ] as: Set) size.
-
+	numberOfAllocatorClasses := (objectAllocations collect: #allocatorClass as: Set) size.
+	
 	didIWalk := true
 ]

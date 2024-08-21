@@ -1,5 +1,5 @@
 Class {
-	#name : 'IllAbstractProfilerTest',
+	#name : 'IllMemoryProfilerTest',
 	#superclass : 'TestCase',
 	#instVars : [
 		'profiler'
@@ -9,27 +9,15 @@ Class {
 	#tag : 'Finalization-Profiler'
 }
 
-{ #category : 'testing' }
-IllAbstractProfilerTest class >> isAbstract [
-
-	^ self = IllAbstractProfilerTest
-]
-
 { #category : 'running' }
-IllAbstractProfilerTest >> profilerClass [
-
-	^ self subclassResponsibility
-]
-
-{ #category : 'running' }
-IllAbstractProfilerTest >> setUp [
+IllMemoryProfilerTest >> setUp [
 
 	super setUp.
-	profiler := self profilerClass new
+	profiler := IllMemoryProfiler new
 ]
 
 { #category : 'running' }
-IllAbstractProfilerTest >> tearDown [
+IllMemoryProfilerTest >> tearDown [
 
 	profiler forceUninstall.
 	profiler := nil.
@@ -37,16 +25,64 @@ IllAbstractProfilerTest >> tearDown [
 ]
 
 { #category : 'tests' }
-IllAbstractProfilerTest >> testOpen [
-	"This is a smoke test"
+IllMemoryProfilerTest >> testOpen [
+	
+	"Increasing the test time. This is due to CI failures. As the profiler pre-allocates a very
+	big collection, the GCs take time."
+	self timeLimit: 1 minute.
 
-	profiler profileOn: [ 5 timesRepeat: [ self profilerClass new ] ].
+	profiler profileOn: [ 5 timesRepeat: [ IllMemoryProfiler new ] ].
 	profiler open window close
 ]
 
 { #category : 'tests' }
-IllAbstractProfilerTest >> testProfileOnSimple [
+IllMemoryProfilerTest >> testProfileOn [
 
+	"Increasing the test time. This is due to CI failures. As the profiler pre-allocates a very
+	big collection, the GCs take time."
+	self timeLimit: 1 minute.
+
+	profiler
+		samplingRate: 1;
+		profileOn: [ 10 timesRepeat: [ Object new ] ].
+
+	"We let the GC run for N times to clean the not referenced objects. Because of the
+	implementation of ephemerons, they can have hard references between them so it is
+	necessary to run the GC several times  "
+	3 timesRepeat: [ Smalltalk garbageCollect ].
+
+	self assert: profiler objectAllocations size >= 10
+]
+
+{ #category : 'tests' }
+IllMemoryProfilerTest >> testProfileOnFinalizesCorrectly [
+
+	| timeNow |
+	"Increasing the test time. This is due to CI failures. As the profiler pre-allocates a very
+	big collection, the GCs take time."
+	self timeLimit: 1 minute.
+
+	timeNow := Time microsecondClockValue.
+	profiler profileOn: [ 10 timesRepeat: [ IllMemoryProfiler new ] ].
+
+	"We let the GC run for N times to clean the not referenced objects. Because of the
+	implementation of ephemerons, they can have hard references between them so it is
+	necessary to run the GC several times  "
+	3 timesRepeat: [ Smalltalk garbageCollect ].
+
+	self assert: profiler objectAllocations size
+		equals: (profiler objectAllocations select: [ :e | e finalizationTime isNotNil ]) size.
+
+	profiler objectAllocations do: [ :alloc | "Finalization time must be after timeNow variable"
+		self assert: alloc finalizationTime > timeNow ]
+]
+
+{ #category : 'tests' }
+IllMemoryProfilerTest >> testProfileOnSimple [
+
+	"Increasing the test time. This is due to CI failures. As the profiler pre-allocates a very big collection, the GCs take time."
+	self timeLimit: 1 minute.
+	
 	"Default sampling rate is 1/100"
 	profiler profileOn: [ 1000 timesRepeat: [ Object new ] ].
 	self assert: profiler objectAllocations size >= 10.
@@ -54,7 +90,19 @@ IllAbstractProfilerTest >> testProfileOnSimple [
 ]
 
 { #category : 'tests' }
-IllAbstractProfilerTest >> testSamplingRate [
+IllMemoryProfilerTest >> testProfileOnSimpleMoreAllocations [
+
+	profiler
+		samplingRate: 1;
+		profileOn: [ 1000 timesRepeat: [ Object new ] ].
+
+	self assert: profiler objectAllocations size >= 1000.
+	profiler objectAllocations do: [ :alloc |
+		self assert: alloc allocatedObjectClass isClass ]
+]
+
+{ #category : 'tests' }
+IllMemoryProfilerTest >> testSamplingRate [
 
 	| allocatedObjects profilerAllocations |
 	
@@ -74,7 +122,7 @@ IllAbstractProfilerTest >> testSamplingRate [
 ]
 
 { #category : 'tests' }
-IllAbstractProfilerTest >> testSamplingRate1in1000 [
+IllMemoryProfilerTest >> testSamplingRate1in1000 [
 
 	| allocatedByteSrings |
 	
@@ -91,7 +139,7 @@ IllAbstractProfilerTest >> testSamplingRate1in1000 [
 ]
 
 { #category : 'tests' }
-IllAbstractProfilerTest >> testSamplingRateOtherPercentage [
+IllMemoryProfilerTest >> testSamplingRateOtherPercentage [
 
 	| allocatedByteSrings |
 	
@@ -109,7 +157,7 @@ IllAbstractProfilerTest >> testSamplingRateOtherPercentage [
 ]
 
 { #category : 'tests' }
-IllAbstractProfilerTest >> testSamplingRateVariable [
+IllMemoryProfilerTest >> testSamplingRateVariable [
 
 	"By default, do not sample"
 	self assert: profiler samplingRate equals: 1/100.

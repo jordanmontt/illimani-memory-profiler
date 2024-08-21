@@ -4,9 +4,9 @@ I am a no action profiler. I am useful to test the introduced overhead of only i
 Class {
 	#name : 'IllNoActionProfiler',
 	#superclass : 'IllAbstractProfiler',
-	#category : 'IllimaniProfiler-Instrumentation',
+	#category : 'IllimaniProfiler-Profiler',
 	#package : 'IllimaniProfiler',
-	#tag : 'Instrumentation'
+	#tag : 'Profiler'
 }
 
 { #category : 'accessing - statistics' }

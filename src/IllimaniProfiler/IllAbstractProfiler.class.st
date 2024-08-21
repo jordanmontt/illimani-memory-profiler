@@ -23,24 +23,10 @@ Class {
 		'illimaniAnnouncer',
 		'instrumentator'
 	],
-	#category : 'IllimaniProfiler-Instrumentation',
+	#category : 'IllimaniProfiler-Profiler',
 	#package : 'IllimaniProfiler',
-	#tag : 'Instrumentation'
+	#tag : 'Profiler'
 }
-
-{ #category : 'accessing - statistics' }
-IllAbstractProfiler >> allocatedMemoryRatePerSecond [
-
-	^ self allocationsStats totalAllocatedMemory
-	  / (Duration microSeconds: totalTime) totalSeconds asFloat
-]
-
-{ #category : 'accessing - statistics' }
-IllAbstractProfiler >> allocationRatePerSecond [
-
-	^ self allocationsStats totalAllocatedObjects
-	  / (Duration microSeconds: totalTime) totalSeconds asFloat
-]
 
 { #category : 'accessing - statistics' }
 IllAbstractProfiler >> allocationsStats [

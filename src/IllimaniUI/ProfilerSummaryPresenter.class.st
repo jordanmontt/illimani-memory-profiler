@@ -12,7 +12,7 @@ Class {
 { #category : 'layout' }
 ProfilerSummaryPresenter >> allocatedMemoryRateString [
 
-	^ profiler allocatedMemoryRatePerSecond asInteger humanReadableByteSizeString
+	^ profiler allocationsStats allocatedMemoryRatePerSecond asInteger humanReadableByteSizeString
 	  , ' per second'
 ]
 
@@ -20,7 +20,7 @@ ProfilerSummaryPresenter >> allocatedMemoryRateString [
 ProfilerSummaryPresenter >> allocationRateString [
 
 	| rate |
-	rate := profiler allocationRatePerSecond.
+	rate := profiler allocationsStats allocationRatePerSecond.
 	^ rate asInteger asStringWithCommas , ' allocations per second'
 ]
 

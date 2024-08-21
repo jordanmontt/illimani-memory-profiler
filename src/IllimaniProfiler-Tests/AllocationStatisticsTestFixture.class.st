@@ -5,7 +5,6 @@ Class {
 	#name : 'AllocationStatisticsTestFixture',
 	#superclass : 'Object',
 	#instVars : [
-		'groupedAndSortedByClassAllocations',
 		'groupedAndSortedByMethodAllocations',
 		'mockedAllocations'
 	],
@@ -20,48 +19,57 @@ AllocationStatisticsTestFixture >> allocationsOne [
 	| allocations |
 	allocations := OrderedCollection new.
 	allocations
-		add: (AllocationSiteInfoModel new
-				 allocatorMethod: Margin >> #asMargin;
+		add: (IllEphemeron new
+				 allocationSite: Margin >> #asMargin;
+				 allocatorClass: Margin;
 				 allocatedObjectClass: OrderedCollection;
 				 sizeInBytes: 16;
 				 yourself);
-		add: (AllocationSiteInfoModel new
-				 allocatorMethod: Margin >> #asMargin;
+		add: (IllEphemeron new
+				 allocationSite: Margin >> #asMargin;
+				 allocatorClass: Margin;
 				 allocatedObjectClass: OrderedCollection;
 				 sizeInBytes: 16;
 				 yourself);
-		add: (AllocationSiteInfoModel new
-				 allocatorMethod: Margin >> #asMargin;
+		add: (IllEphemeron new
+				 allocationSite: Margin >> #asMargin;
+				 allocatorClass: Margin;
 				 allocatedObjectClass: Dictionary;
 				 sizeInBytes: 16;
 				 yourself);
-		add: (AllocationSiteInfoModel new
-				 allocatorMethod: Margin >> #asMargin;
+		add: (IllEphemeron new
+				 allocationSite: Margin >> #asMargin;
+				 allocatorClass: Margin;
 				 allocatedObjectClass: ByteString;
 				 sizeInBytes: 32;
 				 yourself);
-		add: (AllocationSiteInfoModel new
-				 allocatorMethod: Margin >> #asMargin;
+		add: (IllEphemeron new
+				 allocationSite: Margin >> #asMargin;
+				 allocatorClass: Margin;
 				 allocatedObjectClass: ByteString;
 				 sizeInBytes: 48;
 				 yourself);
-		add: (AllocationSiteInfoModel new
-				 allocatorMethod: Margin >> #asMargin;
+		add: (IllEphemeron new
+				 allocationSite: Margin >> #asMargin;
+				 allocatorClass: Margin;
 				 allocatedObjectClass: ByteString;
 				 sizeInBytes: 100;
 				 yourself);
-		add: (AllocationSiteInfoModel new
-				 allocatorMethod: Margin >> #asMargin;
+		add: (IllEphemeron new
+				 allocationSite: Margin >> #asMargin;
+				 allocatorClass: Margin;
 				 allocatedObjectClass: ByteString;
 				 sizeInBytes: 55;
 				 yourself);
-		add: (AllocationSiteInfoModel new
-				 allocatorMethod: Margin >> #asMargin;
+		add: (IllEphemeron new
+				 allocationSite: Margin >> #asMargin;
+				 allocatorClass: Margin;
 				 allocatedObjectClass: Color;
 				 sizeInBytes: 60;
 				 yourself);
-		add: (AllocationSiteInfoModel new
-				 allocatorMethod: Margin >> #asMargin;
+		add: (IllEphemeron new
+				 allocationSite: Margin >> #asMargin;
+				 allocatorClass: Margin;
 				 allocatedObjectClass: Color;
 				 sizeInBytes: 16;
 				 yourself).
@@ -73,8 +81,9 @@ AllocationStatisticsTestFixture >> allocationsThree [
 
 	| allocations |
 	allocations := OrderedCollection new.
-	allocations add: (AllocationSiteInfoModel new
-			 allocatorMethod: Collection>>#sorted:;
+	allocations add: (IllEphemeron new
+			 allocationSite: Collection >> #sorted:;
+			 allocatorClass: Collection;
 			 allocatedObjectClass: ByteArray;
 			 sizeInBytes: 16;
 			 yourself).
@@ -87,28 +96,33 @@ AllocationStatisticsTestFixture >> allocationsTwo [
 	| allocations |
 	allocations := OrderedCollection new.
 	allocations
-		add: (AllocationSiteInfoModel new
-				 allocatorMethod: ArrayedCollection >> #add:;
+		add: (IllEphemeron new
+				 allocationSite: ArrayedCollection >> #add:;
+				 allocatorClass: ArrayedCollection;
 				 allocatedObjectClass: ByteString;
 				 sizeInBytes: 16;
 				 yourself);
-		add: (AllocationSiteInfoModel new
-				 allocatorMethod: ArrayedCollection >> #add:;
+		add: (IllEphemeron new
+				 allocationSite: ArrayedCollection >> #add:;
+				 allocatorClass: ArrayedCollection;
 				 allocatedObjectClass: ByteString;
 				 sizeInBytes: 16;
 				 yourself);
-		add: (AllocationSiteInfoModel new
-				 allocatorMethod: ArrayedCollection >> #add:;
+		add: (IllEphemeron new
+				 allocationSite: ArrayedCollection >> #add:;
+				 allocatorClass: ArrayedCollection;
 				 allocatedObjectClass: ByteString;
 				 sizeInBytes: 32;
 				 yourself);
-		add: (AllocationSiteInfoModel new
-				 allocatorMethod: ArrayedCollection >> #add:;
+		add: (IllEphemeron new
+				 allocationSite: ArrayedCollection >> #add:;
+				 allocatorClass: ArrayedCollection;
 				 allocatedObjectClass: ByteArray;
 				 sizeInBytes: 100;
 				 yourself);
-		add: (AllocationSiteInfoModel new
-				 allocatorMethod: ArrayedCollection >> #add:;
+		add: (IllEphemeron new
+				 allocationSite: ArrayedCollection >> #add:;
+				 allocatorClass: ArrayedCollection;
 				 allocatedObjectClass: ByteArray;
 				 sizeInBytes: 16;
 				 yourself).
@@ -116,7 +130,7 @@ AllocationStatisticsTestFixture >> allocationsTwo [
 ]
 
 { #category : 'fixture' }
-AllocationStatisticsTestFixture >> groupAndSortByAllocatedObjectClassAllocations: someAllocations [
+AllocationStatisticsTestFixture >> groupAndSortByAllocatedClass: someAllocations [
 
 	| groupedAllocations |
 	groupedAllocations := Dictionary new.
@@ -132,42 +146,20 @@ AllocationStatisticsTestFixture >> groupAndSortByAllocatedObjectClassAllocations
 ]
 
 { #category : 'fixture' }
-AllocationStatisticsTestFixture >> groupedAndSortedByClassAllocations [
+AllocationStatisticsTestFixture >> groupedAndSortedByClassAllocator [
 
-	^ (self groupedAndSortedByClassAllocationsOne , self groupedAndSortedByClassAllocationsTwo
-	  , self groupedAndSortedByClassAllocationsThree)
+	^ self mockedAllocations collect: [ :e | e allocatorClass ] as: Set
 ]
 
 { #category : 'fixture' }
-AllocationStatisticsTestFixture >> groupedAndSortedByClassAllocationsOne [
-
-	^ { (self allocationsOne first allocatorClass
-	   -> (self groupAndSortByAllocatedObjectClassAllocations: self allocationsOne)) }
-]
-
-{ #category : 'fixture' }
-AllocationStatisticsTestFixture >> groupedAndSortedByClassAllocationsThree [
-
-	^ { (self allocationsThree first allocatorClass
-	   -> (self groupAndSortByAllocatedObjectClassAllocations: self allocationsThree)) }
-]
-
-{ #category : 'fixture' }
-AllocationStatisticsTestFixture >> groupedAndSortedByClassAllocationsTwo [
-
-	^ { (self allocationsTwo first allocatorClass
-	   -> (self groupAndSortByAllocatedObjectClassAllocations: self allocationsTwo)) }
-]
-
-{ #category : 'fixture' }
-AllocationStatisticsTestFixture >> groupedAndSortedByMethodAllocations [
+AllocationStatisticsTestFixture >> groupedAndSortedByMethodAllocators [
 
 	| dict |
 	dict := Dictionary new.
 
 	self mockedAllocations do: [ :allo |
 		dict
-			at: allo allocatorMethod
+			at: allo allocationSite
 			update: [ :e |
 				e
 					add: allo;
@@ -175,7 +167,7 @@ AllocationStatisticsTestFixture >> groupedAndSortedByMethodAllocations [
 			initial: [ OrderedCollection with: allo ] ].
 
 	^ (dict associations sort: [ :a :b | a value size > b value size ]) collect: [ :e |
-		  e key -> (self groupAndSortByAllocatedObjectClassAllocations: e value) ]
+		  e key -> (self groupAndSortByAllocatedClass: e value) ]
 ]
 
 { #category : 'initialization' }
@@ -183,8 +175,7 @@ AllocationStatisticsTestFixture >> initialize [
 
 	super initialize.
 	mockedAllocations := self allocationsThree , self allocationsTwo , self allocationsOne.
-	groupedAndSortedByClassAllocations := self groupedAndSortedByClassAllocations.
-	groupedAndSortedByMethodAllocations := self groupedAndSortedByMethodAllocations
+	groupedAndSortedByMethodAllocations := self groupedAndSortedByMethodAllocators
 ]
 
 { #category : 'fixture' }

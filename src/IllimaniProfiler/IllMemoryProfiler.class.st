@@ -1,45 +1,46 @@
-"
-I am an object lifetimes profiler. I profile how much time do the objects live. I use finalization (ephemerons) in my implementation.
-"
 Class {
-	#name : 'IllObjectLifetimesProfiler',
+	#name : 'IllMemoryProfiler',
 	#superclass : 'IllAbstractProfiler',
 	#instVars : [
 		'ephemeronsCollection',
 		'statsModel'
 	],
-	#category : 'IllimaniProfiler-Object-Lifetimes-Profiler',
+	#category : 'IllimaniProfiler-Profiler',
 	#package : 'IllimaniProfiler',
-	#tag : 'Object-Lifetimes-Profiler'
+	#tag : 'Profiler'
 }
 
 { #category : 'accessing - statistics' }
-IllObjectLifetimesProfiler >> allocationsStats [
+IllMemoryProfiler >> allocationsStats [
 
-	^ statsModel ifNil: [ statsModel := FinalizationStatsModel on: ephemeronsCollection ]
+	self isProfilingFinished
+		ifFalse: [ ^ Warning signal: 'Need to wait until the profiling is finished to access the stats' ].
+
+	^ statsModel ifNil: [
+		  statsModel := IllStatsModel objectAllocations: ephemeronsCollection totalProfiledTime: totalTime ]
 ]
 
 { #category : 'exporting' }
-IllObjectLifetimesProfiler >> exporterClass [
+IllMemoryProfiler >> exporterClass [
 
-	^ IllObjectLifetimesExporter
+	^ IllMemoryProfilerExporter
 ]
 
 { #category : 'profiling' }
-IllObjectLifetimesProfiler >> forceFinalizationOfObjects [
+IllMemoryProfiler >> forceFinalizationOfObjects [
 
 	ephemeronsCollection do: [ :e | e forceFinalization ]
 ]
 
 { #category : 'initialization' }
-IllObjectLifetimesProfiler >> initialize [
+IllMemoryProfiler >> initialize [
 
 	super initialize.
 	ephemeronsCollection := OrderedCollection new: 100000000
 ]
 
 { #category : 'profiling' }
-IllObjectLifetimesProfiler >> internalRegisterAllocation: newlyAllocatedObject [
+IllMemoryProfiler >> internalRegisterAllocation: newlyAllocatedObject [
 	
 	| metaClass filteredContext |
 	
@@ -54,21 +55,23 @@ IllObjectLifetimesProfiler >> internalRegisterAllocation: newlyAllocatedObject [
 	[ "get out of the receiver. E.g. the new method"
 	filteredContext receiver class = metaClass ] whileTrue:
 		[ filteredContext := filteredContext sender ].
-	
+
 	ephemeronsCollection add: (IllEphemeron newTenured 
 		key: newlyAllocatedObject value: nil;
 		allocationSite: filteredContext compiledCode method;
+		"The allocator class is important since the allocator method can be defined in the super class"
+		allocatorClass: filteredContext receiver class;
 		yourself)
 ]
 
 { #category : 'accessing' }
-IllObjectLifetimesProfiler >> objectAllocations [
+IllMemoryProfiler >> objectAllocations [
 
 	^ ephemeronsCollection
 ]
 
 { #category : 'profiling' }
-IllObjectLifetimesProfiler >> stopProfiling [
+IllMemoryProfiler >> stopProfiling [
 
 	super stopProfiling.
 	self forceFinalizationOfObjects

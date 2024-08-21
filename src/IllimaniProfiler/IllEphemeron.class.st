@@ -10,11 +10,12 @@ Class {
 		'survivedScavenges',
 		'survivedFullGC',
 		'forcedFinalization',
-		'allocationSite'
+		'allocationSite',
+		'allocatorClass'
 	],
-	#category : 'IllimaniProfiler-Object-Lifetimes-Profiler',
+	#category : 'IllimaniProfiler-Profiler',
 	#package : 'IllimaniProfiler',
-	#tag : 'Object-Lifetimes-Profiler'
+	#tag : 'Profiler'
 }
 
 { #category : 'accessing' }
@@ -42,6 +43,18 @@ IllEphemeron >> allocationSite: aMethod [
 ]
 
 { #category : 'accessing' }
+IllEphemeron >> allocatorClass [
+
+	^ allocatorClass
+]
+
+{ #category : 'accessing' }
+IllEphemeron >> allocatorClass: anObject [
+
+	allocatorClass := anObject
+]
+
+{ #category : 'accessing' }
 IllEphemeron >> finalizationTime [
 
 	^ finalizationTime
@@ -64,7 +77,7 @@ IllEphemeron >> flattenedInstanceVariables [
 		  survivedScavenges.
 		  survivedFullGC.
 		  forcedFinalization.
-		  allocationSite }
+		  allocationSite name }
 ]
 
 { #category : 'finalization' }
@@ -133,6 +146,18 @@ IllEphemeron >> inspectorExtension: aBuilder [
 		items: items;
 		beResizable.
 	^ tablePresenter
+]
+
+{ #category : 'inspector - extensions' }
+IllEphemeron >> inspectorExtensionSenders: aBuilder [
+
+	"<inspectorPresentationOrder: 2 title: 'Senders'>"
+	| senders |
+	"senders not yet implemented"
+	^ aBuilder newList
+		items: (senders reject: #isNil);
+		display: [ :aMethod | "we ask the method because of the compiled blocks" aMethod method name ];
+		yourself
 ]
 
 { #category : 'accessing' }
