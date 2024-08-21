@@ -68,7 +68,9 @@ ProfilerSummaryPresenter >> generalStatsAssociations [
 		('Total allocated memory' ->
 			profiler allocationsStats totalAllocatedMemory humanReadableByteSizeString).
 		('Allocated memory rate' -> self allocatedMemoryRateString).
-		('Profiled code' -> profiler profiledCode) }
+		('Profiled code' -> profiler profiledCode).
+		('Classes that allocate objects' -> profiler allocationsStats numberOfAllocatorClasses asString).
+		 ('Methods that allocate objects' -> profiler allocationsStats numberOfAllocatorMethods asString) }
 ]
 
 { #category : 'accessing - model' }

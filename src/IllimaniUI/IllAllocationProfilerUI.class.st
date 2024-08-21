@@ -42,7 +42,6 @@ IllAllocationProfilerUI >> allocationsPerSecondPerAllocatorPresenter [
 { #category : 'accessing' }
 IllAllocationProfilerUI >> codeEvaluatorText [
     ^ 'self objectAllocations.
-self stats allocationsByClass.
 self stats allocationsByMethod'
 ]
 

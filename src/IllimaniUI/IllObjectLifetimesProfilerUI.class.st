@@ -4,28 +4,55 @@ Class {
 	#instVars : [
 		'gcCyclesTable',
 		'frequencyHistogramPresenter',
-		'relativeFrequenciesTable',
-		'avgLifetimesTablePresenter'
+		'allocatorsTablePresenter',
+		'relativeLifetimesTable',
+		'allocatedObjectsTablePresenter',
+		'heatmapPresenter',
+		'allocatedObjectsPerSecondPresenter',
+		'allocationsPerSecondPerAllocatorPresenter'
 	],
 	#category : 'IllimaniUI-Main Presenter',
 	#package : 'IllimaniUI',
 	#tag : 'Main Presenter'
 }
 
-{ #category : 'initialization' }
-IllObjectLifetimesProfilerUI >> avgLifetimesTablePresenter [
+{ #category : 'accessing - lazy roassal presenters' }
+IllObjectLifetimesProfilerUI >> allocatedObjectsPerSecondPresenter [
 
-	avgLifetimesTablePresenter ifNil: [ self initializeAvgLifetimesTablePresenter ].
-	^ avgLifetimesTablePresenter
+	allocatedObjectsPerSecondPresenter ifNil: [ self initializeAllocatedObjectsPerSecond ].
+	^ allocatedObjectsPerSecondPresenter
+]
+
+{ #category : 'accessing - lazy presenters' }
+IllObjectLifetimesProfilerUI >> allocatedObjectsTablePresenter [
+
+	allocatedObjectsTablePresenter ifNil: [ self initializeAllocatedObjectsTablePresenter ].
+	^ allocatedObjectsTablePresenter
+]
+
+{ #category : 'accessing - lazy roassal presenters' }
+IllObjectLifetimesProfilerUI >> allocationsPerSecondPerAllocatorPresenter [
+
+	allocationsPerSecondPerAllocatorPresenter ifNil: [ self initializeAllocationsPerSecondPerAllocator ].
+	^ allocationsPerSecondPerAllocatorPresenter
+]
+
+{ #category : 'accessing - lazy presenters' }
+IllObjectLifetimesProfilerUI >> allocatorsTablePresenter [
+
+	allocatorsTablePresenter ifNil: [ self initializeAllocatorsTablePresenter ].
+	^ allocatorsTablePresenter
 ]
 
 { #category : 'accessing' }
 IllObjectLifetimesProfilerUI >> codeEvaluatorText [
 
-	^ 'self objectAllocations'
+	^
+'self objectAllocations.
+self stats allocationsByMethod'
 ]
 
-{ #category : 'accessing - lazy presenters' }
+{ #category : 'accessing - lazy roassal presenters' }
 IllObjectLifetimesProfilerUI >> frequencyHistogramPresenter [
 
 	frequencyHistogramPresenter ifNil: [ self initializeFrequencyHistogramPresenter ].
@@ -39,13 +66,50 @@ IllObjectLifetimesProfilerUI >> gcCyclesTable [
 	^ gcCyclesTable
 ]
 
-{ #category : 'initialization' }
-IllObjectLifetimesProfilerUI >> initializeAvgLifetimesTablePresenter [
+{ #category : 'accessing - lazy roassal presenters' }
+IllObjectLifetimesProfilerUI >> heatMapPresenter [
 
-	avgLifetimesTablePresenter := ObjectLifetimesTablePresenter on: profiler
+	heatmapPresenter ifNil: [ self initializeHeatmapPresenter ].
+	^ heatmapPresenter
+]
+
+{ #category : 'initialization - lazy roassal presenters' }
+IllObjectLifetimesProfilerUI >> initializeAllocatedObjectsPerSecond [
+
+	allocatedObjectsPerSecondPresenter := SpRoassalPresenter new
+		canvas: (RoassaHelperChartBuilder new
+			model: profiler;
+			topCalculationsNumber: 10;
+			allocatedObjectsPerSecondLineChartCanvas);
+		yourself
 ]
 
 { #category : 'initialization - lazy presenters' }
+IllObjectLifetimesProfilerUI >> initializeAllocatedObjectsTablePresenter [
+
+	allocatedObjectsTablePresenter := ObjectLifetimesTablePresenter on: profiler
+]
+
+{ #category : 'initialization - lazy roassal presenters' }
+IllObjectLifetimesProfilerUI >> initializeAllocationsPerSecondPerAllocator [
+
+	allocationsPerSecondPerAllocatorPresenter := SpRoassalPresenter new
+		canvas: (RoassaHelperChartBuilder new
+			model: profiler;
+			topCalculationsNumber: 10;
+			allocatedObjectsPerSecondPerMethodLineChartCanvas);
+		yourself
+]
+
+{ #category : 'initialization - lazy presenters' }
+IllObjectLifetimesProfilerUI >> initializeAllocatorsTablePresenter [
+
+	allocatorsTablePresenter := AllocationsByAllocatorTablePresenter
+		owner: self
+		on: profiler allocationsStats allocationsByMethod
+]
+
+{ #category : 'initialization - lazy roassal presenters' }
 IllObjectLifetimesProfilerUI >> initializeFrequencyHistogramPresenter [
 
 	frequencyHistogramPresenter := FrequencyHistogramRoassalPresenter on: profiler
@@ -62,33 +126,44 @@ IllObjectLifetimesProfilerUI >> initializeGCCyclesTable [
 		yourself
 ]
 
+{ #category : 'initialization - lazy roassal presenters' }
+IllObjectLifetimesProfilerUI >> initializeHeatmapPresenter [
+
+	| roassalPresenterByMethod |
+	roassalPresenterByMethod := self instantiate: SpRoassalPresenter.
+	roassalPresenterByMethod canvas: (RoassaHelperChartBuilder new
+		model: profiler;
+		topCalculationsNumber: 10;
+		heatmapAllocatorAllocatedCanvasByMethod).
+
+	heatmapPresenter := roassalPresenterByMethod
+]
+
 { #category : 'initialization' }
 IllObjectLifetimesProfilerUI >> initializeNotebook [
 
 	notebookPresenter := self newNotebook
 		addPageTitle: 'Summary' provider: [ self summaryAndEvaluatorPresenter ];
-		addPageTitle: 'Avg Lifetimes' provider: [ self avgLifetimesTablePresenter ];
+		addPageTitle: 'Allocated objects' provider: [ self allocatedObjectsTablePresenter ];
+		addPageTitle: 'Allocation sites' provider: [ self allocatorsTablePresenter ];
 		addPageTitle: 'Survived GC cycles' provider: [ self gcCyclesTable ];
-		addPageTitle: 'Relative Frequencies Table' provider: [ self lifetimesTable ];
-		addPageTitle: 'Relative frequencies' provider: [ self frequencyHistogramPresenter ];
+		addPageTitle: 'Grouped lifetimes' provider: [ self relativeLifetimesTable ];
+		
+		addPageTitle: 'Lifetimes histogram' provider: [ self frequencyHistogramPresenter ];
+		addPageTitle: 'Heatmap' provider: [ self heatMapPresenter ];
+		addPageTitle: 'Allocations per Second Total' provider: [ self allocatedObjectsPerSecondPresenter ];
+		addPageTitle: 'Allocations per Second per Allocator' provider: [ self allocationsPerSecondPerAllocatorPresenter ];
 		
 		addPageTitle: 'Evaluator' provider: [ self codeEvaluator ];
 		yourself
 ]
 
 { #category : 'initialization - lazy presenters' }
-IllObjectLifetimesProfilerUI >> initializeRelativeFrequenciesTable [
+IllObjectLifetimesProfilerUI >> initializeRelativeLifetimesTable [
 
-	relativeFrequenciesTable := self
+	relativeLifetimesTable := self
 		instantiate: RelativeLifetimesBySecondTablePresenter
 		on: profiler objectAllocations
-]
-
-{ #category : 'accessing - lazy presenters' }
-IllObjectLifetimesProfilerUI >> lifetimesTable [
-
-	relativeFrequenciesTable ifNil: [ self initializeRelativeFrequenciesTable ].
-	^ relativeFrequenciesTable
 ]
 
 { #category : 'initialization - lazy presenters' }
@@ -102,6 +177,13 @@ IllObjectLifetimesProfilerUI >> refresh [
 
 	frequencyHistogramPresenter := nil.
 	self layout: self defaultLayout
+]
+
+{ #category : 'accessing - lazy presenters' }
+IllObjectLifetimesProfilerUI >> relativeLifetimesTable [
+
+	relativeLifetimesTable ifNil: [ self initializeRelativeLifetimesTable ].
+	^ relativeLifetimesTable
 ]
 
 { #category : 'initialization' }

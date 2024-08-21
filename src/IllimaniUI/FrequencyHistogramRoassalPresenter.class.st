@@ -15,7 +15,7 @@ FrequencyHistogramRoassalPresenter >> addChartTitles: chart [
 
 	chart xlabel: 'Relative execution time'.
 	chart ylabel: 'Allocated objects'.
-	chart title: 'Relative frequencies histogram'
+	chart title: 'Relative object lifetime frequencies'
 ]
 
 { #category : 'api' }
