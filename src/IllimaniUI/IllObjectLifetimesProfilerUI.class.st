@@ -151,8 +151,8 @@ IllObjectLifetimesProfilerUI >> initializeNotebook [
 		
 		addPageTitle: 'Lifetimes histogram' provider: [ self frequencyHistogramPresenter ];
 		addPageTitle: 'Heatmap' provider: [ self heatMapPresenter ];
-		addPageTitle: 'Allocations per Second Total' provider: [ self allocatedObjectsPerSecondPresenter ];
-		addPageTitle: 'Allocations per Second per Allocator' provider: [ self allocationsPerSecondPerAllocatorPresenter ];
+		addPageTitle: 'Allocations in time' provider: [ self allocatedObjectsPerSecondPresenter ];
+		addPageTitle: 'Allocations per allocator' provider: [ self allocationsPerSecondPerAllocatorPresenter ];
 		
 		addPageTitle: 'Evaluator' provider: [ self codeEvaluator ];
 		yourself
@@ -164,12 +164,6 @@ IllObjectLifetimesProfilerUI >> initializeRelativeLifetimesTable [
 	relativeLifetimesTable := self
 		instantiate: RelativeLifetimesBySecondTablePresenter
 		on: profiler objectAllocations
-]
-
-{ #category : 'initialization - lazy presenters' }
-IllObjectLifetimesProfilerUI >> profilerSummaryPresenter [
-
-	^ ProfilerSummaryPresenter on: profiler
 ]
 
 { #category : 'actions' }
@@ -189,5 +183,5 @@ IllObjectLifetimesProfilerUI >> relativeLifetimesTable [
 { #category : 'initialization' }
 IllObjectLifetimesProfilerUI >> title [
 
-	^ 'Illimani Finalization Memory Profiler'
+	^ 'Illimani Memory Profiler'
 ]

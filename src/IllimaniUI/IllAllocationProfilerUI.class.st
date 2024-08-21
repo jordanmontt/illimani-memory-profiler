@@ -165,7 +165,7 @@ IllAllocationProfilerUI >> memoryTablePresenter [
 { #category : 'initialization - lazy presenters' }
 IllAllocationProfilerUI >> profilerSummaryPresenter [
 
-	^ ProfilerWithAllocationSiteSummaryPresenter on: profiler
+	^ ProfilerSummaryPresenter on: profiler
 ]
 
 { #category : 'actions' }

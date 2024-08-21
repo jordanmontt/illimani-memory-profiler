@@ -52,7 +52,7 @@ ProfilerSummaryPresenter >> defaultLayout [
 			add: generalStatsTable;
 			yourself );
 		add: gcReport;
-		positionOfSlider: 0.33;
+		positionOfSlider: 0.35;
 		yourself
 ]
 
