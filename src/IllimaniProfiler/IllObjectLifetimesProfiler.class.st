@@ -39,10 +39,25 @@ IllObjectLifetimesProfiler >> initialize [
 ]
 
 { #category : 'profiling' }
-IllObjectLifetimesProfiler >> internalRegisterAllocation: anObject [
+IllObjectLifetimesProfiler >> internalRegisterAllocation: newlyAllocatedObject [
+	
+	| metaClass filteredContext |
+	
+	metaClass := newlyAllocatedObject class class.
+
+	filteredContext := thisContext
+		sender "this is me, this profiler"
+		sender "this is the AbstractProfiler (my super class)"
+		sender "this is the IllHandler"
+		sender "this is the trapped instrumented method".
+
+	[ "get out of the receiver. E.g. the new method"
+	filteredContext receiver class = metaClass ] whileTrue:
+		[ filteredContext := filteredContext sender ].
 	
 	ephemeronsCollection add: (IllEphemeron newTenured 
-		key: anObject value: nil;
+		key: newlyAllocatedObject value: nil;
+		allocationSite: filteredContext compiledCode method;
 		yourself)
 ]
 

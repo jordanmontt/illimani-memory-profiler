@@ -9,7 +9,8 @@ Class {
 		'allocatedObjectClass',
 		'survivedScavenges',
 		'survivedFullGC',
-		'forcedFinalization'
+		'forcedFinalization',
+		'allocationSite'
 	],
 	#category : 'IllimaniProfiler-Object-Lifetimes-Profiler',
 	#package : 'IllimaniProfiler',
@@ -26,6 +27,18 @@ IllEphemeron >> allocatedObjectClass [
 IllEphemeron >> allocatedObjectClass: anObject [
 
 	allocatedObjectClass := anObject
+]
+
+{ #category : 'accessing' }
+IllEphemeron >> allocationSite [
+
+	^ allocationSite
+]
+
+{ #category : 'accessing' }
+IllEphemeron >> allocationSite: aMethod [
+
+	allocationSite := aMethod
 ]
 
 { #category : 'accessing' }
@@ -50,7 +63,8 @@ IllEphemeron >> flattenedInstanceVariables [
 		  allocatedObjectClass.
 		  survivedScavenges.
 		  survivedFullGC.
-		  forcedFinalization }
+		  forcedFinalization.
+		  allocationSite }
 ]
 
 { #category : 'finalization' }
@@ -96,12 +110,13 @@ IllEphemeron >> inspectionElements [
 
 	^ {
 		  ('Allocated Object Class' -> allocatedObjectClass).
-		  ('Memory Size' -> sizeInBytes humanReadableByteSizeString).
-		  ('Initialization time' -> initializationTime).
-		  ('Finalization time' -> finalizationTime).
 		  ('Object''s lifetime' -> self lifetimeAsDuration humanReadablePrintString).
+		  ('Allocation site' -> allocationSite).
+		  ('Memory Size' -> sizeInBytes humanReadableByteSizeString).
 		  ('Survived scavenges' -> survivedScavenges).
 		  ('Survived full GCs' -> survivedFullGC).
+		  ('Initialization time' -> initializationTime).
+		  ('Finalization time' -> finalizationTime).
 		  ('Finalization was forced?' -> forcedFinalization) }
 ]
 

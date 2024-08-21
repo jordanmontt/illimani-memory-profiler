@@ -56,7 +56,6 @@ Class {
 	#instVars : [
 		'statisticsModel',
 		'copyExecutionStack',
-		'classesToAvoidInTheContextSearch',
 		'objectAllocations'
 	],
 	#category : 'IllimaniProfiler-Allocation-Profiler',
@@ -71,20 +70,6 @@ IllAllocationSiteProfiler >> allocationsStats [
 		  statisticsModel := AllocationsStatsModel new rawAllocations: objectAllocations ]
 ]
 
-{ #category : 'initialization' }
-IllAllocationSiteProfiler >> defaultClassesToAvoidInTheContextSearch [
-
-	^ {
-		  "Process."
-		  IllAllocationSiteProfiler.
-		  IllAbstractProfiler.
-		  IllHandler.
-		  "MpMethodProxy."
-		  "BlockClosure."
-		  "FullBlockClosure"
-		  "CompiledBlock" }
-]
-
 { #category : 'exporting' }
 IllAllocationSiteProfiler >> exporterClass [
 
@@ -95,9 +80,7 @@ IllAllocationSiteProfiler >> exporterClass [
 IllAllocationSiteProfiler >> initialize [
 
 	super initialize.
-	objectAllocations := OrderedCollection new: 10000000.
-	copyExecutionStack := false.
-	classesToAvoidInTheContextSearch := self defaultClassesToAvoidInTheContextSearch
+	objectAllocations := OrderedCollection new: 10000000
 ]
 
 { #category : 'profiling' }

@@ -18,7 +18,7 @@ IllObjectLifetimesExporter class >> on: aProfiler [
 IllObjectLifetimesExporter >> headerOfAllocationModel [ 
 
 	^ #( #finalizationTimeInMicroSeconds #sizeInBytes #initializationTimeInMicroSeconds #allocatedObjectClass
-	     #survivedScavenges #survivedFullGCs #forcedFinalization )
+	     #survivedScavenges #survivedFullGCs #forcedFinalization #allocationSite )
 ]
 
 { #category : 'exporting' }
