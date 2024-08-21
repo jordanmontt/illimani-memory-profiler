@@ -32,7 +32,7 @@ IllFinalizationExporterTest >> expectedCSVHeader [
 { #category : 'exporting' }
 IllFinalizationExporterTest >> exporterClass [
 
-	^ IllFinalizationExporter
+	^ IllObjectLifetimesExporter
 ]
 
 { #category : 'running' }

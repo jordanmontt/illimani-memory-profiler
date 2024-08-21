@@ -39,7 +39,6 @@ IllAllocationSiteExporterTest >> fakeAllocations [
 	allocatorClasses := 'Kernel' asPackage definedClasses asArray last: 10.
 	^ (1 to: 1000) collect: [ :i | AllocationSiteInfoModel new
 		allocatedObjectClass: allocatedClasses atRandom;
-		allocatorClass: allocatorClasses atRandom;
 		allocatorMethod: Collection>>#sorted:;
 		sizeInBytes: 100;
 		yourself ]

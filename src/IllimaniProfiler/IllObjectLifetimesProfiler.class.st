@@ -1,56 +1,59 @@
+"
+I am an object lifetimes profiler. I profile how much time do the objects live. I use finalization (ephemerons) in my implementation.
+"
 Class {
-	#name : 'IllFinalizationProfiler',
+	#name : 'IllObjectLifetimesProfiler',
 	#superclass : 'IllAbstractProfiler',
 	#instVars : [
 		'ephemeronsCollection',
 		'statsModel'
 	],
-	#category : 'IllimaniProfiler-Finalization-Profiler',
+	#category : 'IllimaniProfiler-Object-Lifetimes-Profiler',
 	#package : 'IllimaniProfiler',
-	#tag : 'Finalization-Profiler'
+	#tag : 'Object-Lifetimes-Profiler'
 }
 
 { #category : 'accessing - statistics' }
-IllFinalizationProfiler >> allocationsStats [
+IllObjectLifetimesProfiler >> allocationsStats [
 
 	^ statsModel ifNil: [ statsModel := FinalizationStatsModel on: ephemeronsCollection ]
 ]
 
 { #category : 'exporting' }
-IllFinalizationProfiler >> exporterClass [
+IllObjectLifetimesProfiler >> exporterClass [
 
-	^ IllFinalizationExporter
+	^ IllObjectLifetimesExporter
 ]
 
 { #category : 'profiling' }
-IllFinalizationProfiler >> forceFinalizationOfObjects [
+IllObjectLifetimesProfiler >> forceFinalizationOfObjects [
 
 	ephemeronsCollection do: [ :e | e forceFinalization ]
 ]
 
 { #category : 'initialization' }
-IllFinalizationProfiler >> initialize [
+IllObjectLifetimesProfiler >> initialize [
 
 	super initialize.
 	ephemeronsCollection := OrderedCollection new: 100000000
 ]
 
 { #category : 'profiling' }
-IllFinalizationProfiler >> internalRegisterAllocation: anObject [
+IllObjectLifetimesProfiler >> internalRegisterAllocation: anObject [
 	
-	ephemeronsCollection add: (IllEphemeron newPinned 
+	ephemeronsCollection add: (IllEphemeron newTenured 
 		key: anObject value: nil;
 		yourself)
 ]
 
 { #category : 'accessing' }
-IllFinalizationProfiler >> objectAllocations [
+IllObjectLifetimesProfiler >> objectAllocations [
 
 	^ ephemeronsCollection
 ]
 
 { #category : 'profiling' }
-IllFinalizationProfiler >> stopProfiling [
+IllObjectLifetimesProfiler >> stopProfiling [
 
 	super stopProfiling.
 	self forceFinalizationOfObjects

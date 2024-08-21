@@ -1,5 +1,13 @@
 "
-I am the abstract class that proviedes infrastructure for all the profilers. You can subclass me to craft your own custom profiler.
+I am the abstract class that proviedes infrastructure for all the profilers. You can subclass me to craft your own custom profiler. You can see my subclasses as examples of custom profilers.
+
+- Sampling rate: I have a default sampling rate for capturing the allocations, so I do not capture the 100% of allocations by default.
+- Exporting: I can export my data in form of json and csv. I can export the metadata and the raw allocations.
+- GUI: I also provide a GUI that the users can use to navigate my data. But, I can be fully used without the GUI too.
+- GC logger: I also provide a garbage collector logger that logs the GC activity one per second and then exports the data. By default, the logger is a null object, so it doesn't log anything by default.
+- VM statistics and statistics in general
+- Announcement when the profiling has stopped: I make an announcement when the profiler has finished profiling.
+
 "
 Class {
 	#name : 'IllAbstractProfiler',
@@ -7,17 +15,13 @@ Class {
 	#instVars : [
 		'samplingCounter',
 		'samplingRate',
-		'handler',
-		'proxyBasicNew',
-		'proxyBasicNewKeyword',
-		'proxyArrayClass',
 		'vmStats',
 		'totalTime',
 		'startTime',
-		'proxyCopy',
 		'profiledCode',
 		'gcActivityMonitor',
-		'illimaniAnnouncer'
+		'illimaniAnnouncer',
+		'instrumentator'
 	],
 	#category : 'IllimaniProfiler-Instrumentation',
 	#package : 'IllimaniProfiler',
@@ -58,8 +62,16 @@ IllAbstractProfiler >> beginningOfProfilingTime [
 
 { #category : 'exporting' }
 IllAbstractProfiler >> exportData [
+	"This exports BOTH the metadata AND the raw allocations"
 
 	(self exporterClass on: self) exportData
+]
+
+{ #category : 'exporting' }
+IllAbstractProfiler >> exportMetaData [
+	"This exports ONLY the medata data, not the raw allocations"
+
+	(self exporterClass on: self) exportMetaData
 ]
 
 { #category : 'exporting' }
@@ -70,10 +82,8 @@ IllAbstractProfiler >> exporterClass [
 
 { #category : 'api' }
 IllAbstractProfiler >> forceUninstall [
-	"Warning, do not use unless you cannot start the profiler because you have the
-	MpCannotInstall exception"
 
-	MpMethodProxy allInstances do: #uninstall
+	instrumentator forceUninstall
 ]
 
 { #category : 'accessing' }
@@ -92,23 +102,11 @@ IllAbstractProfiler >> illimaniAnnouncer [
 IllAbstractProfiler >> initialize [
 
 	super initialize.
-	handler := IllHandler new
-		profiler: self;
-		yourself.
 	illimaniAnnouncer := IllAnnouncer new.
-	self initializeMethodProxies: handler.
+	instrumentator := IllInstrumentator onProfiler: self.
 	samplingCounter := 0.
-	samplingRate := 1.
+	self samplingRate: 1/100.
 	gcActivityMonitor := NullGCActivityMonitor new
-]
-
-{ #category : 'initialization' }
-IllAbstractProfiler >> initializeMethodProxies: aHandler [
-
-	proxyBasicNew := MpMethodProxy onMethod: Behavior >> #basicNew handler: aHandler.
-	proxyBasicNewKeyword := MpMethodProxy onMethod: Behavior >> #basicNew: handler: aHandler.
-	proxyCopy := MpMethodProxy onMethod: Object >> #shallowCopy handler: aHandler. 
-	proxyArrayClass := MpMethodProxy onMethod: Array class >> #new: handler: aHandler
 ]
 
 { #category : 'profiling' }
@@ -119,12 +117,9 @@ IllAbstractProfiler >> initializeVMStats [
 ]
 
 { #category : 'profiling' }
-IllAbstractProfiler >> installMethodProxies [
+IllAbstractProfiler >> instrument [
 
-	proxyBasicNewKeyword install.
-	proxyBasicNew install.
-	proxyArrayClass install.
-	proxyCopy install
+	instrumentator instrument
 ]
 
 { #category : 'profiling' }
@@ -289,6 +284,7 @@ IllAbstractProfiler >> samplingRate [
 IllAbstractProfiler >> samplingRate: aFraction [
 	"I expect my argument to be a fraction. For example 4 / 5. That will mean that I will
 	register 4 out of 5 allocations."
+	"The default sampling rate is 1%, which, by our evaluations, still gives precise results and does not sacrifice too much performance"
 
 	samplingRate := aFraction
 ]
@@ -297,14 +293,14 @@ IllAbstractProfiler >> samplingRate: aFraction [
 IllAbstractProfiler >> startProfiling [
 
 	gcActivityMonitor run.
-	self installMethodProxies.
-	self initializeVMStats
+	self initializeVMStats.
+	self instrument
 ]
 
 { #category : 'profiling' }
 IllAbstractProfiler >> stopProfiling [
 
-	self uninstallMethodProxies.
+	self uninstrument.
 	self updateVMStats.
 	gcActivityMonitor terminate.
 	self announceProfilerStopedProfiling
@@ -335,12 +331,9 @@ IllAbstractProfiler >> totalTime [
 ]
 
 { #category : 'profiling' }
-IllAbstractProfiler >> uninstallMethodProxies [
+IllAbstractProfiler >> uninstrument [
 
-	proxyBasicNew uninstall.
-	proxyBasicNewKeyword uninstall.
-	proxyArrayClass uninstall.
-	proxyCopy uninstall
+	instrumentator uninstrument
 ]
 
 { #category : 'profiling' }

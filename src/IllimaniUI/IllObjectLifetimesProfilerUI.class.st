@@ -1,5 +1,5 @@
 Class {
-	#name : 'IllFinalizationProfilerUI',
+	#name : 'IllObjectLifetimesProfilerUI',
 	#superclass : 'IllAbstractUI',
 	#instVars : [
 		'gcCyclesTable',
@@ -13,46 +13,46 @@ Class {
 }
 
 { #category : 'initialization' }
-IllFinalizationProfilerUI >> avgLifetimesTablePresenter [
+IllObjectLifetimesProfilerUI >> avgLifetimesTablePresenter [
 
 	avgLifetimesTablePresenter ifNil: [ self initializeAvgLifetimesTablePresenter ].
 	^ avgLifetimesTablePresenter
 ]
 
 { #category : 'accessing' }
-IllFinalizationProfilerUI >> codeEvaluatorText [
+IllObjectLifetimesProfilerUI >> codeEvaluatorText [
 
 	^ 'self objectAllocations'
 ]
 
 { #category : 'accessing - lazy presenters' }
-IllFinalizationProfilerUI >> frequencyHistogramPresenter [
+IllObjectLifetimesProfilerUI >> frequencyHistogramPresenter [
 
 	frequencyHistogramPresenter ifNil: [ self initializeFrequencyHistogramPresenter ].
 	^ frequencyHistogramPresenter
 ]
 
 { #category : 'accessing - lazy presenters' }
-IllFinalizationProfilerUI >> gcCyclesTable [
+IllObjectLifetimesProfilerUI >> gcCyclesTable [
 
 	gcCyclesTable ifNil: [ self initializeGCCyclesTable ].
 	^ gcCyclesTable
 ]
 
 { #category : 'initialization' }
-IllFinalizationProfilerUI >> initializeAvgLifetimesTablePresenter [
+IllObjectLifetimesProfilerUI >> initializeAvgLifetimesTablePresenter [
 
 	avgLifetimesTablePresenter := ObjectLifetimesTablePresenter on: profiler
 ]
 
 { #category : 'initialization - lazy presenters' }
-IllFinalizationProfilerUI >> initializeFrequencyHistogramPresenter [
+IllObjectLifetimesProfilerUI >> initializeFrequencyHistogramPresenter [
 
 	frequencyHistogramPresenter := FrequencyHistogramRoassalPresenter on: profiler
 ]
 
 { #category : 'initialization - lazy presenters' }
-IllFinalizationProfilerUI >> initializeGCCyclesTable [
+IllObjectLifetimesProfilerUI >> initializeGCCyclesTable [
 
 	gcCyclesTable := AlternatorPresenter new
 	   presenterTwo: (RelativeLifetimesByScavengesTablePresenter on: profiler objectAllocations)
@@ -63,7 +63,7 @@ IllFinalizationProfilerUI >> initializeGCCyclesTable [
 ]
 
 { #category : 'initialization' }
-IllFinalizationProfilerUI >> initializeNotebook [
+IllObjectLifetimesProfilerUI >> initializeNotebook [
 
 	notebookPresenter := self newNotebook
 		addPageTitle: 'Summary' provider: [ self summaryAndEvaluatorPresenter ];
@@ -77,7 +77,7 @@ IllFinalizationProfilerUI >> initializeNotebook [
 ]
 
 { #category : 'initialization - lazy presenters' }
-IllFinalizationProfilerUI >> initializeRelativeFrequenciesTable [
+IllObjectLifetimesProfilerUI >> initializeRelativeFrequenciesTable [
 
 	relativeFrequenciesTable := self
 		instantiate: RelativeLifetimesBySecondTablePresenter
@@ -85,27 +85,27 @@ IllFinalizationProfilerUI >> initializeRelativeFrequenciesTable [
 ]
 
 { #category : 'accessing - lazy presenters' }
-IllFinalizationProfilerUI >> lifetimesTable [
+IllObjectLifetimesProfilerUI >> lifetimesTable [
 
 	relativeFrequenciesTable ifNil: [ self initializeRelativeFrequenciesTable ].
 	^ relativeFrequenciesTable
 ]
 
 { #category : 'initialization - lazy presenters' }
-IllFinalizationProfilerUI >> profilerSummaryPresenter [
+IllObjectLifetimesProfilerUI >> profilerSummaryPresenter [
 
 	^ ProfilerSummaryPresenter on: profiler
 ]
 
 { #category : 'actions' }
-IllFinalizationProfilerUI >> refresh [
+IllObjectLifetimesProfilerUI >> refresh [
 
 	frequencyHistogramPresenter := nil.
 	self layout: self defaultLayout
 ]
 
 { #category : 'initialization' }
-IllFinalizationProfilerUI >> title [
+IllObjectLifetimesProfilerUI >> title [
 
 	^ 'Illimani Finalization Memory Profiler'
 ]

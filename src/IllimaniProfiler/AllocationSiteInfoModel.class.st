@@ -4,11 +4,9 @@ Class {
 	#instVars : [
 		'allocatedObjectClass',
 		'sizeInBytes',
-		'context',
 		'allocatorMethod',
-		'allocatorClass',
-		'contextFingerprint',
-		'initializationTime'
+		'initializationTime',
+		'senders'
 	],
 	#category : 'IllimaniProfiler-Allocation-Profiler',
 	#package : 'IllimaniProfiler',
@@ -30,13 +28,7 @@ AllocationSiteInfoModel >> allocatedObjectClass: anObject [
 { #category : 'accessing' }
 AllocationSiteInfoModel >> allocatorClass [
 
-	^ allocatorClass
-]
-
-{ #category : 'accessing' }
-AllocationSiteInfoModel >> allocatorClass: anObject [
-
-	allocatorClass := anObject
+	^ allocatorMethod methodClass
 ]
 
 { #category : 'accessing' }
@@ -51,30 +43,6 @@ AllocationSiteInfoModel >> allocatorMethod: aCompiledMethod [
 	allocatorMethod := aCompiledMethod
 ]
 
-{ #category : 'accessing' }
-AllocationSiteInfoModel >> context [
-
-	^ context
-]
-
-{ #category : 'accessing' }
-AllocationSiteInfoModel >> context: anObject [
-
-	context := anObject
-]
-
-{ #category : 'accessing' }
-AllocationSiteInfoModel >> contextFingerprint [
-
-	^ contextFingerprint
-]
-
-{ #category : 'accessing' }
-AllocationSiteInfoModel >> contextFingerprint: aContext [
-
-	contextFingerprint := String streamContents: [ :stream | aContext debugStack: 5 on: stream ]
-]
-
 { #category : 'exporting' }
 AllocationSiteInfoModel >> flattenedInstanceVariables [
 
@@ -82,7 +50,7 @@ AllocationSiteInfoModel >> flattenedInstanceVariables [
 		  allocatedObjectClass.
 		  sizeInBytes.
 		  initializationTime.
-		  allocatorClass.
+		  self allocatorClass.
 		  allocatorMethod name }
 ]
 
@@ -104,7 +72,8 @@ AllocationSiteInfoModel >> initialize [
 
 	super initialize.
 	"always in micro-seconds"
-	initializationTime := Time primUTCMicrosecondsClock
+	initializationTime := Time primUTCMicrosecondsClock.
+	senders := Array new: 10
 ]
 
 { #category : 'inspector - extensions' }
@@ -113,9 +82,8 @@ AllocationSiteInfoModel >> inspectableAssociations [
 	^ {
 		  ('Allocated object class' -> allocatedObjectClass).
 		  ('Memory size' -> sizeInBytes humanReadableByteSizeString).
-		  ('Allocator class' -> allocatorClass).
-		  ('Allocator method' -> allocatorMethod).
-		  ('Context' -> context).
+		  ('Allocator class' -> self allocatorClass).
+		  ('Allocator method' -> allocatorMethod name).
 		  ('Initialization timestamp' -> initializationTime) }
 ]
 
@@ -136,10 +104,13 @@ AllocationSiteInfoModel >> inspectorExtension: aBuilder [
 ]
 
 { #category : 'inspector - extensions' }
-AllocationSiteInfoModel >> inspectorExtensionContextFingerprint: aBuilder [
+AllocationSiteInfoModel >> inspectorExtensionSenders: aBuilder [
 
-	"<inspectorPresentationOrder: 2 title: 'Context Fingerprint'>"
-	^ self contextFingerprint contents inspectionFullString
+	<inspectorPresentationOrder: 2 title: 'Senders'>
+	^ aBuilder newList
+		items: (senders reject: #isNil);
+		display: [ :aMethod | "we ask the method because of the compiled blocks" aMethod method name ];
+		yourself
 ]
 
 { #category : 'printing' }
@@ -149,6 +120,18 @@ AllocationSiteInfoModel >> printOn: aStream [
 	<< ' that weights '.
 	sizeInBytes ifNil: [ aStream << ' - ' ]
 		ifNotNil: [ aStream << sizeInBytes humanReadableByteSizeString ]
+]
+
+{ #category : 'accessing' }
+AllocationSiteInfoModel >> senders [
+
+	^ senders
+]
+
+{ #category : 'accessing' }
+AllocationSiteInfoModel >> senders: anArray [
+
+	senders := anArray
 ]
 
 { #category : 'accessing' }

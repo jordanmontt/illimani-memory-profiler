@@ -1,5 +1,5 @@
 Class {
-	#name : 'IllFinalizationProfilerTest',
+	#name : 'IllObjectLifetimesProfilerTest',
 	#superclass : 'IllAbstractProfilerTest',
 	#category : 'IllimaniProfiler-Tests-Finalization-Profiler',
 	#package : 'IllimaniProfiler-Tests',
@@ -7,13 +7,13 @@ Class {
 }
 
 { #category : 'running' }
-IllFinalizationProfilerTest >> profilerClass [
+IllObjectLifetimesProfilerTest >> profilerClass [
 
-	^ IllFinalizationProfiler
+	^ IllObjectLifetimesProfiler
 ]
 
 { #category : 'tests' }
-IllFinalizationProfilerTest >> testOpen [
+IllObjectLifetimesProfilerTest >> testOpen [
 	
 	"Increasing the test time. This is due to CI failures. As the profiler pre-allocates a very
 	big collection, the GCs take time."
@@ -23,24 +23,26 @@ IllFinalizationProfilerTest >> testOpen [
 ]
 
 { #category : 'tests' }
-IllFinalizationProfilerTest >> testProfileOn [
+IllObjectLifetimesProfilerTest >> testProfileOn [
 
 	"Increasing the test time. This is due to CI failures. As the profiler pre-allocates a very
 	big collection, the GCs take time."
 	self timeLimit: 1 minute.
 
-	profiler profileOn: [ 10 timesRepeat: [ IllFinalizationProfiler new ] ].
+	profiler
+		samplingRate: 1;
+		profileOn: [ 10 timesRepeat: [ Object new ] ].
 
 	"We let the GC run for N times to clean the not referenced objects. Because of the
 	implementation of ephemerons, they can have hard references between them so it is
 	necessary to run the GC several times  "
 	3 timesRepeat: [ Smalltalk garbageCollect ].
 
-	self assert: profiler objectAllocations size > 10
+	self assert: profiler objectAllocations size >= 10
 ]
 
 { #category : 'tests' }
-IllFinalizationProfilerTest >> testProfileOnFinalizesCorrectly [
+IllObjectLifetimesProfilerTest >> testProfileOnFinalizesCorrectly [
 
 	| timeNow |
 	"Increasing the test time. This is due to CI failures. As the profiler pre-allocates a very
@@ -48,7 +50,7 @@ IllFinalizationProfilerTest >> testProfileOnFinalizesCorrectly [
 	self timeLimit: 1 minute.
 
 	timeNow := Time microsecondClockValue.
-	profiler profileOn: [ 10 timesRepeat: [ IllFinalizationProfiler new ] ].
+	profiler profileOn: [ 10 timesRepeat: [ IllObjectLifetimesProfiler new ] ].
 
 	"We let the GC run for N times to clean the not referenced objects. Because of the
 	implementation of ephemerons, they can have hard references between them so it is
@@ -63,7 +65,7 @@ IllFinalizationProfilerTest >> testProfileOnFinalizesCorrectly [
 ]
 
 { #category : 'tests' }
-IllFinalizationProfilerTest >> testProfileOnSimple [
+IllObjectLifetimesProfilerTest >> testProfileOnSimple [
 
 	"Increasing the test time. This is due to CI failures. As the profiler pre-allocates a very
 	big collection, the GCs take time."

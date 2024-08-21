@@ -71,16 +71,6 @@ IllAllocationSiteProfiler >> allocationsStats [
 		  statisticsModel := AllocationsStatsModel new rawAllocations: objectAllocations ]
 ]
 
-{ #category : 'api' }
-IllAllocationSiteProfiler >> copyExecutionStack [
-	"When this is set to true, for each object allocationn the full execution stack from which
-	the method was created will be copied and store. This information will be available for
-	making analysis. Keep in mind that when there is a lot of allocations going the size of
-	the image can grow quickly and drastically."
-
-	copyExecutionStack := true
-]
-
 { #category : 'initialization' }
 IllAllocationSiteProfiler >> defaultClassesToAvoidInTheContextSearch [
 
@@ -95,57 +85,52 @@ IllAllocationSiteProfiler >> defaultClassesToAvoidInTheContextSearch [
 		  "CompiledBlock" }
 ]
 
-{ #category : 'api' }
-IllAllocationSiteProfiler >> doNotCopyExecutionStack [
-	"See the comment of my opposite method"
-
-	copyExecutionStack := false
-]
-
 { #category : 'exporting' }
 IllAllocationSiteProfiler >> exporterClass [
 
 	^ IllAllocationSiteExporter
 ]
 
-{ #category : 'profiling' }
-IllAllocationSiteProfiler >> filterContext: aContext ignoringClass: aClass [
-
-	| sender |
-	sender := aContext sender.
-	[
-	sender receiver class = aClass or: [
-		sender receiver class = aClass class or: [
-			classesToAvoidInTheContextSearch includes: sender receiver class ] ] ]
-		whileTrue: [ sender := sender sender ].
-	^ sender
-]
-
 { #category : 'initialization' }
 IllAllocationSiteProfiler >> initialize [
 
 	super initialize.
-	objectAllocations := OrderedCollection new.
+	objectAllocations := OrderedCollection new: 10000000.
 	copyExecutionStack := false.
 	classesToAvoidInTheContextSearch := self defaultClassesToAvoidInTheContextSearch
-	  , (self defaultClassesToAvoidInTheContextSearch collect: [ :aClass | aClass class ])
 ]
 
 { #category : 'profiling' }
 IllAllocationSiteProfiler >> internalRegisterAllocation: newlyAllocatedObject [
 
-	| filteredContext  allocationInformationHolder |
+	| filteredContext  allocationInformationHolder allocatedObjectClass sender senders index metaClass |
 
 	allocationInformationHolder := AllocationSiteInfoModel new.
-	filteredContext := self filterContext: thisContext ignoringClass: newlyAllocatedObject class.
+	allocatedObjectClass := newlyAllocatedObject class.
+	metaClass := allocatedObjectClass class.
 
-	copyExecutionStack ifTrue: [ allocationInformationHolder context: filteredContext copyStack ].
+	filteredContext := thisContext
+		sender "this is me, this profiler"
+		sender "this is the AbstractProfiler (my super class)"
+		sender "this is the IllHandler"
+		sender "this is the trapped instrumented method".
+
+	[ "get out of the receiver. E.g. the new method"
+	filteredContext receiver class = metaClass ] whileTrue:
+		[ filteredContext := filteredContext sender ].
+
+	senders := Array new: 1000.
+	index := 1.
+	sender := filteredContext.
+	[ sender isNotNil. ] whileTrue: [
+		senders at: index put: sender method.
+		index := index + 1.
+		sender := sender sender ].
 
 	allocationInformationHolder
-		allocatorClass: filteredContext receiver class;
-		allocatorMethod: filteredContext compiledCode method;
-		allocatedObjectClass: newlyAllocatedObject class;
-		"contextFingerprint: filteredContext;"
+		allocatorMethod: filteredContext method;
+		allocatedObjectClass: allocatedObjectClass;
+		senders: senders;
 		sizeInBytes: newlyAllocatedObject sizeInMemory.
 
 	objectAllocations add: allocationInformationHolder

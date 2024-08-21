@@ -1,3 +1,6 @@
+"
+I am a null-object proxy method.
+"
 Class {
 	#name : 'IllNullMethodProxy',
 	#superclass : 'Object',

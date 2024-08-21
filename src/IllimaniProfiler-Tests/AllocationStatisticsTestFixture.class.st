@@ -21,56 +21,47 @@ AllocationStatisticsTestFixture >> allocationsOne [
 	allocations := OrderedCollection new.
 	allocations
 		add: (AllocationSiteInfoModel new
-				 allocatorClass: Rectangle;
 				 allocatorMethod: Margin >> #asMargin;
 				 allocatedObjectClass: OrderedCollection;
 				 sizeInBytes: 16;
 				 yourself);
 		add: (AllocationSiteInfoModel new
-				 allocatorClass: Rectangle;
 				 allocatorMethod: Margin >> #asMargin;
 				 allocatedObjectClass: OrderedCollection;
 				 sizeInBytes: 16;
 				 yourself);
 		add: (AllocationSiteInfoModel new
-				 allocatorClass: Rectangle;
 				 allocatorMethod: Margin >> #asMargin;
 				 allocatedObjectClass: Dictionary;
 				 sizeInBytes: 16;
 				 yourself);
 		add: (AllocationSiteInfoModel new
-				 allocatorClass: Rectangle;
 				 allocatorMethod: Margin >> #asMargin;
 				 allocatedObjectClass: ByteString;
 				 sizeInBytes: 32;
 				 yourself);
 		add: (AllocationSiteInfoModel new
-				 allocatorClass: Rectangle;
 				 allocatorMethod: Margin >> #asMargin;
 				 allocatedObjectClass: ByteString;
 				 sizeInBytes: 48;
 				 yourself);
 		add: (AllocationSiteInfoModel new
-				 allocatorClass: Rectangle;
-				 allocatorMethod: Object >> #'->';
+				 allocatorMethod: Margin >> #asMargin;
 				 allocatedObjectClass: ByteString;
 				 sizeInBytes: 100;
 				 yourself);
 		add: (AllocationSiteInfoModel new
-				 allocatorClass: Rectangle;
-				 allocatorMethod: Object >> #'->';
+				 allocatorMethod: Margin >> #asMargin;
 				 allocatedObjectClass: ByteString;
 				 sizeInBytes: 55;
 				 yourself);
 		add: (AllocationSiteInfoModel new
-				 allocatorClass: Rectangle;
-				 allocatorMethod: Object >> #'->';
+				 allocatorMethod: Margin >> #asMargin;
 				 allocatedObjectClass: Color;
 				 sizeInBytes: 60;
 				 yourself);
 		add: (AllocationSiteInfoModel new
-				 allocatorClass: Rectangle;
-				 allocatorMethod: Object >> #'->';
+				 allocatorMethod: Margin >> #asMargin;
 				 allocatedObjectClass: Color;
 				 sizeInBytes: 16;
 				 yourself).
@@ -83,7 +74,6 @@ AllocationStatisticsTestFixture >> allocationsThree [
 	| allocations |
 	allocations := OrderedCollection new.
 	allocations add: (AllocationSiteInfoModel new
-			 allocatorClass: String;
 			 allocatorMethod: Collection>>#sorted:;
 			 allocatedObjectClass: ByteArray;
 			 sizeInBytes: 16;
@@ -98,31 +88,26 @@ AllocationStatisticsTestFixture >> allocationsTwo [
 	allocations := OrderedCollection new.
 	allocations
 		add: (AllocationSiteInfoModel new
-				 allocatorClass: OrderedCollection;
 				 allocatorMethod: ArrayedCollection >> #add:;
 				 allocatedObjectClass: ByteString;
 				 sizeInBytes: 16;
 				 yourself);
 		add: (AllocationSiteInfoModel new
-				 allocatorClass: OrderedCollection;
 				 allocatorMethod: ArrayedCollection >> #add:;
 				 allocatedObjectClass: ByteString;
 				 sizeInBytes: 16;
 				 yourself);
 		add: (AllocationSiteInfoModel new
-				 allocatorClass: OrderedCollection;
 				 allocatorMethod: ArrayedCollection >> #add:;
 				 allocatedObjectClass: ByteString;
 				 sizeInBytes: 32;
 				 yourself);
 		add: (AllocationSiteInfoModel new
-				 allocatorClass: OrderedCollection;
 				 allocatorMethod: ArrayedCollection >> #add:;
 				 allocatedObjectClass: ByteArray;
 				 sizeInBytes: 100;
 				 yourself);
 		add: (AllocationSiteInfoModel new
-				 allocatorClass: OrderedCollection;
 				 allocatorMethod: ArrayedCollection >> #add:;
 				 allocatedObjectClass: ByteArray;
 				 sizeInBytes: 16;
@@ -149,8 +134,8 @@ AllocationStatisticsTestFixture >> groupAndSortByAllocatedObjectClassAllocations
 { #category : 'fixture' }
 AllocationStatisticsTestFixture >> groupedAndSortedByClassAllocations [
 
-	^ self groupedAndSortedByClassAllocationsOne , self groupedAndSortedByClassAllocationsTwo
-	  , self groupedAndSortedByClassAllocationsThree
+	^ (self groupedAndSortedByClassAllocationsOne , self groupedAndSortedByClassAllocationsTwo
+	  , self groupedAndSortedByClassAllocationsThree)
 ]
 
 { #category : 'fixture' }
@@ -182,7 +167,7 @@ AllocationStatisticsTestFixture >> groupedAndSortedByMethodAllocations [
 
 	self mockedAllocations do: [ :allo |
 		dict
-			at: allo fullMethodName
+			at: allo allocatorMethod
 			update: [ :e |
 				e
 					add: allo;

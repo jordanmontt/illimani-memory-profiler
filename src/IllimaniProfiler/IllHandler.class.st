@@ -1,3 +1,6 @@
+"
+I am a handler that is in charge to delegate the instrumentation actions to the profiler. For more info, read the MethodProxies documentation: [https://github.com/pharo-contributions/MethodProxies](https://github.com/pharo-contributions/MethodProxies)
+"
 Class {
 	#name : 'IllHandler',
 	#superclass : 'MpHandler',

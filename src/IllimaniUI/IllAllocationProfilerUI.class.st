@@ -19,28 +19,6 @@ Class {
 }
 
 { #category : 'accessing - lazy roassal presenters' }
-IllAllocationProfilerUI >> allocatedObjectsPerSecondPerClassPresenter [
-
-	^ SpRoassalPresenter new
-		canvas: (RoassaHelperChartBuilder new
-			model: profiler;
-			topCalculationsNumber: topCalculationsNumber;
-			allocatedObjectsPerSecondPerClassLineChartCanvas);
-		yourself
-]
-
-{ #category : 'accessing - lazy roassal presenters' }
-IllAllocationProfilerUI >> allocatedObjectsPerSecondPerMethodPresenter [
-
-	^ SpRoassalPresenter new
-		canvas: (RoassaHelperChartBuilder new
-			model: profiler;
-			topCalculationsNumber: topCalculationsNumber;
-			allocatedObjectsPerSecondPerMethodLineChartCanvas);
-		yourself
-]
-
-{ #category : 'accessing - lazy roassal presenters' }
 IllAllocationProfilerUI >> allocatedObjectsPerSecondPresenter [
 
 	allocatedObjectsPerSecondPresenter ifNil: [ self initializeAllocatedObjectsPerSecond ].
@@ -115,42 +93,33 @@ IllAllocationProfilerUI >> initializeAllocatedObjectsTablePresenter [
 { #category : 'initialization - lazy roassal presenters' }
 IllAllocationProfilerUI >> initializeAllocationsPerSecondPerAllocator [
 
-	allocationsPerSecondPerAllocatorPresenter := AlternatorPresenter new
-		  presenterOne: self allocatedObjectsPerSecondPerClassPresenter withName: 'Group by Classes';
-		  presenterTwo: self allocatedObjectsPerSecondPerMethodPresenter withName: 'Group by Methods';
-		  yourself
+	allocationsPerSecondPerAllocatorPresenter := SpRoassalPresenter new
+		canvas: (RoassaHelperChartBuilder new
+			model: profiler;
+			topCalculationsNumber: topCalculationsNumber;
+			allocatedObjectsPerSecondPerMethodLineChartCanvas);
+		yourself
 ]
 
 { #category : 'initialization - lazy roassal presenters' }
 IllAllocationProfilerUI >> initializeHeatmapPresenter [
 
-	| roassalPresenterByClass roassalPresenterByMethod |
-	roassalPresenterByClass := self instantiate: SpRoassalPresenter.
-	roassalPresenterByClass canvas: (RoassaHelperChartBuilder new
-			 model: profiler;
-			 topCalculationsNumber: topCalculationsNumber;
-			 heatmapAllocatorAllocatedCanvasByClass).
+	| roassalPresenterByMethod |
 	roassalPresenterByMethod := self instantiate: SpRoassalPresenter.
 	roassalPresenterByMethod canvas: (RoassaHelperChartBuilder new
-			 model: profiler;
-			 topCalculationsNumber: topCalculationsNumber;
-			 heatmapAllocatorAllocatedCanvasByMethod).
+		model: profiler;
+		topCalculationsNumber: topCalculationsNumber;
+		heatmapAllocatorAllocatedCanvasByMethod).
 
-	heatmapPresenter :=( self instantiate: AlternatorPresenter)
-		presenterOne: roassalPresenterByClass withName: 'Group by Classes';
-		presenterTwo: roassalPresenterByMethod  withName: 'Group by Methods';
-		yourself
+	heatmapPresenter := roassalPresenterByMethod
 ]
 
 { #category : 'initialization - lazy presenters' }
 IllAllocationProfilerUI >> initializeMemoryTablePresenter [
 
-	memoryTablePresenter := AlternatorPresenter new
-		presenterOne: (AllocationsByAllocatorTablePresenter owner: self on: profiler allocationsStats allocationsByClass)
-		withName: 'Group by Classes';
-		presenterTwo: (AllocationsByAllocatorTablePresenter owner: self on: profiler allocationsStats allocationsByMethod)
-		withName: 'Group by Methods';
-		yourself
+	memoryTablePresenter := AllocationsByAllocatorTablePresenter
+		owner: self
+		on: profiler allocationsStats allocationsByMethod
 ]
 
 { #category : 'initialization' }

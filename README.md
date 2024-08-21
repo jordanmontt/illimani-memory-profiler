@@ -1,12 +1,10 @@
 
 # Illimani: a Memory Profiler
 
-[![Pharo version](https://img.shields.io/badge/Pharo-12-%23aac9ff.svg)](https://pharo.org/download)
-[![Pharo version](https://img.shields.io/badge/Pharo-11-%23aac9ff.svg)](https://pharo.org/download)
+[![Pharo version](https://img.shields.io/badge/Pharo-13-%23aac9ff.svg)](https://pharo.org/download)
 
-It works on Pharo 11 and Pharo 12. But, keep in mind that the profiler should be faster in Pharo 12. This is because there were some optimizations done in Pharo 12 to make the instrumentation faster.
 
-Illimani is a library of memory profilers. It provides a memory allocation profiler and a finalization profiler. The allocation profiler gives you information about the allocation sites and where the objects where produced in your application. The finalization profiler gives you information about how much time did the objects lived, and about how many GC cycles (both scavenges and full GC) they survived.
+Illimani is a library of memory profilers. It provides an - allocation site memory profiler, - a object lifetimes profiler, - and an allocation rate profiler. The allocation site profiler gives you information about the allocation sites and where the objects where produced in your application. The object lifetimes profiler gives you information about how much time did the objects lived, and about how many GC cycles (both scavenges and full GC) they survived.
 
 ## How to install it
 
@@ -48,10 +46,10 @@ IllAllocationSiteProfiler new
 	yourself
 ```
 
-Example 2, finalization profiler on a code snippet:
+Example 2, object lifetimes profiler on a code snippet:
 
 ```st
-IllFinalizationProfiler new.
+IllObjectLifetimesProfiler new
 	profileOn: [ 15 timesRepeat: [ StPlaygroundPresenter open close ] ] ;
 	open;
 	yourself
@@ -90,11 +88,14 @@ profiler open.
 
 ### Sample the allocations
 
-By default, the profiler captures all the object allocations. You can configure it to sample the samples. This can be useful for reducing the overhead when your application makes lots of allocations.
+By default, the profiler captures 1% of the allocations. We chose this number because in our experiments we found out that the profiler producess precise results with minimal overhead with that sampling rate. You can change the sampling rate. The sampling rate needs to be a fraction.
 
 ```st
-"Capture only 10% of the allocations"
-profiler samplingRate: 10.
+"Capture 10% of the allocations"
+profiler samplingRate: 1/10.
+
+"Capture 100% of the allocations"
+profiler samplingRate: 1.
 ```
 
 ### Export the profiled data to files
@@ -109,7 +110,7 @@ This will create a csv file with all the information about the allocated objects
 
 ### Monitor the GC activity
 
-You can monitor the GC activity while the profiler is profiling with the message `monitorGCActivity`. This will fork a process that will take GC statistics once per second. Then, when exporting the profiler data, two csv files will be exported containing both the scavenges and full GCs.
+You can monitor the GC activity while the profiler is profiling with the message `monitorGCActivity`. This will fork a process that will take GC statistics once per second. Then, when exporting the profiler data, two csv files will be exported containing both the scavenges and full GCs. By default, the GC monitoring is disabled.
 
 ```st
 profiler monitorGCActivity
@@ -121,25 +122,22 @@ Illimani is also a profiling framework. A user can implement his own profiler by
 
 ## Allocation Site profiler
 
-![GIF1](https://github.com/jordanmontt/illimani-memory-profiler/assets/33934979/fd915e86-a251-48c9-a087-3929d74509e7)
-
-It is also possible to copy the execution stack of *each* of the allocated objects with the message.
-This is very useful when you to make analysis, for example indentify in which context the allocations were prodoced, etc.
-Keep in mind that with a lot of allocations, copying the stack can cause the image to grow in size rapidly and making it slow to use.
-
-```st
-profiler copyExecutionStack.
-```
+![allo](https://github.com/jordanmontt/illimani-memory-profiler/assets/33934979/c83ab37b-3ec3-4f19-b4de-02110cd837af)
 
 Without the UI, because the profiler is independent from the UI, you can access to some statistics. See the protocol `accessing - statistics` in the profiler to see the methods. Also, the profiler has a statistics model that groups and sorts the allocation by class and by methods. For example check 'profiler stats allocationsByClass.'
 
-## Finalization profiler
+## Object lifetimes profiler
 
-![GIF2](https://github.com/jordanmontt/illimani-memory-profiler/assets/33934979/b1bfd2fd-80d9-4a5b-8c12-0f637f5cfeb5)
+![fina](https://github.com/jordanmontt/illimani-memory-profiler/assets/33934979/e0c3cf6e-5105-45dc-84ba-26a5513a6710)
+
+## Related papers
+
+ - [ILLIMANI Memory Profiler - A Technical Report. Jordan Montaño S., Polito G., Ducasse S., Tesone P. 2023. Technical Report.](https://hal.science/hal-04225251/file/conference_101719.pdf)
+ - [Evaluating Finalization-Based Object Lifetime Profiling. Jordan Montaño S., Polito G., Ducasse S., Tesone P., 2024, ISMM.](https://hal.science/hal-04581342v1/document)
 
 ## Implementation details
 
-- Illimani uses [method proxies](https://github.com/pharo-contributions/MethodProxies) library to capture the allocations. It inserts a proxy in `Behavior>>basicNew:`, `Behavior>>basicNew`, `Array>>#new:`, and `Object >> #shallowCopy`.
-- It uses Ephemerons to know when an object is about to be finalized.
+- Illimani uses [method proxies](https://github.com/pharo-contributions/MethodProxies) library to capture the allocations. It instruments all the allocator methods in Pharo.
+- The object lifetimes profiler uses Ephemerons to know when an object is about to be finalized. 
 - It has an statistics model that helps with the calculations of allocations grouping them by classes and methods and sorting them by number of allocations. 
 - The UI is independent of the profiler. It can be used without it. You will have access to all allocations and to the same statistics.

@@ -47,26 +47,30 @@ IllAbstractProfilerTest >> testOpen [
 { #category : 'tests' }
 IllAbstractProfilerTest >> testProfileOnSimple [
 
-	profiler profileOn: [ 10 timesRepeat: [ IllFinalizationProfiler new ] ].
-	self assert: profiler objectAllocations size > 10
+	"Default sampling rate is 1/100"
+	profiler profileOn: [ 1000 timesRepeat: [ Object new ] ].
+	self assert: profiler objectAllocations size >= 10.
+	self assert: profiler objectAllocations size < 20
 ]
 
 { #category : 'tests' }
 IllAbstractProfilerTest >> testSamplingRate [
 
-	| allocatedByteSrings |
+	| allocatedObjects profilerAllocations |
 	
+	"The profiler makes some allocations when being installed."
+	profilerAllocations := 3.
+
 	profiler
 		samplingRate: 33 / 100;
-		profileOn: [ 100 timesRepeat: [ ByteString new ] ].
+		profileOn: [ 100 timesRepeat: [ Object new ] ].
 
-	allocatedByteSrings := (profiler objectAllocations select:
-		[ :e | e allocatedObjectClass = ByteString ]) size.
+	allocatedObjects := profiler objectAllocations size - profilerAllocations.
 
 	"We are cheking in this range becase the profiler makes some allocations that are
 	necessary for the profiler to work, like Durations objects. So we cannot check that the
 	allocations are exacty 1/3 of the total."
-	self assert: (allocatedByteSrings >= 33) & (allocatedByteSrings < 40)
+	self assert: (allocatedObjects between: 30 and: 33)
 ]
 
 { #category : 'tests' }
@@ -108,7 +112,7 @@ IllAbstractProfilerTest >> testSamplingRateOtherPercentage [
 IllAbstractProfilerTest >> testSamplingRateVariable [
 
 	"By default, do not sample"
-	self assert: profiler samplingRate equals: 1.
+	self assert: profiler samplingRate equals: 1/100.
 
 	"Sample at 20%"
 	profiler samplingRate: 20 / 100.

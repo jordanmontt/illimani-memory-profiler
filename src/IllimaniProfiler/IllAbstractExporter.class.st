@@ -1,3 +1,6 @@
+"
+I am the abstract class for the exporters. What I do is basically provide logic for exporting the profiling data as json and csv files.
+"
 Class {
 	#name : 'IllAbstractExporter',
 	#superclass : 'Object',
@@ -11,9 +14,13 @@ Class {
 }
 
 { #category : 'exporting' }
-IllAbstractExporter >> exportAllocationModelCollection: fileName [
+IllAbstractExporter >> exportAllocationModelCollection [
 
-	| writeStream writer |
+	| writeStream writer fileName |
+	
+	baseFileName ifNil: [ baseFileName := self fileNameToExport ].
+	fileName := baseFileName , '.csv'.
+	
 	writeStream := fileName asFileReference createFile writeStream.
 	writer := (NeoCSVWriter on: writeStream)
 		writeHeader: self headerOfAllocationModel;
@@ -31,8 +38,8 @@ IllAbstractExporter >> exportData [
 
 	baseFileName := self fileNameToExport.
 	
-	self exportMetaData: baseFileName , '.json'.
-	self exportAllocationModelCollection: baseFileName , '.csv'.
+	self exportMetaData.
+	self exportAllocationModelCollection.
 	self exportGCActivity
 ]
 
@@ -43,15 +50,14 @@ IllAbstractExporter >> exportGCActivity [
 ]
 
 { #category : 'exporting' }
-IllAbstractExporter >> exportMetaData: fileName [
+IllAbstractExporter >> exportMetaData [
 
-	| tempDict jsonString  writeStream |
-	tempDict := { ('totalExecutionTime' -> profiler totalTime).
-		('totalFullGCs' -> profiler totalFullGCs).
-		('profiledCode' -> profiler profiledCode).
-		('totalScavenges' -> profiler totalScavenges).
-		('samplingRate' -> profiler samplingRate).
-		('profiler' -> profiler class name) } asDictionary.
+	| tempDict jsonString  writeStream fileName |
+	
+	baseFileName ifNil: [ baseFileName := self fileNameToExport ].
+	fileName := baseFileName , '.json'.
+
+	tempDict := self jsonDictionary.
 	jsonString := NeoJSONWriter toStringPretty: tempDict.
 
 	writeStream := fileName asFileReference createFile writeStream.
@@ -69,6 +75,18 @@ IllAbstractExporter >> fileNameToExport [
 IllAbstractExporter >> headerOfAllocationModel [
 
 	^ self subclassResponsibility
+]
+
+{ #category : 'exporting' }
+IllAbstractExporter >> jsonDictionary [
+
+	^ {
+		  ('totalExecutionTime' -> profiler totalTime).
+		  ('totalFullGCs' -> profiler totalFullGCs).
+		  ('profiledCode' -> profiler profiledCode).
+		  ('totalScavenges' -> profiler totalScavenges).
+		  ('samplingRate' -> profiler samplingRate).
+		  ('profiler' -> profiler class name) } asDictionary
 ]
 
 { #category : 'accessing' }

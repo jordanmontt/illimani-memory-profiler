@@ -1,31 +1,34 @@
+"
+I am the object lifetimes profiler that *keeps* a reference to all the captured allocated objects. Normally, users should not use me. I am usefult for doing experiments.
+"
 Class {
-	#name : 'IllFinalizationInstanceKeeper',
-	#superclass : 'IllFinalizationProfiler',
+	#name : 'IllObjectLifetimesInstanceKeeper',
+	#superclass : 'IllObjectLifetimesProfiler',
 	#instVars : [
 		'keptInstances',
 		'classesToIncreaseLifetime'
 	],
-	#category : 'IllimaniProfiler-Finalization-Profiler',
+	#category : 'IllimaniProfiler-Object-Lifetimes-Profiler',
 	#package : 'IllimaniProfiler',
-	#tag : 'Finalization-Profiler'
+	#tag : 'Object-Lifetimes-Profiler'
 }
 
 { #category : 'accessing' }
-IllFinalizationInstanceKeeper >> classesToKeepReferenced: aCollection [
+IllObjectLifetimesInstanceKeeper >> classesToKeepReferenced: aCollection [
 
 	"This is a hook that help to increse the lifetime of certain objects. If the allocated object belongs to one of this classes, the profiler will keep that object referenced until the end of the execution"
 	classesToIncreaseLifetime := aCollection
 ]
 
 { #category : 'initialization' }
-IllFinalizationInstanceKeeper >> initialize [
+IllObjectLifetimesInstanceKeeper >> initialize [
 
 	super initialize.
 	keptInstances := OrderedCollection new: 100000000
 ]
 
 { #category : 'profiling' }
-IllFinalizationInstanceKeeper >> internalRegisterAllocation: anObject [
+IllObjectLifetimesInstanceKeeper >> internalRegisterAllocation: anObject [
 
 	"Optimization"
 	classesToIncreaseLifetime ifNil: [
@@ -39,7 +42,7 @@ IllFinalizationInstanceKeeper >> internalRegisterAllocation: anObject [
 ]
 
 { #category : 'profiling' }
-IllFinalizationInstanceKeeper >> stopProfiling [
+IllObjectLifetimesInstanceKeeper >> stopProfiling [
 
 	"Stop refencing the instances"
 	keptInstances := OrderedCollection new.

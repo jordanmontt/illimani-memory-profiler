@@ -1,3 +1,6 @@
+"
+I am an allocation rate profiler. What I do is to only *count* the number of allocated objects by inscreasing a counter. Nothing more.
+"
 Class {
 	#name : 'IllAllocationRateProfiler',
 	#superclass : 'IllAbstractProfiler',
