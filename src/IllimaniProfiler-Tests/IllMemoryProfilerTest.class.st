@@ -26,7 +26,7 @@ IllMemoryProfilerTest >> tearDown [
 
 { #category : 'tests' }
 IllMemoryProfilerTest >> testOpen [
-	
+
 	"Increasing the test time. This is due to CI failures. As the profiler pre-allocates a very
 	big collection, the GCs take time."
 	self timeLimit: 1 minute.
@@ -82,7 +82,7 @@ IllMemoryProfilerTest >> testProfileOnSimple [
 
 	"Increasing the test time. This is due to CI failures. As the profiler pre-allocates a very big collection, the GCs take time."
 	self timeLimit: 1 minute.
-	
+
 	"Default sampling rate is 1/100"
 	profiler profileOn: [ 1000 timesRepeat: [ Object new ] ].
 	self assert: profiler objectAllocations size >= 10.
@@ -105,7 +105,7 @@ IllMemoryProfilerTest >> testProfileOnSimpleMoreAllocations [
 IllMemoryProfilerTest >> testSamplingRate [
 
 	| allocatedObjects profilerAllocations |
-	
+
 	"The profiler makes some allocations when being installed."
 	profilerAllocations := 3.
 
@@ -125,7 +125,7 @@ IllMemoryProfilerTest >> testSamplingRate [
 IllMemoryProfilerTest >> testSamplingRate1in1000 [
 
 	| allocatedByteSrings |
-	
+
 	profiler
 		samplingRate: 1/1000;
 		profileOn: [ 1000 timesRepeat: [ ByteString new ] ].
@@ -142,7 +142,7 @@ IllMemoryProfilerTest >> testSamplingRate1in1000 [
 IllMemoryProfilerTest >> testSamplingRateOtherPercentage [
 
 	| allocatedByteSrings |
-	
+
 	profiler
 		samplingRate: 75 / 100;
 		profileOn: [ 100 timesRepeat: [ ByteString new ] ].
@@ -172,5 +172,5 @@ IllMemoryProfilerTest >> testSamplingRateVariable [
 
 	"Do not sample. The same as sampling 100%"
 	profiler samplingRate: 1.
-	self assert: profiler samplingRate equals: 1.
+	self assert: profiler samplingRate equals: 1
 ]

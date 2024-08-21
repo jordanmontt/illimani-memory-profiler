@@ -41,9 +41,9 @@ IllMemoryProfiler >> initialize [
 
 { #category : 'profiling' }
 IllMemoryProfiler >> internalRegisterAllocation: newlyAllocatedObject [
-	
+
 	| metaClass filteredContext |
-	
+
 	metaClass := newlyAllocatedObject class class.
 
 	filteredContext := thisContext
@@ -56,7 +56,7 @@ IllMemoryProfiler >> internalRegisterAllocation: newlyAllocatedObject [
 	filteredContext receiver class = metaClass ] whileTrue:
 		[ filteredContext := filteredContext sender ].
 
-	ephemeronsCollection add: (IllEphemeron newTenured 
+	ephemeronsCollection add: (IllEphemeron newTenured
 		key: newlyAllocatedObject value: nil;
 		allocationSite: filteredContext compiledCode method;
 		"The allocator class is important since the allocator method can be defined in the super class"

@@ -20,7 +20,7 @@ IllMemoryProfilerExporterTest >> assertCSVContent: csvReader [
 	self assert: line fifth asInteger >= 0. "survived scavenges"
 	self assert: line sixth asInteger >= 0. "survived full gcs"
 	self assert: line seventh equals: 'false'. "forced finalization"
-	
+
 	allocatorMethod := Smalltalk compiler evaluate: line eighth.
 	self assert: allocatorMethod class equals: CompiledMethod "the allocation site is string with the name of a VALID method"
 ]
@@ -44,7 +44,7 @@ IllMemoryProfilerExporterTest >> fakeAllocations [
 	| allocatedClasses allocationSites |
 	allocatedClasses := 'Kernel' asPackage definedClasses asArray first: 10.
 	allocationSites := ('Kernel' asPackage definedClasses flatCollect: #methods) asArray first: 10.
-	
+
 	^ (1 to: 1000) collect: [ :i | IllEphemeron new
 		allocatedObjectClass: allocatedClasses atRandom;
 		allocationSite: allocationSites atRandom;

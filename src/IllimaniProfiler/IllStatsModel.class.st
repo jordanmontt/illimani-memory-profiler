@@ -125,12 +125,12 @@ IllStatsModel >> walkAllocations [
 		allocationNodesByMethod
 			updateAllocationForAllocator: allocationHolder allocationSite
 			allocation: allocationHolder ].
-	
+
 	totalAllocatedMemory := objectAllocations
 		inject: 0
 		into: [ :sum : elem | sum + elem sizeInBytes ].
-		
+
 	numberOfAllocatorClasses := (objectAllocations collect: #allocatorClass as: Set) size.
-	
+
 	didIWalk := true
 ]

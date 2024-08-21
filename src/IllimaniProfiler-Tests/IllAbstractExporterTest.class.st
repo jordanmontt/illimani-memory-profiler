@@ -79,20 +79,20 @@ IllAbstractExporterTest >> testExportData [
 
 	| csvReader createdCSVFile createdJSONFile jsonDictionary |
 	exporter exportData.
-	
+
 	createdCSVFile := (exporter baseFileName , '.csv') asFileReference.
 	self assert: createdCSVFile exists.
-	
+
 	createdJSONFile := (exporter baseFileName , '.json') asFileReference.
 	self assert: createdJSONFile exists.
-	
+
 	csvReader := NeoCSVReader on: createdCSVFile readStream.
 	self assertHeader: csvReader.
 	self assertCSVContent: csvReader.
-	
+
 	jsonDictionary := NeoJSONReader fromString: createdJSONFile readStream contents.
 	self assertJSONMetaData: jsonDictionary.
 
 	createdCSVFile ensureDelete.
-	createdJSONFile ensureDelete.
+	createdJSONFile ensureDelete
 ]

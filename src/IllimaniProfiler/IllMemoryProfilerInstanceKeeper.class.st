@@ -34,7 +34,7 @@ IllMemoryProfilerInstanceKeeper >> internalRegisterAllocation: anObject [
 	classesToIncreaseLifetime ifNil: [
 		super internalRegisterAllocation: anObject.
 		^ self ].
-	
+
 	(classesToIncreaseLifetime includes: anObject class) ifTrue: [
 		keptInstances add: anObject ].
 

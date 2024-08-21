@@ -11,13 +11,10 @@ Class {
 
 { #category : 'exporting' }
 NullGCActivityMonitor >> exportData: baseFileName [
-
 ]
 
 { #category : 'exporting' }
 NullGCActivityMonitor >> run [
-
-	
 ]
 
 { #category : 'exporting' }
