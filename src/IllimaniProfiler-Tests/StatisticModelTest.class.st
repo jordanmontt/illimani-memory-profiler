@@ -18,7 +18,7 @@ StatisticModelTest >> setUp [
 
 	super setUp.
 	fixture := AllocationStatisticsTestFixture new.
-	statsModel := IllStatsModel new
+	statsModel := IllStatisticsModel new
 		objectAllocations: fixture mockedAllocations;
 		yourself
 ]

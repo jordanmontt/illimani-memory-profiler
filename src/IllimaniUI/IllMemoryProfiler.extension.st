@@ -9,5 +9,5 @@ IllMemoryProfiler >> instrumentator: anIllMockInstrumentator [
 { #category : '*IllimaniUI' }
 IllMemoryProfiler >> uiClass [
 
-	^ IllObjectLifetimesProfilerUI
+	^ IllMemoryProfilerUI
 ]

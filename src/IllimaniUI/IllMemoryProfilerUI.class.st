@@ -1,5 +1,5 @@
 Class {
-	#name : 'IllObjectLifetimesProfilerUI',
+	#name : 'IllMemoryProfilerUI',
 	#superclass : 'IllAbstractUI',
 	#instVars : [
 		'gcCyclesTable',
@@ -17,35 +17,35 @@ Class {
 }
 
 { #category : 'accessing - lazy roassal presenters' }
-IllObjectLifetimesProfilerUI >> allocatedObjectsPerSecondPresenter [
+IllMemoryProfilerUI >> allocatedObjectsPerSecondPresenter [
 
 	allocatedObjectsPerSecondPresenter ifNil: [ self initializeAllocatedObjectsPerSecond ].
 	^ allocatedObjectsPerSecondPresenter
 ]
 
 { #category : 'accessing - lazy presenters' }
-IllObjectLifetimesProfilerUI >> allocatedObjectsTablePresenter [
+IllMemoryProfilerUI >> allocatedObjectsTablePresenter [
 
 	allocatedObjectsTablePresenter ifNil: [ self initializeAllocatedObjectsTablePresenter ].
 	^ allocatedObjectsTablePresenter
 ]
 
 { #category : 'accessing - lazy roassal presenters' }
-IllObjectLifetimesProfilerUI >> allocationsPerSecondPerAllocatorPresenter [
+IllMemoryProfilerUI >> allocationsPerSecondPerAllocatorPresenter [
 
 	allocationsPerSecondPerAllocatorPresenter ifNil: [ self initializeAllocationsPerSecondPerAllocator ].
 	^ allocationsPerSecondPerAllocatorPresenter
 ]
 
 { #category : 'accessing - lazy presenters' }
-IllObjectLifetimesProfilerUI >> allocatorsTablePresenter [
+IllMemoryProfilerUI >> allocatorsTablePresenter [
 
 	allocatorsTablePresenter ifNil: [ self initializeAllocatorsTablePresenter ].
 	^ allocatorsTablePresenter
 ]
 
 { #category : 'accessing' }
-IllObjectLifetimesProfilerUI >> codeEvaluatorText [
+IllMemoryProfilerUI >> codeEvaluatorText [
 
 	^
 'self objectAllocations.
@@ -53,28 +53,28 @@ self stats allocationsByMethod'
 ]
 
 { #category : 'accessing - lazy roassal presenters' }
-IllObjectLifetimesProfilerUI >> frequencyHistogramPresenter [
+IllMemoryProfilerUI >> frequencyHistogramPresenter [
 
 	frequencyHistogramPresenter ifNil: [ self initializeFrequencyHistogramPresenter ].
 	^ frequencyHistogramPresenter
 ]
 
 { #category : 'accessing - lazy presenters' }
-IllObjectLifetimesProfilerUI >> gcCyclesTable [
+IllMemoryProfilerUI >> gcCyclesTable [
 
 	gcCyclesTable ifNil: [ self initializeGCCyclesTable ].
 	^ gcCyclesTable
 ]
 
 { #category : 'accessing - lazy roassal presenters' }
-IllObjectLifetimesProfilerUI >> heatMapPresenter [
+IllMemoryProfilerUI >> heatMapPresenter [
 
 	heatmapPresenter ifNil: [ self initializeHeatmapPresenter ].
 	^ heatmapPresenter
 ]
 
 { #category : 'initialization - lazy roassal presenters' }
-IllObjectLifetimesProfilerUI >> initializeAllocatedObjectsPerSecond [
+IllMemoryProfilerUI >> initializeAllocatedObjectsPerSecond [
 
 	allocatedObjectsPerSecondPresenter := SpRoassalPresenter new
 		canvas: (RoassaHelperChartBuilder new
@@ -85,13 +85,13 @@ IllObjectLifetimesProfilerUI >> initializeAllocatedObjectsPerSecond [
 ]
 
 { #category : 'initialization - lazy presenters' }
-IllObjectLifetimesProfilerUI >> initializeAllocatedObjectsTablePresenter [
+IllMemoryProfilerUI >> initializeAllocatedObjectsTablePresenter [
 
 	allocatedObjectsTablePresenter := ObjectLifetimesTablePresenter on: profiler
 ]
 
 { #category : 'initialization - lazy roassal presenters' }
-IllObjectLifetimesProfilerUI >> initializeAllocationsPerSecondPerAllocator [
+IllMemoryProfilerUI >> initializeAllocationsPerSecondPerAllocator [
 
 	allocationsPerSecondPerAllocatorPresenter := SpRoassalPresenter new
 		canvas: (RoassaHelperChartBuilder new
@@ -102,7 +102,7 @@ IllObjectLifetimesProfilerUI >> initializeAllocationsPerSecondPerAllocator [
 ]
 
 { #category : 'initialization - lazy presenters' }
-IllObjectLifetimesProfilerUI >> initializeAllocatorsTablePresenter [
+IllMemoryProfilerUI >> initializeAllocatorsTablePresenter [
 
 	allocatorsTablePresenter := AllocationsByAllocatorTablePresenter
 		owner: self
@@ -110,13 +110,13 @@ IllObjectLifetimesProfilerUI >> initializeAllocatorsTablePresenter [
 ]
 
 { #category : 'initialization - lazy roassal presenters' }
-IllObjectLifetimesProfilerUI >> initializeFrequencyHistogramPresenter [
+IllMemoryProfilerUI >> initializeFrequencyHistogramPresenter [
 
 	frequencyHistogramPresenter := FrequencyHistogramRoassalPresenter on: profiler
 ]
 
 { #category : 'initialization - lazy presenters' }
-IllObjectLifetimesProfilerUI >> initializeGCCyclesTable [
+IllMemoryProfilerUI >> initializeGCCyclesTable [
 
 	gcCyclesTable := AlternatorPresenter new
 	   presenterTwo: (RelativeLifetimesByScavengesTablePresenter on: profiler objectAllocations)
@@ -127,7 +127,7 @@ IllObjectLifetimesProfilerUI >> initializeGCCyclesTable [
 ]
 
 { #category : 'initialization - lazy roassal presenters' }
-IllObjectLifetimesProfilerUI >> initializeHeatmapPresenter [
+IllMemoryProfilerUI >> initializeHeatmapPresenter [
 
 	| roassalPresenterByMethod |
 	roassalPresenterByMethod := self instantiate: SpRoassalPresenter.
@@ -140,7 +140,7 @@ IllObjectLifetimesProfilerUI >> initializeHeatmapPresenter [
 ]
 
 { #category : 'initialization' }
-IllObjectLifetimesProfilerUI >> initializeNotebook [
+IllMemoryProfilerUI >> initializeNotebook [
 
 	notebookPresenter := self newNotebook
 		addPageTitle: 'Summary' provider: [ self summaryAndEvaluatorPresenter ];
@@ -159,7 +159,7 @@ IllObjectLifetimesProfilerUI >> initializeNotebook [
 ]
 
 { #category : 'initialization - lazy presenters' }
-IllObjectLifetimesProfilerUI >> initializeRelativeLifetimesTable [
+IllMemoryProfilerUI >> initializeRelativeLifetimesTable [
 
 	relativeLifetimesTable := self
 		instantiate: RelativeLifetimesBySecondTablePresenter
@@ -167,21 +167,15 @@ IllObjectLifetimesProfilerUI >> initializeRelativeLifetimesTable [
 ]
 
 { #category : 'actions' }
-IllObjectLifetimesProfilerUI >> refresh [
+IllMemoryProfilerUI >> refresh [
 
 	frequencyHistogramPresenter := nil.
 	self layout: self defaultLayout
 ]
 
 { #category : 'accessing - lazy presenters' }
-IllObjectLifetimesProfilerUI >> relativeLifetimesTable [
+IllMemoryProfilerUI >> relativeLifetimesTable [
 
 	relativeLifetimesTable ifNil: [ self initializeRelativeLifetimesTable ].
 	^ relativeLifetimesTable
-]
-
-{ #category : 'initialization' }
-IllObjectLifetimesProfilerUI >> title [
-
-	^ 'Illimani Memory Profiler'
 ]

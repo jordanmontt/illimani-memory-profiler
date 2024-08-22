@@ -1,5 +1,5 @@
 Class {
-	#name : 'IllStatsModel',
+	#name : 'IllStatisticsModel',
 	#superclass : 'Object',
 	#instVars : [
 		'objectAllocations',
@@ -7,7 +7,8 @@ Class {
 		'didIWalk',
 		'totalAllocatedMemory',
 		'numberOfAllocatorClasses',
-		'totalProfiledTime'
+		'totalProfiledTime',
+		'allocationNodesByLifetime'
 	],
 	#category : 'IllimaniProfiler-Model-Statistics',
 	#package : 'IllimaniProfiler',
@@ -15,7 +16,7 @@ Class {
 }
 
 { #category : 'instance creation' }
-IllStatsModel class >> objectAllocations: objectAllocations totalProfiledTime: totalTime [
+IllStatisticsModel class >> objectAllocations: objectAllocations totalProfiledTime: totalTime [
 
 	^ self new
 		  objectAllocations: objectAllocations;
@@ -24,7 +25,7 @@ IllStatsModel class >> objectAllocations: objectAllocations totalProfiledTime: t
 ]
 
 { #category : 'instance creation' }
-IllStatsModel class >> on: objectAllocations [
+IllStatisticsModel class >> on: objectAllocations [
 
 	^ self new
 		  objectAllocations: objectAllocations;
@@ -32,28 +33,35 @@ IllStatsModel class >> on: objectAllocations [
 ]
 
 { #category : 'accessing - statistics' }
-IllStatsModel >> allocatedMemoryRatePerSecond [
+IllStatisticsModel >> allocatedMemoryRatePerSecond [
 
 	^ self totalAllocatedMemory
 	  / (Duration microSeconds: totalProfiledTime) totalSeconds asFloat
 ]
 
 { #category : 'accessing - statistics' }
-IllStatsModel >> allocationRatePerSecond [
+IllStatisticsModel >> allocationRatePerSecond [
 
 	^ self totalAllocatedObjects
 	  / (Duration microSeconds: totalProfiledTime) totalSeconds asFloat
 ]
 
 { #category : 'accessing - statistics' }
-IllStatsModel >> allocationsByMethod [
+IllStatisticsModel >> allocationsByLifetime [
+
+	didIWalk ifFalse: [ self walkAllocations ].
+	^ allocationNodesByLifetime ifNil: [ allocationNodesByLifetime := allocationNodesByMethod sortedByLifetime ]
+]
+
+{ #category : 'accessing - statistics' }
+IllStatisticsModel >> allocationsByMethod [
 
 	didIWalk ifFalse: [ self walkAllocations ].
 	^ allocationNodesByMethod sortedByTotalAllocations
 ]
 
 { #category : 'initialization' }
-IllStatsModel >> initialize [
+IllStatisticsModel >> initialize [
 
 	super initialize.
 	allocationNodesByMethod := GroupedAllocationsByAllocatorCollection new.
@@ -61,38 +69,38 @@ IllStatsModel >> initialize [
 ]
 
 { #category : 'accessing - statistics' }
-IllStatsModel >> numberOfAllocatorClasses [
+IllStatisticsModel >> numberOfAllocatorClasses [
 
 	didIWalk ifFalse: [ self walkAllocations ].
 	^ numberOfAllocatorClasses
 ]
 
 { #category : 'accessing - statistics' }
-IllStatsModel >> numberOfAllocatorMethods [
+IllStatisticsModel >> numberOfAllocatorMethods [
 
 	^ self allocationsByMethod size
 ]
 
 { #category : 'accessing' }
-IllStatsModel >> objectAllocations [
+IllStatisticsModel >> objectAllocations [
 
 	^ objectAllocations
 ]
 
 { #category : 'accessing' }
-IllStatsModel >> objectAllocations: anObject [
+IllStatisticsModel >> objectAllocations: anObject [
 
 	objectAllocations := anObject
 ]
 
 { #category : 'accessing - statistics' }
-IllStatsModel >> timeDifferenceBetweenFirstAndLastAllocation [
+IllStatisticsModel >> timeDifferenceBetweenFirstAndLastAllocation [
 
 	^ self objectAllocations last initializationTime - self objectAllocations first initializationTime
 ]
 
 { #category : 'accessing - statistics' }
-IllStatsModel >> topNAllocationsByMethod: n [
+IllStatisticsModel >> topNAllocationsByMethod: n [
 
 	| allocationsOrderedByMethod |
 	allocationsOrderedByMethod := self allocationsByMethod.
@@ -100,26 +108,26 @@ IllStatsModel >> topNAllocationsByMethod: n [
 ]
 
 { #category : 'accessing - statistics' }
-IllStatsModel >> totalAllocatedMemory [
+IllStatisticsModel >> totalAllocatedMemory [
 
 	didIWalk ifFalse: [ self walkAllocations ].
 	^ totalAllocatedMemory
 ]
 
 { #category : 'accessing - statistics' }
-IllStatsModel >> totalAllocatedObjects [
+IllStatisticsModel >> totalAllocatedObjects [
 
 	^ objectAllocations size
 ]
 
 { #category : 'accessing' }
-IllStatsModel >> totalProfiledTime: totalTime [
+IllStatisticsModel >> totalProfiledTime: totalTime [
 
 	totalProfiledTime := totalTime
 ]
 
 { #category : 'calculating' }
-IllStatsModel >> walkAllocations [
+IllStatisticsModel >> walkAllocations [
 
 	objectAllocations do: [ :allocationHolder |
 		allocationNodesByMethod

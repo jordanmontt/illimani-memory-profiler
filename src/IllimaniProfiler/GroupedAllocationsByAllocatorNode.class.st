@@ -122,6 +122,14 @@ GroupedAllocationsByAllocatorNode >> sortedGroupedAllocationsAsAssociation [
 ]
 
 { #category : 'api' }
+GroupedAllocationsByAllocatorNode >> summedLifetimes [
+
+	^ groupedAllocations values
+		inject: 0
+		into: [ :sum :collection | sum + (collection sum: #lifetime) ]
+]
+
+{ #category : 'api' }
 GroupedAllocationsByAllocatorNode >> totalAllocations [
 
 	^ groupedAllocations values inject: 0 into: [ :sum :collection | sum + collection size ]
