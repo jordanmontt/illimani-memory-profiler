@@ -59,6 +59,7 @@ IllMemoryProfiler >> internalRegisterAllocation: newlyAllocatedObject [
 	ephemeronsCollection add: (IllEphemeron newTenured
 		key: newlyAllocatedObject value: nil;
 		allocationSite: filteredContext compiledCode method;
+		programCounter: filteredContext pc;
 		"The allocator class is important since the allocator method can be defined in the super class"
 		allocatorClass: filteredContext receiver class;
 		yourself)

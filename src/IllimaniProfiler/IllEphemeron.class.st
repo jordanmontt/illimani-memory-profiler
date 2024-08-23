@@ -11,7 +11,8 @@ Class {
 		'survivedFullGC',
 		'forcedFinalization',
 		'allocationSite',
-		'allocatorClass'
+		'allocatorClass',
+		'programCounter'
 	],
 	#category : 'IllimaniProfiler-Profiler',
 	#package : 'IllimaniProfiler',
@@ -192,6 +193,18 @@ IllEphemeron >> printOn: aStream [
 	aStream << allocatedObjectClass name << ' lifetime: '
 	<< self lifetimeAsDuration totalSeconds asFloat asString << ' seconds' << ' weights '
 	<< sizeInBytes humanReadableByteSizeString
+]
+
+{ #category : 'accessing' }
+IllEphemeron >> programCounter [
+
+	^ programCounter
+]
+
+{ #category : 'accessing' }
+IllEphemeron >> programCounter: anObject [
+
+	programCounter := anObject
 ]
 
 { #category : 'accessing' }
