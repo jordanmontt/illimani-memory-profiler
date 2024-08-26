@@ -87,25 +87,10 @@ MaxLiveSizeTest >> setUp [
 { #category : 'tests' }
 MaxLiveSizeTest >> testMaxLiveSize [
 
-	| aliveObjects  currentTime initialTime maxLiveSize |
-	currentTime := 0.
-	maxLiveSize := 0.
-	initialTime := mockedObjectAllocations first initializationTime.
-	
-	aliveObjects := OrderedCollection with: mockedObjectAllocations first.
+	| analyzer |
+	analyzer := IllAnalyzer new
+		objectAllocations: mockedObjectAllocations;
+		yourself.
 
-	mockedObjectAllocations allButFirstDo: [ :illiEphemeron |
-		| deadObjects |
-		deadObjects := OrderedCollection new.
-		currentTime := (illiEphemeron initializationTime - initialTime) floor.
-
-		aliveObjects do: [ :e |
-			currentTime > (e finalizationTime - initialTime) floor
-				ifTrue: [ deadObjects add: e ] ].
-
-		aliveObjects removeAll: deadObjects.
-		aliveObjects add: illiEphemeron.
-		maxLiveSize := maxLiveSize max: aliveObjects size ].
-
-	self assert: maxLiveSize equals: 7
+	self assert: analyzer maxLiveSize equals: 7
 ]
