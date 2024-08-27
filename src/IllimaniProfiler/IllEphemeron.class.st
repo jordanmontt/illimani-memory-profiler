@@ -113,7 +113,8 @@ IllEphemeron >> initializationTime: anObject [
 IllEphemeron >> initialize [
 
 	super initialize.
-	initializationTime := Time primUTCMicrosecondsClock.
+	"initializationTime := Time primUTCMicrosecondsClock."
+	initializationTime := Smalltalk vm parameterAt: 34.
 	survivedScavenges := Smalltalk vm incrementalGCCount.
 	survivedFullGC := Smalltalk vm fullGCCount.
 	forcedFinalization := false
@@ -183,7 +184,8 @@ IllEphemeron >> mourn [
 
 	key := nil.
 
-	finalizationTime := Time primUTCMicrosecondsClock.
+	"finalizationTime := Time primUTCMicrosecondsClock."
+	finalizationTime := Smalltalk vm parameterAt: 34.
 	self updateStatistics
 ]
 

@@ -40,12 +40,6 @@ IllAbstractProfiler >> announceProfilerStopedProfiling [
 	illimaniAnnouncer announce: IllStopedProfilingAnnouncement
 ]
 
-{ #category : 'accessing - statistics' }
-IllAbstractProfiler >> beginningOfProfilingTime [
-
-	^ startTime
-]
-
 { #category : 'exporting' }
 IllAbstractProfiler >> exportData [
 	"This exports BOTH the metadata AND the raw allocations"
@@ -98,7 +92,8 @@ IllAbstractProfiler >> initialize [
 { #category : 'profiling' }
 IllAbstractProfiler >> initializeVMStats [
 
-	startTime := Time primUTCMicrosecondsClock.
+	"startTime := Time primUTCMicrosecondsClock."
+	startTime := Smalltalk vm parameterAt: 34.
 	vmStats := Smalltalk vm getParameters
 ]
 
@@ -299,12 +294,6 @@ IllAbstractProfiler >> totalFullGCs [
 ]
 
 { #category : 'accessing - statistics' }
-IllAbstractProfiler >> totalProfiledTime [
-
-	^ totalTime
-]
-
-{ #category : 'accessing - statistics' }
 IllAbstractProfiler >> totalScavenges [
 
 	^ vmStats at: 9
@@ -325,7 +314,8 @@ IllAbstractProfiler >> uninstrument [
 { #category : 'profiling' }
 IllAbstractProfiler >> updateVMStats [
 
-	totalTime := Time primUTCMicrosecondsClock - startTime.
+	"totalTime := Time primUTCMicrosecondsClock - startTime."
+	totalTime := (Smalltalk vm parameterAt: 34) - startTime.
 	Smalltalk vm getParameters keysAndValuesDo: [ :idx :value |
 		value isInteger ifTrue: [ vmStats at: idx put: value - ((vmStats at: idx) ifNil: [ 0 ]) ] ]
 ]
