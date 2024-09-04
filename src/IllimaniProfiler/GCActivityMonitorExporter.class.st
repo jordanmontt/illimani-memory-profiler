@@ -10,7 +10,7 @@ Class {
 }
 
 { #category : 'instance creation' }
-GCActivityMonitorExporter class >> on: aGCActivityMonitor [ 
+GCActivityMonitorExporter class >> on: aGCActivityMonitor [
 
 	^ self new
 		gcActivityMonitor: aGCActivityMonitor;
@@ -25,7 +25,7 @@ GCActivityMonitorExporter >> export: writeStream data: someData header: aHeaderI
 		writeHeader: #( #fullGCsBySecond );
 		fieldWriter: #raw;
 		yourself.
-	
+
 	someData do: [ :e | writer nextPut: { e } ].
 	writer close
 ]
@@ -34,11 +34,11 @@ GCActivityMonitorExporter >> export: writeStream data: someData header: aHeaderI
 GCActivityMonitorExporter >> exportData: baseFileName [
 
 	| writeStream |
-	
+
 	writeStream := (baseFileName , '-full-gcs' , '.csv') asFileReference createFile writeStream.
 	self exportFullGCs: writeStream.
 	writeStream := (baseFileName , '-scavenges' , '.csv') asFileReference createFile writeStream.
-	self exportScavengesGCs: writeStream.
+	self exportScavengesGCs: writeStream
 ]
 
 { #category : 'exporting' }

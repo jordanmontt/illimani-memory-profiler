@@ -45,22 +45,26 @@ AllocationsGroupedByTablePresenter >> initializePresenters [
 		activateOnSingleClick;
 		items: groupedAllocations;
 		alternateRowsColor;
+		yourself.
+	
+	tablePresenter
 		addColumn: (SpStringTableColumn
 			title: self titleForGroupingColumn
-			evaluated: [ :assoc | assoc key ]);
+			evaluated: [ :assoc | assoc key ]).
+	tablePresenter
+		addColumn: (SpStringTableColumn
+			title: 'Total allocated objects'
+			evaluated: [ :assoc | assoc value size asStringWithCommas ]);
+		addColumn: (SpStringTableColumn
+			title: '% Allocations'
+			evaluated: [ :assoc | self convertToPercentageString: (assoc value size / totalAllocations) ]).
+	tablePresenter
 		addColumn: (SpStringTableColumn
 			title: 'Total allocated memory'
 			evaluated: [ :assoc | (assoc value sum: [ :e | e sizeInBytes ]) humanReadableByteSizeString ]);
 		addColumn: (SpStringTableColumn
 			title: '% Memory'
-			evaluated: [ :assoc | self convertToPercentageString: (assoc value sum: [ :e | e sizeInBytes ]) / totalMemory ]);
-		addColumn: (SpStringTableColumn
-			title: '# of allocated objects'
-			evaluated: [ :assoc | assoc value size asStringWithCommas ]);
-		addColumn: (SpStringTableColumn
-			title: '% Allocated objects'
-			evaluated: [ :assoc | self convertToPercentageString: (assoc value size / totalAllocations) ]);
-			yourself
+			evaluated: [ :assoc | self convertToPercentageString: (assoc value sum: [ :e | e sizeInBytes ]) / totalMemory ])
 ]
 
 { #category : 'accessing - model' }

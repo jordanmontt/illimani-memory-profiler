@@ -6,7 +6,8 @@ Class {
 	#superclass : 'Object',
 	#instVars : [
 		'sortedByTotalAllocationsNodes',
-		'groupedNodesDictionary'
+		'groupedNodesDictionary',
+		'sortedByLifetimeNodes'
 	],
 	#category : 'IllimaniProfiler-Model-Statistics',
 	#package : 'IllimaniProfiler',
@@ -42,20 +43,34 @@ GroupedAllocationsByAllocatorCollection >> inspectorExtension [
 ]
 
 { #category : 'api' }
-GroupedAllocationsByAllocatorCollection >> sort [
+GroupedAllocationsByAllocatorCollection >> sortByLifetime [
+
+	sortedByLifetimeNodes := groupedNodesDictionary sorted: [ :a :b |
+		a value summedLifetimes > b value summedLifetimes ]
+]
+
+{ #category : 'api' }
+GroupedAllocationsByAllocatorCollection >> sortByNumberOfAllocations [
 
 	sortedByTotalAllocationsNodes := groupedNodesDictionary sorted: [ :a :b |
 		a value totalAllocations > b value totalAllocations ]
 ]
 
 { #category : 'api' }
+GroupedAllocationsByAllocatorCollection >> sortedByLifetime [
+
+	sortedByLifetimeNodes ifNil: [ self sortByLifetime ].
+	^ sortedByLifetimeNodes
+]
+
+{ #category : 'api' }
 GroupedAllocationsByAllocatorCollection >> sortedByTotalAllocations [
 
-	sortedByTotalAllocationsNodes ifNil: [ self sort ].
+	sortedByTotalAllocationsNodes ifNil: [ self sortByNumberOfAllocations ].
 	^ sortedByTotalAllocationsNodes
 ]
 
-{ #category : 'accessing' }
+{ #category : 'api' }
 GroupedAllocationsByAllocatorCollection >> updateAllocationForAllocator: allocator allocation: anAllocationHolder [
 
 	groupedNodesDictionary at: allocator

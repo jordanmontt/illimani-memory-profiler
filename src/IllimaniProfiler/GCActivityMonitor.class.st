@@ -65,7 +65,7 @@ GCActivityMonitor >> run: aCodeBlock [
 		[ true ] whileTrue: [
 			self registerStats.
 			waitingTime wait ] ] fork.
-	
+
 	aCodeBlock ensure: [ self terminate ]
 ]
 

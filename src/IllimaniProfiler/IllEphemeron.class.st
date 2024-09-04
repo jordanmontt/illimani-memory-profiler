@@ -9,11 +9,14 @@ Class {
 		'allocatedObjectClass',
 		'survivedScavenges',
 		'survivedFullGC',
-		'forcedFinalization'
+		'forcedFinalization',
+		'allocationSite',
+		'allocatorClass',
+		'programCounter'
 	],
-	#category : 'IllimaniProfiler-Object-Lifetimes-Profiler',
+	#category : 'IllimaniProfiler-Profiler',
 	#package : 'IllimaniProfiler',
-	#tag : 'Object-Lifetimes-Profiler'
+	#tag : 'Profiler'
 }
 
 { #category : 'accessing' }
@@ -26,6 +29,30 @@ IllEphemeron >> allocatedObjectClass [
 IllEphemeron >> allocatedObjectClass: anObject [
 
 	allocatedObjectClass := anObject
+]
+
+{ #category : 'accessing' }
+IllEphemeron >> allocationSite [
+
+	^ allocationSite
+]
+
+{ #category : 'accessing' }
+IllEphemeron >> allocationSite: aMethod [
+
+	allocationSite := aMethod
+]
+
+{ #category : 'accessing' }
+IllEphemeron >> allocatorClass [
+
+	^ allocatorClass
+]
+
+{ #category : 'accessing' }
+IllEphemeron >> allocatorClass: anObject [
+
+	allocatorClass := anObject
 ]
 
 { #category : 'accessing' }
@@ -50,7 +77,8 @@ IllEphemeron >> flattenedInstanceVariables [
 		  allocatedObjectClass.
 		  survivedScavenges.
 		  survivedFullGC.
-		  forcedFinalization }
+		  forcedFinalization.
+		  allocationSite name }
 ]
 
 { #category : 'finalization' }
@@ -85,27 +113,34 @@ IllEphemeron >> initializationTime: anObject [
 IllEphemeron >> initialize [
 
 	super initialize.
-	initializationTime := Time primUTCMicrosecondsClock.
+	"initializationTime := Time primUTCMicrosecondsClock."
+	initializationTime := Smalltalk vm parameterAt: 34.
 	survivedScavenges := Smalltalk vm incrementalGCCount.
 	survivedFullGC := Smalltalk vm fullGCCount.
 	forcedFinalization := false
 ]
 
 { #category : 'inspector - extensions' }
+IllEphemeron >> inspectionElements [
+
+	^ {
+		  ('Allocated Object Class' -> allocatedObjectClass).
+		  ('Object''s lifetime' -> self lifetimeAsDuration humanReadablePrintString).
+		  ('Allocation site' -> allocationSite).
+		  ('Memory Size' -> sizeInBytes humanReadableByteSizeString).
+		  ('Survived scavenges' -> survivedScavenges).
+		  ('Survived full GCs' -> survivedFullGC).
+		  ('Initialization time' -> initializationTime).
+		  ('Finalization time' -> finalizationTime).
+		  ('Finalization was forced?' -> forcedFinalization) }
+]
+
+{ #category : 'inspector - extensions' }
 IllEphemeron >> inspectorExtension: aBuilder [
 
 	<inspectorPresentationOrder: 0 title: 'Overview'>
-	| tablePresenter elements items |
-	elements := {
-		('Allocated Object Class' -> allocatedObjectClass ).
-		('Memory Size' -> sizeInBytes humanReadableByteSizeString).
-	 	('Initialization time' -> initializationTime).
-		('Finalization time' -> finalizationTime).
-		('Object''s lifetime' -> self lifetimeAsDuration humanReadablePrintString).
-		('Survived scavenges' -> survivedScavenges).
-		('Survived full GCs' -> survivedFullGC).
-		('Finalization was forced?' -> forcedFinalization) }.
-	items := elements collect: [ :e | StInspectorAssociationNode hostObject: e ].
+	| tablePresenter  items |
+	items := self inspectionElements collect: [ :e | StInspectorAssociationNode hostObject: e ].
 	tablePresenter := aBuilder newTable.
 	tablePresenter
 		addColumn: (SpStringTableColumn title: 'Name' evaluated: #key);
@@ -113,6 +148,18 @@ IllEphemeron >> inspectorExtension: aBuilder [
 		items: items;
 		beResizable.
 	^ tablePresenter
+]
+
+{ #category : 'inspector - extensions' }
+IllEphemeron >> inspectorExtensionSenders: aBuilder [
+
+	"<inspectorPresentationOrder: 2 title: 'Senders'>"
+	| senders |
+	"senders not yet implemented"
+	^ aBuilder newList
+		items: (senders reject: #isNil);
+		display: [ :aMethod | "we ask the method because of the compiled blocks" aMethod method name ];
+		yourself
 ]
 
 { #category : 'accessing' }
@@ -137,7 +184,8 @@ IllEphemeron >> mourn [
 
 	key := nil.
 
-	finalizationTime := Time primUTCMicrosecondsClock.
+	"finalizationTime := Time primUTCMicrosecondsClock."
+	finalizationTime := Smalltalk vm parameterAt: 34.
 	self updateStatistics
 ]
 
@@ -147,6 +195,18 @@ IllEphemeron >> printOn: aStream [
 	aStream << allocatedObjectClass name << ' lifetime: '
 	<< self lifetimeAsDuration totalSeconds asFloat asString << ' seconds' << ' weights '
 	<< sizeInBytes humanReadableByteSizeString
+]
+
+{ #category : 'accessing' }
+IllEphemeron >> programCounter [
+
+	^ programCounter
+]
+
+{ #category : 'accessing' }
+IllEphemeron >> programCounter: anObject [
+
+	programCounter := anObject
 ]
 
 { #category : 'accessing' }

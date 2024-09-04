@@ -65,7 +65,7 @@ ObjectLifetimesTablePresenter >> initializeTablePresenter [
 				 yourself);
 		addColumn: (SpStringTableColumn title: 'Allocated object class' evaluated: #key);
 		addColumn: (SpStringTableColumn
-				title: '% Lifetime'
+				title: 'Avg. lifetimes'
 				evaluated: [ :e | self toPrettyPercentage: (self relativeLifetimeFor: e) ]);
 		addColumn: (SpStringTableColumn
 				title: '% Allocations'

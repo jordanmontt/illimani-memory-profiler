@@ -17,16 +17,16 @@ Class {
 IllAbstractExporter >> exportAllocationModelCollection [
 
 	| writeStream writer fileName |
-	
+
 	baseFileName ifNil: [ baseFileName := self fileNameToExport ].
 	fileName := baseFileName , '.csv'.
-	
+
 	writeStream := fileName asFileReference createFile writeStream.
 	writer := (NeoCSVWriter on: writeStream)
 		writeHeader: self headerOfAllocationModel;
 		fieldWriter: #raw;
 		yourself.
-	
+
 	profiler objectAllocations do: [ :anAllocationModel |
 		writer nextPut: anAllocationModel flattenedInstanceVariables ].
 
@@ -37,7 +37,7 @@ IllAbstractExporter >> exportAllocationModelCollection [
 IllAbstractExporter >> exportData [
 
 	baseFileName := self fileNameToExport.
-	
+
 	self exportMetaData.
 	self exportAllocationModelCollection.
 	self exportGCActivity
@@ -53,7 +53,7 @@ IllAbstractExporter >> exportGCActivity [
 IllAbstractExporter >> exportMetaData [
 
 	| tempDict jsonString  writeStream fileName |
-	
+
 	baseFileName ifNil: [ baseFileName := self fileNameToExport ].
 	fileName := baseFileName , '.json'.
 

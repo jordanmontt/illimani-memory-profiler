@@ -170,7 +170,7 @@ IllAbstractUI >> profiler: aProfiler [
 { #category : 'initialization - lazy presenters' }
 IllAbstractUI >> profilerSummaryPresenter [
 
-	^ self subclassResponsibility
+	^ ProfilerSummaryPresenter on: profiler
 ]
 
 { #category : 'actions' }

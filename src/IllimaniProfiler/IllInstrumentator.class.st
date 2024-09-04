@@ -88,12 +88,12 @@ IllInstrumentator >> initializeMethodProxies [
 	proxyNewPinnedKeyword := MpMethodProxy onMethod: Behavior >> #basicNewPinned: handler: handler.
 	proxyNewTenured := MpMethodProxy onMethod: Behavior >> #basicNewTenured handler: handler.
 	proxyNewTenuredKeyword := MpMethodProxy onMethod: Behavior >> #basicNewTenured: handler: handler.
-	
+
 	"Specialized primitives"
 	proxyArrayClass := MpMethodProxy onMethod: Array class >> #new: handler: handler.
 	proxyIntervalNew := MpMethodProxy onMethod: Interval class >> #new handler: handler.
 	proxyArobas := MpMethodProxy onMethod: Number >> #@ handler: handler.
-	
+
 	"Copy and clone primitives"
 	proxyCopy := MpMethodProxy onMethod: Object >> #shallowCopy handler: handler.
 	proxyClone := MpMethodProxy onMethod: Object >> #clone handler: handler.

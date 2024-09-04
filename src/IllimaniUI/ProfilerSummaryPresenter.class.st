@@ -12,7 +12,7 @@ Class {
 { #category : 'layout' }
 ProfilerSummaryPresenter >> allocatedMemoryRateString [
 
-	^ profiler allocatedMemoryRatePerSecond asInteger humanReadableByteSizeString
+	^ profiler allocationsStats allocatedMemoryRatePerSecond asInteger humanReadableByteSizeString
 	  , ' per second'
 ]
 
@@ -20,7 +20,7 @@ ProfilerSummaryPresenter >> allocatedMemoryRateString [
 ProfilerSummaryPresenter >> allocationRateString [
 
 	| rate |
-	rate := profiler allocationRatePerSecond.
+	rate := profiler allocationsStats allocationRatePerSecond.
 	^ rate asInteger asStringWithCommas , ' allocations per second'
 ]
 
@@ -52,7 +52,7 @@ ProfilerSummaryPresenter >> defaultLayout [
 			add: generalStatsTable;
 			yourself );
 		add: gcReport;
-		positionOfSlider: 0.33;
+		positionOfSlider: 0.35;
 		yourself
 ]
 
@@ -61,14 +61,16 @@ ProfilerSummaryPresenter >> generalStatsAssociations [
 
 	^ {
 		('Total profiled time' ->
-			(Duration microSeconds: profiler totalProfiledTime) humanReadableStringWithOnlySeconds).
+			(Duration microSeconds: profiler totalTime) humanReadableStringWithOnlySeconds).
 		('Sampling rate' -> profiler samplingRate asFloat asString).
 		('Total allocated objects' -> profiler allocationsStats totalAllocatedObjects asStringWithCommas).
 		('Allocations rate' -> self allocationRateString ).
 		('Total allocated memory' ->
 			profiler allocationsStats totalAllocatedMemory humanReadableByteSizeString).
 		('Allocated memory rate' -> self allocatedMemoryRateString).
-		('Profiled code' -> profiler profiledCode) }
+		('Profiled code' -> profiler profiledCode).
+		('Classes that allocate objects' -> profiler allocationsStats numberOfAllocatorClasses asString).
+		 ('Methods that allocate objects' -> profiler allocationsStats numberOfAllocatorMethods asString) }
 ]
 
 { #category : 'accessing - model' }
