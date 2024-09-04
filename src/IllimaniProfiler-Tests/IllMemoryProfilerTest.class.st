@@ -62,7 +62,8 @@ IllMemoryProfilerTest >> testProfileOnFinalizesCorrectly [
 	big collection, the GCs take time."
 	self timeLimit: 1 minute.
 
-	timeNow := Time microsecondClockValue.
+	"The lifetime is calculated in terms of allocated bytes"
+	timeNow := Smalltalk vm parameterAt: 34.
 	profiler profileOn: [ 10 timesRepeat: [ IllMemoryProfiler new ] ].
 
 	"We let the GC run for N times to clean the not referenced objects. Because of the

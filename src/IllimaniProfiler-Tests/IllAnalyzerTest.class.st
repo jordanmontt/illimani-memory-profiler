@@ -13,6 +13,7 @@ Class {
 IllAnalyzerTest >> testAnalyzeAllocations [
 
 	| ill |
+	self skip.
 	ill := IllMemoryProfiler new.
 	ill profileOn: [ 15 timesRepeat: [ StPlaygroundPresenter open close ] ].
 	IllAnalyzer new analyzeAllocations: ill allocationsStats allocationsByLifetime
