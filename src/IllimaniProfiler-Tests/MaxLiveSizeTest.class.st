@@ -4,15 +4,16 @@ Class {
 	#instVars : [
 		'mockedObjectAllocations'
 	],
-	#category : 'IllimaniProfiler-Tests-Model-Statistics',
+	#category : 'IllimaniProfiler-Tests-Analyzer',
 	#package : 'IllimaniProfiler-Tests',
-	#tag : 'Model-Statistics'
+	#tag : 'Analyzer'
 }
 
 { #category : 'running' }
 MaxLiveSizeTest >> setUp [
 
 	| a b c d e f g h i j k l m initialTime |
+	
 	super setUp.
 	initialTime := Time primUTCMicrosecondsClock.
 	a := IllEphemeron new
@@ -54,7 +55,7 @@ MaxLiveSizeTest >> setUp [
 	g := IllEphemeron new
 		initializationTime: (initialTime + 5000000);
 		finalizationTime: (initialTime + 6000000);
-		sizeInBytes: 15;
+		sizeInBytes: 10;
 		key: #g;
 		yourself.
 	h := IllEphemeron new
@@ -72,7 +73,7 @@ MaxLiveSizeTest >> setUp [
 	j := IllEphemeron new
 		initializationTime: (initialTime + 13000000);
 		finalizationTime: (initialTime + 16000000);
-		sizeInBytes: 10;
+		sizeInBytes: 100;
 		key: #j;
 		yourself.
 	k := IllEphemeron new
@@ -90,22 +91,11 @@ MaxLiveSizeTest >> setUp [
 	m := IllEphemeron new
 		initializationTime: (initialTime + 11000000);
 		finalizationTime: (initialTime + 14000000);
-		sizeInBytes: 10;
+		sizeInBytes: 40;
 		key: #m;
 		yourself.
 
-	mockedObjectAllocations := { a .b .c .d .e .f .g .h .i .j .k .l .m }
-]
-
-{ #category : 'tests' }
-MaxLiveSizeTest >> testClassify [
-
-	| analyzer |
-	analyzer := IllAnalyzer new
-		objectAllocations: mockedObjectAllocations;
-		yourself.
-
-	self assert: analyzer maxLiveSize equals: 7
+	mockedObjectAllocations := { a .b .c .d .e .f .g .h .i .j .k .l .m } sorted: [ :v1 :v2 | v1 initializationTime < v2 initializationTime ]
 ]
 
 { #category : 'tests' }
@@ -116,6 +106,5 @@ MaxLiveSizeTest >> testMaxLiveSize [
 		objectAllocations: mockedObjectAllocations;
 		yourself.
 
-	"There are 7 objects with a size of 10 except one that has 15 of size"
-	self assert: analyzer maxLiveSize equals: 75
+	self assert: analyzer maxLiveSize equals: 140 "j and m are the only alive objects at point 13 of the timeline. J weights 100 bytes and m 40"
 ]

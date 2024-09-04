@@ -8,16 +8,15 @@ Class {
 		'objectAllocations',
 		'maxLiveSize',
 		'initialAllocationTime',
-		'endOfProgram',
 		'taThreshold',
-		'totalAllocation'
+		'totalTime'
 	],
 	#category : 'IllimaniProfiler-Analyzer',
 	#package : 'IllimaniProfiler',
 	#tag : 'Analyzer'
 }
 
-{ #category : 'as yet unclassified' }
+{ #category : 'api' }
 IllAnalyzer >> analyzeAllocations: allocations [
 	"The allocations are grouped and ordered by lifetime"
 
@@ -25,23 +24,25 @@ IllAnalyzer >> analyzeAllocations: allocations [
 	1 halt
 ]
 
-{ #category : 'accessing' }
+{ #category : 'calculating' }
 IllAnalyzer >> calculateMaxLiveSize [
 
-	| aliveObjects currentTime initialTime maxAlive |
-	maxAlive := 0.
+	| aliveObjects currentTime initialTime aliveObjectsSize |
+	maxLiveSize := 0.
 	initialTime := objectAllocations first initializationTime.
 	aliveObjects := OrderedCollection with: objectAllocations first.
 
 	objectAllocations allButFirstDo: [ :illiEphemeron |
 		| deadObjects |
+		aliveObjectsSize := 0.
+		
 		currentTime := illiEphemeron initializationTime - initialTime.
-		deadObjects := aliveObjects select: [ :e | currentTime > (e finalizationTime - initialTime) ].
+		deadObjects := aliveObjects select: [ :e | currentTime >= (e finalizationTime - initialTime) ].
 		aliveObjects removeAll: deadObjects.
 		aliveObjects add: illiEphemeron.
-		aliveObjects size > maxAlive ifTrue: [ 
-			maxAlive := aliveObjects size.
-			maxLiveSize := aliveObjects sum: #sizeInBytes ] ].
+		
+		aliveObjects do: [ :e | aliveObjectsSize := aliveObjectsSize + e sizeInBytes ].
+		maxLiveSize := maxLiveSize max: aliveObjectsSize ].
 
 	^ maxLiveSize
 ]
@@ -51,19 +52,18 @@ IllAnalyzer >> classify [
 
 	taThreshold := 0.2.
 	initialAllocationTime := objectAllocations first initializationTime.
-	endOfProgram := (objectAllocations max: #finalizationTime) - initialAllocationTime.
 
 	objectAllocations do: [ :illEphe |
-		| age timeOfDeath isObjectClassified |
+		| age "timeOfDeath" isObjectClassified |
 		isObjectClassified := false.
 		age := illEphe lifetime / self maxLiveSize.
-		timeOfDeath := illEphe finalizationTime - initialAllocationTime / totalAllocation min: 1.
+		"timeOfDeath := illEphe finalizationTime - initialAllocationTime / totalTime min: 1."
 
-		(self isObjectImmortal: illEphe timeOfDeath: timeOfDeath) ifTrue: [
-			immortalObjectsBin add: illEphe.
-			isObjectClassified := true ].
 		(self isObjectShortLived: illEphe age: age) ifTrue: [
 			shortObjectsBin add: illEphe.
+			isObjectClassified := true ].
+		(self isObjectImmortal: illEphe) ifTrue: [
+			immortalObjectsBin add: illEphe.
 			isObjectClassified := true ].
 		isObjectClassified ifFalse: [ longObjectsBin add: illEphe ] ]
 ]
@@ -72,18 +72,23 @@ IllAnalyzer >> classify [
 IllAnalyzer >> initialize [
 
 	super initialize.
-	immortalObjectsBin := OrderedCollection new.
-	shortObjectsBin := OrderedCollection new.
-	longObjectsBin := OrderedCollection new
+	immortalObjectsBin := OrderedCollection new: 10000.
+	shortObjectsBin := OrderedCollection new: 10000.
+	longObjectsBin := OrderedCollection new: 10000
 ]
 
-{ #category : 'api' }
-IllAnalyzer >> isObjectImmortal: illEphe timeOfDeath: timeOfDeath [
+{ #category : 'calculating' }
+IllAnalyzer >> isObjectImmortal: illEphe [
+	"| timeOfDeath birthToEndOfProgram |
+	timeOfDeath := illEphe finalizationTime - initialAllocationTime.
+	birthToEndOfProgram := totalTime - (illEphe initializationTime - initialAllocationTime).
 
-	^ timeOfDeath > (endOfProgram - (illEphe initializationTime - initialAllocationTime) / 2)
+	^ death > (birthToEndOfProgram / 2)"
+
+	^ totalTime - illEphe finalizationTime / illEphe lifetime <= 1
 ]
 
-{ #category : 'api' }
+{ #category : 'calculating' }
 IllAnalyzer >> isObjectShortLived: illEphe age: age [
 
 	^ age < (taThreshold * self maxLiveSize)
@@ -102,7 +107,6 @@ IllAnalyzer >> objectAllocations: col [
 ]
 
 { #category : 'accessing' }
-IllAnalyzer >> totalAllocation: totalAllocationInBytes [
-
-	totalAllocation := totalAllocationInBytes
+IllAnalyzer >> totalTime: anInteger [ 
+	totalTime := anInteger
 ]
