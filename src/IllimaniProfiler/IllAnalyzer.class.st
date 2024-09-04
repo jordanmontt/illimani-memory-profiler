@@ -50,7 +50,7 @@ IllAnalyzer >> calculateMaxLiveSize [
 { #category : 'api' }
 IllAnalyzer >> classify [
 
-	taThreshold := 0.2.
+	taThreshold := 0.45.
 	initialAllocationTime := objectAllocations first initializationTime.
 
 	objectAllocations do: [ :illEphe |
