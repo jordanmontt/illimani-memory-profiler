@@ -9,23 +9,18 @@ Class {
 		'maxLiveSize',
 		'initialAllocationTime',
 		'taThreshold',
-		'totalTime'
+		'totalTime',
+		'groupedAllocationSites'
 	],
 	#category : 'IllimaniProfiler-Analyzer',
 	#package : 'IllimaniProfiler',
 	#tag : 'Analyzer'
 }
 
-{ #category : 'api' }
-IllAnalyzer >> analyzeAllocations: allocations [
-	"The allocations are grouped and ordered by lifetime"
-
-	allocations first: 10.
-	1 halt
-]
-
-{ #category : 'api' }
+{ #category : 'calculating' }
 IllAnalyzer >> binObjects [
+
+	self groupAllocationSites.
 
 	taThreshold := 0.45.
 	initialAllocationTime := objectAllocations first initializationTime.
@@ -37,11 +32,18 @@ IllAnalyzer >> binObjects [
 
 		(self isObjectImmortal: illEphe) ifTrue: [
 			immortalObjectsBin add: illEphe.
+			(groupedAllocationSites at: illEphe allocationSite)
+				addImmortalObject: illEphe.
 			isObjectClassified := true ].
 		(isObjectClassified not and: [ self isObjectShortLived: illEphe age: age ]) ifTrue: [
 			shortObjectsBin add: illEphe.
+			(groupedAllocationSites at: illEphe allocationSite)
+				addShortLivedObject: illEphe.
 			isObjectClassified := true ].
-		isObjectClassified ifFalse: [ longObjectsBin add: illEphe ] ]
+		isObjectClassified ifFalse: [
+			longObjectsBin add: illEphe.
+			(groupedAllocationSites at: illEphe allocationSite)
+				addShortLivedObject: illEphe. ] ]
 ]
 
 { #category : 'calculating' }
@@ -68,9 +70,39 @@ IllAnalyzer >> calculateMaxLiveSize [
 ]
 
 { #category : 'api' }
-IllAnalyzer >> classifyAllocationsSites [
+IllAnalyzer >> classifyAllocationSites [
 
+	| hif hlf |
 	
+	self binObjects.
+	
+	hif := 0.
+	hlf := 0.6.
+
+	groupedAllocationSites valuesDo: [ :allocationSiteBin |
+		| is ss ls wasClassified |
+		wasClassified := false.
+		is := allocationSiteBin immortalObjects sum: #sizeInBytes.
+		ss := allocationSiteBin shortLivedObjects sum: #sizeInBytes.
+		ls := allocationSiteBin longLivedObjects sum: #sizeInBytes.
+
+		is > (ss + ls + hif) ifTrue: [
+			allocationSiteBin classification: #immortal.
+			wasClassified := true ].
+		(wasClassified not and: [ is + ls > (ss + hlf) ]) ifTrue: [
+			allocationSiteBin classification: #long.
+			wasClassified := true ].
+		wasClassified ifFalse: [ allocationSiteBin classification: #short ] ]
+]
+
+{ #category : 'calculating' }
+IllAnalyzer >> groupAllocationSites [
+	
+	groupedAllocationSites := Dictionary new.
+	objectAllocations do: [ :illEphe |
+		groupedAllocationSites
+			at: illEphe allocationSite
+			ifAbsentPut: IllAllocationSiteBin new ]
 ]
 
 { #category : 'initialization' }
@@ -113,7 +145,7 @@ IllAnalyzer >> objectAllocations: col [
 	objectAllocations := col
 ]
 
-{ #category : 'api' }
+{ #category : 'calculating' }
 IllAnalyzer >> timeOfDeathOf: illEphe [
 
 	^ illEphe finalizationTime - initialAllocationTime / totalTime min: 1
