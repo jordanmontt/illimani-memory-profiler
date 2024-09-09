@@ -24,6 +24,26 @@ IllAnalyzer >> analyzeAllocations: allocations [
 	1 halt
 ]
 
+{ #category : 'api' }
+IllAnalyzer >> binObjects [
+
+	taThreshold := 0.45.
+	initialAllocationTime := objectAllocations first initializationTime.
+
+	objectAllocations do: [ :illEphe |
+		| age isObjectClassified |
+		isObjectClassified := false.
+		age := illEphe lifetime / self maxLiveSize.
+
+		(self isObjectImmortal: illEphe) ifTrue: [
+			immortalObjectsBin add: illEphe.
+			isObjectClassified := true ].
+		(isObjectClassified not and: [ self isObjectShortLived: illEphe age: age ]) ifTrue: [
+			shortObjectsBin add: illEphe.
+			isObjectClassified := true ].
+		isObjectClassified ifFalse: [ longObjectsBin add: illEphe ] ]
+]
+
 { #category : 'calculating' }
 IllAnalyzer >> calculateMaxLiveSize [
 
@@ -48,24 +68,9 @@ IllAnalyzer >> calculateMaxLiveSize [
 ]
 
 { #category : 'api' }
-IllAnalyzer >> classify [
+IllAnalyzer >> classifyAllocationsSites [
 
-	taThreshold := 0.45.
-	initialAllocationTime := objectAllocations first initializationTime.
-
-	objectAllocations do: [ :illEphe |
-		| age "timeOfDeath" isObjectClassified |
-		isObjectClassified := false.
-		age := illEphe lifetime / self maxLiveSize.
-		"timeOfDeath := illEphe finalizationTime - initialAllocationTime / totalTime min: 1."
-
-		(self isObjectShortLived: illEphe age: age) ifTrue: [
-			shortObjectsBin add: illEphe.
-			isObjectClassified := true ].
-		(self isObjectImmortal: illEphe) ifTrue: [
-			immortalObjectsBin add: illEphe.
-			isObjectClassified := true ].
-		isObjectClassified ifFalse: [ longObjectsBin add: illEphe ] ]
+	
 ]
 
 { #category : 'initialization' }
@@ -79,13 +84,15 @@ IllAnalyzer >> initialize [
 
 { #category : 'calculating' }
 IllAnalyzer >> isObjectImmortal: illEphe [
-	"| timeOfDeath birthToEndOfProgram |
-	timeOfDeath := illEphe finalizationTime - initialAllocationTime.
-	birthToEndOfProgram := totalTime - (illEphe initializationTime - initialAllocationTime).
 
-	^ death > (birthToEndOfProgram / 2)"
+	| timeOfDeath birthToEndOfProgram |
+	"timeOfDeath := illEphe finalizationTime - initialAllocationTime."
+	timeOfDeath := self timeOfDeathOf: illEphe.
+	birthToEndOfProgram := totalTime - illEphe initializationTime.
 
-	^ totalTime - illEphe finalizationTime / illEphe lifetime <= 1
+	^ timeOfDeath > (birthToEndOfProgram / 2)
+
+	"^ totalTime - illEphe finalizationTime < illEphe lifetime"
 ]
 
 { #category : 'calculating' }
@@ -104,6 +111,12 @@ IllAnalyzer >> maxLiveSize [
 IllAnalyzer >> objectAllocations: col [
 
 	objectAllocations := col
+]
+
+{ #category : 'api' }
+IllAnalyzer >> timeOfDeathOf: illEphe [
+
+	^ illEphe finalizationTime - initialAllocationTime / totalTime min: 1
 ]
 
 { #category : 'accessing' }

@@ -18,3 +18,50 @@ IllAnalyzerTest >> testAnalyzeAllocations [
 	ill profileOn: [ 15 timesRepeat: [ StPlaygroundPresenter open close ] ].
 	IllAnalyzer new analyzeAllocations: ill allocationsStats allocationsByLifetime
 ]
+
+{ #category : 'tests' }
+IllAnalyzerTest >> testIsObjectImmortal [
+
+	| initialTime totalTime illEphe analyzer |
+	initialTime := 10.
+	totalTime := 110.
+	
+	illEphe := IllEphemeron new
+		initializationTime: 30;
+		finalizationTime: 50;
+		yourself.
+	analyzer := IllAnalyzer new
+		totalTime: totalTime;
+		initialAllocationTime: initialTime;
+		yourself.
+	self deny: (analyzer isObjectImmortal: illEphe).
+	
+	illEphe := IllEphemeron new
+		initializationTime: 30;
+		finalizationTime: 60;
+		yourself.
+	self assert: (analyzer isObjectImmortal: illEphe).
+]
+
+{ #category : 'tests' }
+IllAnalyzerTest >> testTimeOfDeathOf [
+
+	| initialTime deathTime totalTime illEphe analyzer |
+	initialTime := 10.
+	deathTime := 130.
+	totalTime := 100.
+	
+	illEphe := IllEphemeron new
+		finalizationTime: deathTime;
+		yourself.
+	analyzer := IllAnalyzer new
+		initialAllocationTime: initialTime;
+		totalTime: totalTime;
+		yourself.
+	self assert: (analyzer timeOfDeathOf: illEphe) equals: 1.
+	
+	illEphe := IllEphemeron new
+		finalizationTime: 100;
+		yourself.
+	self assert: (analyzer timeOfDeathOf: illEphe) closeTo: 0.9.
+]
