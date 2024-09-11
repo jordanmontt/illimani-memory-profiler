@@ -1,3 +1,6 @@
+"
+I am a simple data structure used by the class IllAnalyzer.
+"
 Class {
 	#name : 'IllAllocationSiteBin',
 	#superclass : 'Object',

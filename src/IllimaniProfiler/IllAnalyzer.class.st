@@ -1,3 +1,6 @@
+"
+Allocation sites classification algorithm. Paper: https://www.steveblackburn.org/pubs/papers/pbp-toplas-2007.pdf
+"
 Class {
 	#name : 'IllAnalyzer',
 	#superclass : 'Object',
