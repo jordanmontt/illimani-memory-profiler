@@ -52,7 +52,18 @@ IllAnalyzerTest >> testIsObjectImmortal [
 		initializationTime: 10;
 		finalizationTime: 61;
 		yourself.
-	self assert: (analyzer isObjectImmortal: illEphe)
+	self assert: (analyzer isObjectImmortal: illEphe).
+	
+	"Strange case"
+	analyzer := IllAnalyzer new
+		startTime: 0;
+		endTime: 17;
+		yourself.
+	illEphe := IllEphemeron new
+		initializationTime: 10;
+		finalizationTime: 11;
+		yourself.
+	self assert: (analyzer isObjectImmortal: illEphe).
 ]
 
 { #category : 'tests' }
