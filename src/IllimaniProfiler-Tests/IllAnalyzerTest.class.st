@@ -41,22 +41,36 @@ IllAnalyzerTest >> testIsObjectImmortal [
 		finalizationTime: 60;
 		yourself.
 	self assert: (analyzer isObjectImmortal: illEphe).
+	
+	illEphe := IllEphemeron new
+		initializationTime: 10;
+		finalizationTime: 110;
+		yourself.
+	self assert: (analyzer isObjectImmortal: illEphe).
+
+	illEphe := IllEphemeron new
+		initializationTime: 10;
+		finalizationTime: 61;
+		yourself.
+	self assert: (analyzer isObjectImmortal: illEphe)
 ]
 
 { #category : 'tests' }
 IllAnalyzerTest >> testTimeOfDeathOf [
 
-	| initialTime deathTime totalTime illEphe analyzer |
-	initialTime := 10.
-	deathTime := 130.
-	totalTime := 100.
+	| initialTime totalTime illEphe analyzer |
 	
-	illEphe := IllEphemeron new
-		finalizationTime: deathTime;
-		yourself.
+	self skip.
+	
+	initialTime := 10.
+	totalTime := 110.
+	
 	analyzer := IllAnalyzer new
 		initialAllocationTime: initialTime;
 		totalTime: totalTime;
+		yourself.
+	illEphe := IllEphemeron new
+		finalizationTime: 130;
 		yourself.
 	self assert: (analyzer timeOfDeathOf: illEphe) equals: 1.
 	
@@ -64,4 +78,36 @@ IllAnalyzerTest >> testTimeOfDeathOf [
 		finalizationTime: 100;
 		yourself.
 	self assert: (analyzer timeOfDeathOf: illEphe) closeTo: 0.9.
+	
+	illEphe := IllEphemeron new
+		finalizationTime: 110;
+		yourself.
+	self assert: (analyzer timeOfDeathOf: illEphe) closeTo: 1
+]
+
+{ #category : 'tests' }
+IllAnalyzerTest >> testTimeOfDeathOfNoNormalization [
+
+	| initialTime totalTime illEphe analyzer |
+	initialTime := 10.
+	totalTime := 110.
+	
+	analyzer := IllAnalyzer new
+		initialAllocationTime: initialTime;
+		totalTime: totalTime;
+		yourself.
+	illEphe := IllEphemeron new
+		finalizationTime: 130;
+		yourself.
+	self assert: (analyzer timeOfDeathOf: illEphe) equals: 110.
+	
+	illEphe := IllEphemeron new
+		finalizationTime: 100;
+		yourself.
+	self assert: (analyzer timeOfDeathOf: illEphe) closeTo: 90.
+	
+	illEphe := IllEphemeron new
+		finalizationTime: 110;
+		yourself.
+	self assert: (analyzer timeOfDeathOf: illEphe) closeTo: 100
 ]

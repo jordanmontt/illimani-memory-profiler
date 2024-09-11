@@ -60,7 +60,7 @@ IllMemoryProfiler >> internalRegisterAllocation: newlyAllocatedObject [
 		key: newlyAllocatedObject value: nil;
 		allocationSite: filteredContext compiledCode method;
 		programCounter: filteredContext pc;
-		"The allocator class is important since the allocator method can be defined in the super class"
+		"The allocator class is important since the sender can be defined in the super class"
 		allocatorClass: filteredContext receiver class;
 		yourself)
 ]
