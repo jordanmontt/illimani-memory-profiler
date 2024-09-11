@@ -17,7 +17,7 @@ IllMemoryProfiler >> allocationsStats [
 		ifFalse: [ ^ Warning signal: 'Need to wait until the profiling is finished to access the stats' ].
 
 	^ statsModel ifNil: [
-		  statsModel := IllStatisticsModel objectAllocations: ephemeronsCollection totalProfiledTime: totalTime ]
+		  statsModel := IllStatisticsModel objectAllocations: ephemeronsCollection totalProfiledTime: endTime ]
 ]
 
 { #category : 'exporting' }

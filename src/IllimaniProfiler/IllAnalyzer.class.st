@@ -11,8 +11,9 @@ Class {
 		'objectAllocations',
 		'maxLiveSize',
 		'initialAllocationTime',
-		'totalTime',
-		'groupedAllocationSites'
+		'groupedAllocationSites',
+		'startTime',
+		'endTime'
 	],
 	#category : 'IllimaniProfiler-Analyzer',
 	#package : 'IllimaniProfiler',
@@ -92,6 +93,11 @@ IllAnalyzer >> classifyAllocationSites [
 		wasClassified ifFalse: [ allocationSiteBin classification: #short ] ]
 ]
 
+{ #category : 'accessing' }
+IllAnalyzer >> endTime: anInteger [ 
+	endTime := anInteger
+]
+
 { #category : 'calculating' }
 IllAnalyzer >> groupAllocationSites [
 	
@@ -116,7 +122,7 @@ IllAnalyzer >> isObjectImmortal: illEphe [
 
 	| timeOfDeath halfwayBirthTimeToEnd |
 	timeOfDeath := self timeOfDeathOf: illEphe.
-	halfwayBirthTimeToEnd := (totalTime - illEphe initializationTime) / 2.
+	halfwayBirthTimeToEnd := (self totalTime - illEphe initializationTime) / 2.
 	^ timeOfDeath > halfwayBirthTimeToEnd
 
 	"^ totalTime - illEphe finalizationTime < illEphe lifetime"
@@ -138,18 +144,34 @@ IllAnalyzer >> maxLiveSize [
 ]
 
 { #category : 'accessing' }
+IllAnalyzer >> objectAllocations [
+	^ objectAllocations
+]
+
+{ #category : 'accessing' }
 IllAnalyzer >> objectAllocations: col [
 
 	objectAllocations := col
 ]
 
-{ #category : 'calculating' }
-IllAnalyzer >> timeOfDeathOf: illEphe [
-
-	^ illEphe finalizationTime - initialAllocationTime min: totalTime "/ totalTime min: 1"
+{ #category : 'accessing' }
+IllAnalyzer >> startTime [
+	^ startTime
 ]
 
 { #category : 'accessing' }
-IllAnalyzer >> totalTime: anInteger [ 
-	totalTime := anInteger
+IllAnalyzer >> startTime: anInteger [ 
+	startTime := anInteger
+]
+
+{ #category : 'calculating' }
+IllAnalyzer >> timeOfDeathOf: illEphe [
+
+	^ illEphe finalizationTime - initialAllocationTime min: self totalTime "/ totalTime min: 1"
+]
+
+{ #category : 'accessing' }
+IllAnalyzer >> totalTime [
+
+	^ endTime - startTime
 ]

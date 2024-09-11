@@ -16,12 +16,12 @@ Class {
 		'samplingCounter',
 		'samplingRate',
 		'vmStats',
-		'totalTime',
 		'startTime',
 		'profiledCode',
 		'gcActivityMonitor',
 		'illimaniAnnouncer',
-		'instrumentator'
+		'instrumentator',
+		'endTime'
 	],
 	#category : 'IllimaniProfiler-Profiler',
 	#package : 'IllimaniProfiler',
@@ -38,6 +38,12 @@ IllAbstractProfiler >> allocationsStats [
 IllAbstractProfiler >> announceProfilerStopedProfiling [
 
 	illimaniAnnouncer announce: IllStopedProfilingAnnouncement
+]
+
+{ #category : 'accessing' }
+IllAbstractProfiler >> endTime [
+
+	^ endTime
 ]
 
 { #category : 'exporting' }
@@ -112,7 +118,7 @@ IllAbstractProfiler >> internalRegisterAllocation: anObject [
 { #category : 'testing' }
 IllAbstractProfiler >> isProfilingFinished [
 
-	^ totalTime isNotNil
+	^ endTime isNotNil
 ]
 
 { #category : 'testing' }
@@ -184,7 +190,7 @@ IllAbstractProfiler >> registerAllocation: anObject [
 IllAbstractProfiler >> reportGCStatsOn: stream [
 
 	| oldSpaceEnd youngSpaceEnd memoryEnd fullGCs fullGCTime incrGCs incrGCTime tenureCount upTime rootOverflows |
-	upTime := totalTime.
+	upTime := endTime - startTime.
 	oldSpaceEnd := vmStats at: 1.
 	youngSpaceEnd := vmStats at: 2.
 	memoryEnd := vmStats at: 3.
@@ -278,6 +284,12 @@ IllAbstractProfiler >> startProfiling [
 	self instrument
 ]
 
+{ #category : 'accessing' }
+IllAbstractProfiler >> startTime [
+
+	^ startTime
+]
+
 { #category : 'profiling' }
 IllAbstractProfiler >> stopProfiling [
 
@@ -302,7 +314,7 @@ IllAbstractProfiler >> totalScavenges [
 { #category : 'accessing' }
 IllAbstractProfiler >> totalTime [
 
-	^ totalTime
+	^ endTime - startTime
 ]
 
 { #category : 'profiling' }
@@ -315,7 +327,7 @@ IllAbstractProfiler >> uninstrument [
 IllAbstractProfiler >> updateVMStats [
 
 	"totalTime := Time primUTCMicrosecondsClock - startTime."
-	totalTime := (Smalltalk vm parameterAt: 34) - startTime.
+	endTime := Smalltalk vm parameterAt: 34.
 	Smalltalk vm getParameters keysAndValuesDo: [ :idx :value |
 		value isInteger ifTrue: [ vmStats at: idx put: value - ((vmStats at: idx) ifNil: [ 0 ]) ] ]
 ]
