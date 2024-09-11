@@ -10,7 +10,6 @@ Class {
 		'immortalObjectsBin',
 		'objectAllocations',
 		'maxLiveSize',
-		'initialAllocationTime',
 		'groupedAllocationSites',
 		'startTime',
 		'endTime'
@@ -24,8 +23,6 @@ Class {
 IllAnalyzer >> binObjects [
 
 	self groupAllocationSites.
-
-	initialAllocationTime := objectAllocations first initializationTime.
 
 	objectAllocations do: [ :illEphe |
 		| isObjectClassified |
@@ -122,7 +119,7 @@ IllAnalyzer >> isObjectImmortal: illEphe [
 
 	| timeOfDeath halfwayBirthTimeToEnd |
 	timeOfDeath := self timeOfDeathOf: illEphe.
-	halfwayBirthTimeToEnd := (self totalTime - illEphe initializationTime) / 2.
+	halfwayBirthTimeToEnd := (endTime - illEphe initializationTime) / 2.
 	^ timeOfDeath > halfwayBirthTimeToEnd
 
 	"^ totalTime - illEphe finalizationTime < illEphe lifetime"
@@ -167,7 +164,7 @@ IllAnalyzer >> startTime: anInteger [
 { #category : 'calculating' }
 IllAnalyzer >> timeOfDeathOf: illEphe [
 
-	^ illEphe finalizationTime - initialAllocationTime min: self totalTime "/ totalTime min: 1"
+	^ (illEphe finalizationTime - startTime) min: endTime "/ totalTime min: 1"
 ]
 
 { #category : 'accessing' }

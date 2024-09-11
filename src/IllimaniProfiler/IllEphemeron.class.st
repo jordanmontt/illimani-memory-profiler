@@ -125,14 +125,15 @@ IllEphemeron >> inspectionElements [
 
 	^ {
 		  ('Allocated Object Class' -> allocatedObjectClass).
-		  ('Object''s lifetime' -> self lifetimeAsDuration humanReadablePrintString).
+		  ('Object''s lifetime' -> self lifetime humanReadableByteSizeString).
 		  ('Allocation site' -> allocationSite).
+		  ('Program counter' -> programCounter).
 		  ('Memory Size' -> sizeInBytes humanReadableByteSizeString).
 		  ('Survived scavenges' -> survivedScavenges).
 		  ('Survived full GCs' -> survivedFullGC).
+		  ('Finalization was forced?' -> forcedFinalization).
 		  ('Initialization time' -> initializationTime).
-		  ('Finalization time' -> finalizationTime).
-		  ('Finalization was forced?' -> forcedFinalization) }
+		  ('Finalization time' -> finalizationTime)  }
 ]
 
 { #category : 'inspector - extensions' }
@@ -193,7 +194,7 @@ IllEphemeron >> mourn [
 IllEphemeron >> printOn: aStream [
 
 	aStream << allocatedObjectClass name << ' lifetime: '
-	<< self lifetimeAsDuration totalSeconds asFloat asString << ' seconds' << ' weights '
+	<< self lifetime humanReadableByteSizeString << ' size: '
 	<< sizeInBytes humanReadableByteSizeString
 ]
 
