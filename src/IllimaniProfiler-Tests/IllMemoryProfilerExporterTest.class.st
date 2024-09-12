@@ -29,7 +29,7 @@ IllMemoryProfilerExporterTest >> assertCSVContent: csvReader [
 IllMemoryProfilerExporterTest >> expectedCSVHeader [
 
 	^ #( 'finalizationTimeInMicroSeconds' 'sizeInBytes' 'initializationTimeInMicroSeconds'
-	     'allocatedObjectClass' 'survivedScavenges' 'survivedFullGCs' 'forcedFinalization' 'allocationSite' )
+	     'allocatedObjectClass' 'survivedScavenges' 'survivedFullGCs' 'forcedFinalization' 'allocatorMethod' )
 ]
 
 { #category : 'exporting' }
