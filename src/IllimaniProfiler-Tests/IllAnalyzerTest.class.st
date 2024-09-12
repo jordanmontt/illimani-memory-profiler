@@ -26,31 +26,26 @@ IllAnalyzerTest >> testIsObjectImmortal [
 	startTime := 10.
 	endTime := 110.
 	
-	illEphe := IllEphemeron new
-		initializationTime: 30;
-		finalizationTime: 50;
-		yourself.
 	analyzer := IllAnalyzer new
 		endTime: endTime;
 		startTime: startTime;
+		yourself.
+
+	illEphe := IllEphemeron new
+		initializationTime: 30;
+		finalizationTime: 70;
 		yourself.
 	self deny: (analyzer isObjectImmortal: illEphe).
 	
 	illEphe := IllEphemeron new
 		initializationTime: 30;
-		finalizationTime: 60;
+		finalizationTime: 71;
 		yourself.
 	self assert: (analyzer isObjectImmortal: illEphe).
 	
 	illEphe := IllEphemeron new
 		initializationTime: 10;
 		finalizationTime: 110;
-		yourself.
-	self assert: (analyzer isObjectImmortal: illEphe).
-
-	illEphe := IllEphemeron new
-		initializationTime: 10;
-		finalizationTime: 61;
 		yourself.
 	self assert: (analyzer isObjectImmortal: illEphe).
 	
@@ -63,62 +58,5 @@ IllAnalyzerTest >> testIsObjectImmortal [
 		initializationTime: 10;
 		finalizationTime: 11;
 		yourself.
-	self assert: (analyzer isObjectImmortal: illEphe).
-]
-
-{ #category : 'tests' }
-IllAnalyzerTest >> testTimeOfDeathOf [
-
-	| startTime endTime illEphe analyzer |
-	startTime := 10.
-	endTime := 110.
-	
-	analyzer := IllAnalyzer new
-		startTime: startTime;
-		endTime: endTime;
-		yourself.
-	illEphe := IllEphemeron new
-		finalizationTime: 130;
-		yourself.
-	self assert: (analyzer timeOfDeathOf: illEphe) equals: 110.
-	
-	illEphe := IllEphemeron new
-		finalizationTime: 100;
-		yourself.
-	self assert: (analyzer timeOfDeathOf: illEphe) equals: 90.
-	
-	illEphe := IllEphemeron new
-		finalizationTime: 110;
-		yourself.
-	self assert: (analyzer timeOfDeathOf: illEphe) equals: 100
-]
-
-{ #category : 'tests' }
-IllAnalyzerTest >> testTimeOfDeathOfNormalized [
-
-	| initialTime totalTime illEphe analyzer |
-	
-	self skip.
-	
-	initialTime := 10.
-	totalTime := 110.
-	
-	analyzer := IllAnalyzer new
-		initialAllocationTime: initialTime;
-		totalTime: totalTime;
-		yourself.
-	illEphe := IllEphemeron new
-		finalizationTime: 130;
-		yourself.
-	self assert: (analyzer timeOfDeathOf: illEphe) equals: 1.
-	
-	illEphe := IllEphemeron new
-		finalizationTime: 100;
-		yourself.
-	self assert: (analyzer timeOfDeathOf: illEphe) closeTo: 0.9.
-	
-	illEphe := IllEphemeron new
-		finalizationTime: 110;
-		yourself.
-	self assert: (analyzer timeOfDeathOf: illEphe) closeTo: 1
+	self deny: (analyzer isObjectImmortal: illEphe).
 ]

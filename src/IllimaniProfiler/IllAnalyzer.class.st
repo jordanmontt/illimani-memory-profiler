@@ -117,10 +117,11 @@ IllAnalyzer >> initialize [
 { #category : 'calculating' }
 IllAnalyzer >> isObjectImmortal: illEphe [
 
-	| timeOfDeath halfwayBirthTimeToEnd |
-	timeOfDeath := self timeOfDeathOf: illEphe.
-	halfwayBirthTimeToEnd := (endTime - illEphe initializationTime) / 2.
-	^ timeOfDeath > halfwayBirthTimeToEnd
+	| timeOfDeath halfwayBirthtimeToEnd birthTime |
+	timeOfDeath := illEphe finalizationTime min: endTime.
+	birthTime := illEphe initializationTime.
+	halfwayBirthtimeToEnd := birthTime + (endTime - illEphe initializationTime / 2).
+	^ timeOfDeath > halfwayBirthtimeToEnd
 
 	"^ totalTime - illEphe finalizationTime < illEphe lifetime"
 ]
@@ -159,12 +160,6 @@ IllAnalyzer >> startTime [
 { #category : 'accessing' }
 IllAnalyzer >> startTime: anInteger [ 
 	startTime := anInteger
-]
-
-{ #category : 'calculating' }
-IllAnalyzer >> timeOfDeathOf: illEphe [
-
-	^ (illEphe finalizationTime - startTime) min: endTime "/ totalTime min: 1"
 ]
 
 { #category : 'accessing' }
