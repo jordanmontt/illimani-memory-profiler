@@ -100,17 +100,21 @@ IllAnalyzer >> groupAllocationSites [
 	
 	groupedAllocationSites := Dictionary new.
 	objectAllocations do: [ :illEphe |
+		| illAllocationSite|
+		illAllocationSite := illEphe allocationSite.
 		groupedAllocationSites
-			at: illEphe allocationSite
-			ifAbsentPut: IllAllocationSiteBin new ]
+			at: illAllocationSite
+			ifAbsentPut: (IllAllocationSiteBin new
+				allocationSite: illAllocationSite;
+				yourself) ]
 ]
 
 { #category : 'initialization' }
 IllAnalyzer >> initialize [
 
 	super initialize.
-	immortalObjectsBin := OrderedCollection new: 10000.
-	shortObjectsBin := OrderedCollection new: 10000.
+	immortalObjectsBin := OrderedCollection new: 100000.
+	shortObjectsBin := OrderedCollection new: 100000.
 	longObjectsBin := OrderedCollection new: 10000
 ]
 
@@ -150,6 +154,16 @@ IllAnalyzer >> objectAllocations [
 IllAnalyzer >> objectAllocations: col [
 
 	objectAllocations := col
+]
+
+{ #category : 'api' }
+IllAnalyzer >> pruneAllocationSites [
+
+	| v totalProgramAllocations |
+	v := 0.000002.
+	totalProgramAllocations := objectAllocations size.
+	^ groupedAllocationSites reject: [ :allocationSiteBin |
+		  allocationSiteBin totalAllocations < (v * totalProgramAllocations) ]
 ]
 
 { #category : 'accessing' }

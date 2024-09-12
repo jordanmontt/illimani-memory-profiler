@@ -159,7 +159,7 @@ AllocationStatisticsTestFixture >> groupedAndSortedByMethodAllocators [
 
 	self mockedAllocations do: [ :allo |
 		dict
-			at: allo allocationSite
+			at: allo allocatorMethod
 			update: [ :e |
 				e
 					add: allo;

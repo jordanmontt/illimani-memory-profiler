@@ -131,7 +131,7 @@ IllStatisticsModel >> walkAllocations [
 
 	objectAllocations do: [ :allocationHolder |
 		allocationNodesByMethod
-			updateAllocationForAllocator: allocationHolder allocationSite
+			updateAllocationForAllocator: allocationHolder allocatorMethod
 			allocation: allocationHolder ].
 
 	totalAllocatedMemory := objectAllocations

@@ -10,9 +10,9 @@ Class {
 		'survivedScavenges',
 		'survivedFullGC',
 		'forcedFinalization',
-		'allocationSite',
 		'allocatorClass',
-		'programCounter'
+		'programCounter',
+		'allocatorMethod'
 	],
 	#category : 'IllimaniProfiler-Profiler',
 	#package : 'IllimaniProfiler',
@@ -34,13 +34,19 @@ IllEphemeron >> allocatedObjectClass: anObject [
 { #category : 'accessing' }
 IllEphemeron >> allocationSite [
 
-	^ allocationSite
+	^ IllAllocationSite method: allocatorMethod byte: self allocatorByte
 ]
 
 { #category : 'accessing' }
 IllEphemeron >> allocationSite: aMethod [
 
-	allocationSite := aMethod
+	allocatorMethod := aMethod
+]
+
+{ #category : 'accessing' }
+IllEphemeron >> allocatorByte [
+
+	^ programCounter - 1
 ]
 
 { #category : 'accessing' }
@@ -53,6 +59,12 @@ IllEphemeron >> allocatorClass [
 IllEphemeron >> allocatorClass: anObject [
 
 	allocatorClass := anObject
+]
+
+{ #category : 'accessing' }
+IllEphemeron >> allocatorMethod [
+
+	^ allocatorMethod
 ]
 
 { #category : 'accessing' }
@@ -78,7 +90,7 @@ IllEphemeron >> flattenedInstanceVariables [
 		  survivedScavenges.
 		  survivedFullGC.
 		  forcedFinalization.
-		  allocationSite name }
+		  allocatorMethod name }
 ]
 
 { #category : 'finalization' }
@@ -126,7 +138,7 @@ IllEphemeron >> inspectionElements [
 	^ {
 		  ('Allocated Object Class' -> allocatedObjectClass).
 		  ('Object''s lifetime' -> self lifetime humanReadableByteSizeString).
-		  ('Allocation site' -> allocationSite).
+		  ('Allocation site' -> allocatorMethod).
 		  ('Program counter' -> programCounter).
 		  ('Memory Size' -> sizeInBytes humanReadableByteSizeString).
 		  ('Survived scavenges' -> survivedScavenges).
@@ -196,12 +208,6 @@ IllEphemeron >> printOn: aStream [
 	aStream << allocatedObjectClass name << ' lifetime: '
 	<< self lifetime humanReadableByteSizeString << ' size: '
 	<< sizeInBytes humanReadableByteSizeString
-]
-
-{ #category : 'accessing' }
-IllEphemeron >> programCounter [
-
-	^ programCounter
 ]
 
 { #category : 'accessing' }

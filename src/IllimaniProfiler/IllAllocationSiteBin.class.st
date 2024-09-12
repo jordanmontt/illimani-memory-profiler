@@ -8,7 +8,8 @@ Class {
 		'immortalObjects',
 		'longLivedObjects',
 		'shortLivedObjects',
-		'classification'
+		'classification',
+		'allocationSite'
 	],
 	#category : 'IllimaniProfiler-Analyzer',
 	#package : 'IllimaniProfiler',
@@ -31,6 +32,17 @@ IllAllocationSiteBin >> addLongLivedObject: object [
 IllAllocationSiteBin >> addShortLivedObject: object [
 
 	shortLivedObjects add: object
+]
+
+{ #category : 'accessing' }
+IllAllocationSiteBin >> allocationSite: anIllAllocationSite [ 
+	allocationSite := anIllAllocationSite
+]
+
+{ #category : 'accessing' }
+IllAllocationSiteBin >> allocationSiteForMethod: aMethod byte: aByteNumber [
+
+	allocationSite := IllAllocationSite method: aMethod byte: aByteNumber
 ]
 
 { #category : 'accessing' }
@@ -70,4 +82,10 @@ IllAllocationSiteBin >> longLivedObjects [
 IllAllocationSiteBin >> shortLivedObjects [
 
 	^ shortLivedObjects
+]
+
+{ #category : 'accessing' }
+IllAllocationSiteBin >> totalAllocations [
+
+	^ immortalObjects size + longLivedObjects size + shortLivedObjects size
 ]
