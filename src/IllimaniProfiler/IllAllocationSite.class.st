@@ -61,9 +61,8 @@ IllAllocationSite >> byte: anInteger [
 IllAllocationSite >> hash [
 
 	| hash |
-	hash := 16777619.
-	hash := hash * 486187739 * method hash.
-	hash := 486187739 * 486187739 * byte hash.
+	hash := method hash.
+	hash := hash * 486187739 + byte hash.
 	^ hash
 ]
 

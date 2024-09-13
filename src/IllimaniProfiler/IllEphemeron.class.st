@@ -138,8 +138,8 @@ IllEphemeron >> inspectionElements [
 	^ {
 		  ('Allocated Object Class' -> allocatedObjectClass).
 		  ('Object''s lifetime' -> self lifetime humanReadableByteSizeString).
-		  ('Allocation site' -> allocatorMethod).
-		  ('Program counter' -> programCounter).
+		  ('Allocator method' -> allocatorMethod).
+		  ('Allocator byte' -> self allocatorByte).
 		  ('Memory Size' -> sizeInBytes humanReadableByteSizeString).
 		  ('Survived scavenges' -> survivedScavenges).
 		  ('Survived full GCs' -> survivedFullGC).
