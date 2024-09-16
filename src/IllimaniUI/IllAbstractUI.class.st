@@ -136,7 +136,7 @@ IllAbstractUI >> initializeWindow: aWindowPresenter [
 
 	aWindowPresenter
 		title: self title;
-		initialExtent: 850 @ 750
+		initialExtent: 850 @ 760
 ]
 
 { #category : 'layout' }

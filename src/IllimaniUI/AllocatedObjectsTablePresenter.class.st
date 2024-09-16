@@ -1,5 +1,5 @@
 Class {
-	#name : 'ObjectLifetimesTablePresenter',
+	#name : 'AllocatedObjectsTablePresenter',
 	#superclass : 'SpPresenter',
 	#instVars : [
 		'tablePresenter',
@@ -15,14 +15,14 @@ Class {
 }
 
 { #category : 'initialization' }
-ObjectLifetimesTablePresenter >> connectPresenters [
+AllocatedObjectsTablePresenter >> connectPresenters [
 
 	inputPresenter whenTextChangedDo: [ :text | self filterTable: text ].
 	tablePresenter whenSelectedDo: [ :item | item value inspect ]
 ]
 
 { #category : 'layout' }
-ObjectLifetimesTablePresenter >> defaultLayout [
+AllocatedObjectsTablePresenter >> defaultLayout [
 
 	^ SpBoxLayout newTopToBottom
 		spacing: 5;
@@ -32,7 +32,7 @@ ObjectLifetimesTablePresenter >> defaultLayout [
 ]
 
 { #category : 'accessing - model' }
-ObjectLifetimesTablePresenter >> filterTable: aText [
+AllocatedObjectsTablePresenter >> filterTable: aText [
 
 	| newItems |
 	aText ifEmpty: [
@@ -44,7 +44,7 @@ ObjectLifetimesTablePresenter >> filterTable: aText [
 ]
 
 { #category : 'initialization' }
-ObjectLifetimesTablePresenter >> initializePresenters [
+AllocatedObjectsTablePresenter >> initializePresenters [
 
 	inputPresenter := self newTextInput
 		placeholder: 'Filter';
@@ -53,7 +53,7 @@ ObjectLifetimesTablePresenter >> initializePresenters [
 ]
 
 { #category : 'initialization' }
-ObjectLifetimesTablePresenter >> initializeTablePresenter [
+AllocatedObjectsTablePresenter >> initializeTablePresenter [
 
 	tablePresenter := self newTable.
 	tablePresenter
@@ -77,23 +77,23 @@ ObjectLifetimesTablePresenter >> initializeTablePresenter [
 ]
 
 { #category : 'initialization' }
-ObjectLifetimesTablePresenter >> relativeAllocationsFor: assoc [
+AllocatedObjectsTablePresenter >> relativeAllocationsFor: assoc [
 
 	^ (assoc value size / totalAllocations)* 100
 ]
 
 { #category : 'initialization' }
-ObjectLifetimesTablePresenter >> relativeLifetimeFor: assoc [
+AllocatedObjectsTablePresenter >> relativeLifetimeFor: assoc [
 
 	| relativeLifetimes |
-	relativeLifetimes := assoc value collect: [ :e | e finalizationTime - e initializationTime ].
+	relativeLifetimes := assoc value collect: [ :e | e lifetime ].
 	relativeLifetimes := relativeLifetimes collect: [ :e | 
 		e >= totalLifetime ifTrue: [ 100 ] ifFalse: [ (e / totalLifetime) * 100 ]].
 	^ relativeLifetimes average
 ]
 
 { #category : 'initialization' }
-ObjectLifetimesTablePresenter >> relativeMemoryFor: assoc [
+AllocatedObjectsTablePresenter >> relativeMemoryFor: assoc [
 
 	| totalGroupMemory |
 	totalGroupMemory := assoc value sum: [ :e | e sizeInBytes ].
@@ -101,7 +101,7 @@ ObjectLifetimesTablePresenter >> relativeMemoryFor: assoc [
 ]
 
 { #category : 'accessing - model' }
-ObjectLifetimesTablePresenter >> setModelBeforeInitialization: aProfiler [
+AllocatedObjectsTablePresenter >> setModelBeforeInitialization: aProfiler [
 
 	totalAllocations := aProfiler objectAllocations size.
 	totalLifetime := aProfiler totalTime.
@@ -114,7 +114,7 @@ ObjectLifetimesTablePresenter >> setModelBeforeInitialization: aProfiler [
 ]
 
 { #category : 'initialization' }
-ObjectLifetimesTablePresenter >> toPrettyPercentage: percentage [
+AllocatedObjectsTablePresenter >> toPrettyPercentage: percentage [
 
 	^ (percentage asFloat printShowingDecimalPlaces: 2) , '%'
 ]

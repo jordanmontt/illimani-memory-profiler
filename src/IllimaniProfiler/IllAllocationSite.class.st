@@ -24,19 +24,21 @@ Class {
 	#superclass : 'Object',
 	#instVars : [
 		'method',
-		'byte'
+		'byte',
+		'receiverClass'
 	],
 	#category : 'IllimaniProfiler-Analyzer',
 	#package : 'IllimaniProfiler',
 	#tag : 'Analyzer'
 }
 
-{ #category : 'as yet unclassified' }
-IllAllocationSite class >> method: method byte: byte [
+{ #category : 'instance creation' }
+IllAllocationSite class >> method: method byte: byte receiverClass: aClass [
 
 	^ self new
 		  method: method;
 		  byte: byte;
+		  receiverClass: aClass;
 		  yourself
 ]
 
@@ -44,7 +46,9 @@ IllAllocationSite class >> method: method byte: byte [
 IllAllocationSite >> = anObj [
 
 	self class = anObj class ifFalse: [ ^ false ].
-	^ method = anObj method and: [ byte = anObj byte ]
+	^ method = anObj method
+		and: [ byte = anObj byte
+			and: [ receiverClass = anObj receiverClass ] ]
 ]
 
 { #category : 'accessing' }
@@ -63,7 +67,35 @@ IllAllocationSite >> hash [
 	| hash |
 	hash := method hash.
 	hash := hash * 486187739 + byte hash.
+	hash := hash * 486187739 + receiverClass hash.
 	^ hash
+]
+
+{ #category : 'inspecting' }
+IllAllocationSite >> inspectionSource [
+
+	<inspectorPresentationOrder: 30 title: 'Allocation site'>
+	| interval codePresenter |
+	interval := (method sourceNode sourceNodeForPC: byte) sourceInterval.
+	codePresenter := SpCodePresenter new
+		                 beForBehavior: method methodClass;
+		                 text: method sourceCode;
+		                 addTextSegmentDecoration:
+			                 (SpTextPresenterDecorator forHighlight
+				                  interval: (interval first to: interval last + 1);
+				                  yourself);
+		                 beNotEditable;
+		                 yourself.
+	^ SpPresenter new
+		  layout: (SpBoxLayout newTopToBottom
+					add: (SpLabelPresenter new label: 'Receiver class:'; yourself) expand: false;
+				   add: (SpTextPresenter new text: receiverClass name; yourself) expand: false;
+				   add: (SpLabelPresenter new label: 'Method implemented in:'; yourself) expand: false;
+				   add: (SpTextPresenter new text: method methodClass name; yourself) expand: false;
+				   add: (SpLabelPresenter new label: 'Method code:'; yourself) expand: false;
+				   add: codePresenter expand: true;
+				   yourself);
+		  yourself
 ]
 
 { #category : 'accessing' }
@@ -80,6 +112,19 @@ IllAllocationSite >> method: aCollection [
 IllAllocationSite >> printOn: aStream [
 
 	method printOn: aStream.
-	aStream << ' at byte: '.
+	aStream << ' (' << receiverClass name << ') '.
+	aStream << 'at byte: '.
 	byte printOn: aStream
+]
+
+{ #category : 'accessing' }
+IllAllocationSite >> receiverClass [
+
+	^ receiverClass
+]
+
+{ #category : 'accessing' }
+IllAllocationSite >> receiverClass: anObject [
+
+	receiverClass := anObject
 ]

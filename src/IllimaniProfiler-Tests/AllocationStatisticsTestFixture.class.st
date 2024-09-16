@@ -20,58 +20,69 @@ AllocationStatisticsTestFixture >> allocationsOne [
 	allocations := OrderedCollection new.
 	allocations
 		add: (IllEphemeron new
-				 allocationSite: Margin >> #asMargin;
+				 allocatorMethod: Margin >> #asMargin;
 				 allocatorClass: Margin;
 				 allocatedObjectClass: OrderedCollection;
+				 programCounter: 10;
 				 sizeInBytes: 16;
 				 yourself);
 		add: (IllEphemeron new
-				 allocationSite: Margin >> #asMargin;
+				 allocatorMethod: Margin >> #asMargin;
 				 allocatorClass: Margin;
 				 allocatedObjectClass: OrderedCollection;
 				 sizeInBytes: 16;
+				 programCounter: 10;
 				 yourself);
 		add: (IllEphemeron new
-				 allocationSite: Margin >> #asMargin;
+				 allocatorMethod: Margin >> #asMargin;
 				 allocatorClass: Margin;
 				 allocatedObjectClass: Dictionary;
 				 sizeInBytes: 16;
+				 programCounter: 10;
 				 yourself);
 		add: (IllEphemeron new
-				 allocationSite: Margin >> #asMargin;
+				 allocatorMethod: Margin >> #asMargin;
 				 allocatorClass: Margin;
 				 allocatedObjectClass: ByteString;
 				 sizeInBytes: 32;
+				 programCounter: 10;
 				 yourself);
 		add: (IllEphemeron new
-				 allocationSite: Margin >> #asMargin;
+				 allocatorMethod: Margin >> #asMargin;
 				 allocatorClass: Margin;
 				 allocatedObjectClass: ByteString;
 				 sizeInBytes: 48;
+				 programCounter: 10;
 				 yourself);
 		add: (IllEphemeron new
-				 allocationSite: Margin >> #asMargin;
+				 allocatorMethod: Margin >> #asMargin;
 				 allocatorClass: Margin;
 				 allocatedObjectClass: ByteString;
 				 sizeInBytes: 100;
+				 programCounter: 10;
 				 yourself);
 		add: (IllEphemeron new
-				 allocationSite: Margin >> #asMargin;
+				 allocatorMethod: Margin >> #asMargin;
 				 allocatorClass: Margin;
 				 allocatedObjectClass: ByteString;
 				 sizeInBytes: 55;
+				 programCounter: 10;
 				 yourself);
 		add: (IllEphemeron new
-				 allocationSite: Margin >> #asMargin;
+				 allocatorMethod: Margin >> #asMargin;
 				 allocatorClass: Margin;
 				 allocatedObjectClass: Color;
 				 sizeInBytes: 60;
+				 programCounter: 10;
+				 programCounter: 10;
 				 yourself);
 		add: (IllEphemeron new
-				 allocationSite: Margin >> #asMargin;
+				 allocatorMethod: Margin >> #asMargin;
 				 allocatorClass: Margin;
 				 allocatedObjectClass: Color;
 				 sizeInBytes: 16;
+				 programCounter: 10;
+				 programCounter: 10;
 				 yourself).
 	^ allocations
 ]
@@ -82,10 +93,11 @@ AllocationStatisticsTestFixture >> allocationsThree [
 	| allocations |
 	allocations := OrderedCollection new.
 	allocations add: (IllEphemeron new
-			 allocationSite: Collection >> #sorted:;
+			 allocatorMethod: Collection >> #sorted:;
 			 allocatorClass: Collection;
 			 allocatedObjectClass: ByteArray;
 			 sizeInBytes: 16;
+			 programCounter: 10;
 			 yourself).
 	^ allocations
 ]
@@ -97,33 +109,38 @@ AllocationStatisticsTestFixture >> allocationsTwo [
 	allocations := OrderedCollection new.
 	allocations
 		add: (IllEphemeron new
-				 allocationSite: ArrayedCollection >> #add:;
+				 allocatorMethod: ArrayedCollection >> #add:;
 				 allocatorClass: ArrayedCollection;
 				 allocatedObjectClass: ByteString;
 				 sizeInBytes: 16;
+				 programCounter: 10;
 				 yourself);
 		add: (IllEphemeron new
-				 allocationSite: ArrayedCollection >> #add:;
+				 allocatorMethod: ArrayedCollection >> #add:;
 				 allocatorClass: ArrayedCollection;
 				 allocatedObjectClass: ByteString;
+				 programCounter: 10;
 				 sizeInBytes: 16;
 				 yourself);
 		add: (IllEphemeron new
-				 allocationSite: ArrayedCollection >> #add:;
+				 allocatorMethod: ArrayedCollection >> #add:;
 				 allocatorClass: ArrayedCollection;
 				 allocatedObjectClass: ByteString;
+				 programCounter: 10;
 				 sizeInBytes: 32;
 				 yourself);
 		add: (IllEphemeron new
-				 allocationSite: ArrayedCollection >> #add:;
+				 allocatorMethod: ArrayedCollection >> #add:;
 				 allocatorClass: ArrayedCollection;
 				 allocatedObjectClass: ByteArray;
+				 programCounter: 10;
 				 sizeInBytes: 100;
 				 yourself);
 		add: (IllEphemeron new
-				 allocationSite: ArrayedCollection >> #add:;
+				 allocatorMethod: ArrayedCollection >> #add:;
 				 allocatorClass: ArrayedCollection;
 				 allocatedObjectClass: ByteArray;
+				 programCounter: 10;
 				 sizeInBytes: 16;
 				 yourself).
 	^ allocations
@@ -159,7 +176,7 @@ AllocationStatisticsTestFixture >> groupedAndSortedByMethodAllocators [
 
 	self mockedAllocations do: [ :allo |
 		dict
-			at: allo allocatorMethod
+			at: allo allocationSite
 			update: [ :e |
 				e
 					add: allo;

@@ -61,13 +61,14 @@ AllocationsByAllocatorTablePresenter >> initializePresenters [
 			yourself);
 		addColumn: (SpStringTableColumn new
 			title: 'Allocator';
-			evaluated: [ :each | StObjectPrinter asTruncatedTextFrom: each allocator ];
+			evaluated: [ :each | StObjectPrinter asTruncatedTextFrom: each allocator method name ];
 			sortFunction: #printString ascending;
 			yourself);
 		addColumn: (SpStringTableColumn new
 			title: 'Total allocations';
 			evaluated: [ :each | each totalAllocations asStringWithCommas ];
 			sortFunction: #totalAllocations ascending;
+			width: 120;
 			yourself);
 		addColumn: (SpStringTableColumn new
 			width: 60;
@@ -79,6 +80,7 @@ AllocationsByAllocatorTablePresenter >> initializePresenters [
 			title: 'Total size in bytes';
 			evaluated: [ :each | each sizeInBytes humanReadableByteSizeString ];
 			sortFunction: #sizeInBytes ascending;
+			width: 120;
 			yourself);
 		addColumn: (SpStringTableColumn new
 			width: 60;

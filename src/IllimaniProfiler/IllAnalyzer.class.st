@@ -105,7 +105,7 @@ IllAnalyzer >> groupAllocationSites [
 		groupedAllocationSites
 			at: illAllocationSite
 			ifAbsentPut: (IllAllocationSiteBin new
-				allocationSite: illAllocationSite;
+				allocatorMethod: illAllocationSite;
 				yourself) ]
 ]
 

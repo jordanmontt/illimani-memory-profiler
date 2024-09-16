@@ -34,13 +34,10 @@ IllEphemeron >> allocatedObjectClass: anObject [
 { #category : 'accessing' }
 IllEphemeron >> allocationSite [
 
-	^ IllAllocationSite method: allocatorMethod byte: self allocatorByte
-]
-
-{ #category : 'accessing' }
-IllEphemeron >> allocationSite: aMethod [
-
-	allocatorMethod := aMethod
+	^ IllAllocationSite
+		  method: allocatorMethod
+		  byte: self allocatorByte
+		  receiverClass: allocatorClass
 ]
 
 { #category : 'accessing' }
@@ -68,15 +65,15 @@ IllEphemeron >> allocatorMethod [
 ]
 
 { #category : 'accessing' }
-IllEphemeron >> finalizationTime [
+IllEphemeron >> allocatorMethod: aMethod [
 
-	^ finalizationTime
+	allocatorMethod := aMethod
 ]
 
 { #category : 'accessing' }
-IllEphemeron >> finalizationTime: anObject [
+IllEphemeron >> finalizationTime [
 
-	finalizationTime := anObject
+	^ finalizationTime
 ]
 
 { #category : 'exporting' }
@@ -90,7 +87,9 @@ IllEphemeron >> flattenedInstanceVariables [
 		  survivedScavenges.
 		  survivedFullGC.
 		  forcedFinalization.
-		  allocatorMethod name }
+		  allocatorMethod name.
+		  allocatorClass name.
+		  (programCounter - 1) }
 ]
 
 { #category : 'finalization' }
@@ -115,12 +114,6 @@ IllEphemeron >> initializationTime [
 	^ initializationTime
 ]
 
-{ #category : 'accessing' }
-IllEphemeron >> initializationTime: anObject [
-
-	initializationTime := anObject
-]
-
 { #category : 'initialization' }
 IllEphemeron >> initialize [
 
@@ -138,14 +131,13 @@ IllEphemeron >> inspectionElements [
 	^ {
 		  ('Allocated Object Class' -> allocatedObjectClass).
 		  ('Object''s lifetime' -> self lifetime humanReadableByteSizeString).
-		  ('Allocator method' -> allocatorMethod).
-		  ('Allocator byte' -> self allocatorByte).
+		  ('Allocation site' -> self allocationSite).
 		  ('Memory Size' -> sizeInBytes humanReadableByteSizeString).
 		  ('Survived scavenges' -> survivedScavenges).
 		  ('Survived full GCs' -> survivedFullGC).
 		  ('Finalization was forced?' -> forcedFinalization).
-		  ('Initialization time' -> initializationTime).
-		  ('Finalization time' -> finalizationTime)  }
+		  ('Initialization time' -> initializationTime humanReadableByteSizeString).
+		  ('Finalization time' -> finalizationTime humanReadableByteSizeString) }
 ]
 
 { #category : 'inspector - extensions' }
@@ -181,12 +173,6 @@ IllEphemeron >> lifetime [
 	^ finalizationTime - initializationTime
 ]
 
-{ #category : 'accessing' }
-IllEphemeron >> lifetimeAsDuration [
-
-	^ Duration microSeconds: finalizationTime - initializationTime
-]
-
 { #category : 'finalization' }
 IllEphemeron >> mourn [
 
@@ -220,12 +206,6 @@ IllEphemeron >> programCounter: anObject [
 IllEphemeron >> sizeInBytes [
 
 	^ sizeInBytes
-]
-
-{ #category : 'accessing' }
-IllEphemeron >> sizeInBytes: anObject [
-
-	sizeInBytes := anObject
 ]
 
 { #category : 'accessing' }

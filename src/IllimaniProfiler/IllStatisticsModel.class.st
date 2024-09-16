@@ -33,20 +33,6 @@ IllStatisticsModel class >> on: objectAllocations [
 ]
 
 { #category : 'accessing - statistics' }
-IllStatisticsModel >> allocatedMemoryRatePerSecond [
-
-	^ self totalAllocatedMemory
-	  / (Duration microSeconds: totalProfiledTime) totalSeconds asFloat
-]
-
-{ #category : 'accessing - statistics' }
-IllStatisticsModel >> allocationRatePerSecond [
-
-	^ self totalAllocatedObjects
-	  / (Duration microSeconds: totalProfiledTime) totalSeconds asFloat
-]
-
-{ #category : 'accessing - statistics' }
 IllStatisticsModel >> allocationsByLifetime [
 
 	didIWalk ifFalse: [ self walkAllocations ].
@@ -94,12 +80,6 @@ IllStatisticsModel >> objectAllocations: anObject [
 ]
 
 { #category : 'accessing - statistics' }
-IllStatisticsModel >> timeDifferenceBetweenFirstAndLastAllocation [
-
-	^ self objectAllocations last initializationTime - self objectAllocations first initializationTime
-]
-
-{ #category : 'accessing - statistics' }
 IllStatisticsModel >> topNAllocationsByMethod: n [
 
 	| allocationsOrderedByMethod |
@@ -131,7 +111,7 @@ IllStatisticsModel >> walkAllocations [
 
 	objectAllocations do: [ :allocationHolder |
 		allocationNodesByMethod
-			updateAllocationForAllocator: allocationHolder allocatorMethod
+			updateAllocationForAllocator: allocationHolder allocationSite
 			allocation: allocationHolder ].
 
 	totalAllocatedMemory := objectAllocations

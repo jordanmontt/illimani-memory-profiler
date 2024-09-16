@@ -28,8 +28,11 @@ IllMemoryProfilerExporterTest >> assertCSVContent: csvReader [
 { #category : 'tests' }
 IllMemoryProfilerExporterTest >> expectedCSVHeader [
 
-	^ #( 'finalizationTimeInMicroSeconds' 'sizeInBytes' 'initializationTimeInMicroSeconds'
-	     'allocatedObjectClass' 'survivedScavenges' 'survivedFullGCs' 'forcedFinalization' 'allocatorMethod' )
+	^ #( 'finalizationTimeInMicroSeconds'
+	     'sizeInBytes' 'initializationTimeInMicroSeconds'
+	     'allocatedObjectClass' 'survivedScavenges' 'survivedFullGCs'
+	     'forcedFinalization' 'allocatorMethod' 'allocatorClass'
+	     'allocatorMethodByte' )
 ]
 
 { #category : 'exporting' }
@@ -41,15 +44,17 @@ IllMemoryProfilerExporterTest >> exporterClass [
 { #category : 'running' }
 IllMemoryProfilerExporterTest >> fakeAllocations [
 
-	| allocatedClasses allocationSites |
+	| allocatedClasses allocatorMethods |
 	allocatedClasses := 'Kernel' asPackage definedClasses asArray first: 10.
-	allocationSites := ('Kernel' asPackage definedClasses flatCollect: #methods) asArray first: 10.
+	allocatorMethods := ('Kernel' asPackage definedClasses flatCollect: #methods) asArray first: 10.
 
 	^ (1 to: 1000) collect: [ :i | IllEphemeron new
 		allocatedObjectClass: allocatedClasses atRandom;
-		allocationSite: allocationSites atRandom;
+		allocatorMethod: allocatorMethods atRandom;
+		allocatorClass: allocatedClasses atRandom;
 		sizeInBytes: 100;
 		finalizationTime: Time primUTCMicrosecondsClock;
+		programCounter: 10;
 		updateStatistics;
 		yourself ]
 ]

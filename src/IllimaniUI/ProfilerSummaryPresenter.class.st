@@ -10,21 +10,6 @@ Class {
 }
 
 { #category : 'layout' }
-ProfilerSummaryPresenter >> allocatedMemoryRateString [
-
-	^ profiler allocationsStats allocatedMemoryRatePerSecond asInteger humanReadableByteSizeString
-	  , ' per second'
-]
-
-{ #category : 'layout' }
-ProfilerSummaryPresenter >> allocationRateString [
-
-	| rate |
-	rate := profiler allocationsStats allocationRatePerSecond.
-	^ rate asInteger asStringWithCommas , ' allocations per second'
-]
-
-{ #category : 'layout' }
 ProfilerSummaryPresenter >> buildTablePresenterOn: associations [ 
 
 	^ self newTable
@@ -60,17 +45,24 @@ ProfilerSummaryPresenter >> defaultLayout [
 ProfilerSummaryPresenter >> generalStatsAssociations [
 
 	^ {
-		('Total profiled time' ->
-			(Duration microSeconds: profiler totalTime) humanReadableStringWithOnlySeconds).
-		('Sampling rate' -> profiler samplingRate asFloat asString).
+		('Total profiled time' -> profiler totalTime humanReadableByteSizeString).
 		('Total allocated objects' -> profiler allocationsStats totalAllocatedObjects asStringWithCommas).
-		('Allocations rate' -> self allocationRateString ).
 		('Total allocated memory' ->
 			profiler allocationsStats totalAllocatedMemory humanReadableByteSizeString).
-		('Allocated memory rate' -> self allocatedMemoryRateString).
+		('Sampling rate' -> self samplingRateString).
 		('Profiled code' -> profiler profiledCode).
-		('Classes that allocate objects' -> profiler allocationsStats numberOfAllocatorClasses asString).
-		 ('Methods that allocate objects' -> profiler allocationsStats numberOfAllocatorMethods asString) }
+		('Total allocator classes' -> profiler allocationsStats numberOfAllocatorClasses asString).
+		('Total allocator methods' -> profiler allocationsStats numberOfAllocatorMethods asString) }
+]
+
+{ #category : 'layout' }
+ProfilerSummaryPresenter >> samplingRateString [
+
+	^ String streamContents: [ :stream |
+		  profiler samplingRate * 100
+			  printOn: stream
+			  showingDecimalPlaces: 1.
+		  stream << ' %' ]
 ]
 
 { #category : 'accessing - model' }

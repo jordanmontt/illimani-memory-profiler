@@ -72,14 +72,6 @@ StatisticModelTest >> testNumberOfMethods [
 ]
 
 { #category : 'tests' }
-StatisticModelTest >> testTimeDifferenceBetweenFirstAndLastAllocation [
-
-	self
-		assert: statsModel timeDifferenceBetweenFirstAndLastAllocation
-		equals: fixture mockedAllocations last initializationTime - fixture mockedAllocations first initializationTime
-]
-
-{ #category : 'tests' }
 StatisticModelTest >> testTopNAllocationsByMethod [
 
 	(statsModel topNAllocationsByMethod: 2) with: (fixture groupedAndSortedByMethodAllocators first: 2)

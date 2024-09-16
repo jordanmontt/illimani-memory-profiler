@@ -1,7 +1,7 @@
 Extension { #name : 'IllEphemeron' }
 
 { #category : '*IllimaniUI' }
-IllEphemeron >> timeAsSeconds [
+IllEphemeron >> timeAsMegaBytes [
 
-	^ initializationTime / 1000000
+	^ initializationTime // 1000000
 ]

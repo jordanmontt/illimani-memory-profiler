@@ -40,12 +40,6 @@ IllAllocationSiteBin >> allocationSite: anIllAllocationSite [
 ]
 
 { #category : 'accessing' }
-IllAllocationSiteBin >> allocationSiteForMethod: aMethod byte: aByteNumber [
-
-	allocationSite := IllAllocationSite method: aMethod byte: aByteNumber
-]
-
-{ #category : 'accessing' }
 IllAllocationSiteBin >> classification [
 
 	^ classification

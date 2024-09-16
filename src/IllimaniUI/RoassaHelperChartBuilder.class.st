@@ -44,7 +44,7 @@ RoassaHelperChartBuilder >> allocatedObjectsPerSecondLineChartCanvas [
 	
 	chart add: linePlot.
 	self addTicksToLabel: chart.
-	self addLabelsX: 'Seconds' y: 'Total Allocated Objects' forChart: chart.
+	self addLabelsX: 'MB' y: 'Total Allocated Objects' forChart: chart.
 	chart build.
 	^ chart canvas
 ]
@@ -95,9 +95,9 @@ RoassaHelperChartBuilder >> createLinePlotForAllocations: someAllocations [
 	sortedByTime := someAllocations sorted: [ :a :b | a initializationTime < b initializationTime ].
 
 	"Roassal does not accepts Duration"
-	times := sortedByTime collect: [ :each | each timeAsSeconds ].
+	times := sortedByTime collect: [ :each | each timeAsMegaBytes ].
 	"To start in 0"
-	times := times collect: [ :e | (e - sortedByTime first timeAsSeconds) asFloat ].
+	times := times collect: [ :e | (e - sortedByTime first timeAsMegaBytes) asFloat ].
 
 	indices := 1 to: times size.
 	linePlot := RSLinePlot new x: times y: indices.

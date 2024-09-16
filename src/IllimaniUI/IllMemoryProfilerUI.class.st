@@ -87,7 +87,7 @@ IllMemoryProfilerUI >> initializeAllocatedObjectsPerSecond [
 { #category : 'initialization - lazy presenters' }
 IllMemoryProfilerUI >> initializeAllocatedObjectsTablePresenter [
 
-	allocatedObjectsTablePresenter := ObjectLifetimesTablePresenter on: profiler
+	allocatedObjectsTablePresenter := AllocatedObjectsTablePresenter on: profiler
 ]
 
 { #category : 'initialization - lazy roassal presenters' }
@@ -162,7 +162,7 @@ IllMemoryProfilerUI >> initializeNotebook [
 IllMemoryProfilerUI >> initializeRelativeLifetimesTable [
 
 	relativeLifetimesTable := self
-		instantiate: RelativeLifetimesBySecondTablePresenter
+		instantiate: RelativeLifetimesByMBTablePresenter
 		on: profiler objectAllocations
 ]
 
