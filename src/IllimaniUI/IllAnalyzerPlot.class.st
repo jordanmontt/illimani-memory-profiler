@@ -14,7 +14,7 @@ IllAnalyzerPlot >> analyzer: anObject [
 	analyzer := anObject
 ]
 
-{ #category : 'as yet unclassified' }
+{ #category : 'api' }
 IllAnalyzerPlot >> plot [
 
 	| chart plot deathTimes ages shortLivedThreshold |
@@ -25,17 +25,17 @@ IllAnalyzerPlot >> plot [
 
 	plot := RSScatterPlot new
 		x: deathTimes y: ages;
-		xlabel: 'Object time of death relative to total allocation';
-		ylabel: 'Object age relative to total allocation';
 		maxChartValueX: 1;
 		yourself.
 
-	shortLivedThreshold :=  ages max * 0.45.
+	shortLivedThreshold := (analyzer shortObjectsBin max: #lifetime) / analyzer totalTime.
 
 	chart := RSCompositeChart new
 		add: plot;
-		add: (RSLinePlot new x: #(1 0) y: #(0 1); color: Color black);
-		add: (RSLinePlot new x: {1 . 0} y: {0.05 . 0.05}; color: Color black);
+		add: (RSLinePlot new x: {plot maxValueX . 0} y: {0 . plot maxValueY}; color: Color black);
+		add: (RSLinePlot new x: {plot maxValueX . 0} y: {shortLivedThreshold . shortLivedThreshold}; color: Color black);
+		xlabel: 'Object time of death relative to total allocation';
+		ylabel: 'Object age relative to total allocation';
 		yourself.
 
 	chart title: ''.

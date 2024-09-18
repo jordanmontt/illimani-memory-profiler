@@ -12,7 +12,10 @@ Class {
 		'maxLiveSize',
 		'groupedAllocationSites',
 		'startTime',
-		'endTime'
+		'endTime',
+		'taThreshold',
+		'hif',
+		'hlf'
 	],
 	#category : 'IllimaniProfiler-Analyzer',
 	#package : 'IllimaniProfiler',
@@ -67,12 +70,7 @@ IllAnalyzer >> calculateMaxLiveSize [
 { #category : 'api' }
 IllAnalyzer >> classifyAllocationSites [
 
-	| hif hlf |
-	
 	self binObjects.
-	
-	hif := 0.
-	hlf := 0.6.
 
 	groupedAllocationSites valuesDo: [ :allocationSiteBin |
 		| is ss ls wasClassified |
@@ -105,7 +103,7 @@ IllAnalyzer >> groupAllocationSites [
 		groupedAllocationSites
 			at: illAllocationSite
 			ifAbsentPut: (IllAllocationSiteBin new
-				allocatorMethod: illAllocationSite;
+				allocationSite: illAllocationSite;
 				yourself) ]
 ]
 
@@ -115,7 +113,11 @@ IllAnalyzer >> initialize [
 	super initialize.
 	immortalObjectsBin := OrderedCollection new: 100000.
 	shortObjectsBin := OrderedCollection new: 100000.
-	longObjectsBin := OrderedCollection new: 10000
+	longObjectsBin := OrderedCollection new: 10000.
+
+	taThreshold := 0.45.
+	hif := 0.
+	hlf := 0.6
 ]
 
 { #category : 'calculating' }
@@ -133,8 +135,7 @@ IllAnalyzer >> isObjectImmortal: illEphe [
 { #category : 'calculating' }
 IllAnalyzer >> isObjectShortLived: illEphe [
 
-	| age taThreshold |
-	taThreshold := 0.45.
+	| age |
 	age := illEphe lifetime / self maxLiveSize.
 	^ age < (taThreshold * self maxLiveSize)
 ]
@@ -164,6 +165,12 @@ IllAnalyzer >> pruneAllocationSites [
 	totalProgramAllocations := objectAllocations size.
 	^ groupedAllocationSites reject: [ :allocationSiteBin |
 		  allocationSiteBin totalAllocations < (v * totalProgramAllocations) ]
+]
+
+{ #category : 'accessing' }
+IllAnalyzer >> shortObjectsBin [
+
+	^ shortObjectsBin
 ]
 
 { #category : 'accessing' }
