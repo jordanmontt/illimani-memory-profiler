@@ -18,72 +18,13 @@ AllocationStatisticsTestFixture >> allocationsOne [
 
 	| allocations |
 	allocations := OrderedCollection new.
-	allocations
-		add: (IllEphemeron new
+	9 timesRepeat: [
+		allocations add: (IllEphemeron new
+				 key: OrderedCollection new value: nil;
 				 allocatorMethod: Margin >> #asMargin;
-				 allocatorClass: Margin;
-				 allocatedObjectClass: OrderedCollection;
 				 programCounter: 10;
-				 sizeInBytes: 16;
-				 yourself);
-		add: (IllEphemeron new
-				 allocatorMethod: Margin >> #asMargin;
-				 allocatorClass: Margin;
-				 allocatedObjectClass: OrderedCollection;
-				 sizeInBytes: 16;
-				 programCounter: 10;
-				 yourself);
-		add: (IllEphemeron new
-				 allocatorMethod: Margin >> #asMargin;
-				 allocatorClass: Margin;
-				 allocatedObjectClass: Dictionary;
-				 sizeInBytes: 16;
-				 programCounter: 10;
-				 yourself);
-		add: (IllEphemeron new
-				 allocatorMethod: Margin >> #asMargin;
-				 allocatorClass: Margin;
-				 allocatedObjectClass: ByteString;
-				 sizeInBytes: 32;
-				 programCounter: 10;
-				 yourself);
-		add: (IllEphemeron new
-				 allocatorMethod: Margin >> #asMargin;
-				 allocatorClass: Margin;
-				 allocatedObjectClass: ByteString;
-				 sizeInBytes: 48;
-				 programCounter: 10;
-				 yourself);
-		add: (IllEphemeron new
-				 allocatorMethod: Margin >> #asMargin;
-				 allocatorClass: Margin;
-				 allocatedObjectClass: ByteString;
-				 sizeInBytes: 100;
-				 programCounter: 10;
-				 yourself);
-		add: (IllEphemeron new
-				 allocatorMethod: Margin >> #asMargin;
-				 allocatorClass: Margin;
-				 allocatedObjectClass: ByteString;
-				 sizeInBytes: 55;
-				 programCounter: 10;
-				 yourself);
-		add: (IllEphemeron new
-				 allocatorMethod: Margin >> #asMargin;
-				 allocatorClass: Margin;
-				 allocatedObjectClass: Color;
-				 sizeInBytes: 60;
-				 programCounter: 10;
-				 programCounter: 10;
-				 yourself);
-		add: (IllEphemeron new
-				 allocatorMethod: Margin >> #asMargin;
-				 allocatorClass: Margin;
-				 allocatedObjectClass: Color;
-				 sizeInBytes: 16;
-				 programCounter: 10;
-				 programCounter: 10;
-				 yourself).
+				 mourn;
+				 yourself) ].
 	^ allocations
 ]
 
@@ -94,8 +35,7 @@ AllocationStatisticsTestFixture >> allocationsThree [
 	allocations := OrderedCollection new.
 	allocations add: (IllEphemeron new
 			 allocatorMethod: Collection >> #sorted:;
-			 allocatorClass: Collection;
-			 allocatedObjectClass: ByteArray;
+			 key: ByteArray new value: nil;
 			 sizeInBytes: 16;
 			 programCounter: 10;
 			 yourself).
@@ -107,42 +47,13 @@ AllocationStatisticsTestFixture >> allocationsTwo [
 
 	| allocations |
 	allocations := OrderedCollection new.
-	allocations
-		add: (IllEphemeron new
+	5 timesRepeat: [
+		allocations add: (IllEphemeron new
+				 key: ByteString new value: nil;
 				 allocatorMethod: ArrayedCollection >> #add:;
-				 allocatorClass: ArrayedCollection;
-				 allocatedObjectClass: ByteString;
-				 sizeInBytes: 16;
 				 programCounter: 10;
-				 yourself);
-		add: (IllEphemeron new
-				 allocatorMethod: ArrayedCollection >> #add:;
-				 allocatorClass: ArrayedCollection;
-				 allocatedObjectClass: ByteString;
-				 programCounter: 10;
-				 sizeInBytes: 16;
-				 yourself);
-		add: (IllEphemeron new
-				 allocatorMethod: ArrayedCollection >> #add:;
-				 allocatorClass: ArrayedCollection;
-				 allocatedObjectClass: ByteString;
-				 programCounter: 10;
-				 sizeInBytes: 32;
-				 yourself);
-		add: (IllEphemeron new
-				 allocatorMethod: ArrayedCollection >> #add:;
-				 allocatorClass: ArrayedCollection;
-				 allocatedObjectClass: ByteArray;
-				 programCounter: 10;
-				 sizeInBytes: 100;
-				 yourself);
-		add: (IllEphemeron new
-				 allocatorMethod: ArrayedCollection >> #add:;
-				 allocatorClass: ArrayedCollection;
-				 allocatedObjectClass: ByteArray;
-				 programCounter: 10;
-				 sizeInBytes: 16;
-				 yourself).
+				 mourn;
+				 yourself) ].
 	^ allocations
 ]
 
@@ -160,12 +71,6 @@ AllocationStatisticsTestFixture >> groupAndSortByAllocatedClass: someAllocations
 					yourself ]
 			initial: [ OrderedCollection with: allocationInfo ] ].
 	^ groupedAllocations associations sorted: [ :a :b | a value size > b value size ]
-]
-
-{ #category : 'fixture' }
-AllocationStatisticsTestFixture >> groupedAndSortedByClassAllocator [
-
-	^ self mockedAllocations collect: [ :e | e allocatorClass ] as: Set
 ]
 
 { #category : 'fixture' }

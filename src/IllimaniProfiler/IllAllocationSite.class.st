@@ -24,8 +24,7 @@ Class {
 	#superclass : 'Object',
 	#instVars : [
 		'method',
-		'byte',
-		'receiverClass'
+		'byte'
 	],
 	#category : 'IllimaniProfiler-Analyzer',
 	#package : 'IllimaniProfiler',
@@ -33,12 +32,11 @@ Class {
 }
 
 { #category : 'instance creation' }
-IllAllocationSite class >> method: method byte: byte receiverClass: aClass [
+IllAllocationSite class >> method: method byte: byte [
 
 	^ self new
 		  method: method;
 		  byte: byte;
-		  receiverClass: aClass;
 		  yourself
 ]
 
@@ -47,8 +45,7 @@ IllAllocationSite >> = anObj [
 
 	self class = anObj class ifFalse: [ ^ false ].
 	^ method = anObj method
-		and: [ byte = anObj byte
-			and: [ receiverClass = anObj receiverClass ] ]
+		and: [ byte = anObj byte ]
 ]
 
 { #category : 'accessing' }
@@ -67,7 +64,6 @@ IllAllocationSite >> hash [
 	| hash |
 	hash := method hash.
 	hash := hash * 486187739 + byte hash.
-	hash := hash * 486187739 + receiverClass hash.
 	^ hash
 ]
 
@@ -88,8 +84,6 @@ IllAllocationSite >> inspectionSource [
 		                 yourself.
 	^ SpPresenter new
 		  layout: (SpBoxLayout newTopToBottom
-					add: (SpLabelPresenter new label: 'Receiver class:'; yourself) expand: false;
-				   add: (SpTextPresenter new text: receiverClass name; yourself) expand: false;
 				   add: (SpLabelPresenter new label: 'Method implemented in:'; yourself) expand: false;
 				   add: (SpTextPresenter new text: method methodClass name; yourself) expand: false;
 				   add: (SpLabelPresenter new label: 'Method code:'; yourself) expand: false;
@@ -112,19 +106,6 @@ IllAllocationSite >> method: aCollection [
 IllAllocationSite >> printOn: aStream [
 
 	method printOn: aStream.
-	aStream << ' (' << receiverClass name << ') '.
 	aStream << 'at byte: '.
 	byte printOn: aStream
-]
-
-{ #category : 'accessing' }
-IllAllocationSite >> receiverClass [
-
-	^ receiverClass
-]
-
-{ #category : 'accessing' }
-IllAllocationSite >> receiverClass: anObject [
-
-	receiverClass := anObject
 ]

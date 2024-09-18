@@ -56,14 +56,6 @@ StatisticModelTest >> testAllocationsByMethodRespectsOrder [
 ]
 
 { #category : 'tests' }
-StatisticModelTest >> testNumberOfClasses [
-
-	self
-		assert: statsModel numberOfAllocatorClasses
-		equals: fixture groupedAndSortedByClassAllocator size
-]
-
-{ #category : 'tests' }
 StatisticModelTest >> testNumberOfMethods [
 
 	self

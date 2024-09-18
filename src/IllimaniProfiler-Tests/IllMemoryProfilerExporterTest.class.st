@@ -14,7 +14,7 @@ IllMemoryProfilerExporterTest >> assertCSVContent: csvReader [
 
 	| line allocatorMethod |
 	line := csvReader next.
-	self assert: line second asInteger equals: 100. "size"
+	self assert: line second asInteger equals: 24. "size"
 	self assert: line first asInteger > line third asInteger. " finalizationTime > initializationTime"
 	self assert: (line fourth asClassInEnvironment: Smalltalk globals) isClass. "allocatedClass"
 	self assert: line fifth asInteger >= 0. "survived scavenges"
@@ -31,8 +31,7 @@ IllMemoryProfilerExporterTest >> expectedCSVHeader [
 	^ #( 'finalizationTimeInMicroSeconds'
 	     'sizeInBytes' 'initializationTimeInMicroSeconds'
 	     'allocatedObjectClass' 'survivedScavenges' 'survivedFullGCs'
-	     'forcedFinalization' 'allocatorMethod' 'allocatorClass'
-	     'allocatorMethodByte' )
+	     'forcedFinalization' 'allocatorMethod' 'allocatorMethodByte' )
 ]
 
 { #category : 'exporting' }
@@ -45,16 +44,13 @@ IllMemoryProfilerExporterTest >> exporterClass [
 IllMemoryProfilerExporterTest >> fakeAllocations [
 
 	| allocatedClasses allocatorMethods |
-	allocatedClasses := 'Kernel' asPackage definedClasses asArray first: 10.
+	allocatedClasses := { Set . Dictionary }.
 	allocatorMethods := ('Kernel' asPackage definedClasses flatCollect: #methods) asArray first: 10.
 
 	^ (1 to: 1000) collect: [ :i | IllEphemeron new
-		allocatedObjectClass: allocatedClasses atRandom;
+		key: allocatedClasses atRandom new value: nil;
 		allocatorMethod: allocatorMethods atRandom;
-		allocatorClass: allocatedClasses atRandom;
-		sizeInBytes: 100;
-		finalizationTime: Time primUTCMicrosecondsClock;
 		programCounter: 10;
-		updateStatistics;
+		mourn;
 		yourself ]
 ]

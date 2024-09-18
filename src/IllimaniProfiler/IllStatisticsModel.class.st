@@ -6,7 +6,6 @@ Class {
 		'allocationNodesByMethod',
 		'didIWalk',
 		'totalAllocatedMemory',
-		'numberOfAllocatorClasses',
 		'totalProfiledTime',
 		'allocationNodesByLifetime'
 	],
@@ -52,13 +51,6 @@ IllStatisticsModel >> initialize [
 	super initialize.
 	allocationNodesByMethod := GroupedAllocationsByAllocatorCollection new.
 	didIWalk := false
-]
-
-{ #category : 'accessing - statistics' }
-IllStatisticsModel >> numberOfAllocatorClasses [
-
-	didIWalk ifFalse: [ self walkAllocations ].
-	^ numberOfAllocatorClasses
 ]
 
 { #category : 'accessing - statistics' }
@@ -117,8 +109,6 @@ IllStatisticsModel >> walkAllocations [
 	totalAllocatedMemory := objectAllocations
 		inject: 0
 		into: [ :sum : elem | sum + elem sizeInBytes ].
-
-	numberOfAllocatorClasses := (objectAllocations collect: #allocatorClass as: Set) size.
 
 	didIWalk := true
 ]

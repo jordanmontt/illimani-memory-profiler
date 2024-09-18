@@ -50,7 +50,7 @@ IllMemoryProfiler >> internalRegisterAllocation: newlyAllocatedObject [
 		sender "this is me, this profiler"
 		sender "this is the AbstractProfiler (my super class)"
 		sender "this is the IllHandler"
-		sender "this is the trapped instrumented method".
+		sender. "this is the trapped instrumented method"
 
 	[ "get out of the receiver. E.g. the new method"
 	filteredContext receiver class = metaClass ] whileTrue:
@@ -60,8 +60,7 @@ IllMemoryProfiler >> internalRegisterAllocation: newlyAllocatedObject [
 		key: newlyAllocatedObject value: nil;
 		allocatorMethod: filteredContext compiledCode method;
 		programCounter: filteredContext pc;
-		"The allocator class is important since the sender can be defined in the super class"
-		allocatorClass: filteredContext receiver class;
+		senders: filteredContext;
 		yourself)
 ]
 

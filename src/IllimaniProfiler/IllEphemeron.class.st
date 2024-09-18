@@ -10,9 +10,9 @@ Class {
 		'survivedScavenges',
 		'survivedFullGC',
 		'forcedFinalization',
-		'allocatorClass',
 		'programCounter',
-		'allocatorMethod'
+		'allocatorMethod',
+		'senders'
 	],
 	#category : 'IllimaniProfiler-Profiler',
 	#package : 'IllimaniProfiler',
@@ -26,36 +26,15 @@ IllEphemeron >> allocatedObjectClass [
 ]
 
 { #category : 'accessing' }
-IllEphemeron >> allocatedObjectClass: anObject [
-
-	allocatedObjectClass := anObject
-]
-
-{ #category : 'accessing' }
 IllEphemeron >> allocationSite [
 
-	^ IllAllocationSite
-		  method: allocatorMethod
-		  byte: self allocatorByte
-		  receiverClass: allocatorClass
+	^ IllAllocationSite method: allocatorMethod byte: self allocatorByte
 ]
 
 { #category : 'accessing' }
 IllEphemeron >> allocatorByte [
 
 	^ programCounter - 1
-]
-
-{ #category : 'accessing' }
-IllEphemeron >> allocatorClass [
-
-	^ allocatorClass
-]
-
-{ #category : 'accessing' }
-IllEphemeron >> allocatorClass: anObject [
-
-	allocatorClass := anObject
 ]
 
 { #category : 'accessing' }
@@ -88,7 +67,6 @@ IllEphemeron >> flattenedInstanceVariables [
 		  survivedFullGC.
 		  forcedFinalization.
 		  allocatorMethod name.
-		  allocatorClass name.
 		  (programCounter - 1) }
 ]
 
@@ -158,8 +136,7 @@ IllEphemeron >> inspectorExtension: aBuilder [
 { #category : 'inspector - extensions' }
 IllEphemeron >> inspectorExtensionSenders: aBuilder [
 
-	"<inspectorPresentationOrder: 2 title: 'Senders'>"
-	| senders |
+	<inspectorPresentationOrder: 2 title: 'Senders context'>
 	"senders not yet implemented"
 	^ aBuilder newList
 		items: (senders reject: #isNil);
@@ -185,7 +162,9 @@ IllEphemeron >> mourn [
 
 	"finalizationTime := Time primUTCMicrosecondsClock."
 	finalizationTime := Smalltalk vm parameterAt: 34.
-	self updateStatistics
+	
+	survivedScavenges := Smalltalk vm incrementalGCCount - survivedScavenges.
+	survivedFullGC := Smalltalk vm fullGCCount - survivedFullGC
 ]
 
 { #category : 'printing' }
@@ -200,6 +179,20 @@ IllEphemeron >> printOn: aStream [
 IllEphemeron >> programCounter: anObject [
 
 	programCounter := anObject
+]
+
+{ #category : 'accessing' }
+IllEphemeron >> senders: aContext [
+
+	| sender |
+	"Using #to:do: because of performance"
+
+	senders := Array new: 10.
+	sender := aContext.
+	1 to: 10 do: [ :i |
+		sender ifNil: [ ^ self ].
+		senders at: i put: sender method.
+		sender := sender sender ]
 ]
 
 { #category : 'accessing' }
@@ -218,13 +211,4 @@ IllEphemeron >> survivedFullGC [
 IllEphemeron >> survivedScavenges [
 
 	^ survivedScavenges
-]
-
-{ #category : 'finalization' }
-IllEphemeron >> updateStatistics [
-	"When the vm calls the method mourn, it is right before of the collection of the object.
-	So we need to add 1 to the counter of scavenges."
-
-	survivedScavenges := Smalltalk vm incrementalGCCount - survivedScavenges + 1.
-	survivedFullGC := Smalltalk vm fullGCCount - survivedFullGC
 ]

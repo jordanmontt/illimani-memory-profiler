@@ -19,8 +19,7 @@ IllMemoryProfilerExporter >> headerOfAllocationModel [
 
 	^ #( #finalizationTimeInMicroSeconds #sizeInBytes #initializationTimeInMicroSeconds
 	     #allocatedObjectClass #survivedScavenges #survivedFullGCs
-	     #forcedFinalization #allocatorMethod #allocatorClass
-	     #allocatorMethodByte )
+	     #forcedFinalization #allocatorMethod #allocatorMethodByte )
 ]
 
 { #category : 'exporting' }

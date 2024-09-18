@@ -51,7 +51,6 @@ ProfilerSummaryPresenter >> generalStatsAssociations [
 			profiler allocationsStats totalAllocatedMemory humanReadableByteSizeString).
 		('Sampling rate' -> self samplingRateString).
 		('Profiled code' -> profiler profiledCode).
-		('Total allocator classes' -> profiler allocationsStats numberOfAllocatorClasses asString).
 		('Total allocator methods' -> profiler allocationsStats numberOfAllocatorMethods asString) }
 ]
 
