@@ -7,7 +7,6 @@ I am the abstract class that proviedes infrastructure for all the profilers. You
 - GC logger: I also provide a garbage collector logger that logs the GC activity one per second and then exports the data. By default, the logger is a null object, so it doesn't log anything by default.
 - VM statistics and statistics in general
 - Announcement when the profiling has stopped: I make an announcement when the profiler has finished profiling.
-
 "
 Class {
 	#name : 'IllAbstractProfiler',
@@ -92,7 +91,7 @@ IllAbstractProfiler >> initialize [
 	instrumentator := IllInstrumentator onProfiler: self.
 	samplingCounter := 0.
 	self samplingRate: 1/100.
-	gcActivityMonitor := NullGCActivityMonitor new
+	gcActivityMonitor := IllNullGCActivityMonitor new
 ]
 
 { #category : 'profiling' }
@@ -132,7 +131,7 @@ IllAbstractProfiler >> monitorGCActivity [
 	"This instantiates a monitor that will run a process that will log the gc activity once per
 	second"
 
-	gcActivityMonitor := GCActivityMonitor new
+	gcActivityMonitor := IllGCActivityMonitor new
 ]
 
 { #category : 'accessing' }

@@ -13,16 +13,19 @@ Class {
 IllMemoryProfilerExporterTest >> assertCSVContent: csvReader [
 
 	| line allocatorMethod |
-	line := csvReader next.
-	self assert: line second asInteger equals: 24. "size"
+	line := csvReader next." 'finalizationTimeInMicroSeconds'
+	     'sizeInBytes' 'initializationTimeInMicroSeconds'
+	     'allocatedObjectClass' 'survivedScavenges' 'survivedFullGCs'
+	     'allocatorMethod' 'allocatorMethodByte'"
 	self assert: line first asInteger > line third asInteger. " finalizationTime > initializationTime"
+	self assert: line second asInteger equals: 24. "size"
 	self assert: (line fourth asClassInEnvironment: Smalltalk globals) isClass. "allocatedClass"
 	self assert: line fifth asInteger >= 0. "survived scavenges"
 	self assert: line sixth asInteger >= 0. "survived full gcs"
-	self assert: line seventh equals: 'false'. "forced finalization"
-
-	allocatorMethod := Smalltalk compiler evaluate: line eighth.
-	self assert: allocatorMethod class equals: CompiledMethod "the allocation site is string with the name of a VALID method"
+	self assert: line eighth asInteger >= 0. "allocatorMethodByte"
+	
+	allocatorMethod := Smalltalk compiler evaluate: line seventh.
+	self assert: allocatorMethod class equals: CompiledMethod "the allocation site is string with the name of a valid method"
 ]
 
 { #category : 'tests' }
@@ -31,7 +34,7 @@ IllMemoryProfilerExporterTest >> expectedCSVHeader [
 	^ #( 'finalizationTimeInMicroSeconds'
 	     'sizeInBytes' 'initializationTimeInMicroSeconds'
 	     'allocatedObjectClass' 'survivedScavenges' 'survivedFullGCs'
-	     'forcedFinalization' 'allocatorMethod' 'allocatorMethodByte' )
+	     'allocatorMethod' 'allocatorMethodByte' )
 ]
 
 { #category : 'exporting' }

@@ -2,7 +2,7 @@
 I am a garbage collector monitor that register the garbage collector activity. To see how often I register the GC activity, see the method `defaultWaitingTime`.
 "
 Class {
-	#name : 'GCActivityMonitor',
+	#name : 'IllGCActivityMonitor',
 	#superclass : 'Object',
 	#instVars : [
 		'fullGCs',
@@ -16,25 +16,25 @@ Class {
 }
 
 { #category : 'initialization' }
-GCActivityMonitor >> defaultWaitingTime [
+IllGCActivityMonitor >> defaultWaitingTime [
 
 	^ 1 second
 ]
 
 { #category : 'exporting' }
-GCActivityMonitor >> exportData: baseFileName [
+IllGCActivityMonitor >> exportData: baseFileName [
 
 	(GCActivityMonitorExporter on: self) exportData: baseFileName
 ]
 
 { #category : 'accessing' }
-GCActivityMonitor >> fullGCs [
+IllGCActivityMonitor >> fullGCs [
 
 	^ fullGCs
 ]
 
 { #category : 'initialization' }
-GCActivityMonitor >> initialize [
+IllGCActivityMonitor >> initialize [
 
 	super initialize.
 	fullGCs := OrderedCollection new: 10000.
@@ -43,14 +43,14 @@ GCActivityMonitor >> initialize [
 ]
 
 { #category : 'api' }
-GCActivityMonitor >> registerStats [
+IllGCActivityMonitor >> registerStats [
 
 	fullGCs add: Smalltalk vm fullGCCount.
 	scavenges add: Smalltalk vm incrementalGCCount
 ]
 
 { #category : 'api' }
-GCActivityMonitor >> run [
+IllGCActivityMonitor >> run [
 
 	process := [
 		[ true ] whileTrue: [
@@ -59,7 +59,7 @@ GCActivityMonitor >> run [
 ]
 
 { #category : 'api' }
-GCActivityMonitor >> run: aCodeBlock [
+IllGCActivityMonitor >> run: aCodeBlock [
 
 	process := [
 		[ true ] whileTrue: [
@@ -70,19 +70,19 @@ GCActivityMonitor >> run: aCodeBlock [
 ]
 
 { #category : 'accessing' }
-GCActivityMonitor >> scavenges [
+IllGCActivityMonitor >> scavenges [
 
 	^ scavenges
 ]
 
 { #category : 'api' }
-GCActivityMonitor >> terminate [
+IllGCActivityMonitor >> terminate [
 
 	process terminate
 ]
 
 { #category : 'accessing' }
-GCActivityMonitor >> waitingTime: aDuration [
+IllGCActivityMonitor >> waitingTime: aDuration [
 
 	waitingTime := aDuration
 ]

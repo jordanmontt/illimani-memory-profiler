@@ -25,51 +25,23 @@ IllMemoryProfilerTest >> tearDown [
 ]
 
 { #category : 'tests' }
-IllMemoryProfilerTest >> testOpen [
-
-	"Increasing the test time. This is due to CI failures. As the profiler pre-allocates a very
-	big collection, the GCs take time."
-	self timeLimit: 1 minute.
-
-	profiler profileOn: [ 5 timesRepeat: [ IllMemoryProfiler new ] ].
-	profiler open window close
-]
-
-{ #category : 'tests' }
 IllMemoryProfilerTest >> testProfileOn [
-
-	"Increasing the test time. This is due to CI failures. As the profiler pre-allocates a very
-	big collection, the GCs take time."
-	self timeLimit: 1 minute.
 
 	profiler
 		samplingRate: 1;
-		profileOn: [ 10 timesRepeat: [ Object new ] ].
+		profileOn: [ 1000 timesRepeat: [ Object new ] ].
 
-	"We let the GC run for N times to clean the not referenced objects. Because of the
-	implementation of ephemerons, they can have hard references between them so it is
-	necessary to run the GC several times  "
-	3 timesRepeat: [ Smalltalk garbageCollect ].
-
-	self assert: profiler objectAllocations size >= 10
+	self assert: profiler objectAllocations size >= 1000
 ]
 
 { #category : 'tests' }
 IllMemoryProfilerTest >> testProfileOnFinalizesCorrectly [
 
 	| timeNow |
-	"Increasing the test time. This is due to CI failures. As the profiler pre-allocates a very
-	big collection, the GCs take time."
-	self timeLimit: 1 minute.
 
 	"The lifetime is calculated in terms of allocated bytes"
 	timeNow := Smalltalk vm parameterAt: 34.
 	profiler profileOn: [ 10 timesRepeat: [ IllMemoryProfiler new ] ].
-
-	"We let the GC run for N times to clean the not referenced objects. Because of the
-	implementation of ephemerons, they can have hard references between them so it is
-	necessary to run the GC several times  "
-	3 timesRepeat: [ Smalltalk garbageCollect ].
 
 	self assert: profiler objectAllocations size
 		equals: (profiler objectAllocations select: [ :e | e finalizationTime isNotNil ]) size.
@@ -80,11 +52,8 @@ IllMemoryProfilerTest >> testProfileOnFinalizesCorrectly [
 
 { #category : 'tests' }
 IllMemoryProfilerTest >> testProfileOnSimple [
-
-	"Increasing the test time. This is due to CI failures. As the profiler pre-allocates a very big collection, the GCs take time."
-	self timeLimit: 1 minute.
-
 	"Default sampling rate is 1/100"
+
 	profiler profileOn: [ 1000 timesRepeat: [ Object new ] ].
 	self assert: profiler objectAllocations size >= 10.
 	self assert: profiler objectAllocations size < 20
@@ -143,18 +112,15 @@ IllMemoryProfilerTest >> testSamplingRate1in1000 [
 IllMemoryProfilerTest >> testSamplingRateOtherPercentage [
 
 	| allocatedByteSrings |
-
 	profiler
 		samplingRate: 75 / 100;
-		profileOn: [ 100 timesRepeat: [ ByteString new ] ].
+		profileOn: [ 1000 timesRepeat: [ Object new ] ].
 
-	allocatedByteSrings := (profiler objectAllocations select:
-		[ :e | e allocatedObjectClass = ByteString ]) size.
+	allocatedByteSrings := (profiler objectAllocations select: [ :e |
+		                        e allocatedObjectClass = Object ]) size.
 
-	"We are cheking in this range becase the profiler makes some allocations that are
-	necessary for the profiler to work, like Durations objects. So we cannot chack that the
-	allocations are exacty 1/3 of the total."
-	self assert: (allocatedByteSrings >= 75) & (allocatedByteSrings < 80)
+	"We are cheking in this range becase the profiler makes some allocations that are necessary for the profiler to work "
+	self assert: allocatedByteSrings >= 750 & (allocatedByteSrings < 800)
 ]
 
 { #category : 'tests' }

@@ -14,7 +14,7 @@ Class {
 }
 
 { #category : 'fixture' }
-AllocationStatisticsTestFixture >> allocationsOne [
+AllocationStatisticsTestFixture class >> allocationsOne [
 
 	| allocations |
 	allocations := OrderedCollection new.
@@ -29,7 +29,7 @@ AllocationStatisticsTestFixture >> allocationsOne [
 ]
 
 { #category : 'fixture' }
-AllocationStatisticsTestFixture >> allocationsThree [
+AllocationStatisticsTestFixture class >> allocationsThree [
 
 	| allocations |
 	allocations := OrderedCollection new.
@@ -43,7 +43,7 @@ AllocationStatisticsTestFixture >> allocationsThree [
 ]
 
 { #category : 'fixture' }
-AllocationStatisticsTestFixture >> allocationsTwo [
+AllocationStatisticsTestFixture class >> allocationsTwo [
 
 	| allocations |
 	allocations := OrderedCollection new.
@@ -96,7 +96,7 @@ AllocationStatisticsTestFixture >> groupedAndSortedByMethodAllocators [
 AllocationStatisticsTestFixture >> initialize [
 
 	super initialize.
-	mockedAllocations := self allocationsThree , self allocationsTwo , self allocationsOne.
+	mockedAllocations := self class allocationsThree , self class allocationsTwo , self class allocationsOne.
 	groupedAndSortedByMethodAllocations := self groupedAndSortedByMethodAllocators
 ]
 

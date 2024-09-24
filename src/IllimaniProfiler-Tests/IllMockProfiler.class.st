@@ -13,13 +13,7 @@ Class {
 { #category : 'accessing' }
 IllMockProfiler >> gcActivityMonitor [
 
-	^ gcMonitor
-]
-
-{ #category : 'as yet unclassified' }
-IllMockProfiler >> gcMonitor: anIllMockGCMonitor [
-
-	gcMonitor := anIllMockGCMonitor
+	^ IllNullGCActivityMonitor new
 ]
 
 { #category : 'accessing' }

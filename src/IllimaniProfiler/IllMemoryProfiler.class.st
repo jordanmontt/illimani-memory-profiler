@@ -29,7 +29,7 @@ IllMemoryProfiler >> exporterClass [
 { #category : 'profiling' }
 IllMemoryProfiler >> forceFinalizationOfObjects [
 
-	ephemeronsCollection do: [ :e | e forceFinalization ]
+	ephemeronsCollection do: [ :e | e mourn ]
 ]
 
 { #category : 'initialization' }

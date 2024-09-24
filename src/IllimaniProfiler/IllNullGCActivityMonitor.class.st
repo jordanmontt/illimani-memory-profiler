@@ -2,7 +2,7 @@
 I am a null-object desing pattern for the GC monitor.
 "
 Class {
-	#name : 'NullGCActivityMonitor',
+	#name : 'IllNullGCActivityMonitor',
 	#superclass : 'Object',
 	#category : 'IllimaniProfiler-GC-Monitor',
 	#package : 'IllimaniProfiler',
@@ -10,13 +10,13 @@ Class {
 }
 
 { #category : 'exporting' }
-NullGCActivityMonitor >> exportData: baseFileName [
+IllNullGCActivityMonitor >> exportData: baseFileName [
 ]
 
 { #category : 'exporting' }
-NullGCActivityMonitor >> run [
+IllNullGCActivityMonitor >> run [
 ]
 
 { #category : 'exporting' }
-NullGCActivityMonitor >> terminate [
+IllNullGCActivityMonitor >> terminate [
 ]

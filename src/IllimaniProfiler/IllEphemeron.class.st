@@ -9,7 +9,6 @@ Class {
 		'allocatedObjectClass',
 		'survivedScavenges',
 		'survivedFullGC',
-		'forcedFinalization',
 		'programCounter',
 		'allocatorMethod',
 		'senders'
@@ -65,7 +64,6 @@ IllEphemeron >> flattenedInstanceVariables [
 		  allocatedObjectClass.
 		  survivedScavenges.
 		  survivedFullGC.
-		  forcedFinalization.
 		  allocatorMethod name.
 		  (programCounter - 1) }
 ]
@@ -75,15 +73,7 @@ IllEphemeron >> forceFinalization [
 
 	"If already finalized"
 	key ifNil: [ ^ self ].
-
-	forcedFinalization := true.
 	self mourn
-]
-
-{ #category : 'accessing' }
-IllEphemeron >> forcedFinalization [
-
-	^ forcedFinalization
 ]
 
 { #category : 'accessing' }
@@ -99,8 +89,7 @@ IllEphemeron >> initialize [
 	"initializationTime := Time primUTCMicrosecondsClock."
 	initializationTime := Smalltalk vm parameterAt: 34.
 	survivedScavenges := Smalltalk vm incrementalGCCount.
-	survivedFullGC := Smalltalk vm fullGCCount.
-	forcedFinalization := false
+	survivedFullGC := Smalltalk vm fullGCCount
 ]
 
 { #category : 'inspector - extensions' }
@@ -113,7 +102,6 @@ IllEphemeron >> inspectionElements [
 		  ('Memory Size' -> sizeInBytes humanReadableByteSizeString).
 		  ('Survived scavenges' -> survivedScavenges).
 		  ('Survived full GCs' -> survivedFullGC).
-		  ('Finalization was forced?' -> forcedFinalization).
 		  ('Initialization time' -> initializationTime humanReadableByteSizeString).
 		  ('Finalization time' -> finalizationTime humanReadableByteSizeString) }
 ]

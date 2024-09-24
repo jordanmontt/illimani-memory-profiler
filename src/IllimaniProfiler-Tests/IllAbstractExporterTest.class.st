@@ -4,7 +4,9 @@ Class {
 	#instVars : [
 		'exporter',
 		'mockProfiler',
-		'mockGCMonitor'
+		'mockGCMonitor',
+		'createdCSVFile',
+		'createdJSONFile'
 	],
 	#category : 'IllimaniProfiler-Tests-Exporters',
 	#package : 'IllimaniProfiler-Tests',
@@ -64,20 +66,26 @@ IllAbstractExporterTest >> fakeAllocations [
 IllAbstractExporterTest >> setUp [
 
 	super setUp.
-	mockGCMonitor := IllMockGCMonitor new.
 	mockProfiler := IllMockProfiler new
 		objectAllocations: self fakeAllocations;
-		gcMonitor: mockGCMonitor;
 		yourself.
 	exporter := self exporterClass new
 		profiler: mockProfiler;
 		yourself
 ]
 
+{ #category : 'running' }
+IllAbstractExporterTest >> tearDown [
+
+	createdCSVFile ensureDelete.
+	createdJSONFile ensureDelete.
+	super tearDown
+]
+
 { #category : 'tests' }
 IllAbstractExporterTest >> testExportData [
 
-	| csvReader createdCSVFile createdJSONFile jsonDictionary |
+	| csvReader jsonDictionary |
 	exporter exportData.
 
 	createdCSVFile := (exporter baseFileName , '.csv') asFileReference.
@@ -91,8 +99,5 @@ IllAbstractExporterTest >> testExportData [
 	self assertCSVContent: csvReader.
 
 	jsonDictionary := NeoJSONReader fromString: createdJSONFile readStream contents.
-	self assertJSONMetaData: jsonDictionary.
-
-	createdCSVFile ensureDelete.
-	createdJSONFile ensureDelete
+	self assertJSONMetaData: jsonDictionary
 ]

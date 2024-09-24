@@ -1,5 +1,5 @@
 "
-I am a no action profiler. I am useful to test the introduced overhead of only instrumenting the methods but without taking no action. I DO NOTHING. I ONLY INSTRUMENT THE ALLOCATOR METHODS.
+I am a no action profiler. I execute no action. But, I instrument all the allocator methods any way. I am useful to test the introduced overhead of only instrumenting the methods but without taking no action.
 "
 Class {
 	#name : 'IllNoActionProfiler',
