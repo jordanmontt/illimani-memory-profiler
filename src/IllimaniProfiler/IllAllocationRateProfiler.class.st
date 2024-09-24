@@ -8,9 +8,9 @@ Class {
 		'totalAllocatedMemory',
 		'numberOfAllocations'
 	],
-	#category : 'IllimaniProfiler-Allocation-Profiler',
+	#category : 'IllimaniProfiler-Allocation-Rate',
 	#package : 'IllimaniProfiler',
-	#tag : 'Allocation-Profiler'
+	#tag : 'Allocation-Rate'
 }
 
 { #category : 'accessing - statistics' }
