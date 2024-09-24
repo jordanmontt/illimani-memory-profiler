@@ -34,3 +34,9 @@ IllPredictator >> objectAllocations: aCollection [
 
 	objectAllocations := aCollection
 ]
+
+{ #category : 'initialization' }
+IllPredictator >> setForProfiler: aProfiler [
+
+	self objectAllocations: aProfiler objectAllocations
+]

@@ -167,6 +167,15 @@ IllAnalyzer >> pruneAllocationSites [
 		  allocationSiteBin totalAllocations < (v * totalProgramAllocations) ]
 ]
 
+{ #category : 'api' }
+IllAnalyzer >> setForProfiler: profiler [
+
+	self
+		objectAllocations: profiler objectAllocations;
+		endTime: profiler endTime;
+		startTime: profiler startTime
+]
+
 { #category : 'accessing' }
 IllAnalyzer >> shortObjectsBin [
 

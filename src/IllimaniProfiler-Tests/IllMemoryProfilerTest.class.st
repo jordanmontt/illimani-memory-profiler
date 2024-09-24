@@ -39,6 +39,8 @@ IllMemoryProfilerTest >> testProfileOnFinalizesCorrectly [
 
 	| timeNow |
 
+	self timeLimit: 1 minute.
+
 	"The lifetime is calculated in terms of allocated bytes"
 	timeNow := Smalltalk vm parameterAt: 34.
 	profiler profileOn: [ 10 timesRepeat: [ IllMemoryProfiler new ] ].

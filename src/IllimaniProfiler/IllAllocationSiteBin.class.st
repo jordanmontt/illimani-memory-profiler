@@ -66,6 +66,13 @@ IllAllocationSiteBin >> initialize [
 	shortLivedObjects := OrderedCollection new
 ]
 
+{ #category : 'inspector' }
+IllAllocationSiteBin >> inspectorAllocSite [
+
+	<inspectorPresentationOrder: 901 title: 'Allocation site'>
+	^ allocationSite inspectionSource
+]
+
 { #category : 'accessing' }
 IllAllocationSiteBin >> longLivedObjects [
 
