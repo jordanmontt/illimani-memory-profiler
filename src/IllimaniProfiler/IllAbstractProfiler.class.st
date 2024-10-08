@@ -185,6 +185,33 @@ IllAbstractProfiler >> registerAllocation: anObject [
 		ifFalse: [ ^ self ]
 ]
 
+{ #category : 'profiling' }
+IllAbstractProfiler >> registerAllocationUsingNewSamplingRate: anObject [
+
+	"NEDDED: Change the sampling rate in the initialize to self samplingRate: 2552.
+	Why that number? Because this code gives 2040 in a pretty stable manner:
+	
+	prof startProfiling.
+	before := Smalltalk vm parameterAt: 34.	
+	Object new.
+	after :=Smalltalk vm parameterAt: 34.
+	prof stopProfiling.
+	after - before ""2040"" " 
+
+	| nextSamplingThreshold |
+	"Fast path for sampling 100% capture all"
+	samplingRate = 0 ifTrue: [
+		self internalRegisterAllocation: anObject.
+		^ self ].
+
+	nextSamplingThreshold := (Smalltalk vm parameterAt: 34) - startTime // samplingRate.
+
+	nextSamplingThreshold > samplingCounter ifTrue: [
+		self internalRegisterAllocation: anObject ].
+
+	samplingCounter := nextSamplingThreshold
+]
+
 { #category : 'accessing - statistics' }
 IllAbstractProfiler >> reportGCStatsOn: stream [
 
