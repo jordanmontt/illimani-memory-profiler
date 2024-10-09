@@ -85,7 +85,7 @@ IllAllocationSite >> inspectionSource [
 	^ SpPresenter new
 		  layout: (SpBoxLayout newTopToBottom
 				   add: (SpLabelPresenter new label: 'Method implemented in:'; yourself) expand: false;
-				   add: (SpTextPresenter new text: method methodClass name; yourself) expand: false;
+				   add: (SpTextPresenter new text: method methodClass name; beNotEditable; yourself) expand: false;
 				   add: (SpLabelPresenter new label: 'Method code:'; yourself) expand: false;
 				   add: codePresenter expand: true;
 				   yourself);
