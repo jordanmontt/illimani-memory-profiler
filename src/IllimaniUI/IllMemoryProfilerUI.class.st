@@ -49,7 +49,7 @@ IllMemoryProfilerUI >> codeEvaluatorText [
 
 	^
 'self objectAllocations.
-self stats allocationsByMethod'
+self allocationStats allocationsByMethod'
 ]
 
 { #category : 'accessing - lazy roassal presenters' }
@@ -106,7 +106,7 @@ IllMemoryProfilerUI >> initializeAllocatorsTablePresenter [
 
 	allocatorsTablePresenter := AllocationsByAllocatorTablePresenter
 		owner: self
-		on: profiler allocationsStats allocationsByMethod
+		on: profiler allocationStats allocationsByMethod
 ]
 
 { #category : 'initialization - lazy roassal presenters' }

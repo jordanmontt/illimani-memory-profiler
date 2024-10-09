@@ -14,7 +14,7 @@ Class {
 }
 
 { #category : 'accessing - statistics' }
-IllAllocationRateProfiler >> allocationsStats [
+IllAllocationRateProfiler >> allocationStats [
 
 	^ self
 ]

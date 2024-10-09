@@ -10,7 +10,7 @@ Class {
 }
 
 { #category : 'accessing - statistics' }
-IllNoActionProfiler >> allocationsStats [
+IllNoActionProfiler >> allocationStats [
 	"Yes, it's not needed but it just to make clear that we do nothing"
 
 	^ self

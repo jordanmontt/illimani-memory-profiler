@@ -11,7 +11,7 @@ Class {
 }
 
 { #category : 'accessing - statistics' }
-IllMemoryProfiler >> allocationsStats [
+IllMemoryProfiler >> allocationStats [
 
 	self isProfilingFinished
 		ifFalse: [ ^ Warning signal: 'Need to wait until the profiling is finished to access the stats' ].

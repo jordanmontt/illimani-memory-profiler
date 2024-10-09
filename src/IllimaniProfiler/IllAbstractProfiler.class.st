@@ -28,7 +28,7 @@ Class {
 }
 
 { #category : 'accessing - statistics' }
-IllAbstractProfiler >> allocationsStats [
+IllAbstractProfiler >> allocationStats [
 
 	^ self subclassResponsibility
 ]
