@@ -127,9 +127,7 @@ Without the UI, because the profiler is independent from the UI, you can access 
 
 ## A glance at the UI
 
-![fina](https://github.com/jordanmontt/illimani-memory-profiler/assets/33934979/e0c3cf6e-5105-45dc-84ba-26a5513a6710)
-
-![allo](https://github.com/jordanmontt/illimani-memory-profiler/assets/33934979/c83ab37b-3ec3-4f19-b4de-02110cd837af)
+<img width="949" alt="image" src="https://github.com/user-attachments/assets/e8bbc116-33ae-4e7e-abe7-58fb7a253366">
 
 ## Related papers
 
