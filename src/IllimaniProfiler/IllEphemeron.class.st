@@ -194,6 +194,12 @@ IllEphemeron >> sizeInBytes [
 ]
 
 { #category : 'accessing' }
+IllEphemeron >> stackStringPrefix [
+
+	^ senders
+]
+
+{ #category : 'accessing' }
 IllEphemeron >> survivedFullGC [
 
 	^ survivedFullGC
