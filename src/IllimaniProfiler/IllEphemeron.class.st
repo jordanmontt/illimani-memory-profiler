@@ -125,10 +125,13 @@ IllEphemeron >> inspectorExtension: aBuilder [
 IllEphemeron >> inspectorExtensionSenders: aBuilder [
 
 	<inspectorPresentationOrder: 2 title: 'Senders context'>
-	"senders not yet implemented"
+	| items |
+	items := senders
+		reject: #isNil
+		thenCollect: [ :e | StInspectorTransmissionNode hostObject: e transmissionBlock: #key].
 	^ aBuilder newList
-		items: (senders reject: #isNil);
-		display: [ :aMethod | "we ask the method because of the compiled blocks" aMethod method name ];
+		items: items;
+		display: [ :ssp | "we ask the method because of the compiled blocks" ssp rawValue method name ];
 		yourself
 ]
 
@@ -172,14 +175,15 @@ IllEphemeron >> programCounter: anObject [
 { #category : 'accessing' }
 IllEphemeron >> senders: aContext [
 
-	| sender |
+	| ssp sender |
 	"Using #to:do: because of performance"
 
 	senders := Array new: 10.
 	sender := aContext.
 	1 to: 10 do: [ :i |
 		sender ifNil: [ ^ self ].
-		senders at: i put: sender method.
+		ssp := sender method -> (sender pc - 1).
+		senders at: i put: ssp.
 		sender := sender sender ]
 ]
 
