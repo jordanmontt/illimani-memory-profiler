@@ -39,7 +39,7 @@ AllocatedObjectsTablePresenter >> filterTable: aText [
 		tablePresenter items: groupedAllocations.
 		^ self ].
 	newItems := groupedAllocations select: [ :item |
-		item first asString includesSubstring: aText caseSensitive: false ].
+		item key asString includesSubstring: aText caseSensitive: false ].
 	tablePresenter items: newItems
 ]
 
