@@ -56,9 +56,14 @@ IllMemoryProfilerTest >> testProfileOnFinalizesCorrectly [
 IllMemoryProfilerTest >> testProfileOnSimple [
 	"Default sampling rate is 1/100"
 
-	profiler profileOn: [ 1000 timesRepeat: [ Object new ] ].
+	| nAllocations |
+	nAllocations := 1000.
+
+	profiler instrumentator: (IllMockInstrumentator onProfiler: profiler).
+	profiler profileOn: [ nAllocations timesRepeat: [ Object illNew ] ].
+
 	self assert: profiler objectAllocations size >= 10.
-	self assert: profiler objectAllocations size < 20
+	self assert: profiler objectAllocations size < 15
 ]
 
 { #category : 'tests' }
