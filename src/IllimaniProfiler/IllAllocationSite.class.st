@@ -106,6 +106,6 @@ IllAllocationSite >> method: aCollection [
 IllAllocationSite >> printOn: aStream [
 
 	method printOn: aStream.
-	aStream << 'at byte: '.
+	aStream << ' at byte: '.
 	byte printOn: aStream
 ]

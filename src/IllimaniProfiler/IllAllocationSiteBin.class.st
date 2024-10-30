@@ -74,9 +74,33 @@ IllAllocationSiteBin >> inspectorAllocSite [
 ]
 
 { #category : 'accessing' }
+IllAllocationSiteBin >> isImmortal [
+
+	^ classification = #immortal
+]
+
+{ #category : 'accessing' }
+IllAllocationSiteBin >> isLong [
+
+	^ classification = #long
+]
+
+{ #category : 'accessing' }
+IllAllocationSiteBin >> isShort [
+
+	^ classification = #short
+]
+
+{ #category : 'accessing' }
 IllAllocationSiteBin >> longLivedObjects [
 
 	^ longLivedObjects
+]
+
+{ #category : 'printing' }
+IllAllocationSiteBin >> printOn: aStream [
+
+	aStream << classification << ' bin '
 ]
 
 { #category : 'accessing' }
