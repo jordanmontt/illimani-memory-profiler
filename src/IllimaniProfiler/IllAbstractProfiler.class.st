@@ -189,7 +189,7 @@ IllAbstractProfiler >> registerAllocation: anObject [
 IllAbstractProfiler >> registerAllocationUsingNewSamplingRate: anObject [
 
 	"NEDDED: Change the sampling rate in the initialize to self samplingRate: 2552.
-	Why that number? Because this code gives 2040 in a pretty stable manner:
+	Why that number? It was the result of a linear regression model:
 	
 	prof startProfiling.
 	before := Smalltalk vm parameterAt: 34.	

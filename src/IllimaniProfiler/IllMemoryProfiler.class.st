@@ -60,7 +60,7 @@ IllMemoryProfiler >> internalRegisterAllocation: newlyAllocatedObject [
 		key: newlyAllocatedObject value: nil;
 		allocatorMethod: filteredContext compiledCode method;
 		programCounter: filteredContext pc;
-		senders: filteredContext;
+		sendersCallStack: filteredContext;
 		yourself)
 ]
 

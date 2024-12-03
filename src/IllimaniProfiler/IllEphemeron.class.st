@@ -124,15 +124,29 @@ IllEphemeron >> inspectorExtension: aBuilder [
 { #category : 'inspector - extensions' }
 IllEphemeron >> inspectorExtensionSenders: aBuilder [
 
-	<inspectorPresentationOrder: 2 title: 'Senders context'>
-	| items |
-	items := senders
-		reject: #isNil
-		thenCollect: [ :e | StInspectorTransmissionNode hostObject: e transmissionBlock: #key].
-	^ aBuilder newList
-		items: items;
-		display: [ :ssp | "we ask the method because of the compiled blocks" ssp rawValue method name ];
-		yourself
+	<inspectorPresentationOrder: 2 title: 'Senders call stack'>
+	| items filteredSenders |
+	filteredSenders := senders reject: #isNil.
+	items := OrderedCollection new.
+	1 to: filteredSenders size by: 2 do: [ :i |
+		| method offset  |
+		method := senders at: i.
+		offset := senders at: i + 1.
+		items add: (StInspectorTransmissionNode
+			hostObject: method -> offset
+			transmissionBlock: [ :e |
+				IllMethodHighlightedBytecodePresenterInspection new method: method; offset: offset; yourself ])].
+	^ aBuilder newTable
+		  activateOnSingleClick;
+		  items: items;
+		  addColumn: (SpStringTableColumn
+				   title: 'Sender'
+				   evaluated: [ :each | "we ask the method because of the compiled blocks"
+					   each hostObject key method name ]);
+		  addColumn: (SpStringTableColumn
+				   title: 'Bytecode'
+				   evaluated: [ :e | e hostObject value ]);
+		  yourself
 ]
 
 { #category : 'accessing' }
@@ -173,17 +187,22 @@ IllEphemeron >> programCounter: anObject [
 ]
 
 { #category : 'accessing' }
-IllEphemeron >> senders: aContext [
+IllEphemeron >> sendersCallStack [
 
-	| ssp sender |
+	^ senders
+]
+
+{ #category : 'accessing' }
+IllEphemeron >> sendersCallStack: aContext [
+
+	| sender |
 	"Using #to:do: because of performance"
-
-	senders := Array new: 10.
+	senders := Array new: 20.
 	sender := aContext.
-	1 to: 10 do: [ :i |
+	1 to: 10 by: 2 do: [ :i |
 		sender ifNil: [ ^ self ].
-		ssp := sender method -> (sender pc - 1).
-		senders at: i put: ssp.
+		senders at: i put: sender method.
+		senders at: i + 1 put:  (sender pc - 1).
 		sender := sender sender ]
 ]
 
