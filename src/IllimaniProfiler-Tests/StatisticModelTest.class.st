@@ -27,15 +27,15 @@ StatisticModelTest >> setUp [
 StatisticModelTest >> testAllocationsByMethodMatchesTotalAllocations [
 
 	self
-		assert: statsModel allocationsByMethod first totalAllocations
+		assert: statsModel allocationsByAllocationSite first totalAllocations
 		equals: (fixture groupedAndSortedByMethodAllocators first value sum: [ :e | e value size ]).
 
 	self
-		assert: statsModel allocationsByMethod second totalAllocations
+		assert: statsModel allocationsByAllocationSite second totalAllocations
 		equals: (fixture groupedAndSortedByMethodAllocators second value sum: [ :e | e value size ]).
 
 	self
-		assert: statsModel allocationsByMethod third totalAllocations
+		assert: statsModel allocationsByAllocationSite third totalAllocations
 		equals: (fixture groupedAndSortedByMethodAllocators third value sum: [ :e | e value size ])
 ]
 
@@ -43,15 +43,15 @@ StatisticModelTest >> testAllocationsByMethodMatchesTotalAllocations [
 StatisticModelTest >> testAllocationsByMethodRespectsOrder [
 
 	self
-		assert: statsModel allocationsByMethod first allocator
+		assert: statsModel allocationsByAllocationSite first key
 		equals: fixture groupedAndSortedByMethodAllocators first key.
 
 	self
-		assert: statsModel allocationsByMethod second allocator
+		assert: statsModel allocationsByAllocationSite second key
 		equals: fixture groupedAndSortedByMethodAllocators second key.
 
 	self
-		assert: statsModel allocationsByMethod third allocator
+		assert: statsModel allocationsByAllocationSite third key
 		equals: fixture groupedAndSortedByMethodAllocators third key
 ]
 
@@ -59,7 +59,7 @@ StatisticModelTest >> testAllocationsByMethodRespectsOrder [
 StatisticModelTest >> testNumberOfMethods [
 
 	self
-		assert: statsModel numberOfAllocatorMethods
+		assert: statsModel numberOfAllocationSites
 		equals: fixture groupedAndSortedByMethodAllocators size
 ]
 
@@ -67,7 +67,7 @@ StatisticModelTest >> testNumberOfMethods [
 StatisticModelTest >> testTopNAllocationsByMethod [
 
 	(statsModel topNAllocationsByMethod: 2) with: (fixture groupedAndSortedByMethodAllocators first: 2)
-		do: [ :a :b | self assert: a allocator equals: b key ]
+		do: [ :a :b | self assert: a key equals: b key ]
 ]
 
 { #category : 'tests' }
@@ -81,5 +81,5 @@ StatisticModelTest >> testTotalAllocatedMemory [
 { #category : 'tests' }
 StatisticModelTest >> testTotalAllocatedObjects [
 
-	self assert: statsModel totalAllocatedObjects equals: fixture mockedAllocations size
+	self assert: statsModel totalAllocations equals: fixture mockedAllocations size
 ]

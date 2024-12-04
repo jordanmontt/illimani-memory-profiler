@@ -6,8 +6,8 @@ Class {
 		'totalAllocations',
 		'inputPresenter',
 		'totalLifetime',
-		'groupedAllocations',
-		'totalMemory'
+		'totalMemory',
+		'groupedAllocationsByObject'
 	],
 	#category : 'IllimaniUI-Widgets',
 	#package : 'IllimaniUI',
@@ -36,10 +36,12 @@ AllocatedObjectsTablePresenter >> filterTable: aText [
 
 	| newItems |
 	aText ifEmpty: [
-		tablePresenter items: groupedAllocations.
+		tablePresenter items: groupedAllocationsByObject.
 		^ self ].
-	newItems := groupedAllocations select: [ :item |
-		item key asString includesSubstring: aText caseSensitive: false ].
+	newItems := groupedAllocationsByObject select: [ :each |
+		            each key asString
+			            includesSubstring: aText
+			            caseSensitive: false ].
 	tablePresenter items: newItems
 ]
 
@@ -59,10 +61,8 @@ AllocatedObjectsTablePresenter >> initializeTablePresenter [
 	tablePresenter
 		alternateRowsColor;
 		activateOnSingleClick;
-		addColumn: (SpIndexTableColumn new
-				 title: 'Index';
-				 width: 60;
-				 yourself);
+		items: groupedAllocationsByObject;
+		addColumn: (SpIndexTableColumn new title: 'Index'; width: 60; yourself);
 		addColumn: (SpStringTableColumn title: 'Allocated object class' evaluated: #key);
 		addColumn: (SpStringTableColumn
 				title: 'Avg. lifetimes'
@@ -75,11 +75,16 @@ AllocatedObjectsTablePresenter >> initializeTablePresenter [
 				evaluated: [ :e | self toPrettyPercentage: (self relativeAllocationsFor: e) ]);
 		addColumn: (SpStringTableColumn
 				title: 'Total Memory'
-				evaluated: [ :e | (e value sum: #sizeInBytes) humanReadableByteSizeString ]);
+				evaluated: [ :e | self prettyTotalMemory: e ]);
 		addColumn: (SpStringTableColumn
 				title: '%'
-				evaluated: [ :e | self toPrettyPercentage: (self relativeMemoryFor: e) ]);
-		items: groupedAllocations
+				evaluated: [ :e | self toPrettyPercentage: (self relativeMemoryFor: e) ])
+]
+
+{ #category : 'initialization' }
+AllocatedObjectsTablePresenter >> prettyTotalMemory: e [
+
+	^ (e value sum: #sizeInBytes) humanReadableByteSizeString
 ]
 
 { #category : 'initialization' }
@@ -109,20 +114,11 @@ AllocatedObjectsTablePresenter >> relativeMemoryFor: assoc [
 { #category : 'accessing - model' }
 AllocatedObjectsTablePresenter >> setModelBeforeInitialization: aProfiler [
 
-	totalAllocations := aProfiler objectAllocations size.
+	totalAllocations := aProfiler allocationStats totalAllocations.
 	totalLifetime := aProfiler totalTime.
-	totalMemory := 0.
-	groupedAllocations := Dictionary new: 1000 "to avoid rehasing".
+	totalMemory := aProfiler allocationStats totalAllocatedMemory.
 
-	aProfiler objectAllocations do: [ :illEphemeron |
-		totalMemory := illEphemeron sizeInBytes + totalMemory.
-		(groupedAllocations
-			 at: illEphemeron allocatedObjectClass
-			 ifAbsentPut: [ OrderedCollection new ]) add: illEphemeron ].
-
-	groupedAllocations := groupedAllocations associations.
-	groupedAllocations := groupedAllocations sort: [ :a :b | 
-		(self relativeAllocationsFor: a) > (self relativeAllocationsFor: b) ]
+	groupedAllocationsByObject := aProfiler allocationStats allocationsByAllocatedObject
 ]
 
 { #category : 'initialization' }

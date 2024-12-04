@@ -3,11 +3,12 @@ Class {
 	#superclass : 'Object',
 	#instVars : [
 		'objectAllocations',
-		'allocationNodesByMethod',
 		'didIWalk',
 		'totalAllocatedMemory',
 		'totalProfiledTime',
-		'allocationNodesByLifetime'
+		'allocationNodesByLifetime',
+		'allocationNodesByAllocationSite',
+		'allocationsByAllocatedObject'
 	],
 	#category : 'IllimaniProfiler-Model-Statistics',
 	#package : 'IllimaniProfiler',
@@ -32,31 +33,39 @@ IllStatisticsModel class >> on: objectAllocations [
 ]
 
 { #category : 'accessing - statistics' }
-IllStatisticsModel >> allocationsByLifetime [
+IllStatisticsModel >> allocationsByAllocatedObject [
 
 	didIWalk ifFalse: [ self walkAllocations ].
-	^ allocationNodesByLifetime ifNil: [ allocationNodesByLifetime := allocationNodesByMethod sortedByLifetime ]
+	^ allocationsByAllocatedObject
 ]
 
 { #category : 'accessing - statistics' }
-IllStatisticsModel >> allocationsByMethod [
+IllStatisticsModel >> allocationsByAllocationSite [
 
 	didIWalk ifFalse: [ self walkAllocations ].
-	^ allocationNodesByMethod sortedByTotalAllocations
+	^ allocationNodesByAllocationSite sortedByTotalAllocations
+]
+
+{ #category : 'accessing - statistics' }
+IllStatisticsModel >> allocationsByLifetime [
+
+	didIWalk ifFalse: [ self walkAllocations ].
+	^ allocationNodesByLifetime ifNil: [ allocationNodesByLifetime := allocationNodesByAllocationSite sortedByLifetime ]
 ]
 
 { #category : 'initialization' }
 IllStatisticsModel >> initialize [
 
 	super initialize.
-	allocationNodesByMethod := GroupedAllocationsByAllocatorCollection new.
+	allocationNodesByAllocationSite := IllGroupedAllocations new.
+	allocationsByAllocatedObject := Dictionary new: 1000 "To avoid rehashing".
 	didIWalk := false
 ]
 
 { #category : 'accessing - statistics' }
-IllStatisticsModel >> numberOfAllocatorMethods [
+IllStatisticsModel >> numberOfAllocationSites [
 
-	^ self allocationsByMethod size
+	^ self allocationsByAllocationSite size
 ]
 
 { #category : 'accessing' }
@@ -75,7 +84,7 @@ IllStatisticsModel >> objectAllocations: anObject [
 IllStatisticsModel >> topNAllocationsByMethod: n [
 
 	| allocationsOrderedByMethod |
-	allocationsOrderedByMethod := self allocationsByMethod.
+	allocationsOrderedByMethod := self allocationsByAllocationSite.
 	^ allocationsOrderedByMethod first: (n min: allocationsOrderedByMethod size)
 ]
 
@@ -87,7 +96,7 @@ IllStatisticsModel >> totalAllocatedMemory [
 ]
 
 { #category : 'accessing - statistics' }
-IllStatisticsModel >> totalAllocatedObjects [
+IllStatisticsModel >> totalAllocations [
 
 	^ objectAllocations size
 ]
@@ -101,14 +110,22 @@ IllStatisticsModel >> totalProfiledTime: totalTime [
 { #category : 'calculating' }
 IllStatisticsModel >> walkAllocations [
 
-	objectAllocations do: [ :allocationHolder |
-		allocationNodesByMethod
-			updateAllocationForAllocator: allocationHolder allocationSite
-			allocation: allocationHolder ].
+	objectAllocations do: [ :illEphemeron |
+		allocationNodesByAllocationSite
+			updateAllocationForKey: illEphemeron allocationSite
+			allocation: illEphemeron.
+
+		(allocationsByAllocatedObject
+			 at: illEphemeron allocatedObjectClass
+			 ifAbsentPut: [ OrderedCollection new ]) add: illEphemeron ].
+
+	allocationsByAllocatedObject := allocationsByAllocatedObject associations.
+	allocationsByAllocatedObject := allocationsByAllocatedObject sort: [ :a :b |
+		a value size > b value size ].
 
 	totalAllocatedMemory := objectAllocations
 		inject: 0
-		into: [ :sum : elem | sum + elem sizeInBytes ].
+		into: [ :sum :elem | sum + elem sizeInBytes ].
 
 	didIWalk := true
 ]

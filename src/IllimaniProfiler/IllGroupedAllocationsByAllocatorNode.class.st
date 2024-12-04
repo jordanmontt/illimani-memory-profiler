@@ -2,11 +2,11 @@
 I am an object that acts like a node for a collection. I am a data structure that is used to calculate statistics. I know the allocator and I also have the allocated objects grouped by the class of the allocated object.
 "
 Class {
-	#name : 'GroupedAllocationsByAllocatorNode',
+	#name : 'IllGroupedAllocationsByAllocatorNode',
 	#superclass : 'Object',
 	#instVars : [
-		'allocator',
-		'groupedAllocations'
+		'groupedAllocations',
+		'key'
 	],
 	#category : 'IllimaniProfiler-Model-Statistics',
 	#package : 'IllimaniProfiler',
@@ -14,37 +14,19 @@ Class {
 }
 
 { #category : 'api' }
-GroupedAllocationsByAllocatorNode >> allocationsOf: aClass [
+IllGroupedAllocationsByAllocatorNode >> allocationsOf: aClass [
 
 	^ groupedAllocations at: aClass ifPresent: [ :e | e size ] ifAbsent: [ 0 ]
 ]
 
 { #category : 'accessing' }
-GroupedAllocationsByAllocatorNode >> allocator [
-
-	^ allocator
-]
-
-{ #category : 'accessing' }
-GroupedAllocationsByAllocatorNode >> allocator: anObject [
-
-	allocator := anObject
-]
-
-{ #category : 'api' }
-GroupedAllocationsByAllocatorNode >> eachAllocationsTotal [
-
-	^ groupedAllocations values
-]
-
-{ #category : 'accessing' }
-GroupedAllocationsByAllocatorNode >> groupedAllocations [
+IllGroupedAllocationsByAllocatorNode >> groupedAllocations [
 
 	^ groupedAllocations
 ]
 
 { #category : 'api' }
-GroupedAllocationsByAllocatorNode >> increaseAllocationsFor: anAllocationHolder [
+IllGroupedAllocationsByAllocatorNode >> increaseAllocationsFor: anAllocationHolder [
 
 	groupedAllocations
 		at: anAllocationHolder allocatedObjectClass
@@ -56,18 +38,18 @@ GroupedAllocationsByAllocatorNode >> increaseAllocationsFor: anAllocationHolder 
 ]
 
 { #category : 'initialization' }
-GroupedAllocationsByAllocatorNode >> initialize [
+IllGroupedAllocationsByAllocatorNode >> initialize [
 
 	super initialize.
 	groupedAllocations := Dictionary new
 ]
 
 { #category : 'inspector - extensions' }
-GroupedAllocationsByAllocatorNode >> inspectorExtension: aBuilder [
+IllGroupedAllocationsByAllocatorNode >> inspectorExtension: aBuilder [
 
 	<inspectorPresentationOrder: 0 title: 'Summary'>
 	| elements tablePresenter |
-	elements := { 'Allocator' -> "because of block closures" allocator . 'Total allocations' -> self totalAllocations . 'Total size in memory' -> self sizeInBytes }.
+	elements := { 'Allocator' -> "because of block closures" key . 'Total allocations' -> self totalAllocations . 'Total size in memory' -> self totalAllocatedMemory humanReadableByteSizeString }.
 	tablePresenter := aBuilder newTable.
 	tablePresenter
 		addColumn: (SpStringTableColumn title: 'Name' evaluated: #key);
@@ -78,7 +60,7 @@ GroupedAllocationsByAllocatorNode >> inspectorExtension: aBuilder [
 ]
 
 { #category : 'inspector - extensions' }
-GroupedAllocationsByAllocatorNode >> inspectorExtensionGroupedAllocations: aBuilder [
+IllGroupedAllocationsByAllocatorNode >> inspectorExtensionGroupedAllocations: aBuilder [
 
 	<inspectorPresentationOrder: 1 title: 'Grouped Allocations'>
 	| tablePresenter |
@@ -95,48 +77,48 @@ GroupedAllocationsByAllocatorNode >> inspectorExtensionGroupedAllocations: aBuil
 	^ tablePresenter
 ]
 
-{ #category : 'printing' }
-GroupedAllocationsByAllocatorNode >> printOn: aStream [
+{ #category : 'accessing' }
+IllGroupedAllocationsByAllocatorNode >> key [
 
-	aStream << allocator asString << ' allocated ' << self totalAllocations asString << ' instances that weight ' << self sizeInBytes humanReadableByteSizeString
+	^ key
 ]
 
 { #category : 'accessing' }
-GroupedAllocationsByAllocatorNode >> sizeInBytes [
+IllGroupedAllocationsByAllocatorNode >> key: anObject [
 
-	^ groupedAllocations inject: 0
-		  into: [ :sum :node | sum + (node sum: [ :e | e sizeInBytes ]) ]
+	key := anObject
+]
+
+{ #category : 'printing' }
+IllGroupedAllocationsByAllocatorNode >> printOn: aStream [
+
+	aStream << key asString << ' allocated ' << self totalAllocations asString << ' instances that weight ' << self sizeInBytes humanReadableByteSizeString
 ]
 
 { #category : 'api' }
-GroupedAllocationsByAllocatorNode >> sortedGroupedAllocations [
+IllGroupedAllocationsByAllocatorNode >> sortedGroupedAllocations [
 
 	^ (groupedAllocations values sorted: [ :a :b | a size > b size ]) flattened
 ]
 
 { #category : 'api' }
-GroupedAllocationsByAllocatorNode >> sortedGroupedAllocationsAsAssociation [
-
-	^ (groupedAllocations associations sorted: [ :a :b | a value size > b value size ])
-		  flattened
-]
-
-{ #category : 'api' }
-GroupedAllocationsByAllocatorNode >> summedLifetimes [
+IllGroupedAllocationsByAllocatorNode >> summedLifetimes [
 
 	^ groupedAllocations values
 		inject: 0
 		into: [ :sum :collection | sum + (collection sum: #lifetime) ]
 ]
 
-{ #category : 'api' }
-GroupedAllocationsByAllocatorNode >> totalAllocations [
+{ #category : 'accessing' }
+IllGroupedAllocationsByAllocatorNode >> totalAllocatedMemory [
 
-	^ groupedAllocations values inject: 0 into: [ :sum :collection | sum + collection size ]
+	^ groupedAllocations
+		inject: 0
+		into: [ :sum :node | sum + (node sum: [ :e | e sizeInBytes ]) ]
 ]
 
 { #category : 'api' }
-GroupedAllocationsByAllocatorNode >> totalGroupedAllocations [
+IllGroupedAllocationsByAllocatorNode >> totalAllocations [
 
-	^ groupedAllocations values collect: #size
+	^ groupedAllocations values inject: 0 into: [ :sum :collection | sum + collection size ]
 ]

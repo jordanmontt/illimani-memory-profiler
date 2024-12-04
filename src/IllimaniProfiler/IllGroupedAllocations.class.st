@@ -2,7 +2,7 @@
 I am an object that acts like a collection. I am only used to calculate statistics and I am used because my api facilitates the calculations.
 "
 Class {
-	#name : 'GroupedAllocationsByAllocatorCollection',
+	#name : 'IllGroupedAllocations',
 	#superclass : 'Object',
 	#instVars : [
 		'sortedByTotalAllocationsNodes',
@@ -15,26 +15,26 @@ Class {
 }
 
 { #category : 'converting' }
-GroupedAllocationsByAllocatorCollection >> asOrderedCollection [
+IllGroupedAllocations >> asOrderedCollection [
 
 	^ self sortedByTotalAllocations
 ]
 
 { #category : 'accessing' }
-GroupedAllocationsByAllocatorCollection >> groupedNodesDictionary [
+IllGroupedAllocations >> groupedNodesDictionary [
 
 	^ groupedNodesDictionary
 ]
 
 { #category : 'initialization' }
-GroupedAllocationsByAllocatorCollection >> initialize [
+IllGroupedAllocations >> initialize [
 
 	super initialize.
 	groupedNodesDictionary := Dictionary new
 ]
 
 { #category : 'inspector - extensions' }
-GroupedAllocationsByAllocatorCollection >> inspectorExtension [
+IllGroupedAllocations >> inspectorExtension [
 
 	<inspectorPresentationOrder: 0 title: 'Title'>
 	^ SpListPresenter new
@@ -43,41 +43,41 @@ GroupedAllocationsByAllocatorCollection >> inspectorExtension [
 ]
 
 { #category : 'api' }
-GroupedAllocationsByAllocatorCollection >> sortByLifetime [
+IllGroupedAllocations >> sortByLifetime [
 
 	sortedByLifetimeNodes := groupedNodesDictionary sorted: [ :a :b |
 		a value summedLifetimes > b value summedLifetimes ]
 ]
 
 { #category : 'api' }
-GroupedAllocationsByAllocatorCollection >> sortByNumberOfAllocations [
+IllGroupedAllocations >> sortByNumberOfAllocations [
 
 	sortedByTotalAllocationsNodes := groupedNodesDictionary sorted: [ :a :b |
 		a value totalAllocations > b value totalAllocations ]
 ]
 
 { #category : 'api' }
-GroupedAllocationsByAllocatorCollection >> sortedByLifetime [
+IllGroupedAllocations >> sortedByLifetime [
 
 	sortedByLifetimeNodes ifNil: [ self sortByLifetime ].
 	^ sortedByLifetimeNodes
 ]
 
 { #category : 'api' }
-GroupedAllocationsByAllocatorCollection >> sortedByTotalAllocations [
+IllGroupedAllocations >> sortedByTotalAllocations [
 
 	sortedByTotalAllocationsNodes ifNil: [ self sortByNumberOfAllocations ].
 	^ sortedByTotalAllocationsNodes
 ]
 
 { #category : 'api' }
-GroupedAllocationsByAllocatorCollection >> updateAllocationForAllocator: allocator allocation: anAllocationHolder [
+IllGroupedAllocations >> updateAllocationForKey: allocator allocation: anAllocationHolder [
 
 	groupedNodesDictionary at: allocator
 		ifPresent: [ :subDictionary | subDictionary increaseAllocationsFor: anAllocationHolder ]
 		ifAbsentPut: [
-			GroupedAllocationsByAllocatorNode new
-				allocator: allocator;
+			IllGroupedAllocationsByAllocatorNode new
+				key: allocator;
 				increaseAllocationsFor: anAllocationHolder;
 				yourself ]
 ]

@@ -61,7 +61,7 @@ AllocationsByAllocatorTablePresenter >> initializePresenters [
 			yourself);
 		addColumn: (SpStringTableColumn new
 			title: 'Allocator';
-			evaluated: [ :each | StObjectPrinter asTruncatedTextFrom: each allocator method name ];
+			evaluated: [ :each | StObjectPrinter asTruncatedTextFrom: each key method name ];
 			sortFunction: #printString ascending;
 			yourself);
 		addColumn: (SpStringTableColumn new
@@ -78,7 +78,7 @@ AllocationsByAllocatorTablePresenter >> initializePresenters [
 			yourself);
 		addColumn: (SpStringTableColumn new
 			title: 'Total size in bytes';
-			evaluated: [ :each | each sizeInBytes humanReadableByteSizeString ];
+			evaluated: [ :each | each totalAllocatedMemory humanReadableByteSizeString ];
 			sortFunction: #sizeInBytes ascending;
 			width: 120;
 			yourself);
@@ -86,7 +86,7 @@ AllocationsByAllocatorTablePresenter >> initializePresenters [
 			width: 60;
 			title: '%';
 			evaluated: [ :e |
-				(((e sizeInBytes / self sizeInBytes) * 100) asFloat printShowingDecimalPlaces: 2) , '%'];
+				(((e totalAllocatedMemory / self sizeInBytes) * 100) asFloat printShowingDecimalPlaces: 2) , '%'];
 			yourself);
 		items: self tableItems
 ]
@@ -100,7 +100,7 @@ AllocationsByAllocatorTablePresenter >> setModelBeforeInitialization: someTableI
 { #category : 'accessing' }
 AllocationsByAllocatorTablePresenter >> sizeInBytes [
 
-	^ totalSizeInBytes ifNil: [ totalSizeInBytes := tableItems sum: [ :e | e sizeInBytes ] ]
+	^ totalSizeInBytes ifNil: [ totalSizeInBytes := tableItems sum: [ :e | e totalAllocatedMemory ] ]
 ]
 
 { #category : 'accessing - model' }
