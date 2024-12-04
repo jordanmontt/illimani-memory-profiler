@@ -68,10 +68,16 @@ AllocatedObjectsTablePresenter >> initializeTablePresenter [
 				title: 'Avg. lifetimes'
 				evaluated: [ :e | self toPrettyPercentage: (self relativeLifetimeFor: e) ]);
 		addColumn: (SpStringTableColumn
-				title: '% Allocations'
+				title: 'Total Allocations'
+				evaluated: [ :e | e value size ]);
+		addColumn: (SpStringTableColumn
+				title: '%'
 				evaluated: [ :e | self toPrettyPercentage: (self relativeAllocationsFor: e) ]);
 		addColumn: (SpStringTableColumn
-				title: '% Memory'
+				title: 'Total Memory'
+				evaluated: [ :e | (e value sum: #sizeInBytes) humanReadableByteSizeString ]);
+		addColumn: (SpStringTableColumn
+				title: '%'
 				evaluated: [ :e | self toPrettyPercentage: (self relativeMemoryFor: e) ]);
 		items: groupedAllocations
 ]
@@ -79,7 +85,7 @@ AllocatedObjectsTablePresenter >> initializeTablePresenter [
 { #category : 'initialization' }
 AllocatedObjectsTablePresenter >> relativeAllocationsFor: assoc [
 
-	^ (assoc value size / totalAllocations)* 100
+	^ (assoc value size / totalAllocations) * 100
 ]
 
 { #category : 'initialization' }
@@ -105,12 +111,18 @@ AllocatedObjectsTablePresenter >> setModelBeforeInitialization: aProfiler [
 
 	totalAllocations := aProfiler objectAllocations size.
 	totalLifetime := aProfiler totalTime.
-	totalMemory := aProfiler objectAllocations sum: #sizeInBytes.
-	
-	groupedAllocations := (aProfiler objectAllocations groupedBy: #allocatedObjectClass) associations.
+	totalMemory := 0.
+	groupedAllocations := Dictionary new: 1000 "to avoid rehasing".
+
+	aProfiler objectAllocations do: [ :illEphemeron |
+		totalMemory := illEphemeron sizeInBytes + totalMemory.
+		(groupedAllocations
+			 at: illEphemeron allocatedObjectClass
+			 ifAbsentPut: [ OrderedCollection new ]) add: illEphemeron ].
+
+	groupedAllocations := groupedAllocations associations.
 	groupedAllocations := groupedAllocations sort: [ :a :b | 
 		(self relativeAllocationsFor: a) > (self relativeAllocationsFor: b) ]
-	
 ]
 
 { #category : 'initialization' }

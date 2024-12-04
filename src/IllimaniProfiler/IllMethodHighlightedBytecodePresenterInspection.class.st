@@ -5,9 +5,9 @@ Class {
 		'method',
 		'offset'
 	],
-	#category : 'IllimaniProfiler-Profiler',
+	#category : 'IllimaniProfiler-Inspector-Utilities',
 	#package : 'IllimaniProfiler',
-	#tag : 'Profiler'
+	#tag : 'Inspector-Utilities'
 }
 
 { #category : 'as yet unclassified' }
@@ -28,7 +28,7 @@ IllMethodHighlightedBytecodePresenterInspection >> buildPresenter [
 { #category : 'as yet unclassified' }
 IllMethodHighlightedBytecodePresenterInspection >> inspector: aBuilder [
 
-	<inspectorPresentationOrder: 2 title: 'Senders call stack'>
+	<inspectorPresentationOrder: 0 title: 'Method code'>
 	^ self buildPresenter
 ]
 

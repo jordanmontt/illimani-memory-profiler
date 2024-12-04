@@ -71,17 +71,11 @@ IllAllocationSite >> hash [
 IllAllocationSite >> inspectionSource [
 
 	<inspectorPresentationOrder: 30 title: 'Allocation site'>
-	| interval codePresenter |
-	interval := (method sourceNode sourceNodeForPC: byte) sourceInterval.
-	codePresenter := SpCodePresenter new
-		                 beForBehavior: method methodClass;
-		                 text: method sourceCode;
-		                 addTextSegmentDecoration:
-			                 (SpTextPresenterDecorator forHighlight
-				                  interval: (interval first to: interval last + 1);
-				                  yourself);
-		                 beNotEditable;
-		                 yourself.
+	| codePresenter |
+	codePresenter := IllMethodHighlightedBytecodePresenterInspection new
+		method: method;
+		offset: byte;
+		yourself.
 	^ SpPresenter new
 		  layout: (SpBoxLayout newTopToBottom
 				   add: (SpLabelPresenter new label: 'Method implemented in:'; yourself) expand: false;
