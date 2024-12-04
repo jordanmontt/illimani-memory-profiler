@@ -53,7 +53,7 @@ RoassaHelperChartBuilder >> allocatedObjectsPerSecondLineChartCanvas [
 RoassaHelperChartBuilder >> allocatedObjectsPerSecondPerMethodLineChartCanvas [
 
 	^ self constructPerSecondLineChart:
-		  (model allocationStats topNAllocationsByMethod: topCalculationsNumber)
+		  (model queryAllocationStats topNAllocationsByMethod: topCalculationsNumber)
 ]
 
 { #category : 'chart construction' }
@@ -108,7 +108,7 @@ RoassaHelperChartBuilder >> createLinePlotForAllocations: someAllocations [
 RoassaHelperChartBuilder >> heatmapAllocatorAllocatedCanvasByMethod [
 
 	^ HeatmapRoassalBuilder new
-		data: (model allocationStats topNAllocationsByMethod: topCalculationsNumber);
+		data: (model queryAllocationStats topNAllocationsByMethod: topCalculationsNumber);
 		build;
 		canvas
 ]

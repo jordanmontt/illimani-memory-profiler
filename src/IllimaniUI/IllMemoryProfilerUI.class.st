@@ -106,7 +106,7 @@ IllMemoryProfilerUI >> initializeAllocatorsTablePresenter [
 
 	allocatorsTablePresenter := AllocationsByAllocatorTablePresenter
 		owner: self
-		on: profiler allocationStats allocationsByAllocationSite
+		on: profiler queryAllocationStats allocationsByAllocationSite
 ]
 
 { #category : 'initialization - lazy roassal presenters' }

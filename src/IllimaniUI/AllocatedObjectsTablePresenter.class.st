@@ -114,11 +114,11 @@ AllocatedObjectsTablePresenter >> relativeMemoryFor: assoc [
 { #category : 'accessing - model' }
 AllocatedObjectsTablePresenter >> setModelBeforeInitialization: aProfiler [
 
-	totalAllocations := aProfiler allocationStats totalAllocations.
+	totalAllocations := aProfiler queryAllocationStats totalAllocations.
 	totalLifetime := aProfiler totalTime.
-	totalMemory := aProfiler allocationStats totalAllocatedMemory.
+	totalMemory := aProfiler queryAllocationStats totalAllocatedMemory.
 
-	groupedAllocationsByObject := aProfiler allocationStats allocationsByAllocatedObject
+	groupedAllocationsByObject := aProfiler queryAllocationStats allocationsByAllocatedObject
 ]
 
 { #category : 'initialization' }

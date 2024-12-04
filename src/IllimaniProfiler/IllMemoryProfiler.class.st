@@ -10,16 +10,6 @@ Class {
 	#tag : 'Profiler'
 }
 
-{ #category : 'accessing - statistics' }
-IllMemoryProfiler >> allocationStats [
-
-	self isProfilingFinished
-		ifFalse: [ ^ Warning signal: 'Need to wait until the profiling is finished to access the stats' ].
-
-	^ statsModel ifNil: [
-		  statsModel := IllStatisticsModel objectAllocations: ephemeronsCollection totalProfiledTime: endTime ]
-]
-
 { #category : 'exporting' }
 IllMemoryProfiler >> exporterClass [
 
@@ -68,6 +58,16 @@ IllMemoryProfiler >> internalRegisterAllocation: newlyAllocatedObject [
 IllMemoryProfiler >> objectAllocations [
 
 	^ ephemeronsCollection
+]
+
+{ #category : 'accessing - statistics' }
+IllMemoryProfiler >> queryAllocationStats [
+
+	self isProfilingFinished
+		ifFalse: [ ^ Warning signal: 'Need to wait until the profiling is finished to access the stats' ].
+
+	^ statsModel ifNil: [
+		  statsModel := IllStatisticsModel objectAllocations: ephemeronsCollection totalProfiledTime: endTime ]
 ]
 
 { #category : 'profiling' }

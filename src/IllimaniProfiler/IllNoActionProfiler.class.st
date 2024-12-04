@@ -9,13 +9,6 @@ Class {
 	#tag : 'Profiler'
 }
 
-{ #category : 'accessing - statistics' }
-IllNoActionProfiler >> allocationStats [
-	"Yes, it's not needed but it just to make clear that we do nothing"
-
-	^ self
-]
-
 { #category : 'initialization' }
 IllNoActionProfiler >> initialize [
 
@@ -35,4 +28,11 @@ IllNoActionProfiler >> internalRegisterAllocation: anObject [
 IllNoActionProfiler >> objectAllocations [
 
 	^ {  }
+]
+
+{ #category : 'accessing - statistics' }
+IllNoActionProfiler >> queryAllocationStats [
+	"Yes, it's not needed but it just to make clear that we do nothing"
+
+	^ self
 ]

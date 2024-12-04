@@ -27,12 +27,6 @@ Class {
 	#tag : 'Profiler'
 }
 
-{ #category : 'accessing - statistics' }
-IllAbstractProfiler >> allocationStats [
-
-	^ self subclassResponsibility
-]
-
 { #category : 'announcements' }
 IllAbstractProfiler >> announceProfilerStopedProfiling [
 
@@ -167,6 +161,12 @@ IllAbstractProfiler >> profileOn: aBlock [
 IllAbstractProfiler >> profiledCode [
 
 	^ profiledCode
+]
+
+{ #category : 'accessing - statistics' }
+IllAbstractProfiler >> queryAllocationStats [
+
+	^ self subclassResponsibility
 ]
 
 { #category : 'profiling' }
