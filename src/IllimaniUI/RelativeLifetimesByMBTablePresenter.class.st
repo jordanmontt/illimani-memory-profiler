@@ -10,7 +10,7 @@ Class {
 RelativeLifetimesByMBTablePresenter >> groupAllocations: someObjectAllocations [
 
 	^ (someObjectAllocations groupedBy: [ :allocationModel |
-		 allocationModel lifetime // (1024*1024*10) "megabytes" ]) associations
+		 allocationModel lifetime // (1024*1024*10) "10 megabytes" ]) associations
 ]
 
 { #category : 'initialization' }

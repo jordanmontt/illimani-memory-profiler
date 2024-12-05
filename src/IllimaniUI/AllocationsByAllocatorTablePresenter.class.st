@@ -77,7 +77,7 @@ AllocationsByAllocatorTablePresenter >> initializePresenters [
 				(((e totalAllocations / self totalAllocations) * 100) asFloat printShowingDecimalPlaces: 2) , '%' ];
 			yourself);
 		addColumn: (SpStringTableColumn new
-			title: 'Total size in bytes';
+			title: 'Total memory';
 			evaluated: [ :each | each totalAllocatedMemory humanReadableByteSizeString ];
 			sortFunction: #sizeInBytes ascending;
 			width: 120;

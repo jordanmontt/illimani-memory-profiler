@@ -68,13 +68,13 @@ AllocatedObjectsTablePresenter >> initializeTablePresenter [
 				title: 'Avg. lifetimes'
 				evaluated: [ :e | self toPrettyPercentage: (self relativeLifetimeFor: e) ]);
 		addColumn: (SpStringTableColumn
-				title: 'Total Allocations'
+				title: 'Total allocations'
 				evaluated: [ :e | e value size ]);
 		addColumn: (SpStringTableColumn
 				title: '%'
 				evaluated: [ :e | self toPrettyPercentage: (self relativeAllocationsFor: e) ]);
 		addColumn: (SpStringTableColumn
-				title: 'Total Memory'
+				title: 'Total memory'
 				evaluated: [ :e | self prettyTotalMemory: e ]);
 		addColumn: (SpStringTableColumn
 				title: '%'

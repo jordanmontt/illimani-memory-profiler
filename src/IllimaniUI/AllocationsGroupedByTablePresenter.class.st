@@ -53,14 +53,14 @@ AllocationsGroupedByTablePresenter >> initializePresenters [
 			evaluated: [ :assoc | assoc key ]).
 	tablePresenter
 		addColumn: (SpStringTableColumn
-			title: 'Total allocated objects'
+			title: 'Total allocations'
 			evaluated: [ :assoc | assoc value size asStringWithCommas ]);
 		addColumn: (SpStringTableColumn
 			title: '% Allocations'
 			evaluated: [ :assoc | self convertToPercentageString: (assoc value size / totalAllocations) ]).
 	tablePresenter
 		addColumn: (SpStringTableColumn
-			title: 'Total allocated memory'
+			title: 'Total memory'
 			evaluated: [ :assoc | (assoc value sum: [ :e | e sizeInBytes ]) humanReadableByteSizeString ]);
 		addColumn: (SpStringTableColumn
 			title: '% Memory'
