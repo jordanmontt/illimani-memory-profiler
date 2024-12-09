@@ -176,7 +176,7 @@ IllEphemeron >> sendersCallStack: aContext [
 
 	| sender i |
 	"Using #to:do: because of performance"
-	senders := Array new: 150.
+	senders := Array new: 250.
 	i := 1.
 	sender := aContext.
 	[ sender isNil ] whileFalse: [
