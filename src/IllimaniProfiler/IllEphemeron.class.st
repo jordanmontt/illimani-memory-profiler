@@ -183,7 +183,7 @@ IllEphemeron >> sendersCallStack: aContext [
 		senders at: i put: sender method.
 		senders at: i + 1 put: sender pc - 1.
 		sender := sender sender.
-		i := i + 1 ]
+		i := i + 2 ]
 	"	1 to: 10 by: 2 do: [ :i |
 		sender ifNil: [ ^ self ].
 		senders at: i put: sender method.
