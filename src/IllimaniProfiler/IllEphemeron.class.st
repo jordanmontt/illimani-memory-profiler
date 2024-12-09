@@ -122,31 +122,10 @@ IllEphemeron >> inspectorExtension: aBuilder [
 ]
 
 { #category : 'inspector - extensions' }
-IllEphemeron >> inspectorExtensionSenders: aBuilder [
+IllEphemeron >> inspectorExtensionSenders [
 
 	<inspectorPresentationOrder: 2 title: 'Senders call stack'>
-	| items filteredSenders |
-	filteredSenders := senders reject: #isNil.
-	items := OrderedCollection new.
-	1 to: filteredSenders size by: 2 do: [ :i |
-		| method offset  |
-		method := senders at: i.
-		offset := senders at: i + 1.
-		items add: (StInspectorTransmissionNode
-			hostObject: method -> offset
-			transmissionBlock: [ :e |
-				IllMethodHighlightedBytecodePresenterInspection new method: method; offset: offset; yourself ])].
-	^ aBuilder newTable
-		  activateOnSingleClick;
-		  items: items;
-		  addColumn: (SpStringTableColumn
-				   title: 'Sender'
-				   evaluated: [ :each | "we ask the method because of the compiled blocks"
-					   each hostObject key method name ]);
-		  addColumn: (SpStringTableColumn
-				   title: 'Bytecode'
-				   evaluated: [ :e | e hostObject value ]);
-		  yourself
+	^ (IllSendersCallStack senders: senders) buildInspectorPresenter
 ]
 
 { #category : 'accessing' }
@@ -189,21 +168,27 @@ IllEphemeron >> programCounter: anObject [
 { #category : 'accessing' }
 IllEphemeron >> sendersCallStack [
 
-	^ senders
+	^ IllSendersCallStack senders: senders
 ]
 
 { #category : 'accessing' }
 IllEphemeron >> sendersCallStack: aContext [
 
-	| sender |
+	| sender i |
 	"Using #to:do: because of performance"
-	senders := Array new: 20.
+	senders := Array new: 50.
+	i := 1.
 	sender := aContext.
-	1 to: 10 by: 2 do: [ :i |
+	[ sender isNil ] whileFalse: [
+		senders at: i put: sender method.
+		senders at: i + 1 put: sender pc - 1.
+		sender := sender sender.
+		i := i + 1 ]
+	"	1 to: 10 by: 2 do: [ :i |
 		sender ifNil: [ ^ self ].
 		senders at: i put: sender method.
 		senders at: i + 1 put:  (sender pc - 1).
-		sender := sender sender ]
+		sender := sender sender ]"
 ]
 
 { #category : 'accessing' }

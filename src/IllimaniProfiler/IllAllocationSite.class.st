@@ -75,7 +75,7 @@ IllAllocationSite >> inspectionSource [
 	codePresenter := IllMethodHighlightedBytecodePresenterInspection new
 		method: method;
 		offset: byte;
-		yourself.
+		buildPresenter.
 	^ SpPresenter new
 		  layout: (SpBoxLayout newTopToBottom
 				   add: (SpLabelPresenter new label: 'Method implemented in:'; yourself) expand: false;
