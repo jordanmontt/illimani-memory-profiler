@@ -71,16 +71,32 @@ IllAllocationSite >> hash [
 IllAllocationSite >> inspectionSource [
 
 	<inspectorPresentationOrder: 30 title: 'Allocation site'>
+	^ self inspectorPresenter
+]
+
+{ #category : 'inspecting' }
+IllAllocationSite >> inspectorPresenter [
+
 	| codePresenter |
 	codePresenter := IllMethodHighlightedBytecodePresenterInspection new
-		method: method;
-		offset: byte;
-		buildPresenter.
+		                 method: method;
+		                 offset: byte;
+		                 buildPresenter.
 	^ SpPresenter new
 		  layout: (SpBoxLayout newTopToBottom
-				   add: (SpLabelPresenter new label: 'Method implemented in:'; yourself) expand: false;
-				   add: (SpTextPresenter new text: method methodClass name; beNotEditable; yourself) expand: false;
-				   add: (SpLabelPresenter new label: 'Method code:'; yourself) expand: false;
+				   add: (SpLabelPresenter new
+						    label: 'Method implemented in:';
+						    yourself)
+				   expand: false;
+				   add: (SpTextPresenter new
+						    text: method methodClass name;
+						    beNotEditable;
+						    yourself)
+				   expand: false;
+				   add: (SpLabelPresenter new
+						    label: 'Method code:';
+						    yourself)
+				   expand: false;
 				   add: codePresenter expand: true;
 				   yourself);
 		  yourself

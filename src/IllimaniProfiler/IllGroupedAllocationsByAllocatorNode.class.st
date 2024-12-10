@@ -45,6 +45,13 @@ IllGroupedAllocationsByAllocatorNode >> initialize [
 ]
 
 { #category : 'inspector - extensions' }
+IllGroupedAllocationsByAllocatorNode >> inspectorAllocSite [
+
+	<inspectorPresentationOrder: 3 title: 'Allocation site'>
+	^ key inspectorPresenter
+]
+
+{ #category : 'inspector - extensions' }
 IllGroupedAllocationsByAllocatorNode >> inspectorExtension: aBuilder [
 
 	<inspectorPresentationOrder: 0 title: 'Summary'>
