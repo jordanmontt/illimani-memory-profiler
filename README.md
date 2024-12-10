@@ -21,7 +21,7 @@ EpMonitor disableDuring: [
 Profiling a given code snippet
 
 ```st
-profiler
+IllMemoryProfiler new
 	profileOn: [ 15 timesRepeat: [ StPlaygroundPresenter open close ] ] ;
 	open;
 	yourself
@@ -30,7 +30,7 @@ profiler
 Profiling the Pharo IDE activity for a given amount of time
 
 ```st
-profiler
+IllMemoryProfiler new
 	profileFor: 6 seconds;
 	open;
 	yourself
