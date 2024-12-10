@@ -92,7 +92,7 @@ IllGroupedAllocationsByAllocatorNode >> key: anObject [
 { #category : 'printing' }
 IllGroupedAllocationsByAllocatorNode >> printOn: aStream [
 
-	aStream << key asString << ' allocated ' << self totalAllocations asString << ' instances that weight ' << self sizeInBytes humanReadableByteSizeString
+	aStream << key asString << ' allocated ' << self totalAllocations asString << ' instances that weight ' << self totalAllocatedMemory humanReadableByteSizeString
 ]
 
 { #category : 'api' }

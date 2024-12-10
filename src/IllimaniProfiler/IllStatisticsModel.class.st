@@ -123,9 +123,10 @@ IllStatisticsModel >> walkAllocations [
 	allocationsByAllocatedObject := allocationsByAllocatedObject sort: [ :a :b |
 		a value size > b value size ].
 
-	totalAllocatedMemory := objectAllocations
+	"totalAllocatedMemory := objectAllocations
 		inject: 0
-		into: [ :sum :elem | sum + elem sizeInBytes ].
+		into: [ :sum :elem | sum + elem sizeInBytes ]."
+	totalAllocatedMemory := objectAllocations sum: #sizeInBytes.
 
 	didIWalk := true
 ]

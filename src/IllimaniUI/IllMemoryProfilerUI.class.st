@@ -49,7 +49,8 @@ IllMemoryProfilerUI >> codeEvaluatorText [
 
 	^
 'self objectAllocations.
-self allocationStats allocationsByMethod'
+self queryAllocationStats allocationsByAllocationSite.
+self queryAllocationStats allocationsByAllocatedObject'
 ]
 
 { #category : 'accessing - lazy roassal presenters' }
