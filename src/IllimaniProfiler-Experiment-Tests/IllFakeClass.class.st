@@ -11,6 +11,6 @@ Class {
 { #category : 'accessing' }
 IllFakeClass >> foo [
 
-	anotherFakeClass := IllAnotherTakeClass new.
+	anotherFakeClass := IllAnotherFakeClass new.
 	anotherFakeClass bar
 ]

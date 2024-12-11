@@ -3,34 +3,30 @@ Class {
 	#superclass : 'Object',
 	#instVars : [
 		'method',
-		'bytecode'
+		'offset'
 	],
 	#category : 'IllimaniProfiler-Experiment',
 	#package : 'IllimaniProfiler-Experiment'
 }
 
-{ #category : 'as yet unclassified' }
-IllRewriterMethodWithBytecode class >> method: aCompiledMethod bytecode: anInteger [
+{ #category : 'instance creation' }
+IllRewriterMethodWithBytecode class >> method: aCompiledMethod offset: anInteger [
 
 	^ self new
 		  method: aCompiledMethod;
-		  bytecode: anInteger;
+		  offset: anInteger;
 		  yourself
 ]
 
 { #category : 'accessing' }
 IllRewriterMethodWithBytecode >> bytecode [
-	^ bytecode
-]
 
-{ #category : 'accessing' }
-IllRewriterMethodWithBytecode >> bytecode: anInteger [
-
-	bytecode := anInteger
+	^ method at: offset
 ]
 
 { #category : 'accessing' }
 IllRewriterMethodWithBytecode >> method [
+
 	^ method
 ]
 
@@ -38,4 +34,22 @@ IllRewriterMethodWithBytecode >> method [
 IllRewriterMethodWithBytecode >> method: aCompiledMethod [
 
 	method := aCompiledMethod
+]
+
+{ #category : 'accessing' }
+IllRewriterMethodWithBytecode >> offset [
+
+	^ offset
+]
+
+{ #category : 'accessing' }
+IllRewriterMethodWithBytecode >> offset: anInt [
+
+	offset := anInt
+]
+
+{ #category : 'accessing' }
+IllRewriterMethodWithBytecode >> selector [
+
+	^ method selector
 ]

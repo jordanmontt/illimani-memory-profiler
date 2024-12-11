@@ -1,5 +1,5 @@
 Class {
-	#name : 'IllAnotherTakeClass',
+	#name : 'IllAnotherFakeClass',
 	#superclass : 'Object',
 	#instVars : [
 		'aDictionary'
@@ -9,7 +9,14 @@ Class {
 }
 
 { #category : 'accessing - token' }
-IllAnotherTakeClass >> bar [
+IllAnotherFakeClass >> bar [
 
 	aDictionary at: 1 put: 3
+]
+
+{ #category : 'initialization' }
+IllAnotherFakeClass >> initialize [
+
+	super initialize.
+	aDictionary := Dictionary new
 ]
