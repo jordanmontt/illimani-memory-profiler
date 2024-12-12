@@ -12,13 +12,13 @@ Class {
 { #category : 'private' }
 IllCodeRewriter >> cloneMethodWithTenureSelector: anIllSender [
 
-	| compiledMethod newSelector |
-	compiledMethod := anIllSender method copy.
-	newSelector := self defaultTenureSelector: compiledMethod selector.
+	| clonedMethod newSelector |
+	clonedMethod := anIllSender method copy.
+	newSelector := self defaultTenureSelector: clonedMethod selector.
 
-	compiledMethod selector: newSelector.
+	clonedMethod selector: newSelector.
 
-	^ compiledMethod
+	^ clonedMethod
 ]
 
 { #category : 'private' }
@@ -50,7 +50,7 @@ IllCodeRewriter >> storeBackupSenders: senders caller: initialCaller [
 { #category : 'api' }
 IllCodeRewriter >> tenureCallingSenders: senders initialCaller: initialCaller [
 
-	| compiledMethod |
+	| clonedMethod |
 	self storeBackupSenders: senders caller: initialCaller.
 
 	initialCaller method methodClass methodDict
@@ -58,9 +58,9 @@ IllCodeRewriter >> tenureCallingSenders: senders initialCaller: initialCaller [
 		put: (self tenureMessageSendFor: initialCaller method offset: initialCaller offset).
 
 	senders do: [ :anIllSender |
-		compiledMethod := self cloneMethodWithTenureSelector: anIllSender.
-		compiledMethod := self tenureMessageSendFor: compiledMethod offset: anIllSender offset.
-		self installMethod: compiledMethod ]
+		clonedMethod := self cloneMethodWithTenureSelector: anIllSender.
+		clonedMethod := self tenureMessageSendFor: clonedMethod offset: anIllSender offset.
+		self installMethod: clonedMethod ]
 ]
 
 { #category : 'private' }
@@ -75,8 +75,8 @@ IllCodeRewriter >> tenureMessageSendFor: compiledMethod offset: offset [
 	irSendNode := (irSequences select: #isSend) detect: [ :e | e selector = messageSendSelector ].
 	irSendNode selector: newMessageSendSelector.
 
-	newMessageSendSelector := ir generate selector: compiledMethod selector; yourself.
-	^ newMessageSendSelector
+	newCompiledMethod := ir generate selector: compiledMethod selector; yourself.
+	^ newCompiledMethod
 ]
 
 { #category : 'private' }
