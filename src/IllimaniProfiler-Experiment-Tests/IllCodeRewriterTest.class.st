@@ -7,7 +7,6 @@ Class {
 	#instVars : [
 		'rewriter',
 		'senders',
-		'basicNewAllocationSite',
 		'initialCaller'
 	],
 	#category : 'IllimaniProfiler-Experiment-Tests',
