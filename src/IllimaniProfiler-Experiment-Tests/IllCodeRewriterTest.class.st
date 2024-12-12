@@ -24,7 +24,19 @@ IllCodeRewriterTest >> setUp [
 	senders := {
 		           (IllRewriterMethodWithBytecode method: IllAnotherFakeClass >> #bar offset: 36).
 		           (IllRewriterMethodWithBytecode method: Dictionary >> #at:put: offset: 82).
-		           (IllRewriterMethodWithBytecode method: Association class >> #key:value: offset: 42) }
+		           (IllRewriterMethodWithBytecode method: Association class >> #key:value: offset: 42) }.
+
+	rewriter storeBackupSenders: senders caller: initialCaller
+]
+
+{ #category : 'running' }
+IllCodeRewriterTest >> tearDown [
+
+	rewriter restoreMethodsToOriginalState.
+	senders do: [ :illSender |
+		illSender method methodClass removeSelector: (rewriter tenureSelector: illSender selector) ].
+
+	super tearDown
 ]
 
 { #category : 'tests' }
@@ -49,11 +61,7 @@ IllCodeRewriterTest >> testCloneMethodWithTenureSelector [
 
 	"Cloned method should have the same code but a different selector"
 	self assert: clonedCompiledMethod bytecodes equals: illSender method bytecodes.
-	self deny: clonedCompiledMethod selector equals: illSender method selector.
-
-	"Tear down"
-	IllAnotherFakeClass removeSelector: tenuredNewSelector.
-	self deny: (IllAnotherFakeClass includesMethod: tenuredNewSelector)
+	self deny: clonedCompiledMethod selector equals: illSender method selector
 ]
 
 { #category : 'tests' }
@@ -76,21 +84,31 @@ IllCodeRewriterTest >> testTenureCallingSendersInitialCaller [
 		raise: MessageNotUnderstood.
 	self
 		shouldnt: [ Association perform: (rewriter tenureSelector: #key:value:) withArguments: #( #key #value ) ]
-		raise: MessageNotUnderstood.
-
-	rewriter restoreMethodsToOriginalState
+		raise: MessageNotUnderstood
 ]
 
 { #category : 'tests' }
 IllCodeRewriterTest >> testTenureMessageSendForOffset [
 
-	| illSender tenuredCompiledMethod symbolicMessageSendBytecode expectedSelector |
-	illSender := senders second.
-	expectedSelector := rewriter tenureSelector: (illSender method sourceNodeForPC: illSender offset) selector.
+	| illSender tenuredCompiledMethod symbolicMessageSendBytecode expectedSelector offset methodToTenure |
+	illSender := senders second. "Dictionary >> #at:put:"
+	methodToTenure := illSender method.
+	offset := illSender offset.
+	expectedSelector := rewriter tenureSelector: (illSender method sourceNodeForPC: offset) selector.
 
-	tenuredCompiledMethod := rewriter tenureMessageSendFor: illSender method clone offset: illSender offset.
+	self
+		shouldnt: [ methodToTenure valueWithReceiver: methodToTenure methodClass new arguments: #( #key #value ) ]
+		raise: PrimitiveFailed.
+
+	tenuredCompiledMethod := rewriter tenureMessageSendFor: methodToTenure clone offset: offset.
 
 	symbolicMessageSendBytecode := tenuredCompiledMethod symbolicBytecodes detect: [ :e |
 		                               e bytes includes: illSender bytecode ].
-	self assert: symbolicMessageSendBytecode description equals: 'send: ' , expectedSelector
+	self assert: symbolicMessageSendBytecode description equals: 'send: ' , expectedSelector.
+	"Method's selector remaine unchanged"
+	self assert: tenuredCompiledMethod selector equals: illSender selector.
+	"We pretenure one message send to a method that does not exists"
+	self
+		should: [ tenuredCompiledMethod valueWithReceiver: methodToTenure methodClass new arguments: #( #key #value ) ]
+		raise: MessageNotUnderstood
 ]

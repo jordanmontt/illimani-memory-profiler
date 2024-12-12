@@ -52,7 +52,7 @@ IllCodeRewriter >> tenureCallingSenders: senders initialCaller: initialCaller [
 
 	| compiledMethod |
 	self storeBackupSenders: senders caller: initialCaller.
-1halt.
+
 	initialCaller method methodClass methodDict
 		at: initialCaller selector
 		put: (self tenureMessageSendFor: initialCaller method offset: initialCaller offset).
@@ -66,18 +66,17 @@ IllCodeRewriter >> tenureCallingSenders: senders initialCaller: initialCaller [
 { #category : 'private' }
 IllCodeRewriter >> tenureMessageSendFor: compiledMethod offset: offset [
 
-	| selectorToReplace newSelector irSendNode ir irSequences |
-	selectorToReplace := (compiledMethod sourceNode sourceNodeForPC: offset)
-		                     selector.
-	newSelector := self tenureSelector: selectorToReplace.
+	| messageSendSelector newMessageSendSelector irSendNode ir irSequences newCompiledMethod |
+	messageSendSelector := (compiledMethod sourceNode sourceNodeForPC: offset) selector.
+	newMessageSendSelector := self tenureSelector: messageSendSelector.
 
-	ir := compiledMethod decompileIR.
-	1 halt.
+	ir := compiledMethod ir.
 	irSequences := ir allSequences flatCollect: #children.
-	irSendNode := (irSequences select: #isSend) detect: [ :e | e selector = selectorToReplace ].
-	irSendNode selector: newSelector.
+	irSendNode := (irSequences select: #isSend) detect: [ :e | e selector = messageSendSelector ].
+	irSendNode selector: newMessageSendSelector.
 
-	^ ir compiledMethod
+	newMessageSendSelector := ir generate selector: compiledMethod selector; yourself.
+	^ newMessageSendSelector
 ]
 
 { #category : 'private' }
