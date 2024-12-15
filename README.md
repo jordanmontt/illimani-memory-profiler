@@ -3,8 +3,7 @@
 
 [![Pharo version](https://img.shields.io/badge/Pharo-13-%23aac9ff.svg)](https://pharo.org/download)
 
-
-Illimani is a memory profiler. It gives you information about the allocation sites and where the objects where produced in your application. It also gives you information about object lifetimes, how much time did the objects lived, and about how many GC cycles (both scavenges and full GC) they survived.
+Illimani is a memory profiler for Pharo that tracks object allocation sites, lifetimes, and garbage collection (GC) cycles. It uses fast and meta-safe instrumentation to profile all object allocations and offers customizable sampling support. It allows the creation of custom memory profilers.
 
 ## How to install it
 
