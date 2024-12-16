@@ -175,7 +175,6 @@ IllEphemeron >> sendersCallStack [
 IllEphemeron >> sendersCallStack: aContext [
 
 	| sender i n |
-	"Using #to:do: because of performance"
 	n := 200.
 	senders := Array new: n.
 	i := 1.
@@ -196,12 +195,6 @@ IllEphemeron >> sendersCallStack: aContext [
 IllEphemeron >> sizeInBytes [
 
 	^ sizeInBytes
-]
-
-{ #category : 'accessing' }
-IllEphemeron >> stackStringPrefix [
-
-	^ senders
 ]
 
 { #category : 'accessing' }

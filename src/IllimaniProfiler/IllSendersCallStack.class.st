@@ -51,6 +51,14 @@ IllSendersCallStack >> buildInspectorPresenter [
 		  yourself
 ]
 
+{ #category : 'api' }
+IllSendersCallStack >> first: n [
+
+	^ self class new
+		  senders: (senders first: n * 2);
+		  yourself
+]
+
 { #category : 'comparing' }
 IllSendersCallStack >> hash [
 

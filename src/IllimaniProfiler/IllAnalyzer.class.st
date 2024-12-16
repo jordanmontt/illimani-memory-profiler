@@ -22,6 +22,14 @@ Class {
 	#tag : 'Analyzer'
 }
 
+{ #category : 'instance creation' }
+IllAnalyzer class >> onProfiler: aProfiler [
+
+	^ self new
+		  setForProfiler: aProfiler;
+		  yourself
+]
+
 { #category : 'calculating' }
 IllAnalyzer >> binObjects [
 
