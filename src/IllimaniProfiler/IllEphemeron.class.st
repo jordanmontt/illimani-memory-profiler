@@ -174,21 +174,14 @@ IllEphemeron >> sendersCallStack [
 { #category : 'accessing' }
 IllEphemeron >> sendersCallStack: aContext [
 
-	| sender i n |
-	n := 200.
-	senders := Array new: n.
-	i := 1.
+	| sender |
+	senders := Array new: 10.
 	sender := aContext.
-	[ sender isNil or: [ i > n ] ] whileFalse: [
-		senders at: i put: sender method.
-		senders at: i + 1 put: sender pc - 1.
-		sender := sender sender.
-		i := i + 2 ]
-	"1 to: 10 by: 2 do: [ :i |
+	1 to: 10 by: 2 do: [ :i |
 		sender ifNil: [ ^ self ].
 		senders at: i put: sender method.
-		senders at: i + 1 put:  (sender pc - 1).
-		sender := sender sender ]"
+		senders at: i + 1 put: sender pc - 1.
+		sender := sender sender ]
 ]
 
 { #category : 'accessing' }
