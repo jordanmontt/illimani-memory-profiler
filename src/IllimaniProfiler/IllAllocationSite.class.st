@@ -24,19 +24,19 @@ Class {
 	#superclass : 'Object',
 	#instVars : [
 		'method',
-		'byte'
+		'offset'
 	],
-	#category : 'IllimaniProfiler-Analyzer',
+	#category : 'IllimaniProfiler-Inspector-Utilities',
 	#package : 'IllimaniProfiler',
-	#tag : 'Analyzer'
+	#tag : 'Inspector-Utilities'
 }
 
 { #category : 'instance creation' }
-IllAllocationSite class >> method: method byte: byte [
+IllAllocationSite class >> method: method offset: byte [
 
 	^ self new
 		  method: method;
-		  byte: byte;
+		  offset: byte;
 		  yourself
 ]
 
@@ -45,17 +45,7 @@ IllAllocationSite >> = anObj [
 
 	self class = anObj class ifFalse: [ ^ false ].
 	^ method = anObj method
-		and: [ byte = anObj byte ]
-]
-
-{ #category : 'accessing' }
-IllAllocationSite >> byte [
-	^ byte
-]
-
-{ #category : 'accessing' }
-IllAllocationSite >> byte: anInteger [ 
-	byte := anInteger
+		and: [ offset = anObj offset ]
 ]
 
 { #category : 'comparing' }
@@ -63,7 +53,7 @@ IllAllocationSite >> hash [
 
 	| hash |
 	hash := method hash.
-	hash := hash * 486187739 + byte hash.
+	hash := hash * 486187739 + offset hash.
 	^ hash
 ]
 
@@ -78,10 +68,7 @@ IllAllocationSite >> inspectionSource [
 IllAllocationSite >> inspectorPresenter [
 
 	| codePresenter |
-	codePresenter := IllMethodHighlightedBytecodePresenterInspection new
-		                 method: method;
-		                 offset: byte;
-		                 buildPresenter.
+	codePresenter := (MethodWithOffset method: method offset: offset) buildPresenter.
 	^ SpPresenter new
 		  layout: (SpBoxLayout newTopToBottom
 				   add: (SpLabelPresenter new
@@ -112,10 +99,16 @@ IllAllocationSite >> method: aCollection [
 	method := aCollection
 ]
 
+{ #category : 'accessing' }
+IllAllocationSite >> offset: anInteger [
+
+	offset := anInteger
+]
+
 { #category : 'printing' }
 IllAllocationSite >> printOn: aStream [
 
 	method printOn: aStream.
-	aStream << ' at byte: '.
-	byte printOn: aStream
+	aStream << ' at offset: '.
+	offset printOn: aStream
 ]

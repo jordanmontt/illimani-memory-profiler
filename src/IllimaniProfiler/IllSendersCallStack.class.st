@@ -31,23 +31,15 @@ IllSendersCallStack >> buildInspectorPresenter [
 	filteredSenders := senders reject: #isNil.
 	items := OrderedCollection new.
 	1 to: filteredSenders size by: 2 do: [ :i |
-		| method offset  |
+		| method offset |
 		method := senders at: i.
 		offset := senders at: i + 1.
-		items add: (StInspectorTransmissionNode
-			hostObject: method -> offset
-			transmissionBlock: [ :e |
-				IllMethodHighlightedBytecodePresenterInspection new method: method; offset: offset; yourself ])].
+		items add: (MethodWithOffset method: method offset: offset) ].
 	^ SpTablePresenter new
 		  activateOnSingleClick;
 		  items: items;
-		  addColumn: (SpStringTableColumn
-				   title: 'Sender'
-				   evaluated: [ :each | "we ask the method because of the compiled blocks"
-					   each hostObject key method name ]);
-		  addColumn: (SpStringTableColumn
-				   title: 'Bytecode'
-				   evaluated: [ :e | e hostObject value ]);
+		  addColumn: (SpStringTableColumn title: 'Sender' evaluated: [ :each | each method method name ]);
+		  addColumn: (SpStringTableColumn title: 'Offset' evaluated: [ :e | e offset ]);
 		  yourself
 ]
 

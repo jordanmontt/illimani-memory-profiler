@@ -11,9 +11,9 @@ Class {
 		'classification',
 		'allocationSite'
 	],
-	#category : 'IllimaniProfiler-Analyzer',
+	#category : 'IllimaniProfiler-Inspector-Utilities',
 	#package : 'IllimaniProfiler',
-	#tag : 'Analyzer'
+	#tag : 'Inspector-Utilities'
 }
 
 { #category : 'api' }

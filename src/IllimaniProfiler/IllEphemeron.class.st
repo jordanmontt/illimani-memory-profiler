@@ -11,7 +11,8 @@ Class {
 		'survivedFullGC',
 		'programCounter',
 		'allocatorMethod',
-		'senders'
+		'senders',
+		'allocationSenderChain'
 	],
 	#category : 'IllimaniProfiler-Profiler',
 	#package : 'IllimaniProfiler',
@@ -27,7 +28,7 @@ IllEphemeron >> allocatedObjectClass [
 { #category : 'accessing' }
 IllEphemeron >> allocationSite [
 
-	^ IllAllocationSite method: allocatorMethod byte: self allocatorByte
+	^ IllAllocationSite method: allocatorMethod offset: self allocatorByte
 ]
 
 { #category : 'accessing' }
