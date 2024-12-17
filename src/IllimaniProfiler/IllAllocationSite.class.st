@@ -100,6 +100,12 @@ IllAllocationSite >> method: aCollection [
 ]
 
 { #category : 'accessing' }
+IllAllocationSite >> offset [
+
+	^ offset
+]
+
+{ #category : 'accessing' }
 IllAllocationSite >> offset: anInteger [
 
 	offset := anInteger

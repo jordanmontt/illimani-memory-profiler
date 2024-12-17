@@ -32,26 +32,33 @@ IllMemoryProfiler >> initialize [
 { #category : 'profiling' }
 IllMemoryProfiler >> internalRegisterAllocation: newlyAllocatedObject [
 
-	| metaClass filteredContext |
-
+	| metaClass filteredContext illEphemeron allocationSenderChain i |
 	metaClass := newlyAllocatedObject class class.
+	illEphemeron := IllEphemeron newTenured.
+	i := 1.
+	allocationSenderChain := Array new: 10.
 
 	filteredContext := thisContext
 		sender "this is me, this profiler"
 		sender "this is the AbstractProfiler (my super class)"
-		sender "this is the IllHandler"
-		sender. "this is the trapped instrumented method"
+		sender. "this is the IllHandler"
+		"sender" "this is the trapped instrumented method (allocator method e.g. #basicNew)"
 
-	[ "get out of the receiver. E.g. the new method"
-	filteredContext receiver class = metaClass ] whileTrue:
-		[ filteredContext := filteredContext sender ].
+	"get out of the receiver. E.g. the new method"
+	[ filteredContext receiver class = metaClass ] whileTrue: [
+		allocationSenderChain
+			at: i put: filteredContext compiledCode method;
+			at: i + 1 put: filteredContext pc.
+		i := i + 2.
+		filteredContext := filteredContext sender ].
 
-	ephemeronsCollection add: (IllEphemeron newTenured
-		key: newlyAllocatedObject value: nil;
-		allocatorMethod: filteredContext compiledCode method;
-		programCounter: filteredContext pc;
-		sendersCallStack: filteredContext;
-		yourself)
+	ephemeronsCollection add: (illEphemeron
+			 allocationSenderChain: allocationSenderChain;
+			 key: newlyAllocatedObject value: nil;
+			 allocatorMethod: filteredContext compiledCode method;
+			 programCounter: filteredContext pc;
+			 sendersCallStack: filteredContext;
+			 yourself)
 ]
 
 { #category : 'accessing' }

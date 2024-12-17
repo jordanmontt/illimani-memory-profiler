@@ -26,6 +26,12 @@ IllEphemeron >> allocatedObjectClass [
 ]
 
 { #category : 'accessing' }
+IllEphemeron >> allocationSenderChain: anArray [
+
+	allocationSenderChain := anArray
+]
+
+{ #category : 'accessing' }
 IllEphemeron >> allocationSite [
 
 	^ IllAllocationSite method: allocatorMethod offset: self allocatorByte
@@ -126,7 +132,7 @@ IllEphemeron >> inspectorExtension: aBuilder [
 IllEphemeron >> inspectorExtensionSenders [
 
 	<inspectorPresentationOrder: 2 title: 'Senders call stack'>
-	^ (IllSendersCallStack senders: senders) buildInspectorPresenter
+	^ self sendersCallStack buildInspectorPresenter
 ]
 
 { #category : 'accessing' }
@@ -169,7 +175,7 @@ IllEphemeron >> programCounter: anObject [
 { #category : 'accessing' }
 IllEphemeron >> sendersCallStack [
 
-	^ IllSendersCallStack senders: senders
+	^ IllSendersCallStack senders: (allocationSenderChain select: #isNotNil) , senders
 ]
 
 { #category : 'accessing' }
