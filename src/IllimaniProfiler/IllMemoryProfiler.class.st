@@ -41,22 +41,22 @@ IllMemoryProfiler >> internalRegisterAllocation: newlyAllocatedObject [
 	filteredContext := thisContext
 		sender "this is me, this profiler"
 		sender "this is the AbstractProfiler (my super class)"
-		sender. "this is the IllHandler"
-		"sender" "this is the trapped instrumented method (allocator method e.g. #basicNew)"
+		sender "this is the IllHandler"
+		sender. "this is the trapped instrumented method (allocator method e.g. #basicNew)"
 
 	"get out of the receiver. E.g. the new method"
 	[ filteredContext receiver class = metaClass ] whileTrue: [
 		allocationSenderChain
 			at: i put: filteredContext compiledCode method;
-			at: i + 1 put: filteredContext pc.
+			at: i + 1 put: filteredContext pc - 1.
 		i := i + 2.
 		filteredContext := filteredContext sender ].
 
 	ephemeronsCollection add: (illEphemeron
 			 allocationSenderChain: allocationSenderChain;
 			 key: newlyAllocatedObject value: nil;
-			 allocatorMethod: filteredContext compiledCode method;
-			 programCounter: filteredContext pc;
+			 allocatorMethod: filteredContext compiledCode;
+			 offset: filteredContext pc -1;
 			 sendersCallStack: filteredContext;
 			 yourself)
 ]

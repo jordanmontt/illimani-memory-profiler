@@ -9,10 +9,10 @@ Class {
 		'allocatedObjectClass',
 		'survivedScavenges',
 		'survivedFullGC',
-		'programCounter',
 		'allocatorMethod',
 		'senders',
-		'allocationSenderChain'
+		'allocationSenderChain',
+		'offset'
 	],
 	#category : 'IllimaniProfiler-Profiler',
 	#package : 'IllimaniProfiler',
@@ -31,16 +31,26 @@ IllEphemeron >> allocationSenderChain: anArray [
 	allocationSenderChain := anArray
 ]
 
-{ #category : 'accessing' }
-IllEphemeron >> allocationSite [
+{ #category : 'allocation site' }
+IllEphemeron >> allocationSenders [
+	"Replace basic new because it was the trap method when it was captured"
 
-	^ IllAllocationSite method: allocatorMethod offset: self allocatorByte
+	| filteredSenders |
+	filteredSenders := allocationSenderChain select: #isNotNil.
+	filteredSenders ifNotEmpty: [
+		allocationSenderChain at: 1 put: (OpalCompiler new
+				 source: allocationSenderChain first name;
+				 evaluate) ].
+
+	^ IllSendersCallStack senders: filteredSenders , {
+			  allocatorMethod.
+			  offset }
 ]
 
-{ #category : 'accessing' }
-IllEphemeron >> allocatorByte [
+{ #category : 'allocation site' }
+IllEphemeron >> allocationSite [
 
-	^ programCounter - 1
+	^ IllAllocationSite method: allocatorMethod offset: offset
 ]
 
 { #category : 'accessing' }
@@ -72,7 +82,7 @@ IllEphemeron >> flattenedInstanceVariables [
 		  survivedScavenges.
 		  survivedFullGC.
 		  allocatorMethod name.
-		  (programCounter - 1) }
+		  offset }
 ]
 
 { #category : 'finalization' }
@@ -158,6 +168,18 @@ IllEphemeron >> mourn [
 	survivedFullGC := Smalltalk vm fullGCCount - survivedFullGC
 ]
 
+{ #category : 'accessing' }
+IllEphemeron >> offset [
+
+	^ offset
+]
+
+{ #category : 'accessing' }
+IllEphemeron >> offset: anObject [
+
+	offset := anObject
+]
+
 { #category : 'printing' }
 IllEphemeron >> printOn: aStream [
 
@@ -166,19 +188,13 @@ IllEphemeron >> printOn: aStream [
 	<< sizeInBytes humanReadableByteSizeString
 ]
 
-{ #category : 'accessing' }
-IllEphemeron >> programCounter: anObject [
-
-	programCounter := anObject
-]
-
-{ #category : 'accessing' }
+{ #category : 'allocation site' }
 IllEphemeron >> sendersCallStack [
 
 	^ IllSendersCallStack senders: (allocationSenderChain select: #isNotNil) , senders
 ]
 
-{ #category : 'accessing' }
+{ #category : 'allocation site' }
 IllEphemeron >> sendersCallStack: aContext [
 
 	| sender i n |

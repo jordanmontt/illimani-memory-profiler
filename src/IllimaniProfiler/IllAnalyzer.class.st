@@ -15,7 +15,8 @@ Class {
 		'endTime',
 		'taThreshold',
 		'hif',
-		'hlf'
+		'hlf',
+		'pretenurator'
 	],
 	#category : 'IllimaniProfiler-Analyzer',
 	#package : 'IllimaniProfiler',
@@ -96,6 +97,32 @@ IllAnalyzer >> classifyAllocationSites [
 		wasClassified ifFalse: [ allocationSiteBin classification: #short ] ]
 ]
 
+{ #category : 'as yet unclassified' }
+IllAnalyzer >> cleanKernelAllocationSites: aCollection [ 
+
+	^ aCollection reject: [ :e |
+    | allocatedObjectClass  |
+    allocatedObjectClass := (e allObjects collect: #allocatedObjectClass as: Set) anyOne.
+
+    allocatedObjectClass = Context 
+        or: [ allocatedObjectClass = Point 
+        or: [ allocatedObjectClass = Deprecation 
+        or: [ allocatedObjectClass = Process ] ] ] ].
+]
+
+{ #category : 'api' }
+IllAnalyzer >> doMagic [
+
+	| toPretenureSites |
+	self classifyAllocationSites.
+	toPretenureSites := self pruneAllocationSites select: #isLongOrImmortal.
+	toPretenureSites := self cleanKernelAllocationSites: toPretenureSites.
+	toPretenureSites := self removeDoItAllocationSite: toPretenureSites.
+	
+	pretenurator doMagic: toPretenureSites.
+	^ pretenurator
+]
+
 { #category : 'accessing' }
 IllAnalyzer >> endTime: anInteger [ 
 	endTime := anInteger
@@ -125,7 +152,9 @@ IllAnalyzer >> initialize [
 
 	taThreshold := 0.45.
 	hif := 0.
-	hlf := 0.6
+	hlf := 0.6.
+
+	pretenurator := IllPretenurator new
 ]
 
 { #category : 'calculating' }
@@ -173,6 +202,12 @@ IllAnalyzer >> pruneAllocationSites [
 	totalProgramAllocations := objectAllocations size.
 	^ groupedAllocationSites reject: [ :allocationSiteBin |
 		  allocationSiteBin totalAllocations < (v * totalProgramAllocations) ]
+]
+
+{ #category : 'api' }
+IllAnalyzer >> removeDoItAllocationSite: toPretenureSites [
+
+	^ toPretenureSites reject: #hasDoItAllocationSite
 ]
 
 { #category : 'api' }

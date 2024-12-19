@@ -24,6 +24,12 @@ IllSendersCallStack >> = illSenders [
 	^ senders = illSenders senders
 ]
 
+{ #category : 'accessing' }
+IllSendersCallStack >> asMethodWithOffsetObjects [
+
+	^ senders pairsCollect: [ :method :offset | MethodWithOffset method: method offset: offset ]
+]
+
 { #category : 'api' }
 IllSendersCallStack >> buildInspectorPresenter [
 
@@ -49,6 +55,13 @@ IllSendersCallStack >> first: n [
 	^ self class new
 		  senders: (senders first: n * 2);
 		  yourself
+]
+
+{ #category : 'testing' }
+IllSendersCallStack >> hasDoItSelector [
+
+	^ (self first: 5) asMethodWithOffsetObjects anySatisfy: [ :methodWithOffset |
+		  methodWithOffset method selector = #DoIt ]
 ]
 
 { #category : 'comparing' }

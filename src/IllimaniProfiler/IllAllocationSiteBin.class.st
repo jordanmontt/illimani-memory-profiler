@@ -67,6 +67,12 @@ IllAllocationSiteBin >> containsClass: anObjClass [
 			  shortLivedObjects contains: block ] ]
 ]
 
+{ #category : 'testing' }
+IllAllocationSiteBin >> hasDoItAllocationSite [
+
+	^ self allObjects anySatisfy: [ :illEphe | illEphe sendersCallStack hasDoItSelector ]
+]
+
 { #category : 'accessing' }
 IllAllocationSiteBin >> immortalObjects [
 
