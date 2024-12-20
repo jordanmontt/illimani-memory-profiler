@@ -12,20 +12,15 @@ Class {
 { #category : 'as yet unclassified' }
 IllPretenurator >> doMagic: toPretenureSites [
 
-	[
-	toPretenureSites valuesDo: [ :allocSiteBin |
+	toPretenureSites do: [ :allocationSenders |
 		| sct allocationSenders initialCaller sendersToTransform |
-		allocationSenders := (allocSiteBin allObjects collect: #allocationSenders as: Set) anyOne
-			                     asMethodWithOffsetObjects.
 		initialCaller := allocationSenders last.
 		sendersToTransform := allocationSenders allButLast.
-
+		
 		sct := SendersChainTransformer new.
 		codeTransformers add: sct.
 		sct backupSenders: sendersToTransform caller: initialCaller.
-		sct transformCallingSenders: sendersToTransform initialCaller: initialCaller ] ]
-
-	ensure: [ codeTransformers do: #restoreOriginalState ]
+		sct transformCallingSenders: sendersToTransform initialCaller: initialCaller ]
 ]
 
 { #category : 'initialization' }
@@ -33,4 +28,10 @@ IllPretenurator >> initialize [
 
 	super initialize.
 	codeTransformers := OrderedCollection new
+]
+
+{ #category : 'as yet unclassified' }
+IllPretenurator >> restoreOriginalState [
+
+	codeTransformers do: #restoreOriginalState
 ]

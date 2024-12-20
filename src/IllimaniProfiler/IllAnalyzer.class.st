@@ -113,13 +113,15 @@ IllAnalyzer >> cleanKernelAllocationSites: aCollection [
 { #category : 'api' }
 IllAnalyzer >> doMagic [
 
-	| toPretenureSites |
+	| toPretenureSites allocationSendersList |
 	self classifyAllocationSites.
 	toPretenureSites := self pruneAllocationSites select: #isLongOrImmortal.
 	toPretenureSites := self cleanKernelAllocationSites: toPretenureSites.
 	toPretenureSites := self removeDoItAllocationSite: toPretenureSites.
-	
-	pretenurator doMagic: toPretenureSites.
+
+	allocationSendersList := toPretenureSites values collect: [ :allocSiteBin |
+		                         allocSiteBin allObjects first allocationSenders asMethodWithOffsetObjects ].
+	pretenurator doMagic: allocationSendersList.
 	^ pretenurator
 ]
 
