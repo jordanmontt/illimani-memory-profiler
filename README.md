@@ -7,6 +7,16 @@ Illimani is a memory profiler for Pharo that tracks object allocation sites, lif
 
 ## How to install it
 
+Latest version
+```smalltalk
+EpMonitor disableDuring: [
+	Metacello new
+		baseline: 'IllimaniProfiler';
+		repository: 'github://jordanmontt/illimani-memory-profiler:dev';
+		load ].
+```
+
+Stable version
 ```smalltalk
 EpMonitor disableDuring: [
 	Metacello new
