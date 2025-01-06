@@ -33,11 +33,11 @@ IllEphemeron >> allocationSenderChain: anArray [
 
 { #category : 'allocation site' }
 IllEphemeron >> allocationSenders [
-	"Replace basic new because it was the trap method when it was captured"
 
 	| filteredSenders |
 	filteredSenders := allocationSenderChain select: #isNotNil.
 	filteredSenders ifNotEmpty: [
+		"Replace basic new because it was the trap method when it was captured"
 		allocationSenderChain at: 1 put: (OpalCompiler new
 				 source: allocationSenderChain first name;
 				 evaluate) ].

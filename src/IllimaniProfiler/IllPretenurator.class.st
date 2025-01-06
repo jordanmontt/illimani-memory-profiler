@@ -10,12 +10,12 @@ Class {
 }
 
 { #category : 'as yet unclassified' }
-IllPretenurator >> doMagic: toPretenureSites [
+IllPretenurator >> doMagic: toPretenureSitesArray [
 
-	toPretenureSites do: [ :allocationSenders |
-		| sct allocationSenders initialCaller sendersToTransform |
-		initialCaller := allocationSenders last.
-		sendersToTransform := allocationSenders allButLast.
+	toPretenureSitesArray do: [ :methodsWithOffsets |
+		| sct initialCaller sendersToTransform |
+		initialCaller := methodsWithOffsets last.
+		sendersToTransform := methodsWithOffsets allButLast.
 		
 		sct := SendersChainTransformer new.
 		codeTransformers add: sct.
