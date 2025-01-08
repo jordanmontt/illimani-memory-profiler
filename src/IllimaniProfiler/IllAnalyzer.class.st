@@ -16,7 +16,8 @@ Class {
 		'taThreshold',
 		'hif',
 		'hlf',
-		'pretenurator'
+		'pretenurator',
+		'allocationSiteStrategy'
 	],
 	#category : 'IllimaniProfiler-Analyzer',
 	#package : 'IllimaniProfiler',
@@ -111,6 +112,9 @@ IllAnalyzer >> cleanKernelAllocationSites: aCollection [
 IllAnalyzer >> doMagic [
 
 	| toPretenureSites allocationSendersList |
+	self removeKernelAllocations.
+	self identifyAllocationSites.
+	1 halt.
 	self classifyAllocationSites.
 	toPretenureSites := self pruneAllocationSites select: #isLongOrImmortal.
 	toPretenureSites := self cleanKernelAllocationSites: toPretenureSites.
@@ -136,6 +140,12 @@ IllAnalyzer >> groupAllocationSites [
 				yourself) ]
 ]
 
+{ #category : 'calculating' }
+IllAnalyzer >> identifyAllocationSites [
+
+	allocationSiteStrategy identifyAllocationSites: objectAllocations.
+]
+
 { #category : 'initialization' }
 IllAnalyzer >> initialize [
 
@@ -148,7 +158,8 @@ IllAnalyzer >> initialize [
 	hif := 0.
 	hlf := 0.6.
 
-	pretenurator := IllPretenurator new
+	pretenurator := IllPretenurator new.
+	allocationSiteStrategy := TextualLocationOfNewStrategy new
 ]
 
 { #category : 'calculating' }
@@ -198,10 +209,21 @@ IllAnalyzer >> removeDoItAllocationSite: toPretenureSites [
 	^ toPretenureSites reject: #hasDoItAllocationSite
 ]
 
+{ #category : 'removing' }
+IllAnalyzer >> removeKernelAllocations [
+
+	objectAllocations removeAllSuchThat: [ :illEphemeron |
+		{
+			Context.
+			Deprecation.
+			Process.
+			WeakArray } includes: illEphemeron allocatedObjectClass ]
+]
+
 { #category : 'api' }
 IllAnalyzer >> setForProfiler: profiler [
 
-	objectAllocations := profiler objectAllocations.
+	objectAllocations := profiler objectAllocations copy.
 	endTime := profiler endTime.
 	startTime := profiler startTime
 ]

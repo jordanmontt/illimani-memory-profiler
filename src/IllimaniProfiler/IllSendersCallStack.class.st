@@ -90,6 +90,13 @@ IllSendersCallStack >> senders [
 ]
 
 { #category : 'accessing' }
-IllSendersCallStack >> senders: aCollection [ 
-	senders := aCollection
+IllSendersCallStack >> senders: anArray [
+
+	senders := anArray reject: #isNil
+]
+
+{ #category : 'accessing' }
+IllSendersCallStack >> size [
+
+	^ senders size / 2
 ]

@@ -174,7 +174,7 @@ IllEphemeron >> sendersCallStack [
 { #category : 'allocation site' }
 IllEphemeron >> sendersCallStack: aList [
 
-	sendersCallStackCollection := aList reject: #isNil.
+	sendersCallStackCollection := aList
 	"	| filteredSenders |
 	filteredSenders := sendersCallStackCollection select: #isNotNil.
 	filteredSenders ifNotEmpty: [
