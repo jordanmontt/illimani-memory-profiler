@@ -96,6 +96,12 @@ IllAllocationSiteBin >> inspectorAllocSite [
 ]
 
 { #category : 'testing' }
+IllAllocationSiteBin >> isAmbiguous [
+
+	^ shortLivedObjects notEmpty and: [ longLivedObjects notEmpty or: [ immortalObjects notEmpty ] ]
+]
+
+{ #category : 'testing' }
 IllAllocationSiteBin >> isImmortal [
 
 	^ classification = #immortal

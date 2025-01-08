@@ -10,9 +10,8 @@ Class {
 		'survivedScavenges',
 		'survivedFullGC',
 		'allocatorMethod',
-		'senders',
-		'allocationSenderChain',
-		'offset'
+		'offset',
+		'sendersCallStackCollection'
 	],
 	#category : 'IllimaniProfiler-Profiler',
 	#package : 'IllimaniProfiler',
@@ -23,28 +22,6 @@ Class {
 IllEphemeron >> allocatedObjectClass [
 
 	^ allocatedObjectClass
-]
-
-{ #category : 'accessing' }
-IllEphemeron >> allocationSenderChain: anArray [
-
-	allocationSenderChain := anArray
-]
-
-{ #category : 'allocation site' }
-IllEphemeron >> allocationSenders [
-
-	| filteredSenders |
-	filteredSenders := allocationSenderChain select: #isNotNil.
-	filteredSenders ifNotEmpty: [
-		"Replace basic new because it was the trap method when it was captured"
-		allocationSenderChain at: 1 put: (OpalCompiler new
-				 source: allocationSenderChain first name;
-				 evaluate) ].
-
-	^ IllSendersCallStack senders: filteredSenders , {
-			  allocatorMethod.
-			  offset }
 ]
 
 { #category : 'allocation site' }
@@ -191,22 +168,24 @@ IllEphemeron >> printOn: aStream [
 { #category : 'allocation site' }
 IllEphemeron >> sendersCallStack [
 
-	^ IllSendersCallStack senders: (allocationSenderChain select: #isNotNil) , senders
+	^ IllSendersCallStack senders: sendersCallStackCollection
 ]
 
 { #category : 'allocation site' }
-IllEphemeron >> sendersCallStack: aContext [
+IllEphemeron >> sendersCallStack: aList [
 
-	| sender i n |
-	n := 200.
-	senders := Array new: n.
-	i := 1.
-	sender := aContext.
-	[ sender isNil or: [ i > n ] ] whileFalse: [
-		senders at: i put: sender method.
-		senders at: i + 1 put: sender pc - 1.
-		sender := sender sender.
-		i := i + 2 ]
+	sendersCallStackCollection := aList reject: #isNil.
+	"	| filteredSenders |
+	filteredSenders := sendersCallStackCollection select: #isNotNil.
+	filteredSenders ifNotEmpty: [
+		""Replace basic new because it was the trap method when it was captured""
+		sendersCallStackCollection at: 1 put: (OpalCompiler new
+				 source: sendersCallStackCollection first name;
+				 evaluate) ].
+
+	^ IllSendersCallStack senders: filteredSenders , {
+			  allocatorMethod.
+			  offset }"
 ]
 
 { #category : 'accessing' }

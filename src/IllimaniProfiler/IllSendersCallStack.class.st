@@ -30,6 +30,12 @@ IllSendersCallStack >> asMethodWithOffsetObjects [
 	^ senders pairsCollect: [ :method :offset | MethodWithOffset method: method offset: offset ]
 ]
 
+{ #category : 'accessing' }
+IllSendersCallStack >> at: index [
+
+	^ MethodWithOffset method: (senders at: index * 2 - 1) offset: (senders at: index * 2)
+]
+
 { #category : 'api' }
 IllSendersCallStack >> buildInspectorPresenter [
 
@@ -42,11 +48,12 @@ IllSendersCallStack >> buildInspectorPresenter [
 		offset := senders at: i + 1.
 		items add: (MethodWithOffset method: method offset: offset) ].
 	^ SpTablePresenter new
-		  activateOnSingleClick;
-		  items: items;
-		  addColumn: (SpStringTableColumn title: 'Sender' evaluated: [ :each | each method method name ]);
-		  addColumn: (SpStringTableColumn title: 'Offset' evaluated: [ :e | e offset ]);
-		  yourself
+		activateOnSingleClick;
+		items: items;
+		addColumn: (SpIndexTableColumn new title: 'Index'; width: 40; yourself);
+		addColumn: (SpStringTableColumn title: 'Sender' evaluated: [ :each | each method method name ]);
+		addColumn: (SpStringTableColumn title: 'Offset' evaluated: [ :e | e offset ]);
+		yourself
 ]
 
 { #category : 'api' }

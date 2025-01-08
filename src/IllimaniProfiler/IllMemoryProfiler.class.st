@@ -32,11 +32,12 @@ IllMemoryProfiler >> initialize [
 { #category : 'profiling' }
 IllMemoryProfiler >> internalRegisterAllocation: newlyAllocatedObject [
 
-	| metaClass filteredContext illEphemeron allocationSenderChain i |
+	| metaClass filteredContext illEphemeron allocationSenderChain i n |
 	metaClass := newlyAllocatedObject class class.
 	illEphemeron := IllEphemeron newTenured.
 	i := 1.
-	allocationSenderChain := Array new: 10.
+	n := 60.
+	allocationSenderChain := Array new: n.
 
 	filteredContext := thisContext
 		sender "this is me, this profiler"
@@ -44,21 +45,30 @@ IllMemoryProfiler >> internalRegisterAllocation: newlyAllocatedObject [
 		sender "this is the IllHandler"
 		sender. "this is the trapped instrumented method (allocator method e.g. #basicNew)"
 
-	"get out of the receiver. E.g. the new method"
+	"Get the textual location of new. Get out of the receiver to do it."
 	[ filteredContext receiver class = metaClass ] whileTrue: [
 		allocationSenderChain
-			at: i put: filteredContext compiledCode method;
+			at: i put: filteredContext compiledCode;
 			at: i + 1 put: filteredContext pc - 1.
 		i := i + 2.
 		filteredContext := filteredContext sender ].
 
-	ephemeronsCollection add: (illEphemeron
-			 allocationSenderChain: allocationSenderChain;
-			 key: newlyAllocatedObject value: nil;
-			 allocatorMethod: filteredContext compiledCode;
-			 offset: filteredContext pc -1;
-			 sendersCallStack: filteredContext;
-			 yourself)
+	"Now the filtered context is at the textual location of new."
+	illEphemeron
+		key: newlyAllocatedObject value: nil;
+		allocatorMethod: filteredContext compiledCode;
+		offset: filteredContext pc -1.
+
+	"Get the rest of the stack until a limit n"
+	[ filteredContext isNil or: [ i > n ] ] whileFalse: [
+		allocationSenderChain
+			at: i put: filteredContext compiledCode;
+		 	at: i + 1 put: filteredContext pc - 1.
+		i := i + 2.
+		filteredContext := filteredContext sender ].
+
+	illEphemeron sendersCallStack: allocationSenderChain.
+	ephemeronsCollection add: illEphemeron.
 ]
 
 { #category : 'accessing' }

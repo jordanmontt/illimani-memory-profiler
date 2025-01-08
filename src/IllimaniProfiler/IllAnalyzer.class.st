@@ -97,17 +97,14 @@ IllAnalyzer >> classifyAllocationSites [
 		wasClassified ifFalse: [ allocationSiteBin classification: #short ] ]
 ]
 
-{ #category : 'as yet unclassified' }
-IllAnalyzer >> cleanKernelAllocationSites: aCollection [ 
+{ #category : 'calculating' }
+IllAnalyzer >> cleanKernelAllocationSites: aCollection [
 
 	^ aCollection reject: [ :e |
-    | allocatedObjectClass  |
-    allocatedObjectClass := (e allObjects collect: #allocatedObjectClass as: Set) anyOne.
-
-    allocatedObjectClass = Context 
-        or: [ allocatedObjectClass = Point 
-        or: [ allocatedObjectClass = Deprecation 
-        or: [ allocatedObjectClass = Process ] ] ] ].
+		  | allocatedObjectClasses |
+		  allocatedObjectClasses := e allObjects collect: #allocatedObjectClass as: Set.
+		  allocatedObjectClasses size > 1 ifTrue: [ ^ false ].
+		  { allocatedObjectClasses first } includesAny: { Context. Deprecation. Process. WeakArray } ]
 ]
 
 { #category : 'api' }
@@ -120,14 +117,9 @@ IllAnalyzer >> doMagic [
 	toPretenureSites := self removeDoItAllocationSite: toPretenureSites.
 
 	allocationSendersList := toPretenureSites values collect: [ :allocSiteBin |
-		                         allocSiteBin allObjects first allocationSenders asMethodWithOffsetObjects ].
+		allocSiteBin allObjects first sendersCallStack asMethodWithOffsetObjects ].
 	pretenurator doMagic: allocationSendersList.
 	^ pretenurator
-]
-
-{ #category : 'accessing' }
-IllAnalyzer >> endTime: anInteger [ 
-	endTime := anInteger
 ]
 
 { #category : 'calculating' }
@@ -190,12 +182,6 @@ IllAnalyzer >> objectAllocations [
 	^ objectAllocations
 ]
 
-{ #category : 'accessing' }
-IllAnalyzer >> objectAllocations: col [
-
-	objectAllocations := col
-]
-
 { #category : 'api' }
 IllAnalyzer >> pruneAllocationSites [
 
@@ -206,7 +192,7 @@ IllAnalyzer >> pruneAllocationSites [
 		  allocationSiteBin totalAllocations < (v * totalProgramAllocations) ]
 ]
 
-{ #category : 'api' }
+{ #category : 'calculating' }
 IllAnalyzer >> removeDoItAllocationSite: toPretenureSites [
 
 	^ toPretenureSites reject: #hasDoItAllocationSite
@@ -215,10 +201,9 @@ IllAnalyzer >> removeDoItAllocationSite: toPretenureSites [
 { #category : 'api' }
 IllAnalyzer >> setForProfiler: profiler [
 
-	self
-		objectAllocations: profiler objectAllocations;
-		endTime: profiler endTime;
-		startTime: profiler startTime
+	objectAllocations := profiler objectAllocations.
+	endTime := profiler endTime.
+	startTime := profiler startTime
 ]
 
 { #category : 'accessing' }
@@ -230,11 +215,6 @@ IllAnalyzer >> shortObjectsBin [
 { #category : 'accessing' }
 IllAnalyzer >> startTime [
 	^ startTime
-]
-
-{ #category : 'accessing' }
-IllAnalyzer >> startTime: anInteger [ 
-	startTime := anInteger
 ]
 
 { #category : 'accessing' }
