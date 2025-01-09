@@ -56,6 +56,14 @@ IllSendersCallStack >> buildInspectorPresenter [
 		yourself
 ]
 
+{ #category : 'accessing' }
+IllSendersCallStack >> copyUpTo: aMethod [
+
+	| index |
+	index := senders indexOf: aMethod.
+	^ self class new senders: (senders copyFrom: 1 to: index + 1)
+]
+
 { #category : 'api' }
 IllSendersCallStack >> first: n [
 

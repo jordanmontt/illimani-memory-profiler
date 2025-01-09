@@ -127,7 +127,7 @@ IllAnalyzer >> doMagic [
 	toPretenureSites := self removeDoItAllocationSite: toPretenureSites.
 
 	allocationSendersList := toPretenureSites values collect: [ :allocSiteBin |
-		allocSiteBin allObjects first sendersCallStack asMethodWithOffsetObjects ].
+		allocSiteBin allObjects first allocationSenders asMethodWithOffsetObjects ].
 	pretenurator doMagic: allocationSendersList.
 	^ pretenurator
 ]

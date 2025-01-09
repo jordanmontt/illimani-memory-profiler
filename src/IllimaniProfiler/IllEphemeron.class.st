@@ -25,6 +25,12 @@ IllEphemeron >> allocatedObjectClass [
 ]
 
 { #category : 'allocation site' }
+IllEphemeron >> allocationSenders [
+
+	^ self sendersCallStack copyUpTo: allocatorMethod
+]
+
+{ #category : 'allocation site' }
 IllEphemeron >> allocationSite [
 
 	^ IllAllocationSite method: allocatorMethod offset: offset
