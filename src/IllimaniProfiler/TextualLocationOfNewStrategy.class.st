@@ -1,6 +1,6 @@
 Class {
 	#name : 'TextualLocationOfNewStrategy',
-	#superclass : 'Object',
+	#superclass : 'AllocationSiteIdentificationStrategy',
 	#category : 'IllimaniProfiler-Analyzer',
 	#package : 'IllimaniProfiler',
 	#tag : 'Analyzer'
@@ -8,20 +8,11 @@ Class {
 
 { #category : 'as yet unclassified' }
 TextualLocationOfNewStrategy >> identifyAllocationSites: objectAllocations [
+	"do nothing as ephemerons have already the textual location as the allocation site"
+]
 
-	objectAllocations do: [ :illEphemeron |
-		| callStack i |
-		callStack := illEphemeron sendersCallStack.
-		i := 1.
-		[ i <= callStack size ] whileTrue: [
-			| sender |
-			sender := callStack at: i.
-			(illEphemeron allocatedObjectClass isKindOf: sender method methodClass) ifFalse: [
-				"Set the allocation site"
-				illEphemeron
-					allocatorMethod: sender method;
-					offset: sender offset.
-				i := callStack size ].
-			i := i + 1 ] ].
-	^ objectAllocations
+{ #category : 'as yet unclassified' }
+TextualLocationOfNewStrategy >> stopCriterionForAllocatedClass: allocatedObjectClass receiverClass: receiverClass [
+
+	^ (allocatedObjectClass = receiverClass or: [ allocatedObjectClass inheritsFrom: receiverClass ]) not
 ]

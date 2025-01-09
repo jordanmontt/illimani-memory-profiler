@@ -36,7 +36,7 @@ IllMemoryProfiler >> internalRegisterAllocation: newlyAllocatedObject [
 	metaClass := newlyAllocatedObject class class.
 	illEphemeron := IllEphemeron newTenured.
 	i := 1.
-	n := 60.
+	n := 120.
 	allocationSenderChain := Array new: n.
 
 	filteredContext := thisContext

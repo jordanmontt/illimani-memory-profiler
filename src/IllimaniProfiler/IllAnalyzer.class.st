@@ -32,6 +32,12 @@ IllAnalyzer class >> onProfiler: aProfiler [
 		  yourself
 ]
 
+{ #category : 'accessing' }
+IllAnalyzer >> allocationSiteStrategy: aStrategy [
+
+	allocationSiteStrategy := aStrategy
+]
+
 { #category : 'calculating' }
 IllAnalyzer >> binObjects [
 
@@ -104,8 +110,8 @@ IllAnalyzer >> cleanKernelAllocationSites: aCollection [
 	^ aCollection reject: [ :e |
 		  | allocatedObjectClasses |
 		  allocatedObjectClasses := e allObjects collect: #allocatedObjectClass as: Set.
-		  allocatedObjectClasses size > 1 ifTrue: [ ^ false ].
-		  { allocatedObjectClasses first } includesAny: { Context. Deprecation. Process. WeakArray } ]
+		  allocatedObjectClasses size = 1 and: [
+			  { allocatedObjectClasses anyOne } includesAny: { Context. Deprecation. Process. WeakArray } ] ]
 ]
 
 { #category : 'api' }
