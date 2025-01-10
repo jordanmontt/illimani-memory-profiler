@@ -83,6 +83,12 @@ IllAnalyzer >> removeMisclassifiedSites [
 	^ toPretenureSites
 ]
 
+{ #category : 'api' }
+IllAnalyzer >> restoreOriginalState [
+
+	pretenurator restoreOriginalState
+]
+
 { #category : 'initialization' }
 IllAnalyzer >> setForProfiler: aProfiler [
 
