@@ -16,7 +16,7 @@ IllAnalyzerTest >> testIsObjectImmortal [
 	startTime := 10.
 	endTime := 110.
 	
-	analyzer := IllAnalyzer new
+	analyzer := IllAllocationSiteClassificator new
 		endTime: endTime;
 		startTime: startTime;
 		yourself.
@@ -40,7 +40,7 @@ IllAnalyzerTest >> testIsObjectImmortal [
 	self assert: (analyzer isObjectImmortal: illEphe).
 	
 	"Strange case"
-	analyzer := IllAnalyzer new
+	analyzer := IllAllocationSiteClassificator new
 		startTime: 0;
 		endTime: 17;
 		yourself.

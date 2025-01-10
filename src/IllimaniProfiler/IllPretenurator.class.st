@@ -9,20 +9,6 @@ Class {
 	#tag : 'Analyzer'
 }
 
-{ #category : 'as yet unclassified' }
-IllPretenurator >> doMagic: toPretenureSitesArray [
-
-	toPretenureSitesArray do: [ :methodsWithOffsets |
-		| sct initialCaller sendersToTransform |
-		initialCaller := methodsWithOffsets last.
-		sendersToTransform := methodsWithOffsets allButLast.
-		
-		sct := SendersChainTransformer new.
-		codeTransformers add: sct.
-		sct backupSenders: sendersToTransform caller: initialCaller.
-		sct transformCallingSenders: sendersToTransform initialCaller: initialCaller ]
-]
-
 { #category : 'initialization' }
 IllPretenurator >> initialize [
 
@@ -30,7 +16,24 @@ IllPretenurator >> initialize [
 	codeTransformers := OrderedCollection new
 ]
 
-{ #category : 'as yet unclassified' }
+{ #category : 'api' }
+IllPretenurator >> pretenureAllocationChainForInitialCaller: initialCaller senders: sendersToTransform [
+
+	| sct |
+	sct := SendersChainTransformer new.
+	codeTransformers add: sct.
+	sct backupSenders: sendersToTransform caller: initialCaller.
+	sct transformCallingSenders: sendersToTransform initialCaller: initialCaller
+]
+
+{ #category : 'api' }
+IllPretenurator >> pretenureAllocations: toPretenureSitesArray [
+
+	toPretenureSitesArray do: [ :methodsWithOffsets |
+		self pretenureAllocationChainForInitialCaller: methodsWithOffsets last senders: methodsWithOffsets allButLast ]
+]
+
+{ #category : 'api' }
 IllPretenurator >> restoreOriginalState [
 
 	codeTransformers do: #restoreOriginalState

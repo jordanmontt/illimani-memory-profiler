@@ -102,7 +102,7 @@ MaxLiveSizeTest >> setUp [
 MaxLiveSizeTest >> testMaxLiveSize [
 
 	| analyzer |
-	analyzer := IllAnalyzer new
+	analyzer := IllAllocationSiteClassificator new
 		objectAllocations: mockedObjectAllocations;
 		yourself.
 
