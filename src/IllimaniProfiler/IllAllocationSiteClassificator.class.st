@@ -22,14 +22,6 @@ Class {
 	#tag : 'Analyzer'
 }
 
-{ #category : 'instance creation' }
-IllAllocationSiteClassificator class >> onProfiler: aProfiler [
-
-	^ self new
-		  setForProfiler: aProfiler;
-		  yourself
-]
-
 { #category : 'calculating' }
 IllAllocationSiteClassificator >> binObjects [
 
@@ -179,15 +171,6 @@ IllAllocationSiteClassificator >> retrievePretenureSites [
 
 	self classifyAllocationSites.
 	^ self pruneAllocationSites select: #isLongOrImmortal
-]
-
-{ #category : 'api' }
-IllAllocationSiteClassificator >> setForProfiler: profiler [
-
-	self
-		objectAllocations: profiler objectAllocations;
-		endTime: profiler endTime;
-		startTime: profiler startTime
 ]
 
 { #category : 'accessing' }

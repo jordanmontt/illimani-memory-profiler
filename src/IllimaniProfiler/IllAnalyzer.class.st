@@ -13,6 +13,14 @@ Class {
 	#tag : 'Analyzer'
 }
 
+{ #category : 'instance creation' }
+IllAnalyzer class >> onProfiler: aProfiler [
+
+	^ self new
+		  setForProfiler: aProfiler;
+		  yourself
+]
+
 { #category : 'accessing' }
 IllAnalyzer >> allocationSiteStrategy: aStrategy [
 
@@ -26,6 +34,8 @@ IllAnalyzer >> analyze [
 	self removeKernelAllocations.
 	self identifyAllocationSites.
 	self classifyAllocationSites.
+	self removeMisclassifiedSites.
+	1 halt.
 
 	allocationSendersList := toPretenureSites values collect: [ :allocSiteBin |
 		allocSiteBin allObjects first allocationSenders asMethodWithOffsetObjects ].
@@ -50,6 +60,7 @@ IllAnalyzer >> initialize [
 
 	super initialize.
 
+	allocationSiteClassificator := IllAllocationSiteClassificator new.
 	pretenurator := IllPretenurator new.
 	allocationSiteStrategy := TextualLocationOfNewStrategy new
 ]
@@ -65,9 +76,19 @@ IllAnalyzer >> removeKernelAllocations [
 			WeakArray } includes: illEphemeron allocatedObjectClass ]
 ]
 
+{ #category : 'api' }
+IllAnalyzer >> removeMisclassifiedSites [
+
+	toPretenureSites := allocationSiteStrategy removeMisclassifiedSites: toPretenureSites.
+	^ toPretenureSites
+]
+
 { #category : 'initialization' }
 IllAnalyzer >> setForProfiler: aProfiler [
 
-	allocationSiteClassificator setForProfiler: aProfiler.
-	objectAllocations := aProfiler objectAllocations copy
+	objectAllocations := aProfiler objectAllocations copy.
+	allocationSiteClassificator
+		objectAllocations: objectAllocations;
+		endTime: aProfiler endTime;
+		startTime: aProfiler startTime
 ]

@@ -21,7 +21,14 @@ MethodFromTheSamePackageStrategy >> packages: aCollectionOfPackages [
 	classesToMatch := aCollectionOfPackages flatCollect: #definedClasses
 ]
 
-{ #category : 'as yet unclassified' }
+{ #category : 'api' }
+MethodFromTheSamePackageStrategy >> removeMisclassifiedSites: aDictionary [
+
+	^ aDictionary select: [ :illAllocationSiteBin |
+		  classesToMatch includes: illAllocationSiteBin allocationSite method methodClass ]
+]
+
+{ #category : 'internal' }
 MethodFromTheSamePackageStrategy >> stopCriterionForAllocatedClass: allocatedObjectClass receiverClass: receiverClass [
 
 	^ classesToMatch includes: receiverClass

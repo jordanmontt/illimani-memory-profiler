@@ -41,6 +41,12 @@ IllAllocationSiteBin >> allObjects [
 ]
 
 { #category : 'accessing' }
+IllAllocationSiteBin >> allocationSite [
+
+	^ allocationSite
+]
+
+{ #category : 'accessing' }
 IllAllocationSiteBin >> allocationSite: anIllAllocationSite [ 
 	allocationSite := anIllAllocationSite
 ]

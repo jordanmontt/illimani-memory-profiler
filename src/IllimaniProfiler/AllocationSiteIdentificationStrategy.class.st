@@ -6,7 +6,7 @@ Class {
 	#tag : 'Analyzer'
 }
 
-{ #category : 'as yet unclassified' }
+{ #category : 'internal' }
 AllocationSiteIdentificationStrategy >> identifyAllocationSiteFor: illEphemeron [
 
 	| callStack i sender |
@@ -23,14 +23,20 @@ AllocationSiteIdentificationStrategy >> identifyAllocationSiteFor: illEphemeron 
 		i := i + 1 ]
 ]
 
-{ #category : 'as yet unclassified' }
+{ #category : 'api' }
 AllocationSiteIdentificationStrategy >> identifyAllocationSites: objectAllocations [
 
 	objectAllocations do: [ :illEphemeron | self identifyAllocationSiteFor: illEphemeron ].
 	^ objectAllocations
 ]
 
-{ #category : 'as yet unclassified' }
+{ #category : 'api' }
+AllocationSiteIdentificationStrategy >> removeMisclassifiedSites: aDictionary [
+
+	^ aDictionary
+]
+
+{ #category : 'internal' }
 AllocationSiteIdentificationStrategy >> stopCriterionForAllocatedClass: allocatedObjectClass receiverClass: receiverClass [
 
 	^ self subclassResponsibility
