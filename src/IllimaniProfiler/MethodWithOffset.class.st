@@ -5,9 +5,9 @@ Class {
 		'method',
 		'offset'
 	],
-	#category : 'IllimaniProfiler-Inspector-Utilities',
+	#category : 'IllimaniProfiler-Profiler',
 	#package : 'IllimaniProfiler',
-	#tag : 'Inspector-Utilities'
+	#tag : 'Profiler'
 }
 
 { #category : 'instance creation' }
@@ -19,8 +19,37 @@ MethodWithOffset class >> method: aCompiledMethod offset: anInteger [
 		  yourself
 ]
 
+{ #category : 'comparing' }
+MethodWithOffset >> = anObj [
+
+	self class = anObj class ifFalse: [ ^ false ].
+	^ method = anObj method and: [ offset = anObj offset ]
+]
+
+{ #category : 'accessing' }
+MethodWithOffset >> bytecode [
+
+	^ method at: offset
+]
+
+{ #category : 'comparing' }
+MethodWithOffset >> hash [
+
+	| hash |
+	hash := method hash.
+	hash := hash * 486187739 + offset hash.
+	^ hash
+]
+
 { #category : 'inspector' }
-MethodWithOffset >> buildPresenter [
+MethodWithOffset >> inspector: aBuilder [
+
+	<inspectorPresentationOrder: 0 title: 'Method code'>
+	^ self inspectorPresenter
+]
+
+{ #category : 'inspector' }
+MethodWithOffset >> inspectorPresenter [
 
 	| interval |
 	interval := (method sourceNode sourceNodeForPC: offset) sourceInterval.
@@ -32,19 +61,6 @@ MethodWithOffset >> buildPresenter [
 				   yourself);
 		  beNotEditable;
 		  yourself
-]
-
-{ #category : 'accessing' }
-MethodWithOffset >> bytecode [
-
-	^ method at: offset
-]
-
-{ #category : 'inspector' }
-MethodWithOffset >> inspector: aBuilder [
-
-	<inspectorPresentationOrder: 0 title: 'Method code'>
-	^ self buildPresenter
 ]
 
 { #category : 'accessing' }
