@@ -44,8 +44,7 @@ IllAllocationSite class >> method: method offset: byte [
 IllAllocationSite >> = anObj [
 
 	self class = anObj class ifFalse: [ ^ false ].
-	^ method = anObj method
-		and: [ offset = anObj offset ]
+	^ method = anObj method and: [ offset = anObj offset ]
 ]
 
 { #category : 'comparing' }

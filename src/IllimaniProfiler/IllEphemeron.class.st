@@ -33,7 +33,7 @@ IllEphemeron >> allocationSenders [
 { #category : 'allocation site' }
 IllEphemeron >> allocationSite [
 
-	^ IllAllocationSite method: allocatorMethod offset: offset
+	^ MethodWithOffset method: allocatorMethod offset: offset
 ]
 
 { #category : 'accessing' }

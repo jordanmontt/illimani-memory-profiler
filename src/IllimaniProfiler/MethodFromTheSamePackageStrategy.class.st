@@ -9,10 +9,24 @@ Class {
 	#tag : 'Analyzer'
 }
 
+{ #category : 'instance creation' }
+MethodFromTheSamePackageStrategy class >> classesToMatch: aCol [
+
+	^ self new
+		  classesToMatch: aCol;
+		  yourself
+]
+
 { #category : 'accessing' }
 MethodFromTheSamePackageStrategy >> classesToMatch [
 
 	^ classesToMatch
+]
+
+{ #category : 'accessing' }
+MethodFromTheSamePackageStrategy >> classesToMatch: aCol [
+
+	classesToMatch := aCol
 ]
 
 { #category : 'accessing' }
