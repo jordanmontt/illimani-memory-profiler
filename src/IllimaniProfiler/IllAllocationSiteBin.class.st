@@ -98,7 +98,7 @@ IllAllocationSiteBin >> initialize [
 IllAllocationSiteBin >> inspectorAllocSite [
 
 	<inspectorPresentationOrder: 901 title: 'Allocation site'>
-	^ allocationSite inspectionSource
+	^ allocationSite inspectorPresenter
 ]
 
 { #category : 'testing' }
