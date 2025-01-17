@@ -76,6 +76,13 @@ MethodWithOffset >> method: aCompiledMethod [
 ]
 
 { #category : 'accessing' }
+MethodWithOffset >> name [
+	"Double method due to blocks"
+
+	^ method method name
+]
+
+{ #category : 'accessing' }
 MethodWithOffset >> offset [
 
 	^ offset

@@ -29,8 +29,10 @@ IllPretenurator >> pretenureAllocationChainForInitialCaller: initialCaller sende
 { #category : 'api' }
 IllPretenurator >> pretenureAllocations: toPretenureSitesArray [
 
+	| transformedSites |
 	toPretenureSitesArray do: [ :methodsWithOffsets |
-		self pretenureAllocationChainForInitialCaller: methodsWithOffsets last senders: methodsWithOffsets allButLast ]
+		self pretenureAllocationChainForInitialCaller: methodsWithOffsets last senders: methodsWithOffsets allButLast ].
+	transformedSites := codeTransformers collect: [ :codeTransformer | codeTransformer transformedSendersChain ]
 ]
 
 { #category : 'api' }
