@@ -102,9 +102,8 @@ IllAnalyzer >> setForProfiler: aProfiler [
 { #category : 'api' }
 IllAnalyzer >> useMethodFromTheSamePackageStrategy [
 
+	self flag: 'We need to set the packages'.
 	allocationSiteStrategy := MethodFromTheSamePackageStrategy new
-			packages: AlSitExCormas applicationPackages;
-			yourself
 ]
 
 { #category : 'api' }
