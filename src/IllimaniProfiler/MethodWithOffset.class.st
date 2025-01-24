@@ -5,9 +5,9 @@ Class {
 		'offset',
 		'compiledMethodOrBlock'
 	],
-	#category : 'SendersChainTransformer-Core',
-	#package : 'SendersChainTransformer',
-	#tag : 'Core'
+	#category : 'IllimaniProfiler-former',
+	#package : 'IllimaniProfiler',
+	#tag : 'former'
 }
 
 { #category : 'instance creation' }
