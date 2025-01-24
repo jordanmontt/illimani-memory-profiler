@@ -62,7 +62,7 @@ IllAnalyzer >> initialize [
 
 	allocationSiteClassificator := IllAllocationSiteClassificator new.
 	pretenurator := IllPretenurator new.
-	allocationSiteStrategy := TextualLocationOfNewStrategy new
+	self useTextualLocationStrategy
 ]
 
 { #category : 'removing' }
@@ -97,4 +97,18 @@ IllAnalyzer >> setForProfiler: aProfiler [
 		objectAllocations: objectAllocations;
 		endTime: aProfiler endTime;
 		startTime: aProfiler startTime
+]
+
+{ #category : 'api' }
+IllAnalyzer >> useMethodFromTheSamePackageStrategy [
+
+	allocationSiteStrategy := MethodFromTheSamePackageStrategy new
+			packages: AlSitExCormas applicationPackages;
+			yourself
+]
+
+{ #category : 'api' }
+IllAnalyzer >> useTextualLocationStrategy [
+
+	allocationSiteStrategy := TextualLocationOfNewStrategy new
 ]
