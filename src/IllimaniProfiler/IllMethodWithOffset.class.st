@@ -1,17 +1,17 @@
 Class {
-	#name : 'MethodWithOffset',
+	#name : 'IllMethodWithOffset',
 	#superclass : 'Object',
 	#instVars : [
 		'offset',
 		'compiledMethodOrBlock'
 	],
-	#category : 'IllimaniProfiler-former',
+	#category : 'IllimaniProfiler-Inspector-Utilities',
 	#package : 'IllimaniProfiler',
-	#tag : 'former'
+	#tag : 'Inspector-Utilities'
 }
 
 { #category : 'instance creation' }
-MethodWithOffset class >> method: aCompiledMethod offset: anInteger [
+IllMethodWithOffset class >> method: aCompiledMethod offset: anInteger [
 
 	^ self new
 		  method: aCompiledMethod;
@@ -20,20 +20,20 @@ MethodWithOffset class >> method: aCompiledMethod offset: anInteger [
 ]
 
 { #category : 'comparing' }
-MethodWithOffset >> = anObj [
+IllMethodWithOffset >> = anObj [
 
 	self class = anObj class ifFalse: [ ^ false ].
 	^ compiledMethodOrBlock = anObj method and: [ offset = anObj offset ]
 ]
 
 { #category : 'accessing' }
-MethodWithOffset >> bytecode [
+IllMethodWithOffset >> bytecode [
 
 	^ compiledMethodOrBlock at: offset
 ]
 
 { #category : 'comparing' }
-MethodWithOffset >> hash [
+IllMethodWithOffset >> hash [
 
 	| hash |
 	hash := compiledMethodOrBlock hash.
@@ -42,14 +42,14 @@ MethodWithOffset >> hash [
 ]
 
 { #category : 'inspector' }
-MethodWithOffset >> inspector: aBuilder [
+IllMethodWithOffset >> inspector: aBuilder [
 
 	<inspectorPresentationOrder: 0 title: 'Method code'>
 	^ self inspectorPresenter
 ]
 
 { #category : 'inspector' }
-MethodWithOffset >> inspectorPresenter [
+IllMethodWithOffset >> inspectorPresenter [
 
 	| interval |
 	interval := (compiledMethodOrBlock sourceNode sourceNodeForPC: offset) sourceInterval.
@@ -64,50 +64,50 @@ MethodWithOffset >> inspectorPresenter [
 ]
 
 { #category : 'accessing' }
-MethodWithOffset >> method [
+IllMethodWithOffset >> method [
 
 	^ compiledMethodOrBlock
 ]
 
 { #category : 'accessing' }
-MethodWithOffset >> method: aCompiledCode [
+IllMethodWithOffset >> method: aCompiledCode [
 
 	compiledMethodOrBlock := aCompiledCode
 ]
 
 { #category : 'accessing' }
-MethodWithOffset >> methodClass [
+IllMethodWithOffset >> methodClass [
 
 	^ compiledMethodOrBlock methodClass
 ]
 
 { #category : 'accessing' }
-MethodWithOffset >> name [
+IllMethodWithOffset >> name [
 	"Double method due to blocks"
 
 	^ compiledMethodOrBlock method name
 ]
 
 { #category : 'accessing' }
-MethodWithOffset >> offset [
+IllMethodWithOffset >> offset [
 
 	^ offset
 ]
 
 { #category : 'accessing' }
-MethodWithOffset >> offset: anInt [
+IllMethodWithOffset >> offset: anInt [
 
 	offset := anInt
 ]
 
 { #category : 'accessing' }
-MethodWithOffset >> parseTree [
+IllMethodWithOffset >> parseTree [
 
 	^ compiledMethodOrBlock method parseTree
 ]
 
 { #category : 'printing' }
-MethodWithOffset >> printOn: aStream [
+IllMethodWithOffset >> printOn: aStream [
 
 	compiledMethodOrBlock printOn: aStream.
 	aStream << ' offset '.
@@ -115,7 +115,7 @@ MethodWithOffset >> printOn: aStream [
 ]
 
 { #category : 'accessing' }
-MethodWithOffset >> selector [
+IllMethodWithOffset >> selector [
 
 	^ compiledMethodOrBlock selector
 ]

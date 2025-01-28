@@ -27,13 +27,13 @@ IllSendersCallStack >> = illSenders [
 { #category : 'accessing' }
 IllSendersCallStack >> asMethodWithOffsetObjects [
 
-	^ senders pairsCollect: [ :method :offset | MethodWithOffset method: method offset: offset ]
+	^ senders pairsCollect: [ :method :offset | IllMethodWithOffset method: method offset: offset ]
 ]
 
 { #category : 'accessing' }
 IllSendersCallStack >> at: index [
 
-	^ MethodWithOffset method: (senders at: index * 2 - 1) offset: (senders at: index * 2)
+	^ IllMethodWithOffset method: (senders at: index * 2 - 1) offset: (senders at: index * 2)
 ]
 
 { #category : 'api' }
@@ -46,7 +46,7 @@ IllSendersCallStack >> buildInspectorPresenter [
 		| method offset |
 		method := senders at: i.
 		offset := senders at: i + 1.
-		items add: (MethodWithOffset method: method offset: offset) ].
+		items add: (IllMethodWithOffset method: method offset: offset) ].
 	^ SpTablePresenter new
 		activateOnSingleClick;
 		items: items;
