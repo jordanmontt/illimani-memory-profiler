@@ -1,3 +1,11 @@
+"
+Experiment to implement the algorithm for predicting object lifetimes.
+
+Paper:
+
+Object Lifetime Prediction in Java
+Hajime Inoue, Darko Stefanovic, Stephanie Forrest
+"
 Class {
 	#name : 'IllPredictator',
 	#superclass : 'Object',
@@ -5,9 +13,9 @@ Class {
 		'objectAllocations',
 		'predictors'
 	],
-	#category : 'IllimaniProfiler-Analyzer',
+	#category : 'IllimaniProfiler-Experiments',
 	#package : 'IllimaniProfiler',
-	#tag : 'Analyzer'
+	#tag : 'Experiments'
 }
 
 { #category : 'as yet unclassified' }
