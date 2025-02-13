@@ -51,16 +51,27 @@ IllMethodWithOffset >> inspector: aBuilder [
 { #category : 'inspector' }
 IllMethodWithOffset >> inspectorPresenter [
 
-	| interval |
+	| interval codePresenter |
 	interval := (compiledMethodOrBlock sourceNode sourceNodeForPC: offset) sourceInterval.
-	^ SpCodePresenter new
+	codePresenter := SpCodePresenter new
 		  beForBehavior: compiledMethodOrBlock methodClass;
 		  text: compiledMethodOrBlock sourceCode;
 		  addTextSegmentDecoration: (SpTextPresenterDecorator forHighlight
 				   interval: (interval first to: interval last + 1);
 				   yourself);
 		  beNotEditable;
-		  yourself
+		  yourself.
+	^ SpPresenter new
+			layout: (SpBoxLayout newTopToBottom
+				spacing: 3;
+				add: (SpTextPresenter new
+					text: self name;
+					beNotEditable;
+					yourself)
+				expand: false;
+				add: codePresenter;
+				yourself);
+		yourself.
 ]
 
 { #category : 'accessing' }
