@@ -27,7 +27,7 @@ IllSendersCallStack >> = illSenders [
 { #category : 'accessing' }
 IllSendersCallStack >> asMethodWithOffsetObjects [
 
-	^ senders pairsCollect: [ :method :offset | IllMethodWithOffset method: method offset: offset ]
+	^ self methodWithOffsetDo:[ :method :offset | IllMethodWithOffset method: method offset: offset ]
 ]
 
 { #category : 'accessing' }
@@ -90,6 +90,12 @@ IllSendersCallStack >> inspector [
 
 	<inspectorPresentationOrder: 0 title: 'Senders call stack'>
 	^ self buildInspectorPresenter
+]
+
+{ #category : 'accessing' }
+IllSendersCallStack >> methodWithOffsetDo: aBlock [
+
+	^ senders pairsCollect: aBlock
 ]
 
 { #category : 'accessing' }
