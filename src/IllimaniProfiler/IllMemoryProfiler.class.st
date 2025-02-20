@@ -43,7 +43,7 @@ IllMemoryProfiler >> internalRegisterAllocation: newlyAllocatedObject [
 		sender "this is me, this profiler"
 		sender "this is the AbstractProfiler (my super class)"
 		sender "this is the IllHandler"
-		sender. "this is the trapped instrumented method (allocator method e.g. #basicNew)"
+		"sender". "this is the trapped instrumented method (allocator method e.g. #basicNew)"
 
 	"Get the textual location of new. Get out of the receiver to do it."
 	[ filteredContext receiver class = metaClass ] whileTrue: [
