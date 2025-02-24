@@ -14,10 +14,8 @@ BaselineOfIllimaniProfiler >> baseline: spec [
 	<baseline>
 	spec for: #common do: [
 		"Packages"
-		spec package: 'IllimaniUI'
-			with: [ spec requires: #( 'IllimaniProfiler' ) ].
-		spec package: 'IllimaniProfiler-Tests'
-			with: [ spec requires: #( 'IllimaniProfiler' 'IllimaniUI' ) ].
+		spec package: 'IllimaniUI' with: [ spec requires: #( 'IllimaniProfiler' ) ].
+		spec package: 'IllimaniProfiler-Tests' with: [ spec requires: #( 'IllimaniProfiler' 'IllimaniUI' ) ].
 
 		"External dependencies"
 
@@ -26,6 +24,11 @@ BaselineOfIllimaniProfiler >> baseline: spec [
 		spec baseline: 'NeoCSV' with: [ spec repository: 'github://svenvc/NeoCSV/repository' ].
 		spec baseline: 'MethodProxies' with: [ spec repository: 'github://pharo-contributions/MethodProxies' ].
 		spec package: 'IllimaniProfiler' with: [ spec requires: #('NeoJSON' 'NeoCSV' 'MethodProxies') ].
+		
+		"Loading tenured method that are only present by default on Pharon 13"
+		spec for: #(#'pharo10.x' #'pharo11.x' #'pharo12.x') do: [
+			spec package: 'Illimani-Pharo12-Compatibility'.
+			spec package: 'IllimaniProfiler' with: [ spec requires: #( 'Illimani-Pharo12-Compatibility' ) ] ].
 
 		"Load Roassal and a fixed release of MethodProxies for Pharo 10 and 11"
 		"Load a fixed version of MethodProxies for Pharo 11 or lower. Note that the latest changes of MethodProxies require Pharo 12 or >"
