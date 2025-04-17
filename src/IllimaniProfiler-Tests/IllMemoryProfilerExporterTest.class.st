@@ -34,7 +34,7 @@ IllMemoryProfilerExporterTest >> expectedCSVHeader [
 	^ #( 'finalizationTimeInMicroSeconds'
 	     'sizeInBytes' 'initializationTimeInMicroSeconds'
 	     'allocatedObjectClass' 'survivedScavenges' 'survivedFullGCs'
-	     'allocatorMethod' 'allocatorMethodOffset' )
+	     'textualAllocatorMethod' 'textualAllocatorMethodOffset' )
 ]
 
 { #category : 'exporting' }
@@ -52,7 +52,7 @@ IllMemoryProfilerExporterTest >> fakeAllocations [
 
 	^ (1 to: 1000) collect: [ :i | IllEphemeron new
 		key: allocatedClasses atRandom new value: nil;
-		allocatorMethod: allocatorMethods atRandom;
+		textualAllocatorMethod: allocatorMethods atRandom;
 		offset: 10;
 		mourn;
 		yourself ]

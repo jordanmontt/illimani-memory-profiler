@@ -9,9 +9,9 @@ Class {
 		'allocatedObjectClass',
 		'survivedScavenges',
 		'survivedFullGC',
-		'allocatorMethod',
 		'offset',
-		'sendersCallStackCollection'
+		'sendersCallStackCollection',
+		'textualAllocatorMethod'
 	],
 	#category : 'IllimaniProfiler-Profiler',
 	#package : 'IllimaniProfiler',
@@ -27,25 +27,13 @@ IllEphemeron >> allocatedObjectClass [
 { #category : 'allocation site' }
 IllEphemeron >> allocationSenders [
 
-	^ self sendersCallStack copyUpTo: allocatorMethod
+	^ self sendersCallStack copyUpTo: textualAllocatorMethod
 ]
 
 { #category : 'allocation site' }
 IllEphemeron >> allocationSite [
 
-	^ IllMethodWithOffset method: allocatorMethod offset: offset
-]
-
-{ #category : 'accessing' }
-IllEphemeron >> allocatorMethod [
-
-	^ allocatorMethod
-]
-
-{ #category : 'accessing' }
-IllEphemeron >> allocatorMethod: aMethod [
-
-	allocatorMethod := aMethod
+	^ IllMethodWithOffset method: textualAllocatorMethod offset: offset
 ]
 
 { #category : 'accessing' }
@@ -64,7 +52,7 @@ IllEphemeron >> flattenedInstanceVariables [
 		  allocatedObjectClass.
 		  survivedScavenges.
 		  survivedFullGC.
-		  allocatorMethod name.
+		  textualAllocatorMethod name.
 		  offset }
 ]
 
@@ -190,7 +178,7 @@ IllEphemeron >> sendersCallStack: aList [
 				 evaluate) ].
 
 	^ IllSendersCallStack senders: filteredSenders , {
-			  allocatorMethod.
+			  textualAllocatorMethod.
 			  offset }"
 ]
 
@@ -210,4 +198,16 @@ IllEphemeron >> survivedFullGC [
 IllEphemeron >> survivedScavenges [
 
 	^ survivedScavenges
+]
+
+{ #category : 'accessing' }
+IllEphemeron >> textualAllocatorMethod [
+
+	^ textualAllocatorMethod
+]
+
+{ #category : 'accessing' }
+IllEphemeron >> textualAllocatorMethod: anObject [
+
+	textualAllocatorMethod := anObject
 ]

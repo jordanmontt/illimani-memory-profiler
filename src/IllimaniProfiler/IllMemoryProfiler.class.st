@@ -56,7 +56,7 @@ IllMemoryProfiler >> internalRegisterAllocation: newlyAllocatedObject [
 	"Now the filtered context is at the textual location of new."
 	illEphemeron
 		key: newlyAllocatedObject value: nil;
-		allocatorMethod: filteredContext compiledCode;
+		textualAllocatorMethod: filteredContext compiledCode;
 		offset: filteredContext pc -1.
 
 	"Get the rest of the stack until a limit n"
