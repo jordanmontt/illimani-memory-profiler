@@ -18,6 +18,12 @@ Class {
 	#tag : 'Profiler'
 }
 
+{ #category : 'comparing' }
+IllEphemeron >> = anObject [
+
+	^ self == anObject
+]
+
 { #category : 'accessing' }
 IllEphemeron >> allocatedObjectClass [
 
@@ -62,6 +68,12 @@ IllEphemeron >> forceFinalization [
 	"If already finalized"
 	key ifNil: [ ^ self ].
 	self mourn
+]
+
+{ #category : 'comparing' }
+IllEphemeron >> hash [
+
+	^ self identityHash
 ]
 
 { #category : 'accessing' }
