@@ -39,13 +39,13 @@ IllMemoryProfiler >> internalRegisterAllocation: newlyAllocatedObject [
 	n := 120.
 	allocationSenderChain := Array new: n.
 
-	filteredContext := thisContext
+	filteredContext := thisContext "proxy method"
 		sender "this is me, this profiler"
-		sender "this is the AbstractProfiler (my super class)"
+		sender "this is the AbstractProfiler"
 		sender "this is the IllHandler"
-		"sender". "this is the trapped instrumented method (allocator method e.g. #basicNew)"
+		"sender". "this is the instrumented method (allocator method e.g. #basicNew)"
 
-	"Get the textual location of new. Get out of the receiver to do it."
+	"Get the textual location of new."
 	[ filteredContext receiver class = metaClass ] whileTrue: [
 		allocationSenderChain
 			at: i put: filteredContext compiledCode;
