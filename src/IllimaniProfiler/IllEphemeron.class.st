@@ -84,6 +84,11 @@ IllEphemeron >> hash [
 ]
 
 { #category : 'accessing' }
+IllEphemeron >> identifiedAllocationSite [
+	^ identifiedAllocationSite
+]
+
+{ #category : 'accessing' }
 IllEphemeron >> identifiedAllocationSite: aMethod [
 
 	identifiedAllocationSite := aMethod
