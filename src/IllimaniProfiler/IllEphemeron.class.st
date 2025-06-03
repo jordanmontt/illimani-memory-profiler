@@ -11,7 +11,8 @@ Class {
 		'survivedFullGC',
 		'offset',
 		'sendersCallStackCollection',
-		'textualAllocatorMethod'
+		'textualAllocatorMethod',
+		'identifiedAllocationSite'
 	],
 	#category : 'IllimaniProfiler-Profiler',
 	#package : 'IllimaniProfiler',
@@ -33,13 +34,17 @@ IllEphemeron >> allocatedObjectClass [
 { #category : 'allocation site' }
 IllEphemeron >> allocationSenders [
 
-	^ self sendersCallStack copyUpTo: textualAllocatorMethod
+	^ identifiedAllocationSite
+		  ifNil: [ self sendersCallStack copyUpTo: textualAllocatorMethod ]
+		  ifNotNil: [ self sendersCallStack copyUpTo: identifiedAllocationSite ]
 ]
 
 { #category : 'allocation site' }
 IllEphemeron >> allocationSite [
 
-	^ IllMethodWithOffset method: textualAllocatorMethod offset: offset
+	^ identifiedAllocationSite
+		  ifNil: [ IllMethodWithOffset method: textualAllocatorMethod offset: offset ]
+		  ifNotNil: [ IllMethodWithOffset method: identifiedAllocationSite offset: offset ]
 ]
 
 { #category : 'accessing' }
@@ -51,15 +56,17 @@ IllEphemeron >> finalizationTime [
 { #category : 'exporting' }
 IllEphemeron >> flattenedInstanceVariables [
 
-	^ {
-		  finalizationTime.
-		  sizeInBytes.
-		  initializationTime.
-		  allocatedObjectClass.
-		  survivedScavenges.
-		  survivedFullGC.
-		  textualAllocatorMethod name.
-		  offset }
+	| variables |
+	variables := {
+		             finalizationTime.
+		             sizeInBytes.
+		             initializationTime.
+		             allocatedObjectClass.
+		             survivedScavenges.
+		             survivedFullGC.
+		             textualAllocatorMethod name }.
+	identifiedAllocationSite ifNotNil: [ variables := variables , { identifiedAllocationSite name } ].
+	^ variables , { offset }
 ]
 
 { #category : 'finalization' }
@@ -74,6 +81,12 @@ IllEphemeron >> forceFinalization [
 IllEphemeron >> hash [
 
 	^ self identityHash
+]
+
+{ #category : 'accessing' }
+IllEphemeron >> identifiedAllocationSite: aMethod [
+
+	identifiedAllocationSite := aMethod
 ]
 
 { #category : 'accessing' }
