@@ -11,8 +11,7 @@ Class {
 		'survivedFullGC',
 		'offset',
 		'sendersCallStackCollection',
-		'textualAllocatorMethod',
-		'identifiedAllocationSite'
+		'textualAllocatorMethod'
 	],
 	#category : 'IllimaniProfiler-Profiler',
 	#package : 'IllimaniProfiler',
@@ -34,17 +33,13 @@ IllEphemeron >> allocatedObjectClass [
 { #category : 'allocation site' }
 IllEphemeron >> allocationSenders [
 
-	^ identifiedAllocationSite
-		  ifNil: [ self sendersCallStack copyUpTo: textualAllocatorMethod ]
-		  ifNotNil: [ self sendersCallStack copyUpTo: identifiedAllocationSite ]
+	^ self sendersCallStack copyUpTo: textualAllocatorMethod
 ]
 
 { #category : 'allocation site' }
 IllEphemeron >> allocationSite [
 
-	^ identifiedAllocationSite
-		  ifNil: [ IllMethodWithOffset method: textualAllocatorMethod offset: offset ]
-		  ifNotNil: [ IllMethodWithOffset method: identifiedAllocationSite offset: offset ]
+	^ IllMethodWithOffset method: textualAllocatorMethod offset: offset
 ]
 
 { #category : 'accessing' }
@@ -64,9 +59,8 @@ IllEphemeron >> flattenedInstanceVariables [
 		             allocatedObjectClass.
 		             survivedScavenges.
 		             survivedFullGC.
-		             textualAllocatorMethod name }.
-	identifiedAllocationSite ifNotNil: [ variables := variables , { identifiedAllocationSite name } ].
-	^ variables , { offset }
+		             textualAllocatorMethod name.
+		             offset }
 ]
 
 { #category : 'finalization' }
@@ -81,17 +75,6 @@ IllEphemeron >> forceFinalization [
 IllEphemeron >> hash [
 
 	^ self identityHash
-]
-
-{ #category : 'accessing' }
-IllEphemeron >> identifiedAllocationSite [
-	^ identifiedAllocationSite
-]
-
-{ #category : 'accessing' }
-IllEphemeron >> identifiedAllocationSite: aMethod [
-
-	identifiedAllocationSite := aMethod
 ]
 
 { #category : 'accessing' }
