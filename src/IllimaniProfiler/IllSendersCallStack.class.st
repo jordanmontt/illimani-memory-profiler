@@ -36,8 +36,8 @@ IllSendersCallStack >> at: index [
 	^ IllMethodWithOffset method: (senders at: index * 2 - 1) offset: (senders at: index * 2)
 ]
 
-{ #category : 'api' }
-IllSendersCallStack >> buildInspectorPresenter [
+{ #category : 'inspector' }
+IllSendersCallStack >> buildInspectorPresenter: aBuilder [
 
 	| items filteredSenders |
 	filteredSenders := senders reject: #isNil.
@@ -47,7 +47,7 @@ IllSendersCallStack >> buildInspectorPresenter [
 		method := senders at: i.
 		offset := senders at: i + 1.
 		items add: (IllMethodWithOffset method: method offset: offset) ].
-	^ SpTablePresenter new
+	^ aBuilder newTable
 		activateOnSingleClick;
 		items: items;
 		addColumn: (SpIndexTableColumn new title: 'Index'; width: 40; yourself);
@@ -86,10 +86,10 @@ IllSendersCallStack >> hash [
 ]
 
 { #category : 'inspector' }
-IllSendersCallStack >> inspector [
+IllSendersCallStack >> inspector: aBuilder [
 
 	<inspectorPresentationOrder: 0 title: 'Senders call stack'>
-	^ self buildInspectorPresenter
+	^ self buildInspectorPresenter: aBuilder
 ]
 
 { #category : 'accessing' }
