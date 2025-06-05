@@ -51,16 +51,15 @@ IllEphemeron >> finalizationTime [
 { #category : 'exporting' }
 IllEphemeron >> flattenedInstanceVariables [
 
-	| variables |
-	variables := {
-		             finalizationTime.
-		             sizeInBytes.
-		             initializationTime.
-		             allocatedObjectClass.
-		             survivedScavenges.
-		             survivedFullGC.
-		             textualAllocatorMethod name.
-		             offset }
+	^ {
+		  finalizationTime.
+		  sizeInBytes.
+		  initializationTime.
+		  allocatedObjectClass.
+		  survivedScavenges.
+		  survivedFullGC.
+		  textualAllocatorMethod name.
+		  offset }
 ]
 
 { #category : 'finalization' }
