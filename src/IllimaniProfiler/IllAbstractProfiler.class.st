@@ -17,7 +17,6 @@ Class {
 		'vmStats',
 		'startTime',
 		'profiledCode',
-		'gcActivityMonitor',
 		'illimaniAnnouncer',
 		'instrumentator',
 		'endTime'
@@ -66,12 +65,6 @@ IllAbstractProfiler >> forceUninstall [
 ]
 
 { #category : 'accessing' }
-IllAbstractProfiler >> gcActivityMonitor [
-
-	^ gcActivityMonitor
-]
-
-{ #category : 'accessing' }
 IllAbstractProfiler >> illimaniAnnouncer [
 
 	^ illimaniAnnouncer
@@ -84,8 +77,7 @@ IllAbstractProfiler >> initialize [
 	illimaniAnnouncer := IllAnnouncer new.
 	instrumentator := IllInstrumentator onProfiler: self.
 	samplingCounter := 0.
-	self samplingRate: 1/100.
-	gcActivityMonitor := IllNullGCActivityMonitor new
+	self samplingRate: 1/100
 ]
 
 { #category : 'profiling' }
@@ -118,14 +110,6 @@ IllAbstractProfiler >> isProfilingFinished [
 IllAbstractProfiler >> isProfilingStarted [
 
 	^ startTime isNotNil
-]
-
-{ #category : 'api' }
-IllAbstractProfiler >> monitorGCActivity [
-	"This instantiates a monitor that will run a process that will log the gc activity once per
-	second"
-
-	gcActivityMonitor := IllGCActivityMonitor new
 ]
 
 { #category : 'accessing' }
@@ -305,7 +289,6 @@ IllAbstractProfiler >> samplingRate: aFraction [
 { #category : 'profiling' }
 IllAbstractProfiler >> startProfiling [
 
-	gcActivityMonitor run.
 	self initializeVMStats.
 	self instrument
 ]
@@ -321,7 +304,6 @@ IllAbstractProfiler >> stopProfiling [
 
 	self uninstrument.
 	self updateVMStats.
-	gcActivityMonitor terminate.
 	self announceProfilerStopedProfiling
 ]
 

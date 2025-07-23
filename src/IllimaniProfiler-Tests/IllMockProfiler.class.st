@@ -2,19 +2,12 @@ Class {
 	#name : 'IllMockProfiler',
 	#superclass : 'Object',
 	#instVars : [
-		'allocations',
-		'gcMonitor'
+		'allocations'
 	],
 	#category : 'IllimaniProfiler-Tests-Exporters',
 	#package : 'IllimaniProfiler-Tests',
 	#tag : 'Exporters'
 }
-
-{ #category : 'accessing' }
-IllMockProfiler >> gcActivityMonitor [
-
-	^ IllNullGCActivityMonitor new
-]
 
 { #category : 'accessing' }
 IllMockProfiler >> objectAllocations [

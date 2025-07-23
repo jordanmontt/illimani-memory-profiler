@@ -39,14 +39,7 @@ IllAbstractExporter >> exportData [
 	baseFileName := self fileNameToExport.
 
 	self exportMetaData.
-	self exportAllocationModelCollection.
-	self exportGCActivity
-]
-
-{ #category : 'exporting' }
-IllAbstractExporter >> exportGCActivity [
-
-	profiler gcActivityMonitor exportData: baseFileName
+	self exportAllocationModelCollection
 ]
 
 { #category : 'exporting' }
