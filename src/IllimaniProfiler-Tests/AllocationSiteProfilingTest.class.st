@@ -35,12 +35,12 @@ AllocationSiteProfilingTest >> testFilterContextIgnoringClass [
 	Object illNew.
 
 	self
-		assert: profiler objectAllocations first allocatorMethod methodClass
+		assert: profiler objectAllocations first textualAllocatorMethod methodClass
 		equals: self class.
 	self
-		assert: profiler objectAllocations first allocatorMethod selector
+		assert: profiler objectAllocations first textualAllocatorMethod selector
 		equals: #testFilterContextIgnoringClass.
 	self
-		assert: profiler objectAllocations first allocatorMethod
+		assert: profiler objectAllocations first textualAllocatorMethod
 		equals: self class >> #testFilterContextIgnoringClass
 ]

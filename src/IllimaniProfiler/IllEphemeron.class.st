@@ -9,15 +9,20 @@ Class {
 		'allocatedObjectClass',
 		'survivedScavenges',
 		'survivedFullGC',
-		'programCounter',
-		'allocatorMethod',
-		'senders',
-		'allocationSenderChain'
+		'offset',
+		'sendersCallStackCollection',
+		'textualAllocatorMethod'
 	],
 	#category : 'IllimaniProfiler-Profiler',
 	#package : 'IllimaniProfiler',
 	#tag : 'Profiler'
 }
+
+{ #category : 'comparing' }
+IllEphemeron >> = anObject [
+
+	^ self == anObject
+]
 
 { #category : 'accessing' }
 IllEphemeron >> allocatedObjectClass [
@@ -25,28 +30,16 @@ IllEphemeron >> allocatedObjectClass [
 	^ allocatedObjectClass
 ]
 
-{ #category : 'accessing' }
+{ #category : 'allocation site' }
+IllEphemeron >> allocationSenders [
+
+	^ self sendersCallStack copyUpTo: textualAllocatorMethod
+]
+
+{ #category : 'allocation site' }
 IllEphemeron >> allocationSite [
 
-	^ IllAllocationSite method: allocatorMethod offset: self allocatorByte
-]
-
-{ #category : 'accessing' }
-IllEphemeron >> allocatorByte [
-
-	^ programCounter - 1
-]
-
-{ #category : 'accessing' }
-IllEphemeron >> allocatorMethod [
-
-	^ allocatorMethod
-]
-
-{ #category : 'accessing' }
-IllEphemeron >> allocatorMethod: aMethod [
-
-	allocatorMethod := aMethod
+	^ IllMethodWithOffset method: textualAllocatorMethod offset: offset
 ]
 
 { #category : 'accessing' }
@@ -65,8 +58,8 @@ IllEphemeron >> flattenedInstanceVariables [
 		  allocatedObjectClass.
 		  survivedScavenges.
 		  survivedFullGC.
-		  allocatorMethod name.
-		  (programCounter - 1) }
+		  textualAllocatorMethod name.
+		  offset }
 ]
 
 { #category : 'finalization' }
@@ -75,6 +68,12 @@ IllEphemeron >> forceFinalization [
 	"If already finalized"
 	key ifNil: [ ^ self ].
 	self mourn
+]
+
+{ #category : 'comparing' }
+IllEphemeron >> hash [
+
+	^ self identityHash
 ]
 
 { #category : 'accessing' }
@@ -126,7 +125,7 @@ IllEphemeron >> inspectorExtension: aBuilder [
 IllEphemeron >> inspectorExtensionSenders [
 
 	<inspectorPresentationOrder: 2 title: 'Senders call stack'>
-	^ (IllSendersCallStack senders: senders) buildInspectorPresenter
+	^ self sendersCallStack buildInspectorPresenter
 ]
 
 { #category : 'accessing' }
@@ -152,6 +151,18 @@ IllEphemeron >> mourn [
 	survivedFullGC := Smalltalk vm fullGCCount - survivedFullGC
 ]
 
+{ #category : 'accessing' }
+IllEphemeron >> offset [
+
+	^ offset
+]
+
+{ #category : 'accessing' }
+IllEphemeron >> offset: anObject [
+
+	offset := anObject
+]
+
 { #category : 'printing' }
 IllEphemeron >> printOn: aStream [
 
@@ -160,29 +171,27 @@ IllEphemeron >> printOn: aStream [
 	<< sizeInBytes humanReadableByteSizeString
 ]
 
-{ #category : 'accessing' }
-IllEphemeron >> programCounter: anObject [
-
-	programCounter := anObject
-]
-
-{ #category : 'accessing' }
+{ #category : 'allocation site' }
 IllEphemeron >> sendersCallStack [
 
-	^ IllSendersCallStack senders: senders
+	^ IllSendersCallStack senders: sendersCallStackCollection
 ]
 
-{ #category : 'accessing' }
-IllEphemeron >> sendersCallStack: aContext [
+{ #category : 'allocation site' }
+IllEphemeron >> sendersCallStack: aList [
 
-	| sender |
-	senders := Array new: 10.
-	sender := aContext.
-	1 to: 10 by: 2 do: [ :i |
-		sender ifNil: [ ^ self ].
-		senders at: i put: sender method.
-		senders at: i + 1 put: sender pc - 1.
-		sender := sender sender ]
+	sendersCallStackCollection := aList
+	"	| filteredSenders |
+	filteredSenders := sendersCallStackCollection select: #isNotNil.
+	filteredSenders ifNotEmpty: [
+		""Replace basic new because it was the trap method when it was captured""
+		sendersCallStackCollection at: 1 put: (OpalCompiler new
+				 source: sendersCallStackCollection first name;
+				 evaluate) ].
+
+	^ IllSendersCallStack senders: filteredSenders , {
+			  textualAllocatorMethod.
+			  offset }"
 ]
 
 { #category : 'accessing' }
@@ -201,4 +210,16 @@ IllEphemeron >> survivedFullGC [
 IllEphemeron >> survivedScavenges [
 
 	^ survivedScavenges
+]
+
+{ #category : 'accessing' }
+IllEphemeron >> textualAllocatorMethod [
+
+	^ textualAllocatorMethod
+]
+
+{ #category : 'accessing' }
+IllEphemeron >> textualAllocatorMethod: anObject [
+
+	textualAllocatorMethod := anObject
 ]

@@ -32,26 +32,43 @@ IllMemoryProfiler >> initialize [
 { #category : 'profiling' }
 IllMemoryProfiler >> internalRegisterAllocation: newlyAllocatedObject [
 
-	| metaClass filteredContext |
-
+	| metaClass filteredContext illEphemeron allocationSenderChain i n |
 	metaClass := newlyAllocatedObject class class.
+	illEphemeron := IllEphemeron newTenured.
+	i := 1.
+	n := 120.
+	allocationSenderChain := Array new: n.
 
-	filteredContext := thisContext
+	filteredContext := thisContext "proxy method"
 		sender "this is me, this profiler"
-		sender "this is the AbstractProfiler (my super class)"
+		sender "this is the AbstractProfiler"
 		sender "this is the IllHandler"
-		sender. "this is the trapped instrumented method"
+		"sender". "this is the instrumented method (allocator method e.g. #basicNew)"
 
-	[ "get out of the receiver. E.g. the new method"
-	filteredContext receiver class = metaClass ] whileTrue:
-		[ filteredContext := filteredContext sender ].
+	"Get the textual location of new."
+	[ filteredContext receiver class = metaClass ] whileTrue: [
+		allocationSenderChain
+			at: i put: filteredContext compiledCode;
+			at: i + 1 put: filteredContext pc - 1.
+		i := i + 2.
+		filteredContext := filteredContext sender ].
 
-	ephemeronsCollection add: (IllEphemeron newTenured
+	"Now the filtered context is at the textual location of new."
+	illEphemeron
 		key: newlyAllocatedObject value: nil;
-		allocatorMethod: filteredContext compiledCode method;
-		programCounter: filteredContext pc;
-		sendersCallStack: filteredContext;
-		yourself)
+		textualAllocatorMethod: filteredContext compiledCode;
+		offset: filteredContext pc -1.
+
+	"Get the rest of the stack until a limit n"
+	[ filteredContext isNil or: [ i > n ] ] whileFalse: [
+		allocationSenderChain
+			at: i put: filteredContext compiledCode;
+		 	at: i + 1 put: filteredContext pc - 1.
+		i := i + 2.
+		filteredContext := filteredContext sender ].
+
+	illEphemeron sendersCallStack: allocationSenderChain.
+	ephemeronsCollection add: illEphemeron.
 ]
 
 { #category : 'accessing' }
@@ -67,7 +84,7 @@ IllMemoryProfiler >> queryAllocationStats [
 		ifFalse: [ ^ Warning signal: 'Need to wait until the profiling is finished to access the stats' ].
 
 	^ statsModel ifNil: [
-		  statsModel := IllStatisticsModel objectAllocations: ephemeronsCollection totalProfiledTime: endTime ]
+		  statsModel := IllStatisticsQueryModel onProfiler: self ]
 ]
 
 { #category : 'profiling' }

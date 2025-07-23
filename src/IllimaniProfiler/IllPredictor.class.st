@@ -6,9 +6,9 @@ Class {
 		'lifetimes',
 		'types'
 	],
-	#category : 'IllimaniProfiler-Analyzer',
+	#category : 'IllimaniProfiler-Experiments',
 	#package : 'IllimaniProfiler',
-	#tag : 'Analyzer'
+	#tag : 'Experiments'
 }
 
 { #category : 'adding' }

@@ -24,8 +24,20 @@ IllSendersCallStack >> = illSenders [
 	^ senders = illSenders senders
 ]
 
-{ #category : 'api' }
-IllSendersCallStack >> buildInspectorPresenter [
+{ #category : 'accessing' }
+IllSendersCallStack >> asMethodWithOffsetObjects [
+
+	^ self methodWithOffsetDo:[ :method :offset | IllMethodWithOffset method: method offset: offset ]
+]
+
+{ #category : 'accessing' }
+IllSendersCallStack >> at: index [
+
+	^ IllMethodWithOffset method: (senders at: index * 2 - 1) offset: (senders at: index * 2)
+]
+
+{ #category : 'inspector' }
+IllSendersCallStack >> buildInspectorPresenter: aBuilder [
 
 	| items filteredSenders |
 	filteredSenders := senders reject: #isNil.
@@ -34,13 +46,22 @@ IllSendersCallStack >> buildInspectorPresenter [
 		| method offset |
 		method := senders at: i.
 		offset := senders at: i + 1.
-		items add: (MethodWithOffset method: method offset: offset) ].
-	^ SpTablePresenter new
-		  activateOnSingleClick;
-		  items: items;
-		  addColumn: (SpStringTableColumn title: 'Sender' evaluated: [ :each | each method method name ]);
-		  addColumn: (SpStringTableColumn title: 'Offset' evaluated: [ :e | e offset ]);
-		  yourself
+		items add: (IllMethodWithOffset method: method offset: offset) ].
+	^ aBuilder newTable
+		activateOnSingleClick;
+		items: items;
+		addColumn: (SpIndexTableColumn new title: 'Index'; width: 40; yourself);
+		addColumn: (SpStringTableColumn title: 'Sender' evaluated: [ :each | each method method name ]);
+		addColumn: (SpStringTableColumn title: 'Offset' evaluated: [ :e | e offset ]);
+		yourself
+]
+
+{ #category : 'accessing' }
+IllSendersCallStack >> copyUpTo: aMethod [
+
+	| index |
+	index := senders indexOf: aMethod.
+	^ self class new senders: (senders copyFrom: 1 to: index + 1)
 ]
 
 { #category : 'api' }
@@ -51,6 +72,13 @@ IllSendersCallStack >> first: n [
 		  yourself
 ]
 
+{ #category : 'testing' }
+IllSendersCallStack >> hasDoItSelector [
+
+	^ (self first: 5) asMethodWithOffsetObjects anySatisfy: [ :methodWithOffset |
+		  methodWithOffset method selector = #DoIt ]
+]
+
 { #category : 'comparing' }
 IllSendersCallStack >> hash [
 
@@ -58,10 +86,16 @@ IllSendersCallStack >> hash [
 ]
 
 { #category : 'inspector' }
-IllSendersCallStack >> inspector [
+IllSendersCallStack >> inspector: aBuilder [
 
 	<inspectorPresentationOrder: 0 title: 'Senders call stack'>
-	^ self buildInspectorPresenter
+	^ self buildInspectorPresenter: aBuilder
+]
+
+{ #category : 'accessing' }
+IllSendersCallStack >> methodWithOffsetDo: aBlock [
+
+	^ senders pairsCollect: aBlock
 ]
 
 { #category : 'accessing' }
@@ -70,6 +104,13 @@ IllSendersCallStack >> senders [
 ]
 
 { #category : 'accessing' }
-IllSendersCallStack >> senders: aCollection [ 
-	senders := aCollection
+IllSendersCallStack >> senders: anArray [
+
+	senders := anArray reject: #isNil
+]
+
+{ #category : 'accessing' }
+IllSendersCallStack >> size [
+
+	^ senders size / 2
 ]

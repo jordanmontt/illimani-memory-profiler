@@ -21,8 +21,8 @@ AllocationStatisticsTestFixture class >> allocationsOne [
 	9 timesRepeat: [
 		allocations add: (IllEphemeron new
 				 key: OrderedCollection new value: nil;
-				 allocatorMethod: Margin >> #asMargin;
-				 programCounter: 10;
+				 textualAllocatorMethod: Margin >> #asMargin;
+				 offset: 10;
 				 mourn;
 				 yourself) ].
 	^ allocations
@@ -34,10 +34,10 @@ AllocationStatisticsTestFixture class >> allocationsThree [
 	| allocations |
 	allocations := OrderedCollection new.
 	allocations add: (IllEphemeron new
-			 allocatorMethod: Collection >> #sorted:;
+			 textualAllocatorMethod: Collection >> #sorted:;
 			 key: ByteArray new value: nil;
 			 sizeInBytes: 16;
-			 programCounter: 10;
+			 offset: 10;
 			 yourself).
 	^ allocations
 ]
@@ -50,8 +50,8 @@ AllocationStatisticsTestFixture class >> allocationsTwo [
 	5 timesRepeat: [
 		allocations add: (IllEphemeron new
 				 key: ByteString new value: nil;
-				 allocatorMethod: ArrayedCollection >> #add:;
-				 programCounter: 10;
+				 textualAllocatorMethod: ArrayedCollection >> #add:;
+				 offset: 10;
 				 mourn;
 				 yourself) ].
 	^ allocations

@@ -36,7 +36,7 @@ HeatmapRoassalBuilder >> data: someData [
 	data := someData.
 	self initializeColorMultilinearScale.
 
-	self objectsY: (data collect: [ :e | "because of block closures" e key method name]).
+	self objectsY: (data collect: [ :e | "because of block closures" e key method method name]).
 
 	allocatedSortedClasses := Dictionary new.
 	data do: [ :e | e groupedAllocations keysAndValuesDo: [ :k :v |
@@ -121,7 +121,7 @@ HeatmapRoassalBuilder >> numberFor: tuple [
 	| allocator allocatedClass index |
 	allocator := tuple key.
 	allocatedClass := tuple value.
-	index := data findFirst: [ :node | node key method name = allocator ].
+	index := data findFirst: [ :node | node key method method name = allocator ].
 	^ (data at: index) allocationsOf: allocatedClass
 ]
 
