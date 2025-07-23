@@ -61,7 +61,7 @@ AllocationsByAllocatorTablePresenter >> initializePresenters [
 			yourself);
 		addColumn: (SpStringTableColumn new
 			title: 'Allocator';
-			evaluated: [ :each | StObjectPrinter asTruncatedTextFrom: each key method name ];
+			evaluated: [ :each | StObjectPrinter asTruncatedTextFrom: each key method method name ];
 			sortFunction: #printString ascending;
 			yourself);
 		addColumn: (SpStringTableColumn new
