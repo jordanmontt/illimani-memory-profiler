@@ -18,9 +18,10 @@ BaselineOfIllimaniProfiler >> baseline: spec [
 		spec package: 'Illimani-FrameworkProfiler-Examples' with: [ spec requires: #( 'Illimani-FrameworkProfiler' ) ].
 		spec package: 'Illimani-FrameworkProfiler-Tests' with: [ spec requires: #( 'Illimani-FrameworkProfiler' ) ].
 		
-		spec package: 'IllimaniUI' with: [ spec requires: #( 'Illimani-FrameworkProfiler' ) ].
+		spec package: 'IllimaniUI' with: [ spec 
+					requires: #( 'Illimani-FrameworkProfiler' 'Illimani-FrameworkProfiler-Examples' 'FiLiP-MemoryProfiler') ].
 		
-		spec package: 'FiLiP-MemoryProfiler' with: [ spec requires: #( 'Illimani-FrameworkProfiler' 'IllimaniUI' ) ].
+		spec package: 'FiLiP-MemoryProfiler' with: [ spec requires: #( 'Illimani-FrameworkProfiler' ) ].
 		spec package: 'FiLiP-MemoryProfiler-Tests' with: [ spec requires: #( 'FiLiP-MemoryProfiler' ) ].
 		spec package: 'FiLiP-MemoryProfiler-UI-Tests' with: [ spec requires: #( 'FiLiP-MemoryProfiler' 'IllimaniUI' ) ].
 
