@@ -3,7 +3,7 @@ Extension { #name : 'IllAbstractProfiler' }
 { #category : '*IllimaniUI' }
 IllAbstractProfiler >> open [
 
-	^ (self uiClass profiler: self announcer: self illimaniAnnouncer)
+	^ (self uiClass profiler: self announcer: illimaniAnnouncer)
 		  open;
 		  yourself
 ]
