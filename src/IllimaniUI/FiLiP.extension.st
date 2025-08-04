@@ -1,9 +1,9 @@
 Extension { #name : 'FiLiP' }
 
 { #category : '*IllimaniUI' }
-FiLiP >> instrumentator: anIllMockInstrumentator [
+FiLiP >> instrumentator: anInstrumentator [
 
-	instrumentator := anIllMockInstrumentator
+	instrumentator := anInstrumentator
 ]
 
 { #category : '*IllimaniUI' }

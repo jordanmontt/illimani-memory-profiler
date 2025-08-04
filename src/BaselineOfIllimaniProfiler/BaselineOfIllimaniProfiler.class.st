@@ -22,7 +22,7 @@ BaselineOfIllimaniProfiler >> baseline: spec [
 		
 		spec package: 'FiLiP-MemoryProfiler' with: [ spec requires: #( 'Illimani-FrameworkProfiler' 'IllimaniUI' ) ].
 		spec package: 'FiLiP-MemoryProfiler-Tests' with: [ spec requires: #( 'FiLiP-MemoryProfiler' ) ].
-		spec package: 'FiLiP-MemoryProfiler-UI-Tests' with: [ spec requires: #( 'FiLiP-MemoryProfiler' ) ].
+		spec package: 'FiLiP-MemoryProfiler-UI-Tests' with: [ spec requires: #( 'FiLiP-MemoryProfiler' 'IllimaniUI' ) ].
 
 
 		"External dependencies"
