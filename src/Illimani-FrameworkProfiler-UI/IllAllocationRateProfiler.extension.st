@@ -1,6 +1,6 @@
 Extension { #name : 'IllAllocationRateProfiler' }
 
-{ #category : '*IllimaniUI' }
+{ #category : '*Illimani-FrameworkProfiler-UI' }
 IllAllocationRateProfiler >> uiClass [
 
 	^ IllAllocationRateProfilerUI

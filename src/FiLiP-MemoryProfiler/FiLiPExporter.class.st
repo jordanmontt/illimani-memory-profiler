@@ -1,9 +1,9 @@
 Class {
 	#name : 'FiLiPExporter',
 	#superclass : 'IllSimpleExporter',
-	#category : 'FiLiP-MemoryProfiler-Profiler',
+	#category : 'FiLiP-MemoryProfiler-Exporter',
 	#package : 'FiLiP-MemoryProfiler',
-	#tag : 'Profiler'
+	#tag : 'Exporter'
 }
 
 { #category : 'instance creation' }

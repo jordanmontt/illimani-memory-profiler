@@ -1,9 +1,8 @@
 Class {
 	#name : 'RelativeLifetimesByMBTablePresenter',
 	#superclass : 'AllocationsGroupedByTablePresenter',
-	#category : 'IllimaniUI-Widgets',
-	#package : 'IllimaniUI',
-	#tag : 'Widgets'
+	#category : 'FiLiP-MemoryProfiler-UI',
+	#package : 'FiLiP-MemoryProfiler-UI'
 }
 
 { #category : 'accessing - model' }

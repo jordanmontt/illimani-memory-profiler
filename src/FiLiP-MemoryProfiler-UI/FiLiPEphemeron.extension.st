@@ -1,6 +1,6 @@
 Extension { #name : 'FiLiPEphemeron' }
 
-{ #category : '*IllimaniUI' }
+{ #category : '*FiLiP-MemoryProfiler-UI' }
 FiLiPEphemeron >> timeAsMegaBytes [
 
 	^ initializationTime // 1000000

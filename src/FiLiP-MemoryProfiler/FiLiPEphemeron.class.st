@@ -13,8 +13,9 @@ Class {
 		'sendersCallStackCollection',
 		'textualAllocatorMethod'
 	],
-	#category : 'FiLiP-MemoryProfiler',
-	#package : 'FiLiP-MemoryProfiler'
+	#category : 'FiLiP-MemoryProfiler-Profiler',
+	#package : 'FiLiP-MemoryProfiler',
+	#tag : 'Profiler'
 }
 
 { #category : 'comparing' }

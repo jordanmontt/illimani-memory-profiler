@@ -1,16 +1,16 @@
 Class {
-	#name : 'ProfilerSummaryPresenter',
+	#name : 'IllProfilingSummaryPresenter',
 	#superclass : 'SpPresenter',
 	#instVars : [
 		'profiler'
 	],
-	#category : 'IllimaniUI-Widgets',
-	#package : 'IllimaniUI',
+	#category : 'Illimani-FrameworkProfiler-UI-Widgets',
+	#package : 'Illimani-FrameworkProfiler-UI',
 	#tag : 'Widgets'
 }
 
 { #category : 'layout' }
-ProfilerSummaryPresenter >> buildTablePresenterOn: associations [ 
+IllProfilingSummaryPresenter >> buildTablePresenterOn: associations [ 
 
 	^ self newTable
 		addColumn: (SpStringTableColumn title: 'Name' evaluated: #key);
@@ -21,7 +21,7 @@ ProfilerSummaryPresenter >> buildTablePresenterOn: associations [
 ]
 
 { #category : 'layout' }
-ProfilerSummaryPresenter >> defaultLayout [
+IllProfilingSummaryPresenter >> defaultLayout [
 
 	| gcReport generalStatsTable | 
 	generalStatsTable := self buildTablePresenterOn: self generalStatsAssociations. 
@@ -42,20 +42,16 @@ ProfilerSummaryPresenter >> defaultLayout [
 ]
 
 { #category : 'layout' }
-ProfilerSummaryPresenter >> generalStatsAssociations [
+IllProfilingSummaryPresenter >> generalStatsAssociations [
 
 	^ {
 		('Total profiled time' -> profiler totalTime humanReadableByteSizeString).
-		('Total allocated objects' -> profiler queryAllocationStats totalAllocations asStringWithCommas).
-		('Total allocated memory' ->
-			profiler queryAllocationStats totalAllocatedMemory humanReadableByteSizeString).
 		('Sampling rate' -> self samplingRateString).
-		('Profiled code' -> profiler profiledCode).
-		('Total allocator methods' -> profiler queryAllocationStats numberOfAllocationSites asString) }
+		('Profiled code' -> profiler profiledCode) }
 ]
 
 { #category : 'layout' }
-ProfilerSummaryPresenter >> samplingRateString [
+IllProfilingSummaryPresenter >> samplingRateString [
 
 	^ String streamContents: [ :stream |
 		  profiler samplingRate * 100
@@ -65,7 +61,7 @@ ProfilerSummaryPresenter >> samplingRateString [
 ]
 
 { #category : 'accessing - model' }
-ProfilerSummaryPresenter >> setModelBeforeInitialization: aModel [
+IllProfilingSummaryPresenter >> setModelBeforeInitialization: aModel [
 
 	profiler := aModel
 ]

@@ -1,29 +1,21 @@
 Class {
 	#name : 'IllAllocationRateProfilerUI',
 	#superclass : 'IllAbstractUI',
-	#category : 'IllimaniUI-Main Presenter',
-	#package : 'IllimaniUI',
-	#tag : 'Main Presenter'
+	#category : 'Illimani-FrameworkProfiler-Examples-Allocation-Rate-Profiler',
+	#package : 'Illimani-FrameworkProfiler-Examples',
+	#tag : 'Allocation-Rate-Profiler'
 }
 
 { #category : 'accessing' }
 IllAllocationRateProfilerUI >> codeEvaluatorText [
-    ^ 'self'
-]
 
-{ #category : 'initialization' }
-IllAllocationRateProfilerUI >> initializeNotebook [
-
-	notebookPresenter := self newNotebook
-		addPageTitle: 'Summary' provider: [ self summaryAndEvaluatorPresenter ];
-		addPageTitle: 'Evaluator' provider: [ self codeEvaluator ];
-		yourself
+	^ 'self'
 ]
 
 { #category : 'initialization - lazy presenters' }
 IllAllocationRateProfilerUI >> profilerSummaryPresenter [
 
-	^ ProfilerSummaryPresenter on: profiler
+	^ IllSummaryAllocationRatePresenter on: profiler
 ]
 
 { #category : 'actions' }
@@ -36,5 +28,5 @@ IllAllocationRateProfilerUI >> refresh [
 { #category : 'initialization' }
 IllAllocationRateProfilerUI >> title [
 
-	^ 'Illimani Allocation Rate Memory Profiler'
+	^ 'Allocation Rate Memory Profiler'
 ]

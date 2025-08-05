@@ -9,9 +9,8 @@ Class {
 		'totalMemory',
 		'groupedAllocationsByObject'
 	],
-	#category : 'IllimaniUI-Widgets',
-	#package : 'IllimaniUI',
-	#tag : 'Widgets'
+	#category : 'FiLiP-MemoryProfiler-UI',
+	#package : 'FiLiP-MemoryProfiler-UI'
 }
 
 { #category : 'initialization' }

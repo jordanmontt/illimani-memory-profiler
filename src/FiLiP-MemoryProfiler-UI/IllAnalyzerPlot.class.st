@@ -4,8 +4,8 @@ Class {
 	#instVars : [
 		'analyzer'
 	],
-	#category : 'IllimaniUI',
-	#package : 'IllimaniUI'
+	#category : 'FiLiP-MemoryProfiler-UI',
+	#package : 'FiLiP-MemoryProfiler-UI'
 }
 
 { #category : 'accessing' }

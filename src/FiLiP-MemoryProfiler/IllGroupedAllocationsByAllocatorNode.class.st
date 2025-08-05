@@ -8,8 +8,9 @@ Class {
 		'groupedAllocations',
 		'key'
 	],
-	#category : 'FiLiP-MemoryProfiler',
-	#package : 'FiLiP-MemoryProfiler'
+	#category : 'FiLiP-MemoryProfiler-QueryModel',
+	#package : 'FiLiP-MemoryProfiler',
+	#tag : 'QueryModel'
 }
 
 { #category : 'api' }

@@ -10,8 +10,8 @@ Class {
 		'codeEvaluator',
 		'summaryAndEvaluatorPresenter'
 	],
-	#category : 'IllimaniUI-Main Presenter',
-	#package : 'IllimaniUI',
+	#category : 'Illimani-FrameworkProfiler-UI-Main Presenter',
+	#package : 'Illimani-FrameworkProfiler-UI',
 	#tag : 'Main Presenter'
 }
 
@@ -91,7 +91,10 @@ IllAbstractUI >> initializeCodeEvaluator [
 { #category : 'initialization' }
 IllAbstractUI >> initializeNotebook [
 
-	self subclassResponsibility
+	notebookPresenter := self newNotebook
+		addPageTitle: 'Summary' provider: [ self summaryAndEvaluatorPresenter ];
+		addPageTitle: 'Evaluator' provider: [ self codeEvaluator ];
+		yourself
 ]
 
 { #category : 'initialization' }
@@ -136,7 +139,10 @@ IllAbstractUI >> initializeWindow: aWindowPresenter [
 
 	aWindowPresenter
 		title: self title;
-		initialExtent: 850 @ 760
+		initialExtent: 850 @ 760;
+		whenResizingDo: [ :ann |
+				aWindowPresenter isResizable ifTrue: [
+						self preferredExtent: ann newSize ] ]
 ]
 
 { #category : 'layout' }
@@ -170,7 +176,7 @@ IllAbstractUI >> profiler: aProfiler [
 { #category : 'initialization - lazy presenters' }
 IllAbstractUI >> profilerSummaryPresenter [
 
-	^ ProfilerSummaryPresenter on: profiler
+	^ IllProfilingSummaryPresenter on: profiler
 ]
 
 { #category : 'actions' }

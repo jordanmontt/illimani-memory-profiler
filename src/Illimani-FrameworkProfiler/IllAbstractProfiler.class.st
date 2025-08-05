@@ -31,7 +31,7 @@ IllAbstractProfiler class >> forceUninstall [
 	"Warning, do not use unless you cannot start the profiler because you have the
 	MpCannotInstall exception"
 
-	MpMethodProxy allInstances do: #uninstall
+	IllInstrumentator forceUninstall
 ]
 
 { #category : 'announcements' }
@@ -63,7 +63,7 @@ IllAbstractProfiler >> forceUninstall [
 	"Warning, do not use unless you cannot start the profiler because you have the
 	MpCannotInstall exception"
 
-	self class forceUninstall
+	IllInstrumentator forceUninstall
 ]
 
 { #category : 'initialization' }
@@ -88,6 +88,12 @@ IllAbstractProfiler >> initializeVMStats [
 IllAbstractProfiler >> instrument [
 
 	instrumentator instrument
+]
+
+{ #category : 'accessing' }
+IllAbstractProfiler >> instrumentator: anInstrumentator [
+
+	instrumentator := anInstrumentator
 ]
 
 { #category : 'profiling' }

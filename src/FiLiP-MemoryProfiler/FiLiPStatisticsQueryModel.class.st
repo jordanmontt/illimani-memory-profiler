@@ -10,8 +10,9 @@ Class {
 		'allocationNodesByAllocationSite',
 		'allocationsByAllocatedObject'
 	],
-	#category : 'FiLiP-MemoryProfiler',
-	#package : 'FiLiP-MemoryProfiler'
+	#category : 'FiLiP-MemoryProfiler-QueryModel',
+	#package : 'FiLiP-MemoryProfiler',
+	#tag : 'QueryModel'
 }
 
 { #category : 'instance creation' }

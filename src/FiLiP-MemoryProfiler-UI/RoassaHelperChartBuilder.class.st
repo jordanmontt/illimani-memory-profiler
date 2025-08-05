@@ -8,9 +8,8 @@ Class {
 		'topCalculationsNumber',
 		'model'
 	],
-	#category : 'IllimaniUI-Roassal',
-	#package : 'IllimaniUI',
-	#tag : 'Roassal'
+	#category : 'FiLiP-MemoryProfiler-UI',
+	#package : 'FiLiP-MemoryProfiler-UI'
 }
 
 { #category : 'instance creation' }

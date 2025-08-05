@@ -10,9 +10,8 @@ Class {
 		'colorPaletteList',
 		'dataDomain'
 	],
-	#category : 'IllimaniUI-Roassal',
-	#package : 'IllimaniUI',
-	#tag : 'Roassal'
+	#category : 'FiLiP-MemoryProfiler-UI',
+	#package : 'FiLiP-MemoryProfiler-UI'
 }
 
 { #category : 'hooks' }

@@ -1,6 +1,6 @@
 Extension { #name : 'IllAbstractProfiler' }
 
-{ #category : '*IllimaniUI' }
+{ #category : '*Illimani-FrameworkProfiler-UI' }
 IllAbstractProfiler >> open [
 
 	^ (self uiClass profiler: self announcer: illimaniAnnouncer)
@@ -8,7 +8,7 @@ IllAbstractProfiler >> open [
 		  yourself
 ]
 
-{ #category : '*IllimaniUI' }
+{ #category : '*Illimani-FrameworkProfiler-UI' }
 IllAbstractProfiler >> uiClass [
 
 	^ self subclassResponsibility

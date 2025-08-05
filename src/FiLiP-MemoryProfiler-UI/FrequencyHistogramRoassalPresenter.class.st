@@ -5,9 +5,8 @@ Class {
 		'data',
 		'histogramPresenter'
 	],
-	#category : 'IllimaniUI-Roassal',
-	#package : 'IllimaniUI',
-	#tag : 'Roassal'
+	#category : 'FiLiP-MemoryProfiler-UI',
+	#package : 'FiLiP-MemoryProfiler-UI'
 }
 
 { #category : 'adding' }

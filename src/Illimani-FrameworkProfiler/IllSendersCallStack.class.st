@@ -60,12 +60,12 @@ IllSendersCallStack >> buildInspectorPresenter: aBuilder [
 		offset := senders at: i + 1.
 		items add: (IllMethodWithOffset method: method offset: offset) ].
 	^ aBuilder newTable
-		activateOnSingleClick;
-		items: items;
-		addColumn: (SpIndexTableColumn new title: 'Index'; width: 40; yourself);
-		addColumn: (SpStringTableColumn title: 'Sender' evaluated: [ :each | each method method name ]);
-		addColumn: (SpStringTableColumn title: 'Offset' evaluated: [ :e | e offset ]);
-		yourself
+			activateOnSingleClick;
+			items: items;
+			addColumn: (SpIndexTableColumn new title: 'Index'; width: 40; yourself);
+			addColumn: (SpStringTableColumn title: 'Sender' evaluated: [ :each | each method method name ]);
+			addColumn: (SpStringTableColumn title: 'Offset' evaluated: [ :e | e offset ]);
+			yourself
 ]
 
 { #category : 'accessing' }
@@ -82,13 +82,6 @@ IllSendersCallStack >> first: n [
 	^ self class new
 		  senders: (senders first: n * 2);
 		  yourself
-]
-
-{ #category : 'testing' }
-IllSendersCallStack >> hasDoItSelector [
-
-	^ (self first: 5) asMethodWithOffsetObjects anySatisfy: [ :methodWithOffset |
-		  methodWithOffset method selector = #DoIt ]
 ]
 
 { #category : 'comparing' }

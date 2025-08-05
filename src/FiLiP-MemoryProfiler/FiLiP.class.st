@@ -5,8 +5,9 @@ Class {
 		'ephemeronsCollection',
 		'statsModel'
 	],
-	#category : 'FiLiP-MemoryProfiler',
-	#package : 'FiLiP-MemoryProfiler'
+	#category : 'FiLiP-MemoryProfiler-Profiler',
+	#package : 'FiLiP-MemoryProfiler',
+	#tag : 'Profiler'
 }
 
 { #category : 'exporting' }
