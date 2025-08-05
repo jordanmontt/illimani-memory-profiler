@@ -54,3 +54,9 @@ IllAllocationRateProfiler >> totalAllocations [
 
 	^ numberOfAllocations
 ]
+
+{ #category : 'construction-UIManager' }
+IllAllocationRateProfiler >> uiClass [
+
+	^ IllAllocationRateProfilerUI
+]

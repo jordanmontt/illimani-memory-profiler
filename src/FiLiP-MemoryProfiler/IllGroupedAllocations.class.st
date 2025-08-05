@@ -33,15 +33,6 @@ IllGroupedAllocations >> initialize [
 	groupedNodesDictionary := Dictionary new
 ]
 
-{ #category : 'inspector - extensions' }
-IllGroupedAllocations >> inspectorExtension [
-
-	<inspectorPresentationOrder: 0 title: 'Title'>
-	^ SpListPresenter new
-		  items: self asOrderedCollection;
-		  yourself
-]
-
 { #category : 'api' }
 IllGroupedAllocations >> sortByLifetime [
 

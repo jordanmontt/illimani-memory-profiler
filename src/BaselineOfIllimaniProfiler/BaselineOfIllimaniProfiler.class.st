@@ -15,15 +15,14 @@ BaselineOfIllimaniProfiler >> baseline: spec [
 	spec for: #common do: [
 		"Packages"
 		spec package: 'Illimani-FrameworkProfiler'.
-		spec package: 'Illimani-FrameworkProfiler-Examples' with: [ spec requires: #( 'Illimani-FrameworkProfiler' ) ].
+		spec package: 'Illimani-FrameworkProfiler-UI' with: [ spec requires: #( 'Illimani-FrameworkProfiler' ) ].
+		spec package: 'Illimani-FrameworkProfiler-Examples' with: [ spec requires: #( 'Illimani-FrameworkProfiler' 'Illimani-FrameworkProfiler-UI' ) ].
 		spec package: 'Illimani-FrameworkProfiler-Tests' with: [ spec requires: #( 'Illimani-FrameworkProfiler' ) ].
 		
-		spec package: 'IllimaniUI' with: [ spec 
-					requires: #( 'Illimani-FrameworkProfiler' 'Illimani-FrameworkProfiler-Examples' 'FiLiP-MemoryProfiler') ].
-		
 		spec package: 'FiLiP-MemoryProfiler' with: [ spec requires: #( 'Illimani-FrameworkProfiler' ) ].
+		spec package: 'FiLiP-MemoryProfiler-UI' with: [ spec requires: #( 'FiLiP-MemoryProfiler' 'Illimani-FrameworkProfiler-UI' ) ].
 		spec package: 'FiLiP-MemoryProfiler-Tests' with: [ spec requires: #( 'FiLiP-MemoryProfiler' ) ].
-		spec package: 'FiLiP-MemoryProfiler-UI-Tests' with: [ spec requires: #( 'FiLiP-MemoryProfiler' 'IllimaniUI' ) ].
+		spec package: 'FiLiP-MemoryProfiler-UI-Tests' with: [ spec requires: #( 'FiLiP-MemoryProfiler-UI' ) ].
 
 
 		"External dependencies"
@@ -45,7 +44,7 @@ BaselineOfIllimaniProfiler >> baseline: spec [
 		"Load a fixed version of MethodProxies for Pharo 11 or lower. Note that the latest changes of MethodProxies require Pharo 12 or >"
 		spec for: #(#'pharo10.x' #'pharo11.x') do: [
 			spec baseline: 'Roassal' with: [ spec repository: 'github://pharo-graphics/Roassal/src' ].
-			spec package: 'IllimaniUI' with: [ spec requires: #('Roassal') ].
+			spec package: 'FiLiP-MemoryProfiler-UI' with: [ spec requires: #('Roassal') ].
 			spec baseline: 'MethodProxies'
 				with: [ spec repository: 'github://pharo-contributions/MethodProxies:a3204024eba7fce4f92db7f521425d3d0d869afc/src' ].
 			spec package: 'Illimani-FrameworkProfiler' with: [ spec requires: #('MethodProxies') ] ].
@@ -53,6 +52,7 @@ BaselineOfIllimaniProfiler >> baseline: spec [
 
 		"Groups"
 		spec group: 'default' with: #( 'core' 'tests' ).
-		spec group: 'core' with: #( 'Illimani-FrameworkProfiler' 'Illimani-FrameworkProfiler-Examples' 'IllimaniUI' 'FiLiP-MemoryProfiler' ).
+		spec group: 'core' with: #( 'Illimani-FrameworkProfiler' 'Illimani-FrameworkProfiler-Examples' 'Illimani-FrameworkProfile-UI'
+					'FiLiP-MemoryProfiler' 'FiLiP-MemoryProfiler-UI' ).
 		spec group: 'tests' with: #( 'Illimani-FrameworkProfiler-Tests' 'FiLiP-MemoryProfiler-Tests' 'FiLiP-MemoryProfiler-UI-Tests' ) ]
 ]

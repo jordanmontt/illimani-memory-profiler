@@ -1,18 +1,18 @@
 Extension { #name : 'FiLiPEphemeron' }
 
-{ #category : '*Illimani-FrameworkProfiler-Tests' }
+{ #category : '*FiLiP-MemoryProfiler-Tests' }
 FiLiPEphemeron >> finalizationTime: anObject [
 
 	finalizationTime := anObject
 ]
 
-{ #category : '*Illimani-FrameworkProfiler-Tests' }
+{ #category : '*FiLiP-MemoryProfiler-Tests' }
 FiLiPEphemeron >> initializationTime: anObject [
 
 	initializationTime := anObject
 ]
 
-{ #category : '*Illimani-FrameworkProfiler-Tests' }
+{ #category : '*FiLiP-MemoryProfiler-Tests' }
 FiLiPEphemeron >> sizeInBytes: anObject [
 
 	sizeInBytes := anObject

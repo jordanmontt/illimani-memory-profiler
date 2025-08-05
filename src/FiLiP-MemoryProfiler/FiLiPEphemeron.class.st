@@ -106,28 +106,6 @@ FiLiPEphemeron >> inspectionElements [
 		  ('Finalization time' -> finalizationTime humanReadableByteSizeString) }
 ]
 
-{ #category : 'inspector - extensions' }
-FiLiPEphemeron >> inspectorExtension: aBuilder [
-
-	<inspectorPresentationOrder: 0 title: 'Overview'>
-	| tablePresenter  items |
-	items := self inspectionElements collect: [ :e | StInspectorAssociationNode hostObject: e ].
-	tablePresenter := aBuilder newTable.
-	tablePresenter
-		addColumn: (SpStringTableColumn title: 'Name' evaluated: #key);
-		addColumn: (SpStringTableColumn title: 'Value' evaluated: #value);
-		items: items;
-		beResizable.
-	^ tablePresenter
-]
-
-{ #category : 'inspector - extensions' }
-FiLiPEphemeron >> inspectorExtensionSenders [
-
-	<inspectorPresentationOrder: 2 title: 'Senders call stack'>
-	^ self sendersCallStack buildInspectorPresenter
-]
-
 { #category : 'accessing' }
 FiLiPEphemeron >> lifetime [
 
