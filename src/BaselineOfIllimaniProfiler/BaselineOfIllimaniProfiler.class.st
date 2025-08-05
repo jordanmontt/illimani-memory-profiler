@@ -29,8 +29,6 @@ BaselineOfIllimaniProfiler >> baseline: spec [
 		spec baseline: 'NeoJSON' with: [ spec repository: 'github://svenvc/NeoJSON/repository' ].
 		spec baseline: 'NeoCSV' with: [ spec repository: 'github://svenvc/NeoCSV/repository' ].
 		spec baseline: 'MethodProxies' with: [ spec repository: 'github://pharo-contributions/MethodProxies' ].
-		
-		
 		"Link external dependencies"
 		spec package: 'Illimani-FrameworkProfiler' with: [ spec requires: #('NeoJSON' 'NeoCSV' 'MethodProxies') ].
 		
@@ -51,8 +49,8 @@ BaselineOfIllimaniProfiler >> baseline: spec [
 
 
 		"Groups"
-		spec group: 'default' with: #( 'core' 'tests' ).
-		spec group: 'core' with: #( 'Illimani-FrameworkProfiler' 'Illimani-FrameworkProfiler-Examples' 'Illimani-FrameworkProfiler-UI'
-					'FiLiP-MemoryProfiler' 'FiLiP-MemoryProfiler-UI' ).
-		spec group: 'tests' with: #( 'Illimani-FrameworkProfiler-Tests' 'FiLiP-MemoryProfiler-Tests' 'FiLiP-MemoryProfiler-UI-Tests' ) ]
+		spec group: 'default' with: #( 'core' ).
+		spec group: 'core' with: #( 'illimani' 'filip' ).
+		spec group: 'illimani' with: #( 'Illimani-FrameworkProfiler' 'Illimani-FrameworkProfiler-Examples' 'Illimani-FrameworkProfiler-UI' 'Illimani-FrameworkProfiler-Tests' ).
+		spec group: 'filip' with: #( 'illimani' 'FiLiP-MemoryProfiler' 'FiLiP-MemoryProfiler-UI' 'FiLiP-MemoryProfiler-Tests' 'FiLiP-MemoryProfiler-UI-Tests' ) ]
 ]
