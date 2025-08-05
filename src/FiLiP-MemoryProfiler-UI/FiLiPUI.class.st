@@ -1,6 +1,6 @@
 Class {
 	#name : 'FiLiPUI',
-	#superclass : 'IllAbstractUI',
+	#superclass : 'IllSimpleUI',
 	#instVars : [
 		'gcCyclesTable',
 		'frequencyHistogramPresenter',
@@ -50,6 +50,19 @@ FiLiPUI >> codeEvaluatorText [
 'self objectAllocations.
 self queryAllocationStats allocationsByAllocationSite.
 self queryAllocationStats allocationsByAllocatedObject'
+]
+
+{ #category : 'layout' }
+FiLiPUI >> defaultLayout [
+
+	(profiler isProfilingStarted and: [ profiler isProfilingFinished not ]) ifTrue: [
+		^ self layoutWhenThereIsNotDataWithMessage: 'Still profiling' ].
+
+	(profiler isProfilingFinished and: [ profiler objectAllocations isEmpty ]) ifTrue: [
+		^ self layoutWhenThereIsNotDataWithMessage: 'Profiling finished without any allocations. No allocations were produced during this profiling' ].
+
+	(profiler isProfilingFinished and: [ profiler objectAllocations isNotEmpty ]) ifTrue: [
+		^ self layoutWhenThereIsData ]
 ]
 
 { #category : 'accessing - lazy roassal presenters' }

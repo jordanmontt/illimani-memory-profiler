@@ -1,16 +1,10 @@
 Class {
 	#name : 'IllAllocationRateProfilerUI',
-	#superclass : 'IllAbstractUI',
+	#superclass : 'IllSimpleUI',
 	#category : 'Illimani-FrameworkProfiler-Examples-Allocation-Rate-Profiler',
 	#package : 'Illimani-FrameworkProfiler-Examples',
 	#tag : 'Allocation-Rate-Profiler'
 }
-
-{ #category : 'accessing' }
-IllAllocationRateProfilerUI >> codeEvaluatorText [
-
-	^ 'self'
-]
 
 { #category : 'initialization - lazy presenters' }
 IllAllocationRateProfilerUI >> profilerSummaryPresenter [

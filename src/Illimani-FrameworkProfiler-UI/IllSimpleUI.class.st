@@ -1,5 +1,5 @@
 Class {
-	#name : 'IllAbstractUI',
+	#name : 'IllSimpleUI',
 	#superclass : 'SpPresenter',
 	#instVars : [
 		'notebookPresenter',
@@ -16,7 +16,7 @@ Class {
 }
 
 { #category : 'accessing' }
-IllAbstractUI class >> profiler: aProfiler announcer: anIllimaniAnnouncer [
+IllSimpleUI class >> profiler: aProfiler announcer: anIllimaniAnnouncer [
 
 	^ self basicNew
 		profiler: aProfiler;
@@ -26,26 +26,26 @@ IllAbstractUI class >> profiler: aProfiler announcer: anIllimaniAnnouncer [
 ]
 
 { #category : 'accessing - lazy presenters' }
-IllAbstractUI >> codeEvaluator [
+IllSimpleUI >> codeEvaluator [
 
 	codeEvaluator ifNil: [ self initializeCodeEvaluator ].
 	^ codeEvaluator
 ]
 
 { #category : 'accessing' }
-IllAbstractUI >> codeEvaluatorText [
+IllSimpleUI >> codeEvaluatorText [
 
-	^ self subclassResponsibility
+	^ 'self'
 ]
 
 { #category : 'initialization' }
-IllAbstractUI >> connectPresenters [
+IllSimpleUI >> connectPresenters [
 
 	refreshButton action: [ self refresh ]
 ]
 
 { #category : 'layout' }
-IllAbstractUI >> controlButtonsLayout [
+IllSimpleUI >> controlButtonsLayout [
 
 	^ SpBoxLayout newTopToBottom
 		  spacing: 5;
@@ -54,33 +54,29 @@ IllAbstractUI >> controlButtonsLayout [
 ]
 
 { #category : 'layout' }
-IllAbstractUI >> defaultLayout [
+IllSimpleUI >> defaultLayout [
 
 	(profiler isProfilingStarted and: [ profiler isProfilingFinished not ]) ifTrue: [
 		^ self layoutWhenThereIsNotDataWithMessage: 'Still profiling' ].
 
-	(profiler isProfilingFinished and: [ profiler objectAllocations isEmpty ]) ifTrue: [
-		^ self layoutWhenThereIsNotDataWithMessage: 'Profiling finished without any allocations. No allocations were produced during this profiling' ].
-
-	(profiler isProfilingFinished and: [ profiler objectAllocations isNotEmpty ]) ifTrue: [
-		^ self layoutWhenThereIsData ]
+	profiler isProfilingFinished ifTrue: [ ^ self layoutWhenThereIsData ]
 ]
 
 { #category : 'accessing' }
-IllAbstractUI >> illimaniAnnouncer: aIllimaniAnnouncer [
+IllSimpleUI >> illimaniAnnouncer: aIllimaniAnnouncer [
 
 	illimaniAnnouncer := aIllimaniAnnouncer
 ]
 
 { #category : 'initialization' }
-IllAbstractUI >> initialize [
+IllSimpleUI >> initialize [
 
 	super initialize.
 	self respondToAnnouncement
 ]
 
 { #category : 'initialization - lazy presenters' }
-IllAbstractUI >> initializeCodeEvaluator [
+IllSimpleUI >> initializeCodeEvaluator [
 
 	codeEvaluator := self newCode
 		text: self codeEvaluatorText;
@@ -89,7 +85,7 @@ IllAbstractUI >> initializeCodeEvaluator [
 ]
 
 { #category : 'initialization' }
-IllAbstractUI >> initializeNotebook [
+IllSimpleUI >> initializeNotebook [
 
 	notebookPresenter := self newNotebook
 		addPageTitle: 'Summary' provider: [ self summaryAndEvaluatorPresenter ];
@@ -98,14 +94,14 @@ IllAbstractUI >> initializeNotebook [
 ]
 
 { #category : 'initialization' }
-IllAbstractUI >> initializePresenters [
+IllSimpleUI >> initializePresenters [
 
 	self initializeToolbar.
 	self initializeNotebook
 ]
 
 { #category : 'initialization - lazy presenters' }
-IllAbstractUI >> initializeSummaryAndEvaluatorPresenter [
+IllSimpleUI >> initializeSummaryAndEvaluatorPresenter [
 
 	| statsAndEvaluatorLayout statsPresenter |
 	statsPresenter :=	self profilerSummaryPresenter.
@@ -122,7 +118,7 @@ IllAbstractUI >> initializeSummaryAndEvaluatorPresenter [
 ]
 
 { #category : 'initialization' }
-IllAbstractUI >> initializeToolbar [
+IllSimpleUI >> initializeToolbar [
 
 	refreshButton := self newToolbarButton
 		label: 'Refresh views';
@@ -135,7 +131,7 @@ IllAbstractUI >> initializeToolbar [
 ]
 
 { #category : 'initialization' }
-IllAbstractUI >> initializeWindow: aWindowPresenter [
+IllSimpleUI >> initializeWindow: aWindowPresenter [
 
 	super initializeWindow: aWindowPresenter.
 	
@@ -145,7 +141,7 @@ IllAbstractUI >> initializeWindow: aWindowPresenter [
 ]
 
 { #category : 'layout' }
-IllAbstractUI >> layoutWhenThereIsData [
+IllSimpleUI >> layoutWhenThereIsData [
 
 	^ SpBoxLayout newTopToBottom
 		add: self controlButtonsLayout expand: false;
@@ -154,7 +150,7 @@ IllAbstractUI >> layoutWhenThereIsData [
 ]
 
 { #category : 'layout' }
-IllAbstractUI >> layoutWhenThereIsNotDataWithMessage: aString [
+IllSimpleUI >> layoutWhenThereIsNotDataWithMessage: aString [
 
 	^ SpBoxLayout newTopToBottom
 		  add: self controlButtonsLayout expand: false;
@@ -167,25 +163,25 @@ IllAbstractUI >> layoutWhenThereIsNotDataWithMessage: aString [
 ]
 
 { #category : 'accessing' }
-IllAbstractUI >> profiler: aProfiler [
+IllSimpleUI >> profiler: aProfiler [
 
 	profiler := aProfiler
 ]
 
 { #category : 'initialization - lazy presenters' }
-IllAbstractUI >> profilerSummaryPresenter [
+IllSimpleUI >> profilerSummaryPresenter [
 
 	^ IllProfilingSummaryPresenter on: profiler
 ]
 
 { #category : 'actions' }
-IllAbstractUI >> refresh [
+IllSimpleUI >> refresh [
 
 	self subclassResponsibility
 ]
 
 { #category : 'actions' }
-IllAbstractUI >> respondToAnnouncement [
+IllSimpleUI >> respondToAnnouncement [
 
 	illimaniAnnouncer when: IllStopedProfilingAnnouncement
 		do: [ self refresh ]
@@ -193,14 +189,14 @@ IllAbstractUI >> respondToAnnouncement [
 ]
 
 { #category : 'accessing - lazy presenters' }
-IllAbstractUI >> summaryAndEvaluatorPresenter [
+IllSimpleUI >> summaryAndEvaluatorPresenter [
 
 	summaryAndEvaluatorPresenter ifNil: [ self initializeSummaryAndEvaluatorPresenter ].
 	^ summaryAndEvaluatorPresenter
 ]
 
 { #category : 'initialization' }
-IllAbstractUI >> title [
+IllSimpleUI >> title [
 
 	^ 'Illimani Memory Profiler'
 ]
