@@ -137,12 +137,11 @@ IllAbstractUI >> initializeToolbar [
 { #category : 'initialization' }
 IllAbstractUI >> initializeWindow: aWindowPresenter [
 
+	super initializeWindow: aWindowPresenter.
+	
 	aWindowPresenter
 		title: self title;
-		initialExtent: 850 @ 760;
-		whenResizingDo: [ :ann |
-				aWindowPresenter isResizable ifTrue: [
-						self preferredExtent: ann newSize ] ]
+		initialExtent: 850 @ 760
 ]
 
 { #category : 'layout' }
