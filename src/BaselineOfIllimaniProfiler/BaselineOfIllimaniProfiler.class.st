@@ -52,7 +52,7 @@ BaselineOfIllimaniProfiler >> baseline: spec [
 
 		"Groups"
 		spec group: 'default' with: #( 'core' 'tests' ).
-		spec group: 'core' with: #( 'Illimani-FrameworkProfiler' 'Illimani-FrameworkProfiler-Examples' 'Illimani-FrameworkProfile-UI'
+		spec group: 'core' with: #( 'Illimani-FrameworkProfiler' 'Illimani-FrameworkProfiler-Examples' 'Illimani-FrameworkProfiler-UI'
 					'FiLiP-MemoryProfiler' 'FiLiP-MemoryProfiler-UI' ).
 		spec group: 'tests' with: #( 'Illimani-FrameworkProfiler-Tests' 'FiLiP-MemoryProfiler-Tests' 'FiLiP-MemoryProfiler-UI-Tests' ) ]
 ]
