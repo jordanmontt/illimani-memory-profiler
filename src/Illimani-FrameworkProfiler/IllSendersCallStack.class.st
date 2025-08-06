@@ -76,6 +76,16 @@ IllSendersCallStack >> methodWithOffsetDo: aBlock [
 	^ senders pairsCollect: aBlock
 ]
 
+{ #category : 'printing' }
+IllSendersCallStack >> printOn: aStream [
+
+	super printOn: aStream.
+	senders ifNotNil: [
+			aStream << ' '.
+			senders size / 2 printOn: aStream.
+			aStream << ' items' ]
+]
+
 { #category : 'accessing' }
 IllSendersCallStack >> senders [
 	^ senders
