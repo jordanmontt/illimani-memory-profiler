@@ -56,7 +56,7 @@ FiLiPStatisticsQueryModel >> averageRelativeLifetime [
 
     | relativeLifetimes |
     relativeLifetimes := objectAllocations collect: [ :sample |
-    			(sample lifetime max: profiler totalTime) / profiler totalTime ].
+    			(sample lifetime min: profiler totalTime) / profiler totalTime ].
     ^ relativeLifetimes average
 ]
 
