@@ -1,5 +1,5 @@
 Class {
-	#name : 'AllocationCallGraphProfiler',
+	#name : 'IllAllocationCallGraphProfiler',
 	#superclass : 'IllAbstractProfiler',
 	#instVars : [
 		'allocationStacks',
@@ -11,7 +11,7 @@ Class {
 }
 
 { #category : 'accessing' }
-AllocationCallGraphProfiler >> allocationCallGraph [
+IllAllocationCallGraphProfiler >> allocationCallGraph [
 
 	^ allocationCallGraph ifNil: [
 		| samples |
@@ -23,14 +23,14 @@ AllocationCallGraphProfiler >> allocationCallGraph [
 ]
 
 { #category : 'initialization' }
-AllocationCallGraphProfiler >> initialize [
+IllAllocationCallGraphProfiler >> initialize [
 
 	super initialize.
 	allocationStacks := OrderedCollection new: 1000000
 ]
 
 { #category : 'profiling' }
-AllocationCallGraphProfiler >> internalRegisterAllocation: anObject [
+IllAllocationCallGraphProfiler >> internalRegisterAllocation: anObject [
 
 	| filteredContext thisAllocationStack i n |
 	i := 1.

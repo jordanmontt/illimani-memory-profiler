@@ -9,5 +9,5 @@ Class {
 { #category : 'length units' }
 AllocationGraphFixtureUtilities class >> mm [
 
-	5 timesRepeat: [ Behavior basicNew ]
+	5 timesRepeat: [ AllocationGraphFixtureElement basicNew ]
 ]

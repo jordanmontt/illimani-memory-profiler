@@ -17,12 +17,13 @@ AllocationGraphFixture class >> entryPoint [
 { #category : 'as yet unclassified' }
 AllocationGraphFixture class >> m1 [
 
-	5 timesRepeat: [ Behavior basicNew ].
-	20 timesRepeat: [ Array new: 0 ]
+	5 timesRepeat: [ AllocationGraphFixtureElement basicNew ].
+	20 timesRepeat: [ AllocationGraphFixtureArray new: 0 ]
 ]
 
 { #category : 'as yet unclassified' }
 AllocationGraphFixture class >> m2 [
+	"calling method from another package"
 
 	AllocationGraphFixtureUtilities mm
 ]
@@ -30,19 +31,19 @@ AllocationGraphFixture class >> m2 [
 { #category : 'as yet unclassified' }
 AllocationGraphFixture class >> m3 [
 
-	20 timesRepeat: [ Behavior basicNewTenured ]
+	20 timesRepeat: [ AllocationGraphFixtureElement basicNewTenured ]
 ]
 
 { #category : 'as yet unclassified' }
 AllocationGraphFixture class >> m4 [
 
-	5 timesRepeat: [ Behavior basicNewTenured ]
+	5 timesRepeat: [ AllocationGraphFixtureElement basicNewTenured ]
 ]
 
 { #category : 'as yet unclassified' }
 AllocationGraphFixture class >> m5 [
 
-	5 timesRepeat: [ Behavior basicNewTenured ]
+	5 timesRepeat: [ AllocationGraphFixtureElement basicNewTenured ]
 ]
 
 { #category : 'as yet unclassified' }
