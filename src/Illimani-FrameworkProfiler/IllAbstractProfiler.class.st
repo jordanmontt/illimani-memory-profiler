@@ -242,11 +242,18 @@ IllAbstractProfiler >> samplingRate [
 
 { #category : 'api' }
 IllAbstractProfiler >> samplingRate: aFraction [
-	"I expect my argument to be a fraction. For example 4 / 5. That will mean that I will
+    "I expect my argument to be a fraction. For example 4 / 5. That will mean that I will
 	register 4 out of 5 allocations."
-	"The default sampling rate is 1%, which, by our evaluations, still gives precise results and does not sacrifice too much performance"
 
-	samplingRate := aFraction
+    "The default sampling rate is 1%, which, by our evaluations, still gives precise results and does not sacrifice too much performance"
+
+
+    "We are asserting here because the error risen because of the bad sampling rate will be in the instrumentation, in the proxy method, so it will break the image with no debugger."
+    self assert: aFraction isFraction.
+    self assert: aFraction asFloat >= 0.
+    self assert: aFraction asFloat <= 1.
+
+    samplingRate := aFraction
 ]
 
 { #category : 'profiling' }
