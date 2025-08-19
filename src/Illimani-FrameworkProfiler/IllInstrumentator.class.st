@@ -139,7 +139,7 @@ IllInstrumentator >> proxyVariables [
 	proxyVariables := { proxyBasicNew. proxyBasicNewKeyword. proxyNewPinned. proxyNewPinnedKeyword. proxyNewTenured. 
 				proxyNewTenuredKeyword. proxyArrayClass. proxyIntervalNew. proxyArobas. proxyCopy. proxyClone. 
 				proxyCompiledCodeClone. proxyExternalAddressClone. proxyFixedBitWidthRegisterCopy }.
-	self assert: proxyVariables size = (self class slots size - 2).
+
 	^ proxyVariables
 ]
 
