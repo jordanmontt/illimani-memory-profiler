@@ -98,7 +98,7 @@ IllInstrumentator >> initializeMethodProxies [
 	proxyNewTenuredKeyword := MpMethodProxy onMethod: Behavior >> #basicNewTenured: handler: handler.
 
 	"Specialized primitives"
-	proxyArrayClass := MpMethodProxy onMethod: ArrayedCollection class >> #new: handler: handler.
+	proxyArrayClass := MpMethodProxy onMethod: (Array class lookupSelector: #new:) handler: handler.
 	proxyIntervalNew := MpMethodProxy onMethod: Interval class >> #new handler: handler.
 	proxyArobas := MpMethodProxy onMethod: Number >> #@ handler: handler.
 
