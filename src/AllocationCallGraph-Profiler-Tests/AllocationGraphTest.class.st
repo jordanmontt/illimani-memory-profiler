@@ -70,5 +70,5 @@ AllocationGraphTest >> testPruneFromRoot [
 	"Check leaves"
 	self assert: (allocationGraph nodeAtMethod: Behavior >> #basicNew) allocatedSamples size equals: 10.
 	self assert: (allocationGraph nodeAtMethod: Behavior >> #basicNewTenured) allocatedSamples size equals: 30.
-	self assert: (allocationGraph nodeAtMethod: Array class >> #new:) allocatedSamples size equals: 20
+	self assert: (allocationGraph nodeAtMethod: (Array class lookupSelector: #new:)) allocatedSamples size equals: 20
 ]
