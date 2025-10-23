@@ -1,9 +1,22 @@
 
-# Illimani: a Memory Profiler
+# Illimani: a memory profiler framework with different profilers implemented
 
 [![Pharo version](https://img.shields.io/badge/Pharo-12-%23aac9ff.svg)](https://pharo.org/download)[![Pharo version](https://img.shields.io/badge/Pharo-13-%23aac9ff.svg)](https://pharo.org/download)[![Pharo version](https://img.shields.io/badge/Pharo-14-%23aac9ff.svg)](https://pharo.org/download)
 
-Illimani is a memory profiler for Pharo that tracks object allocation sites, lifetimes, and garbage collection (GC) cycles. It uses fast and meta-safe instrumentation to profile all object allocations and offers customizable sampling support. It allows the creation of custom memory profilers.
+Illimani is a framework for crafting custom memory profilers. It provides a solid infrastructure that instruments and captures all object allocations during the execution of an application.
+It uses [MethodProxies](https://github.com/pharo-contributions/MethodProxies) as its instrumentation backend, and **it instruments all the 14 allocator methods present in Pharo** By subclassing a class and overriding a few methods, users can implement their own memory profiler.
+
+The framework Illimani provides different profiler implementations. It implements an allocation rate profiler that counts the number of allocation and their size in memory; an allocation call graph that registers the call stacks that led to object allocations; and an object lifetime profiler. Illimani uses one instrumentation handler (the after action in this case, we execute the actions after the allocation is made) to always forward the logic to the profiler. This is an implementation decision to keep the profiler logic in the profiler and not in the instrumentation handler. This decision is key to keep the instrumentation backend (in this case \mps) independent from the profiler logic, allowing users to use different instrumentation backends if wanted.
+
+## About FiLiP
+
+FiLiP is an object lifeteime profiler: it estimate the lifetime for each allocated object. FiLiP also registers the stack trace for each object allocation, allowing for the construction of an allocation call graph and better understanding allocation patterns. It also records the memory size, type, and other relevant information for each object allocation to give a wider picture of the memory profile of the application.
+
+We have used FiLiP (**Fi**nalization **Li**fetime **P**rofiler), in several experiments, and to profile industrial applications with memory problems. FiLiP has proved to be useful in identifying the causes of the memory problems. Using finalization, a mechanism provided by the virtual machine to execute an action when an object is about to be garbage collected, we record the object's death time. The birth time is obtained thanks to the MethodProxies instrumentation, as it captures the allocation immediately after it is made. With this information, FiLiP is capable of estimating object lifetimes.
+
+FiLiP includes sampling support to reduce memory overhead. We have evaluated the precision of the sampling rate in [this paper](https://hal.science/hal-04581342v1/document), and we obtained good results even with a sampling rate of 1%. By default, \filip uses a sampling rate of 1%, but it is customizable. This configuration can significantly reduce the overhead.
+
+FiLiP has a full GUI from which all general information of the profile can be examined. It also has a statistics object model that users can programatically query to obtain all sorts of information. Thanks to these capabilities, users can perform powerful memory analysis to apply memory optimizations.
 
 ## How to install it
 
@@ -30,7 +43,7 @@ EpMonitor disableDuring: [
 Profiling a given code snippet
 
 ```st
-IllMemoryProfiler new
+FiLiP new
 	profileOn: [ 15 timesRepeat: [ StPlaygroundPresenter open close ] ] ;
 	open;
 	yourself
@@ -39,7 +52,7 @@ IllMemoryProfiler new
 Profiling the Pharo IDE activity for a given amount of time
 
 ```st
-IllMemoryProfiler new
+FiLiP new
 	profileFor: 6 seconds;
 	open;
 	yourself
@@ -48,7 +61,7 @@ IllMemoryProfiler new
 Example 1, Profiling the Pharo IDE activity
 
 ```st
-IllMemoryProfiler new
+FiLiP new
 	copyExecutionStack;
 	profileFor: 6 seconds;
 	open;
@@ -58,7 +71,7 @@ IllMemoryProfiler new
 Example 2, Profiling on a code snippet:
 
 ```st
-IllMemoryProfiler new
+FiLiP new
 	profileOn: [ 15 timesRepeat: [ StPlaygroundPresenter open close ] ] ;
 	open;
 	yourself
@@ -71,7 +84,7 @@ IllMemoryProfiler new
 You can decide both to profile a given method block or just watching the activity of the image for some time.
 
 ```st
-profiler := IllMemoryProfiler new.
+profiler := FiLiP new.
 "With this the profiler will block the ui and you will only capture the objects created by your code snippet"
 profiler profileOn: [ anObject performSomeAction ].
 
