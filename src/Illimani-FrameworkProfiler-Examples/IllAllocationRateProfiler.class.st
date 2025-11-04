@@ -32,15 +32,22 @@ IllAllocationRateProfiler >> initialize [
 
 { #category : 'profiling' }
 IllAllocationRateProfiler >> internalRegisterAllocation: anObject [
+    "Do nothing as registerAllocation: was overridden"
 
-	numberOfAllocations := numberOfAllocations + 1.
-	totalAllocatedMemory := totalAllocatedMemory + anObject sizeInMemory
+    
 ]
 
 { #category : 'accessing' }
 IllAllocationRateProfiler >> objectAllocations [
 
 	^ 1 to: numberOfAllocations
+]
+
+{ #category : 'profiling' }
+IllAllocationRateProfiler >> registerAllocation: anObject [
+
+    numberOfAllocations := numberOfAllocations + 1.
+    totalAllocatedMemory := totalAllocatedMemory + anObject sizeInMemory
 ]
 
 { #category : 'accessing' }
