@@ -124,6 +124,6 @@ FiLiP >> registerAllocationUsingNewSamplingRate: anObject [
 { #category : 'profiling' }
 FiLiP >> stopProfiling [
 
-	super stopProfiling.
-	self forceFinalizationOfObjects
+	self forceFinalizationOfObjects.
+	super stopProfiling
 ]
