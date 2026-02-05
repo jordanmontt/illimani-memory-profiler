@@ -15,7 +15,14 @@ Class {
 }
 
 { #category : 'evaluating' }
-IllHandler >> afterExecutionWithReceiver: receiver arguments: arguments returnValue: newlyAllocatedObject [
+IllHandler >> afterExecutionWithReceiver: receiver returnValue: newlyAllocatedObject [
+
+	profiler registerAllocation: newlyAllocatedObject.
+	^ newlyAllocatedObject
+]
+
+{ #category : 'evaluating' }
+IllHandler >> afterExecutionWithReceiver: receiver with: arguments returnValue: newlyAllocatedObject [
 
 	profiler registerAllocation: newlyAllocatedObject.
 	^ newlyAllocatedObject
