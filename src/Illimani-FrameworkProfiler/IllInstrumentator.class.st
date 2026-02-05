@@ -94,6 +94,8 @@ IllInstrumentator >> initializeMethodProxies [
 	proxyBasicNewKeyword := MpMethodProxy onMethod: Behavior >> #basicNew: handler: handler.
 	proxyNewPinned := MpMethodProxy onMethod: Behavior >> #basicNewPinned handler: handler.
 	proxyNewPinnedKeyword := MpMethodProxy onMethod: Behavior >> #basicNewPinned: handler: handler.
+	
+	"Tenured primitives"
 	proxyNewTenured := MpMethodProxy onMethod: Behavior >> #basicNewTenured handler: handler.
 	proxyNewTenuredKeyword := MpMethodProxy onMethod: Behavior >> #basicNewTenured: handler: handler.
 
