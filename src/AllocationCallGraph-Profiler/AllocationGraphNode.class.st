@@ -39,18 +39,18 @@ AllocationGraphNode >> allocatedSamples [
 ]
 
 { #category : 'accessing' }
-AllocationGraphNode >> allocationPaths [
+AllocationGraphNode >> allocationCallStacks [
 
 	^ allocationPaths
 ]
 
 { #category : 'accessing' }
-AllocationGraphNode >> allocationPaths: aCollection [ 
+AllocationGraphNode >> allocationCallStacks: aCollection [ 
 	allocationPaths := aCollection
 ]
 
 { #category : 'api' }
-AllocationGraphNode >> appendPath: aCollection [
+AllocationGraphNode >> appendCallStack: aCollection [
 
 	allocationPaths add: aCollection
 ]
@@ -79,7 +79,7 @@ AllocationGraphNode >> copy [
 	^ self shallowCopy
 		  edges: edgesCopy;
 		  callers: callersCopy;
-		  allocationPaths: allocationPathsCopy;
+		  allocationCallStacks: allocationPathsCopy;
 		  yourself
 ]
 
@@ -122,6 +122,12 @@ AllocationGraphNode >> edges [
 AllocationGraphNode >> edges: anObject [
 
 	edges := anObject
+]
+
+{ #category : 'api - accessing' }
+AllocationGraphNode >> incomingEdges [
+
+    ^ self callers collect: [ :caller | caller edgeTo: self ]
 ]
 
 { #category : 'initialization' }

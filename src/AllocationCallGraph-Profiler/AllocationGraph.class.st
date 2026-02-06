@@ -61,6 +61,12 @@ AllocationGraph >> allocatedSamples [
 ]
 
 { #category : 'accessing' }
+AllocationGraph >> edgeFrom: aMethod to: anotherMethod [
+
+    ^ (self nodeAtMethod: aMethod) edgeTo: (self nodeAtMethod: anotherMethod)
+]
+
+{ #category : 'accessing' }
 AllocationGraph >> edges [
 
 	^ nodes values flatCollect: #edges as: Set
@@ -83,7 +89,7 @@ AllocationGraph >> identifyAllocationSitesUsing: aStrategy [
 		"Cut the traversal if we didn't find an allocation site until this depth"
 		(path size <= 100) ifTrue: [
 			(aStrategy isAllocationSite: current fromAllocationPath: path)
-				ifTrue: [ current beAllocationSite; appendPath: path ]
+				ifTrue: [ current beAllocationSite; appendCallStack: path ]
 				ifFalse: [ 
 					current callers do: [ :caller | 
 						caller
@@ -195,4 +201,26 @@ AllocationGraph >> setUpForSamples: aCollection [
 AllocationGraph >> subGraphForType: aClass [
 
 	^ self class onSamples: (samples select: [ :e | e allocatedObjectClass = aClass ])
+]
+
+{ #category : 'api' }
+AllocationGraph >> traverseLongLivedSenderChainsUsing: aStrategy [
+    "Performs a DFS algorithm to extract the long lived senders chains. Stops the traversal using a using criteria algorithm."
+
+	| stack currentNode pathUntilNow association |
+	stack := Stack newFrom: (self leaves collect: [ :leafNode | leafNode -> {  } ]).
+
+	[ stack isEmpty ] whileFalse: [
+		association := stack pop.
+		currentNode := association key.
+		pathUntilNow := association value.
+
+		"Cut the traversal if we didn't find an allocation site until this depth"
+		pathUntilNow size <= 50 ifTrue: [
+			(aStrategy isAllocationSite: currentNode fromAllocationPath: pathUntilNow)
+				ifTrue: [ currentNode beAllocationSite; appendCallStack: pathUntilNow ]
+				ifFalse: [ 
+					(currentNode incomingEdges select: #isLongLived) do: [ :edge | 
+						(pathUntilNow includes: edge) ifFalse: [ 
+							stack add: edge sourceNode -> (pathUntilNow copyWith: edge) ] ] ] ] ]
 ]

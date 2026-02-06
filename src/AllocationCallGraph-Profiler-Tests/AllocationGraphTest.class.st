@@ -43,6 +43,28 @@ AllocationGraphTest >> testAllocatedSamplesStayTheSameAfterPruning [
 ]
 
 { #category : 'tests' }
+AllocationGraphTest >> testIncomingEdges [
+
+    | leaf |
+    leaf := allocationGraph nodeAtMethod: Behavior >> #basicNew.
+    self assert: leaf incomingEdges size equals: 2.
+    self assertCollection: leaf incomingEdges includesAll: {
+            ((allocationGraph nodeAtMethod: AllocationGraphFixtureUtilities class >> #mm) edgeTo: leaf).
+            ((allocationGraph nodeAtMethod: AllocationGraphFixture class >> #m1) edgeTo: leaf) }
+]
+
+{ #category : 'tests' }
+AllocationGraphTest >> testLeaves [
+
+	| expectedLeaveSelectors |
+	expectedLeaveSelectors := { #basicNew. #new:. #basicNewTenured }.
+	self assert: allocationGraph leaves size equals: 3.
+	self
+		assertCollection: (allocationGraph leaves collect: [ :e | e method selector ])
+		hasSameElements: expectedLeaveSelectors
+]
+
+{ #category : 'tests' }
 AllocationGraphTest >> testPruneFromRoot [
 
 	| oldNode |
@@ -71,4 +93,35 @@ AllocationGraphTest >> testPruneFromRoot [
 	self assert: (allocationGraph nodeAtMethod: Behavior >> #basicNew) allocatedSamples size equals: 10.
 	self assert: (allocationGraph nodeAtMethod: Behavior >> #basicNewTenured) allocatedSamples size equals: 30.
 	self assert: (allocationGraph nodeAtMethod: (Array class lookupSelector: #new:)) allocatedSamples size equals: 20
+]
+
+{ #category : 'tests' }
+AllocationGraphTest >> testPruneGraphFromRoot [
+
+	| oldNode |
+	oldNode:= allocationGraph nodeAtMethod: AllocationGraphFixture class >> #entryPoint.
+	self deny: oldNode isRoot.
+	
+	allocationGraph := allocationGraph pruneFromRoot: (allocationGraph nodeAtMethod: AllocationGraphFixture class >> #entryPoint).
+	
+	"Check new and old roots"
+	self assert: allocationGraph nodes size equals: 12.
+	self assert: (allocationGraph nodeAtMethod: AllocationGraphFixture class >> #entryPoint) isRoot.
+	self deny: oldNode isRoot.
+	
+	"Check the other nodes"
+	self assert: (allocationGraph nodeAtMethod: AllocationGraphFixture class >> #entryPoint) allocatedSamples size equals: 60.
+	self assert: (allocationGraph nodeAtMethod: AllocationGraphFixture class >> #m6) allocatedSamples size equals: 50.
+	self assert: (allocationGraph nodeAtMethod: AllocationGraphFixture class >> #m7) allocatedSamples size equals: 10.
+	self assert: (allocationGraph nodeAtMethod: AllocationGraphFixture class >> #m2) allocatedSamples size equals: 5.
+	self assert: (allocationGraph nodeAtMethod: AllocationGraphFixture class >> #m1) allocatedSamples size equals: 25.
+	self assert: (allocationGraph nodeAtMethod: AllocationGraphFixture class >> #m3) allocatedSamples size equals: 20.
+	self assert: (allocationGraph nodeAtMethod: AllocationGraphFixture class >> #m4) allocatedSamples size equals: 5.
+	self assert: (allocationGraph nodeAtMethod: AllocationGraphFixture class >> #m5) allocatedSamples size equals: 5.
+	self assert: (allocationGraph nodeAtMethod: AllocationGraphFixtureUtilities class >> #mm) allocatedSamples size equals: 5.
+	
+	"Check leaves"
+	self assert: (allocationGraph nodeAtMethod: Behavior >> #basicNew) allocatedSamples size equals: 10.
+	self assert: (allocationGraph nodeAtMethod: Behavior >> #basicNewTenured) allocatedSamples size equals: 30.
+	self assert: (allocationGraph nodeAtMethod: ArrayedCollection class >> #new:) allocatedSamples size equals: 20
 ]

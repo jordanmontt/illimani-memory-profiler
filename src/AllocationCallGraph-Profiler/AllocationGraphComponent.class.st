@@ -69,6 +69,12 @@ AllocationGraphComponent >> isLongLived [
 	^ isLongLived
 ]
 
+{ #category : 'api' }
+AllocationGraphComponent >> isShortLived [
+
+    ^ isLongLived
+]
+
 { #category : 'testing' }
 AllocationGraphComponent >> isTextualAllocationSite [
 
