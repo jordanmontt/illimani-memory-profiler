@@ -72,33 +72,6 @@ AllocationGraph >> edges [
 	^ nodes values flatCollect: #edges as: Set
 ]
 
-{ #category : 'api' }
-AllocationGraph >> identifyAllocationSitesUsing: aStrategy [
-
-	| stack current path |
-	"If the strategy needs some preprocessing"
-	aStrategy setupForGraph: self andSamples: samples.
-
-	stack := self leaves collect: [ :leafNode | leafNode -> { } ] as: OrderedCollection.
-
-	[ stack isEmpty ] whileFalse: [
-		current := stack last key.
-		path := stack last value.
-		stack removeLast.
-
-		"Cut the traversal if we didn't find an allocation site until this depth"
-		(path size <= 100) ifTrue: [
-			(aStrategy isAllocationSite: current fromAllocationPath: path)
-				ifTrue: [ current beAllocationSite; appendCallStack: path ]
-				ifFalse: [ 
-					current callers do: [ :caller | 
-						caller
-							edgeTo: current
-							ifFound: [ :edge |
-								(path includes: edge) ifFalse: [ 
-									stack add: caller -> (path copyWith: edge) ] ] ] ] ] ]
-]
-
 { #category : 'initialization' }
 AllocationGraph >> initialize [
 
