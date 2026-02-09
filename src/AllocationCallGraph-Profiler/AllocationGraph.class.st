@@ -183,6 +183,11 @@ AllocationGraph >> recordCallFrom: aCaller to: aCallee at: anOffset sample: samp
 ]
 
 { #category : 'accessing' }
+AllocationGraph >> samples [
+	^ samples
+]
+
+{ #category : 'accessing' }
 AllocationGraph >> samples: aCollection [
 
 	samples := aCollection
