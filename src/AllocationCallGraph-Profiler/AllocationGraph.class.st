@@ -147,28 +147,26 @@ AllocationGraph >> nodes: aCollection [
 { #category : 'api' }
 AllocationGraph >> pruneFromRoot: aNode [
 
-	| newRoot newNodes nodesToTreat visitesNodes |
-	newRoot := aNode copy
+	| newRoot prunedNodes nodesToTreat visitedNodes |
+	newRoot := aNode
 		callers: Set new;
 		yourself.
-	nodesToTreat := OrderedCollection with: newRoot.
-	newNodes := Set with: newRoot.
-	visitesNodes := OrderedCollection new.
+	nodesToTreat := Stack with: newRoot.
+	prunedNodes := Set with: newRoot.
+	visitedNodes := Set new.
 
 	[ nodesToTreat isNotEmpty ] whileTrue: [
 		| current targetNodes |
-		current := nodesToTreat removeFirst.
-		(visitesNodes includes: current) ifFalse: [
-			visitesNodes add: current.
-			targetNodes := (current edges collect: #targetNode) 
-					reject: [ :target | visitesNodes includes: target ].
-			newNodes addAll: targetNodes.
+		current := nodesToTreat pop.
+		(visitedNodes includes: current) ifFalse: [
+			visitedNodes add: current.
+			targetNodes := (current edges collect: #targetNode)
+					reject: [ :target | visitedNodes includes: target ].
+			prunedNodes addAll: targetNodes.
 			nodesToTreat addAll: targetNodes ] ].
 
-	^ self class new
-		  nodes: (newNodes collect: [ :node | node method -> node ]) asDictionary;
-		  samples: samples;
-		  yourself
+	self nodes: (prunedNodes collect: [ :node | node method -> node ]) asDictionary.
+	^ self
 ]
 
 { #category : 'private' }
