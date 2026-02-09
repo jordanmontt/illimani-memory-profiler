@@ -136,7 +136,7 @@ AllocationGraphNode >> initialize [
 	super initialize.
 	edges := Dictionary new.
 	callers := Set new.
-	allocationPaths := OrderedCollection new
+	allocationPaths := Set new
 ]
 
 { #category : 'inspector' }

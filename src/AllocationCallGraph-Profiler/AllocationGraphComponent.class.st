@@ -63,6 +63,12 @@ AllocationGraphComponent >> isAllocationSite [
 	^ isAllocationSite
 ]
 
+{ #category : 'api' }
+AllocationGraphComponent >> isAllocationSite: boolean [
+
+	isAllocationSite := boolean 
+]
+
 { #category : 'accessing' }
 AllocationGraphComponent >> isLongLived [ 
 
