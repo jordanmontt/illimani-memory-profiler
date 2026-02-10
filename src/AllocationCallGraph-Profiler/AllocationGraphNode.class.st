@@ -142,25 +142,35 @@ AllocationGraphNode >> initialize [
 { #category : 'inspector' }
 AllocationGraphNode >> inspector: aBuilder [
 
-	<inspectorPresentationOrder: 0 title: 'Code'>
-	^ self inspectorPresenter: aBuilder
+    <inspectorPresentationOrder: 0 title: 'Method'>
+    ^ aBuilder newPresenter
+          layout: (SpBoxLayout newTopToBottom
+                   spacing: 3;
+                   add: (aBuilder newText text: method name; yourself) expand: false;
+                   add: (method inspectionSource: aBuilder);
+                   yourself);
+          yourself
 ]
 
 { #category : 'inspector' }
 AllocationGraphNode >> inspectorAllocationPath: aBuilder [
 
-	<inspectorPresentationOrder: 1 title: 'Path'>
-	| callStackRawArray |
-	allocationPaths ifNil: [ ^ aBuilder newList ].
-
-	callStackRawArray := allocationPaths allButFirst flatCollect: [ :assoc | { assoc key method . assoc value } ].
-	^ (IllSendersCallStack senders: callStackRawArray) buildInspectorPresenter: aBuilder
+    <inspectorPresentationOrder: 1 title: 'Allocation paths'>
+    ^ allocationPaths inspectionItems: aBuilder
 ]
 
 { #category : 'inspector' }
-AllocationGraphNode >> inspectorPresenter: aBuilder [
+AllocationGraphNode >> inspectorIncomingEdges: aBuilder [
 
-	^ method inspectionSource: aBuilder
+    <inspectorPresentationOrder: 3 title: 'Incoming Edges'>
+    ^ self incomingEdges inspectionItems: aBuilder
+]
+
+{ #category : 'inspector' }
+AllocationGraphNode >> inspectorOutgoingEdges: aBuilder [
+
+    <inspectorPresentationOrder: 2 title: 'Edges'>
+    ^ self edges inspectionItems: aBuilder
 ]
 
 { #category : 'testing' }

@@ -3,16 +3,28 @@ Extension { #name : 'IllMethodWithOffset' }
 { #category : '*Illimani-FrameworkProfiler-UI' }
 IllMethodWithOffset >> inspector: aBuilder [
 
-	<inspectorPresentationOrder: 0 title: 'Method code'>
-	^ self inspectorPresenter
+    <inspectorPresentationOrder: 0 title: 'Method code'>
+    | codePresenter |
+    codePresenter := self inspectorPresenter: aBuilder.
+    ^ aBuilder newPresenter
+          layout: (SpBoxLayout newTopToBottom
+                   spacing: 3;
+                   add: (aBuilder newText
+                       text: (self name, ' with offset: ', self offset asString);
+                       beNotEditable;
+                       yourself)
+                   expand: false;
+                   add: codePresenter;
+                   yourself);
+          yourself
 ]
 
 { #category : '*Illimani-FrameworkProfiler-UI' }
-IllMethodWithOffset >> inspectorPresenter [
+IllMethodWithOffset >> inspectorPresenter: aBuilder [
 
 	| interval codePresenter |
 	interval := (compiledMethodOrBlock sourceNode sourceNodeForPC: offset) sourceInterval.
-	codePresenter := SpCodePresenter new
+	codePresenter := aBuilder newCode
 		  beForBehavior: compiledMethodOrBlock methodClass;
 		  text: compiledMethodOrBlock sourceCode;
 		  addTextSegmentDecoration: (SpTextPresenterDecorator forHighlight
@@ -20,15 +32,5 @@ IllMethodWithOffset >> inspectorPresenter [
 				   yourself);
 		  beNotEditable;
 		  yourself.
-	^ SpPresenter new
-			layout: (SpBoxLayout newTopToBottom
-				spacing: 3;
-				add: (SpTextPresenter new
-					text: self name;
-					beNotEditable;
-					yourself)
-				expand: false;
-				add: codePresenter;
-				yourself);
-		yourself.
+	^ codePresenter
 ]

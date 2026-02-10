@@ -96,7 +96,7 @@ AllocationGraphTest >> testPruneFromRoot [
 	newRoot := allocationGraph nodeAtMethod: AllocationGraphFixture class >> #entryPoint.
 	self deny: newRoot isRoot.
 	
-	allocationGraph := allocationGraph pruneFromRoot: (allocationGraph nodeAtMethod: AllocationGraphFixture class >> #entryPoint).
+	allocationGraph pruneFromRoot: (allocationGraph nodeAtMethod: AllocationGraphFixture class >> #entryPoint).
 	
 	"Check new and old roots"
 	self assert: allocationGraph nodes size equals: 12.
@@ -118,4 +118,22 @@ AllocationGraphTest >> testPruneFromRoot [
 	self assert: (allocationGraph nodeAtMethod: Behavior >> #basicNew) allocatedSamples size equals: 10.
 	self assert: (allocationGraph nodeAtMethod: Behavior >> #basicNewTenured) allocatedSamples size equals: 30.
 	self assert: (allocationGraph nodeAtMethod: ArrayedCollection class >> #new:) allocatedSamples size equals: 20
+]
+
+{ #category : 'tests' }
+AllocationGraphTest >> testPruneFromRootGraphIsClean [
+
+    | newRoot |
+    newRoot := allocationGraph nodeAtMethod: AllocationGraphFixture class >> #entryPoint.
+    self deny: newRoot isRoot.
+    self deny: newRoot incomingEdges size equals: 0.
+
+    allocationGraph pruneFromRoot: (allocationGraph nodeAtMethod: AllocationGraphFixture class >> #entryPoint).
+
+    self assert: allocationGraph nodes size equals: 12.
+    self assert: allocationGraph edges size equals: 14.
+    self assert: (allocationGraph nodes select: #isRoot) size equals: 1.
+    self assert: (allocationGraph nodes select: [ :e | e incomingEdges isEmpty ]) size equals: 1.
+    self assert: newRoot isRoot.
+    self assert: newRoot incomingEdges size equals: 0
 ]
