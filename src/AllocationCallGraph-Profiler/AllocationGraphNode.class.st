@@ -39,18 +39,18 @@ AllocationGraphNode >> allocatedSamples [
 ]
 
 { #category : 'accessing' }
-AllocationGraphNode >> allocationPaths [
+AllocationGraphNode >> allocationCallStacks [
 
 	^ allocationPaths
 ]
 
 { #category : 'accessing' }
-AllocationGraphNode >> allocationPaths: aCollection [ 
+AllocationGraphNode >> allocationCallStacks: aCollection [ 
 	allocationPaths := aCollection
 ]
 
 { #category : 'api' }
-AllocationGraphNode >> appendPath: aCollection [
+AllocationGraphNode >> appendCallStack: aCollection [
 
 	allocationPaths add: aCollection
 ]
@@ -79,7 +79,7 @@ AllocationGraphNode >> copy [
 	^ self shallowCopy
 		  edges: edgesCopy;
 		  callers: callersCopy;
-		  allocationPaths: allocationPathsCopy;
+		  allocationCallStacks: allocationPathsCopy;
 		  yourself
 ]
 
@@ -124,37 +124,53 @@ AllocationGraphNode >> edges: anObject [
 	edges := anObject
 ]
 
+{ #category : 'api - accessing' }
+AllocationGraphNode >> incomingEdges [
+
+    ^ self callers collect: [ :caller | caller edgeTo: self ]
+]
+
 { #category : 'initialization' }
 AllocationGraphNode >> initialize [
 
 	super initialize.
 	edges := Dictionary new.
 	callers := Set new.
-	allocationPaths := OrderedCollection new
+	allocationPaths := Set new
 ]
 
 { #category : 'inspector' }
 AllocationGraphNode >> inspector: aBuilder [
 
-	<inspectorPresentationOrder: 0 title: 'Code'>
-	^ self inspectorPresenter: aBuilder
+    <inspectorPresentationOrder: 0 title: 'Method'>
+    ^ aBuilder newPresenter
+          layout: (SpBoxLayout newTopToBottom
+                   spacing: 3;
+                   add: (aBuilder newText text: method name; yourself) expand: false;
+                   add: (method inspectionSource: aBuilder);
+                   yourself);
+          yourself
 ]
 
 { #category : 'inspector' }
 AllocationGraphNode >> inspectorAllocationPath: aBuilder [
 
-	<inspectorPresentationOrder: 1 title: 'Path'>
-	| callStackRawArray |
-	allocationPaths ifNil: [ ^ aBuilder newList ].
-
-	callStackRawArray := allocationPaths allButFirst flatCollect: [ :assoc | { assoc key method . assoc value } ].
-	^ (IllSendersCallStack senders: callStackRawArray) buildInspectorPresenter: aBuilder
+    <inspectorPresentationOrder: 1 title: 'Allocation paths'>
+    ^ allocationPaths inspectionItems: aBuilder
 ]
 
 { #category : 'inspector' }
-AllocationGraphNode >> inspectorPresenter: aBuilder [
+AllocationGraphNode >> inspectorIncomingEdges: aBuilder [
 
-	^ method inspectionSource: aBuilder
+    <inspectorPresentationOrder: 3 title: 'Incoming Edges'>
+    ^ self incomingEdges inspectionItems: aBuilder
+]
+
+{ #category : 'inspector' }
+AllocationGraphNode >> inspectorOutgoingEdges: aBuilder [
+
+    <inspectorPresentationOrder: 2 title: 'Edges'>
+    ^ self edges inspectionItems: aBuilder
 ]
 
 { #category : 'testing' }

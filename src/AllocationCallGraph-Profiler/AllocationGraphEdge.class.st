@@ -36,6 +36,32 @@ AllocationGraphEdge >> initialize [
 ]
 
 { #category : 'accessing' }
+AllocationGraphEdge >> inspectorMethodWithOffset: aBuilder [
+
+    <inspectorPresentationOrder: 0 title: 'Edge'>
+    | text spaces |
+    spaces := {sourceNode method printString size . targetNode method printString size } average.
+    spaces := spaces asInteger.
+
+    text := String streamContents: [ :stream |
+        sourceNode method printOn: stream.
+        stream << ' (offset '.
+        offset printOn: stream.
+        stream << ')' << String cr.
+        spaces timesRepeat: [ stream << String space ].
+        stream << '-->' << String cr.
+        targetNode method printOn: stream ].
+
+    ^ aBuilder newPresenter
+        layout: (SpBoxLayout newTopToBottom
+            spacing: 3;
+            add: (aBuilder newText text: text; yourself) height: 70;
+            add: ((IllMethodWithOffset method: sourceNode method offset: offset)
+                    inspectorPresenter: aBuilder));
+            yourself
+]
+
+{ #category : 'accessing' }
 AllocationGraphEdge >> offset [
 	^ offset
 ]

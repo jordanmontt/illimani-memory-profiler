@@ -61,36 +61,15 @@ AllocationGraph >> allocatedSamples [
 ]
 
 { #category : 'accessing' }
+AllocationGraph >> edgeFrom: aMethod to: anotherMethod [
+
+    ^ (self nodeAtMethod: aMethod) edgeTo: (self nodeAtMethod: anotherMethod)
+]
+
+{ #category : 'accessing' }
 AllocationGraph >> edges [
 
 	^ nodes values flatCollect: #edges as: Set
-]
-
-{ #category : 'api' }
-AllocationGraph >> identifyAllocationSitesUsing: aStrategy [
-
-	| stack current path |
-	"If the strategy needs some preprocessing"
-	aStrategy setupForGraph: self andSamples: samples.
-
-	stack := self leaves collect: [ :leafNode | leafNode -> { } ] as: OrderedCollection.
-
-	[ stack isEmpty ] whileFalse: [
-		current := stack last key.
-		path := stack last value.
-		stack removeLast.
-
-		"Cut the traversal if we didn't find an allocation site until this depth"
-		(path size <= 100) ifTrue: [
-			(aStrategy isAllocationSite: current fromAllocationPath: path)
-				ifTrue: [ current beAllocationSite; appendPath: path ]
-				ifFalse: [ 
-					current callers do: [ :caller | 
-						caller
-							edgeTo: current
-							ifFound: [ :edge |
-								(path includes: edge) ifFalse: [ 
-									stack add: caller -> (path copyWith: edge) ] ] ] ] ] ]
 ]
 
 { #category : 'initialization' }
@@ -141,28 +120,26 @@ AllocationGraph >> nodes: aCollection [
 { #category : 'api' }
 AllocationGraph >> pruneFromRoot: aNode [
 
-	| newRoot newNodes nodesToTreat visitesNodes |
-	newRoot := aNode copy
+	| newRoot prunedNodes nodesToTreat visitedNodes |
+	newRoot := aNode
 		callers: Set new;
 		yourself.
-	nodesToTreat := OrderedCollection with: newRoot.
-	newNodes := Set with: newRoot.
-	visitesNodes := OrderedCollection new.
+	nodesToTreat := Stack with: newRoot.
+	prunedNodes := Set with: newRoot.
+	visitedNodes := Set new.
 
 	[ nodesToTreat isNotEmpty ] whileTrue: [
 		| current targetNodes |
-		current := nodesToTreat removeFirst.
-		(visitesNodes includes: current) ifFalse: [
-			visitesNodes add: current.
-			targetNodes := (current edges collect: #targetNode) 
-					reject: [ :target | visitesNodes includes: target ].
-			newNodes addAll: targetNodes.
+		current := nodesToTreat pop.
+		(visitedNodes includes: current) ifFalse: [
+			visitedNodes add: current.
+			targetNodes := (current edges collect: #targetNode)
+					reject: [ :target | visitedNodes includes: target ].
+			prunedNodes addAll: targetNodes.
 			nodesToTreat addAll: targetNodes ] ].
 
-	^ self class new
-		  nodes: (newNodes collect: [ :node | node method -> node ]) asDictionary;
-		  samples: samples;
-		  yourself
+	self nodes: (prunedNodes collect: [ :node | node method -> node ]) asDictionary.
+	^ self
 ]
 
 { #category : 'private' }
@@ -176,6 +153,11 @@ AllocationGraph >> recordCallFrom: aCaller to: aCallee at: anOffset sample: samp
 	calleeNode addCaller: callerNode.
 
 	edge updateFromSample: sample
+]
+
+{ #category : 'accessing' }
+AllocationGraph >> samples [
+	^ samples
 ]
 
 { #category : 'accessing' }
@@ -195,4 +177,26 @@ AllocationGraph >> setUpForSamples: aCollection [
 AllocationGraph >> subGraphForType: aClass [
 
 	^ self class onSamples: (samples select: [ :e | e allocatedObjectClass = aClass ])
+]
+
+{ #category : 'api' }
+AllocationGraph >> traverseLongLivedSenderChainsUsing: aStrategy [
+    "Performs a DFS algorithm to extract the long lived senders chains. Stops the traversal using a using criteria algorithm."
+
+	| stack currentNode pathUntilNow association |
+	stack := Stack newFrom: (self leaves collect: [ :leafNode | leafNode -> {  } ]).
+
+	[ stack isEmpty ] whileFalse: [
+		association := stack pop.
+		currentNode := association key.
+		pathUntilNow := association value.
+
+		"Cut the traversal if we didn't find an allocation site until this depth"
+		pathUntilNow size <= 50 ifTrue: [
+			(aStrategy isAllocationSite: currentNode fromAllocationPath: pathUntilNow)
+				ifTrue: [ currentNode beAllocationSite; appendCallStack: pathUntilNow ]
+				ifFalse: [ 
+					(currentNode incomingEdges select: #isLongLived) do: [ :edge | 
+						(pathUntilNow includes: edge) ifFalse: [ 
+							stack add: edge sourceNode -> (pathUntilNow copyWith: edge) ] ] ] ] ]
 ]

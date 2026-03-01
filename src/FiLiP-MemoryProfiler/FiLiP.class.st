@@ -45,11 +45,11 @@ FiLiP >> internalRegisterAllocation: newlyAllocatedObject [
 	i := 1.
 	n := 120.
 	allocationSenderChain := Array new: n.
-
+	
 	filteredContext := thisContext "proxy method"
-		sender "this is me, this profiler"
-		sender "this is the AbstractProfiler"
-		sender "this is the IllHandler"
+		sender "FiLiP >> #internalRegisterAllocation:"
+		sender "IllAbstractProfiler >> #registerAllocation:"
+		sender "IllHandler >> #afterExecutionWithReceiver:returnValue:"
 		"sender". "this is the instrumented method (allocator method e.g. #basicNew)"
 
 	"Get the textual location of new."
