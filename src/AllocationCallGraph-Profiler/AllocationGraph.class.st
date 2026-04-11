@@ -117,31 +117,6 @@ AllocationGraph >> nodes: aCollection [
 	nodes := aCollection
 ]
 
-{ #category : 'api' }
-AllocationGraph >> pruneFromRoot: aNode [
-
-	| newRoot prunedNodes nodesToTreat visitedNodes |
-	newRoot := aNode
-		callers: Set new;
-		yourself.
-	nodesToTreat := Stack with: newRoot.
-	prunedNodes := Set with: newRoot.
-	visitedNodes := Set new.
-
-	[ nodesToTreat isNotEmpty ] whileTrue: [
-		| current targetNodes |
-		current := nodesToTreat pop.
-		(visitedNodes includes: current) ifFalse: [
-			visitedNodes add: current.
-			targetNodes := (current edges collect: #targetNode)
-					reject: [ :target | visitedNodes includes: target ].
-			prunedNodes addAll: targetNodes.
-			nodesToTreat addAll: targetNodes ] ].
-
-	self nodes: (prunedNodes collect: [ :node | node method -> node ]) asDictionary.
-	^ self
-]
-
 { #category : 'private' }
 AllocationGraph >> recordCallFrom: aCaller to: aCallee at: anOffset sample: sample [
 	"Caller -> the one that calls. Callee -> the one being called"
@@ -174,9 +149,40 @@ AllocationGraph >> setUpForSamples: aCollection [
 ]
 
 { #category : 'api' }
-AllocationGraph >> subGraphForType: aClass [
+AllocationGraph >> subgraphForType: aClass [
 
 	^ self class onSamples: (samples select: [ :e | e allocatedObjectClass = aClass ])
+]
+
+{ #category : 'api' }
+AllocationGraph >> subgraphReachableFromMethod: aCompiledMethod [
+
+    ^ self subgraphReachableFromNode: (self nodeAtMethod: aCompiledMethod)
+]
+
+{ #category : 'api' }
+AllocationGraph >> subgraphReachableFromNode: aNode [
+
+	| newRoot prunedNodes nodesToTreat visitedNodes |
+	newRoot := aNode
+		callers: Set new;
+		yourself.
+	nodesToTreat := Stack with: newRoot.
+	prunedNodes := Set with: newRoot.
+	visitedNodes := Set new.
+
+	[ nodesToTreat isNotEmpty ] whileTrue: [
+		| current targetNodes |
+		current := nodesToTreat pop.
+		(visitedNodes includes: current) ifFalse: [
+			visitedNodes add: current.
+			targetNodes := (current edges collect: #targetNode)
+					reject: [ :target | visitedNodes includes: target ].
+			prunedNodes addAll: targetNodes.
+			nodesToTreat addAll: targetNodes ] ].
+
+	self nodes: (prunedNodes collect: [ :node | node method -> node ]) asDictionary.
+	^ self
 ]
 
 { #category : 'api' }

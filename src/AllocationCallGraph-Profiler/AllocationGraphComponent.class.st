@@ -78,7 +78,7 @@ AllocationGraphComponent >> isLongLived [
 { #category : 'api' }
 AllocationGraphComponent >> isShortLived [
 
-    ^ isLongLived
+    ^ self isLongLived not
 ]
 
 { #category : 'testing' }
