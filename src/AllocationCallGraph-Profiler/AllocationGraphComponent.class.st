@@ -5,7 +5,8 @@ Class {
 		'isAllocationSite',
 		'isLeaf',
 		'isTextualAllocationSite',
-		'isLongLived'
+		'isLongLived',
+		'isShortLived'
 	],
 	#category : 'AllocationCallGraph-Profiler-AllocationCallGraph',
 	#package : 'AllocationCallGraph-Profiler',
@@ -39,7 +40,7 @@ AllocationGraphComponent >> beLongLived [
 { #category : 'api' }
 AllocationGraphComponent >> beShortLived [
 
-	isLongLived := false
+	isShortLived := true
 ]
 
 { #category : 'api' }
@@ -51,10 +52,11 @@ AllocationGraphComponent >> beTextualAllocationSite [
 { #category : 'initialization' }
 AllocationGraphComponent >> initialize [
 
-	super initialize.
-	isAllocationSite := false.
-	isTextualAllocationSite := false.
-	isLongLived := false
+    super initialize.
+    isAllocationSite := false.
+    isTextualAllocationSite := false.
+    isLongLived := false.
+    isShortLived := false
 ]
 
 { #category : 'testing' }
@@ -70,15 +72,23 @@ AllocationGraphComponent >> isAllocationSite: boolean [
 ]
 
 { #category : 'accessing' }
-AllocationGraphComponent >> isLongLived [ 
+AllocationGraphComponent >> isImmortal [
 
-	^ isLongLived
+    ^ self isLongLived
+]
+
+{ #category : 'accessing' }
+AllocationGraphComponent >> isLongLived [
+
+    isLongLived ifNil: [ ^ false ].
+    ^ isLongLived
 ]
 
 { #category : 'api' }
 AllocationGraphComponent >> isShortLived [
 
-    ^ self isLongLived not
+    isShortLived ifNil: [ ^ false ].
+    ^ isShortLived
 ]
 
 { #category : 'testing' }
