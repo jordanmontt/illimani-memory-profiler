@@ -124,8 +124,9 @@ AllocationGraph >> recordCallFrom: aCaller to: aCallee at: anOffset sample: samp
 	callerNode := self nodeFor: aCaller.
 	calleeNode := self nodeFor: aCallee.
 	edge := callerNode addCallTo: calleeNode withOffset: anOffset.
-
+	
 	calleeNode addCaller: callerNode.
+	calleeNode addIncomingEdge: edge.
 
 	edge updateFromSample: sample
 ]
