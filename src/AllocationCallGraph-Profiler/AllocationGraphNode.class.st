@@ -6,8 +6,7 @@ Class {
 		'edges',
 		'callers',
 		'allocationPaths',
-		'incomingEdges',
-		'allocatedObjectTypes'
+		'incomingEdges'
 	],
 	#category : 'AllocationCallGraph-Profiler-AllocationCallGraph',
 	#package : 'AllocationCallGraph-Profiler',
@@ -33,13 +32,6 @@ AllocationGraphNode >> addCaller: anAllocationGraphNode [
 AllocationGraphNode >> addIncomingEdge: anEdge [
 
     incomingEdges add: anEdge
-]
-
-{ #category : 'accessing' }
-AllocationGraphNode >> allocatedObjectTypes [
-
-    ^ allocatedObjectTypes ifNil: [
-          allocatedObjectTypes := self allocatedSamples collect: #allocatedObjectClass as: Set ]
 ]
 
 { #category : 'api - accessing' }
