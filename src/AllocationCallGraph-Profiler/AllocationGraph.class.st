@@ -164,12 +164,9 @@ AllocationGraph >> subgraphReachableFromMethod: aCompiledMethod [
 { #category : 'api' }
 AllocationGraph >> subgraphReachableFromNode: aNode [
 
-	| newRoot prunedNodes nodesToTreat visitedNodes |
-	newRoot := aNode
-		callers: Set new;
-		yourself.
-	nodesToTreat := Stack with: newRoot.
-	prunedNodes := Set with: newRoot.
+	| prunedNodes nodesToTreat visitedNodes |
+	nodesToTreat := Stack with: aNode.
+	prunedNodes := Set with: aNode.
 	visitedNodes := Set new.
 
 	[ nodesToTreat isNotEmpty ] whileTrue: [
@@ -181,6 +178,11 @@ AllocationGraph >> subgraphReachableFromNode: aNode [
 					reject: [ :target | visitedNodes includes: target ].
 			prunedNodes addAll: targetNodes.
 			nodesToTreat addAll: targetNodes ] ].
+
+	"Clean up callers and incomingEdges to only reference nodes within the subgraph"
+	prunedNodes do: [ :node |
+		node callers: (node callers select: [ :caller | prunedNodes includes: caller ]).
+		node incomingEdges: (node incomingEdges select: [ :edge | prunedNodes includes: edge sourceNode ]) ].
 
 	self nodes: (prunedNodes collect: [ :node | node method -> node ]) asDictionary.
 	^ self

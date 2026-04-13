@@ -137,6 +137,12 @@ AllocationGraphNode >> incomingEdges [
     ^ incomingEdges
 ]
 
+{ #category : 'api - accessing' }
+AllocationGraphNode >> incomingEdges: aCollection [
+
+    incomingEdges := aCollection
+]
+
 { #category : 'initialization' }
 AllocationGraphNode >> initialize [
 
