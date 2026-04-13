@@ -52,7 +52,7 @@ FiLiP >> internalRegisterAllocation: newlyAllocatedObject [
 		sender "IllHandler >> #afterExecutionWithReceiver:returnValue:"
 		"sender". "this is the instrumented method (allocator method e.g. #basicNew)"
 
-	"Get the textual location of new."
+	"Get the call site of basicNew."
 	[ filteredContext receiver class = metaClass ] whileTrue: [
 		allocationSenderChain
 			at: i put: filteredContext compiledCode;
@@ -60,7 +60,7 @@ FiLiP >> internalRegisterAllocation: newlyAllocatedObject [
 		i := i + 2.
 		filteredContext := filteredContext sender ].
 
-	"Now the filtered context is at the textual location of new."
+	"Now the filtered context is at the call site of basicNew (or equivalent, basicNew: Array>>new:)"
 	illEphemeron
 		key: newlyAllocatedObject value: nil;
 		textualAllocatorMethod: filteredContext compiledCode;
