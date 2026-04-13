@@ -5,7 +5,8 @@ Class {
 		'method',
 		'edges',
 		'callers',
-		'allocationPaths'
+		'allocationPaths',
+		'incomingEdges'
 	],
 	#category : 'AllocationCallGraph-Profiler-AllocationCallGraph',
 	#package : 'AllocationCallGraph-Profiler',
@@ -25,6 +26,12 @@ AllocationGraphNode >> addCallTo: anAllocationGraphNode withOffset: anOffset [
 AllocationGraphNode >> addCaller: anAllocationGraphNode [
 
 	callers add: anAllocationGraphNode
+]
+
+{ #category : 'api' }
+AllocationGraphNode >> addIncomingEdge: anEdge [
+
+    incomingEdges add: anEdge
 ]
 
 { #category : 'api - accessing' }
@@ -127,16 +134,23 @@ AllocationGraphNode >> edges: anObject [
 { #category : 'api - accessing' }
 AllocationGraphNode >> incomingEdges [
 
-    ^ self callers collect: [ :caller | caller edgeTo: self ]
+    ^ incomingEdges
+]
+
+{ #category : 'api - accessing' }
+AllocationGraphNode >> incomingEdges: aCollection [
+
+    incomingEdges := aCollection
 ]
 
 { #category : 'initialization' }
 AllocationGraphNode >> initialize [
 
-	super initialize.
-	edges := Dictionary new.
-	callers := Set new.
-	allocationPaths := Set new
+    super initialize.
+    edges := Dictionary new.
+    callers := Set new.
+    incomingEdges := Set new.
+    allocationPaths := Set new
 ]
 
 { #category : 'inspector' }
@@ -146,7 +160,7 @@ AllocationGraphNode >> inspector: aBuilder [
     ^ aBuilder newPresenter
           layout: (SpBoxLayout newTopToBottom
                    spacing: 3;
-                   add: (aBuilder newText text: method name; yourself) expand: false;
+                   add: (aBuilder newText text: method method name; yourself) expand: false;
                    add: (method inspectionSource: aBuilder);
                    yourself);
           yourself

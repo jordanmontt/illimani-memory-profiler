@@ -5,7 +5,8 @@ Class {
 		'offset',
 		'allocNodeStatistics',
 		'targetNode',
-		'sourceNode'
+		'sourceNode',
+		'allocatedObjectTypes'
 	],
 	#category : 'AllocationCallGraph-Profiler-AllocationCallGraph',
 	#package : 'AllocationCallGraph-Profiler',
@@ -20,6 +21,13 @@ AllocationGraphEdge class >> targetNode: node sourceNode: aSourceNode offset: an
 		  sourceNode: aSourceNode;
 		  offset: anInteger;
 		  yourself
+]
+
+{ #category : 'accessing' }
+AllocationGraphEdge >> allocatedObjectTypes [
+
+	^ allocatedObjectTypes ifNil: [
+		  allocatedObjectTypes := self allocatedSamples collect: #allocatedObjectClass as: Set ]
 ]
 
 { #category : 'accessing' }
