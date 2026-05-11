@@ -190,22 +190,44 @@ AllocationGraph >> subgraphReachableFromNode: aNode [
 
 { #category : 'api' }
 AllocationGraph >> traverseLongLivedSenderChainsUsing: aStrategy [
-    "Performs a DFS algorithm to extract the long lived senders chains. Stops the traversal using a using criteria algorithm."
 
-	| stack currentNode pathUntilNow association |
-	stack := Stack newFrom: (self leaves collect: [ :leafNode | leafNode -> {  } ]).
+	self leaves do: [ :leaf | 
+		"leaf allocatedObjectTypes do: [ :type |"
+			self traverseLongLivedSenderChainsUsingDFS: aStrategy node: leaf pathUntilNow: {  } "type: type ]" ]
+]
 
-	[ stack isEmpty ] whileFalse: [
-		association := stack pop.
-		currentNode := association key.
-		pathUntilNow := association value.
+{ #category : 'api' }
+AllocationGraph >> traverseLongLivedSenderChainsUsingDFS: aStrategy node: currentNode pathUntilNow: pathUntilNow [
 
-		"Cut the traversal if we didn't find an allocation site until this depth"
-		pathUntilNow size <= 50 ifTrue: [
-			(aStrategy isAllocationSite: currentNode fromAllocationPath: pathUntilNow)
-				ifTrue: [ currentNode beAllocationSite; appendCallStack: pathUntilNow ]
-				ifFalse: [ 
-					(currentNode incomingEdges select: #isLongLived) do: [ :edge | 
-						(pathUntilNow includes: edge) ifFalse: [ 
-							stack add: edge sourceNode -> (pathUntilNow copyWith: edge) ] ] ] ] ]
+	pathUntilNow size > 50 ifTrue: [ ^ self ].
+
+	(aStrategy isAllocationSite: currentNode fromAllocationPath: pathUntilNow) ifTrue: [ 
+		currentNode beAllocationSite; appendCallStack: pathUntilNow.
+		^ self ].
+	
+	currentNode incomingEdges do: [ :edge | 
+		(pathUntilNow includes: edge) ifFalse: [
+			self
+				traverseLongLivedSenderChainsUsingDFS: aStrategy
+				node: edge sourceNode
+				pathUntilNow: (pathUntilNow copyWith: edge) ] ]
+]
+
+{ #category : 'api' }
+AllocationGraph >> traverseLongLivedSenderChainsUsingDFS: aStrategy node: currentNode pathUntilNow: pathUntilNow type: aType [
+
+	pathUntilNow size > 50 ifTrue: [ ^ self ].
+	(currentNode allocatedObjectTypes includes: aType) ifFalse: [ ^ self ].
+
+	(aStrategy isAllocationSite: currentNode fromAllocationPath: pathUntilNow) ifTrue: [ 
+		currentNode beAllocationSite; appendCallStack: pathUntilNow.
+		^ self ].
+	
+	currentNode incomingEdges do: [ :edge | 
+		(pathUntilNow includes: edge) ifFalse: [
+			self
+				traverseLongLivedSenderChainsUsingDFS: aStrategy
+				node: edge sourceNode
+				pathUntilNow: (pathUntilNow copyWith: edge)
+				type: aType ] ]
 ]
