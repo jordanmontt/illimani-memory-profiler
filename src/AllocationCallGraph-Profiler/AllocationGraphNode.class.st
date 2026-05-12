@@ -182,7 +182,7 @@ AllocationGraphNode >> inspectorIncomingEdges: aBuilder [
 { #category : 'inspector' }
 AllocationGraphNode >> inspectorOutgoingEdges: aBuilder [
 
-    <inspectorPresentationOrder: 2 title: 'Edges'>
+    <inspectorPresentationOrder: 2 title: 'Outgoing Edges'>
     ^ self edges inspectionItems: aBuilder
 ]
 
