@@ -6,7 +6,8 @@ Class {
 		'edges',
 		'callers',
 		'allocationPaths',
-		'incomingEdges'
+		'incomingEdges',
+		'allocatedSamples'
 	],
 	#category : 'AllocationCallGraph-Profiler-AllocationCallGraph',
 	#package : 'AllocationCallGraph-Profiler',
@@ -37,12 +38,10 @@ AllocationGraphNode >> addIncomingEdge: anEdge [
 { #category : 'api - accessing' }
 AllocationGraphNode >> allocatedSamples [
 
-	self isLeaf ifTrue: [
-		^ callers
-			flatCollect: [ :caller | (caller edgeTo: self) allocatedSamples ]
-			as: Set ].
-
-	^ edges values flatCollect: #allocatedSamples
+    ^ allocatedSamples ifNil: [
+        allocatedSamples := self isLeaf
+            ifTrue: [ self incomingEdges flatCollect: #allocatedSamples as: Set ]
+            ifFalse: [ edges values flatCollect: #allocatedSamples ] ]
 ]
 
 { #category : 'accessing' }
