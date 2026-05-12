@@ -119,10 +119,10 @@ AllocationGraphNode >> edgeTo: aTargetNode ifFound: foundBlock ifNone: noneBlock
 		  ifNone: noneBlock
 ]
 
-{ #category : 'accessing' }
+{ #category : 'api - accessing' }
 AllocationGraphNode >> edges [
 
-	^ edges values
+	^ edges
 ]
 
 { #category : 'accessing' }
@@ -209,6 +209,12 @@ AllocationGraphNode >> method [
 AllocationGraphNode >> method: aCollection [
 
 	method := aCollection
+]
+
+{ #category : 'api - accessing' }
+AllocationGraphNode >> outgoingEdges [
+
+	^ self edges
 ]
 
 { #category : 'printing' }
