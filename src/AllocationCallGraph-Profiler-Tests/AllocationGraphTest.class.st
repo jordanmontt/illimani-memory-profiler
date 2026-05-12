@@ -20,7 +20,7 @@ AllocationGraphTest >> setUp [
 		   	profileOn: [ AllocationGraphFixture entryPoint ];
 			yourself.
 	samples := profiler objectAllocations select: [ :ephemeron |
-			{  AllocationGraphFixtureArray. AllocationGraphFixtureElement } includes: ephemeron allocatedObjectClass ].
+			{  AllocationGraphFixtureArray. AllocationGraphFixtureObject } includes: ephemeron allocatedObjectClass ].
 	allocationGraph := AllocationGraph new
 			setUpForSamples: samples;
 			yourself
@@ -47,18 +47,25 @@ AllocationGraphTest >> testIncomingEdges [
 
     | leaf |
     leaf := allocationGraph nodeAtMethod: Behavior >> #basicNew.
-    self assert: leaf incomingEdges size equals: 2.
-    self assertCollection: leaf incomingEdges includesAll: {
+
+    self assert: leaf incomingEdges size equals: 5.
+    self
+		assertCollection: leaf incomingEdges
+		includesAll: {
             ((allocationGraph nodeAtMethod: AllocationGraphFixtureUtilities class >> #mm) edgeTo: leaf).
-            ((allocationGraph nodeAtMethod: AllocationGraphFixture class >> #m1) edgeTo: leaf) }
+            ((allocationGraph nodeAtMethod: AllocationGraphFixture class >> #m1) edgeTo: leaf).
+				((allocationGraph nodeAtMethod: AllocationGraphFixture class >> #m3) edgeTo: leaf).
+				((allocationGraph nodeAtMethod: AllocationGraphFixture class >> #m4) edgeTo: leaf).
+				((allocationGraph nodeAtMethod: AllocationGraphFixture class >> #m5) edgeTo: leaf) }
 ]
 
 { #category : 'tests' }
 AllocationGraphTest >> testLeaves [
 
 	| expectedLeaveSelectors |
-	expectedLeaveSelectors := { #basicNew. #new:. #basicNewTenured }.
-	self assert: allocationGraph leaves size equals: 3.
+	expectedLeaveSelectors := { #basicNew. #new: }.
+	
+	self assert: allocationGraph leaves size equals: expectedLeaveSelectors size.
 	self
 		assertCollection: (allocationGraph leaves collect: [ :e | e method selector ])
 		hasSameElements: expectedLeaveSelectors
@@ -71,7 +78,7 @@ AllocationGraphTest >> testNodesEdgesAfterPruning [
 	edgesBeforePruning := OrderedCollection new.
 
 	edgesBeforePruning addAll: {
-		(allocationGraph edgeFrom: AllocationGraphFixture class >> #m4 to: Behavior >> #basicNewTenured).
+		(allocationGraph edgeFrom: AllocationGraphFixture class >> #m4 to: Behavior >> #basicNew).
 		(allocationGraph edgeFrom: AllocationGraphFixture class >> #m7 to: AllocationGraphFixture class >> #m4).
 		(allocationGraph edgeFrom: AllocationGraphFixture class >> #entryPoint to: AllocationGraphFixture class >> #m7) }.
 	edgesBeforePruning do: #beLongLived.
@@ -81,7 +88,7 @@ AllocationGraphTest >> testNodesEdgesAfterPruning [
 	allocationGraph := allocationGraph subgraphReachableFromNode: newRoot.
 
 	edgesAfterPruning := {
-		(allocationGraph edgeFrom: AllocationGraphFixture class >> #m4 to: Behavior >> #basicNewTenured).
+		(allocationGraph edgeFrom: AllocationGraphFixture class >> #m4 to: Behavior >> #basicNew).
 		(allocationGraph edgeFrom: AllocationGraphFixture class >> #m7 to: AllocationGraphFixture class >> #m4).
 		(allocationGraph edgeFrom: AllocationGraphFixture class >> #entryPoint to: AllocationGraphFixture class >> #m7) }.
 
@@ -99,7 +106,7 @@ AllocationGraphTest >> testPruneFromRoot [
 	allocationGraph subgraphReachableFromNode: (allocationGraph nodeAtMethod: AllocationGraphFixture class >> #entryPoint).
 	
 	"Check new and old roots"
-	self assert: allocationGraph nodes size equals: 12.
+	self assert: allocationGraph nodes size equals: 11.
 	self assert: (allocationGraph nodeAtMethod: AllocationGraphFixture class >> #entryPoint) isRoot.
 	self assert: newRoot isRoot.
 	
@@ -115,8 +122,7 @@ AllocationGraphTest >> testPruneFromRoot [
 	self assert: (allocationGraph nodeAtMethod: AllocationGraphFixtureUtilities class >> #mm) allocatedSamples size equals: 5.
 	
 	"Check leaves"
-	self assert: (allocationGraph nodeAtMethod: Behavior >> #basicNew) allocatedSamples size equals: 10.
-	self assert: (allocationGraph nodeAtMethod: Behavior >> #basicNewTenured) allocatedSamples size equals: 30.
+	self assert: (allocationGraph nodeAtMethod: Behavior >> #basicNew) allocatedSamples size equals: 40.
 	self assert: (allocationGraph nodeAtMethod: ArrayedCollection class >> #new:) allocatedSamples size equals: 20
 ]
 
@@ -130,7 +136,7 @@ AllocationGraphTest >> testPruneFromRootGraphIsClean [
 
     allocationGraph subgraphReachableFromNode: (allocationGraph nodeAtMethod: AllocationGraphFixture class >> #entryPoint).
 
-    self assert: allocationGraph nodes size equals: 12.
+    self assert: allocationGraph nodes size equals: 11.
     self assert: allocationGraph edges size equals: 14.
     self assert: (allocationGraph nodes select: #isRoot) size equals: 1.
     self assert: (allocationGraph nodes select: [ :e | e incomingEdges isEmpty ]) size equals: 1.
