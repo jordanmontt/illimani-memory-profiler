@@ -73,22 +73,6 @@ AllocationGraphNode >> callers: aSet [
 	callers := aSet
 ]
 
-{ #category : 'copying' }
-AllocationGraphNode >> copy [
-
-	| edgesCopy callersCopy allocationPathsCopy |
-	edgesCopy := edges collect: [ :edge | edge shallowCopy ].
-	callersCopy := callers collect: [ :caller | caller shallowCopy ].
-	allocationPathsCopy := allocationPaths collect: [ :collection |
-		                       collection collect: [ :obj | obj shallowCopy ] ].
-
-	^ self shallowCopy
-		  edges: edgesCopy;
-		  callers: callersCopy;
-		  allocationCallStacks: allocationPathsCopy;
-		  yourself
-]
-
 { #category : 'api - accessing' }
 AllocationGraphNode >> edgeForOffset: anInteger [ 
 
@@ -102,32 +86,9 @@ AllocationGraphNode >> edgeTo: aTargetNode [
 ]
 
 { #category : 'api - accessing' }
-AllocationGraphNode >> edgeTo: aTargetNode ifFound: ifFoundBlock [
-
-	^ edges
-		  detect: [ :edge | edge targetNode = aTargetNode ]
-		  ifFound: ifFoundBlock
-]
-
-{ #category : 'api - accessing' }
-AllocationGraphNode >> edgeTo: aTargetNode ifFound: foundBlock ifNone: noneBlock [
-
-	^ edges
-		  detect: [ :edge | edge targetNode = aTargetNode ]
-		  ifFound: foundBlock
-		  ifNone: noneBlock
-]
-
-{ #category : 'api - accessing' }
 AllocationGraphNode >> edges [
 
 	^ edges
-]
-
-{ #category : 'accessing' }
-AllocationGraphNode >> edges: anObject [
-
-	edges := anObject
 ]
 
 { #category : 'api - accessing' }
@@ -140,6 +101,13 @@ AllocationGraphNode >> incomingEdges [
 AllocationGraphNode >> incomingEdges: aCollection [
 
     incomingEdges := aCollection
+]
+
+{ #category : 'as yet unclassified' }
+AllocationGraphNode >> incomingEdgesForType: aType [
+
+	^ self incomingEdges select: [ :edge |
+		  edge allocatedObjectTypes includes: aType ]
 ]
 
 { #category : 'initialization' }
