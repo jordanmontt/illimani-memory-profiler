@@ -1,0 +1,19 @@
+name: Mirror to Codeberg
+on:
+  push:
+  delete:
+  workflow_dispatch:
+jobs:
+  mirror:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      - name: Push to Codeberg
+        env:
+          CB_USER: ${{ secrets.CODEBERG_USER }}
+          CB_TOKEN: ${{ secrets.CODEBERG_TOKEN }}
+        run: |
+          repo="${GITHUB_REPOSITORY##*/}"
+          git push --mirror "https://${CB_USER}:${CB_TOKEN}@codeberg.org/${CB_USER}/${repo}.git"
