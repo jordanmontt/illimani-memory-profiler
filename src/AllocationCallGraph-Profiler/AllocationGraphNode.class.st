@@ -92,6 +92,12 @@ AllocationGraphNode >> edges [
 ]
 
 { #category : 'api - accessing' }
+AllocationGraphNode >> incomingEdgeForOffset: anInteger [ 
+
+	^ incomingEdges detect: [ :edge | edge offset = anInteger ]
+]
+
+{ #category : 'api - accessing' }
 AllocationGraphNode >> incomingEdges [
 
     ^ incomingEdges
