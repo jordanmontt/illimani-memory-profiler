@@ -1,5 +1,5 @@
 Class {
-	#name : 'AllocationGraphFixtureElement',
+	#name : 'AllocationGraphFixtureObject',
 	#superclass : 'Object',
 	#category : 'AllocationCallGraph-Profiler-Tests',
 	#package : 'AllocationCallGraph-Profiler-Tests'

@@ -17,7 +17,7 @@ AllocationGraphFixture class >> entryPoint [
 { #category : 'as yet unclassified' }
 AllocationGraphFixture class >> m1 [
 
-	5 timesRepeat: [ AllocationGraphFixtureElement basicNew ].
+	5 timesRepeat: [ AllocationGraphFixtureObject basicNew ].
 	20 timesRepeat: [ AllocationGraphFixtureArray new: 0 ]
 ]
 
@@ -31,19 +31,19 @@ AllocationGraphFixture class >> m2 [
 { #category : 'as yet unclassified' }
 AllocationGraphFixture class >> m3 [
 
-	20 timesRepeat: [ AllocationGraphFixtureElement basicNewTenured ]
+	20 timesRepeat: [ AllocationGraphFixtureObject basicNew ]
 ]
 
 { #category : 'as yet unclassified' }
 AllocationGraphFixture class >> m4 [
 
-	5 timesRepeat: [ AllocationGraphFixtureElement basicNewTenured ]
+	5 timesRepeat: [ AllocationGraphFixtureObject basicNew ]
 ]
 
 { #category : 'as yet unclassified' }
 AllocationGraphFixture class >> m5 [
 
-	5 timesRepeat: [ AllocationGraphFixtureElement basicNewTenured ]
+	5 timesRepeat: [ AllocationGraphFixtureObject basicNew ]
 ]
 
 { #category : 'as yet unclassified' }

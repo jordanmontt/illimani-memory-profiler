@@ -37,9 +37,9 @@ IllSendersCallStack >> = illSenders [
 ]
 
 { #category : 'accessing' }
-IllSendersCallStack >> asMethodWithOffsetObjects [
+IllSendersCallStack >> asMethodWithOffsetCollection [
 
-	^ self methodWithOffsetDo:[ :method :offset | IllMethodWithOffset method: method offset: offset ]
+	^ self methodWithOffsetCollect: [ :method :offset | IllMethodWithOffset method: method offset: offset ]
 ]
 
 { #category : 'accessing' }
@@ -71,9 +71,15 @@ IllSendersCallStack >> hash [
 ]
 
 { #category : 'accessing' }
-IllSendersCallStack >> methodWithOffsetDo: aBlock [
+IllSendersCallStack >> methodWithOffsetCollect: aBlock [
 
 	^ senders pairsCollect: aBlock
+]
+
+{ #category : 'accessing' }
+IllSendersCallStack >> methodWithOffsetDo: aBlock [
+
+	^ senders pairsDo: aBlock
 ]
 
 { #category : 'printing' }

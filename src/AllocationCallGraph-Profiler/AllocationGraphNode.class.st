@@ -6,7 +6,8 @@ Class {
 		'edges',
 		'callers',
 		'allocationPaths',
-		'incomingEdges'
+		'incomingEdges',
+		'allocatedSamples'
 	],
 	#category : 'AllocationCallGraph-Profiler-AllocationCallGraph',
 	#package : 'AllocationCallGraph-Profiler',
@@ -37,12 +38,10 @@ AllocationGraphNode >> addIncomingEdge: anEdge [
 { #category : 'api - accessing' }
 AllocationGraphNode >> allocatedSamples [
 
-	self isLeaf ifTrue: [
-		^ callers
-			flatCollect: [ :caller | (caller edgeTo: self) allocatedSamples ]
-			as: Set ].
-
-	^ edges values flatCollect: #allocatedSamples
+    ^ allocatedSamples ifNil: [
+        allocatedSamples := self isLeaf
+            ifTrue: [ self incomingEdges flatCollect: #allocatedSamples as: Set ]
+            ifFalse: [ edges values flatCollect: #allocatedSamples ] ]
 ]
 
 { #category : 'accessing' }
@@ -74,22 +73,6 @@ AllocationGraphNode >> callers: aSet [
 	callers := aSet
 ]
 
-{ #category : 'copying' }
-AllocationGraphNode >> copy [
-
-	| edgesCopy callersCopy allocationPathsCopy |
-	edgesCopy := edges collect: [ :edge | edge shallowCopy ].
-	callersCopy := callers collect: [ :caller | caller shallowCopy ].
-	allocationPathsCopy := allocationPaths collect: [ :collection |
-		                       collection collect: [ :obj | obj shallowCopy ] ].
-
-	^ self shallowCopy
-		  edges: edgesCopy;
-		  callers: callersCopy;
-		  allocationCallStacks: allocationPathsCopy;
-		  yourself
-]
-
 { #category : 'api - accessing' }
 AllocationGraphNode >> edgeForOffset: anInteger [ 
 
@@ -103,32 +86,15 @@ AllocationGraphNode >> edgeTo: aTargetNode [
 ]
 
 { #category : 'api - accessing' }
-AllocationGraphNode >> edgeTo: aTargetNode ifFound: ifFoundBlock [
+AllocationGraphNode >> edges [
 
 	^ edges
-		  detect: [ :edge | edge targetNode = aTargetNode ]
-		  ifFound: ifFoundBlock
 ]
 
 { #category : 'api - accessing' }
-AllocationGraphNode >> edgeTo: aTargetNode ifFound: foundBlock ifNone: noneBlock [
+AllocationGraphNode >> incomingEdgeForOffset: anInteger [ 
 
-	^ edges
-		  detect: [ :edge | edge targetNode = aTargetNode ]
-		  ifFound: foundBlock
-		  ifNone: noneBlock
-]
-
-{ #category : 'accessing' }
-AllocationGraphNode >> edges [
-
-	^ edges values
-]
-
-{ #category : 'accessing' }
-AllocationGraphNode >> edges: anObject [
-
-	edges := anObject
+	^ incomingEdges detect: [ :edge | edge offset = anInteger ]
 ]
 
 { #category : 'api - accessing' }
@@ -141,6 +107,13 @@ AllocationGraphNode >> incomingEdges [
 AllocationGraphNode >> incomingEdges: aCollection [
 
     incomingEdges := aCollection
+]
+
+{ #category : 'as yet unclassified' }
+AllocationGraphNode >> incomingEdgesForType: aType [
+
+	^ self incomingEdges select: [ :edge |
+		  edge allocatedObjectTypes includes: aType ]
 ]
 
 { #category : 'initialization' }
@@ -183,7 +156,7 @@ AllocationGraphNode >> inspectorIncomingEdges: aBuilder [
 { #category : 'inspector' }
 AllocationGraphNode >> inspectorOutgoingEdges: aBuilder [
 
-    <inspectorPresentationOrder: 2 title: 'Edges'>
+    <inspectorPresentationOrder: 2 title: 'Outgoing Edges'>
     ^ self edges inspectionItems: aBuilder
 ]
 
@@ -209,6 +182,12 @@ AllocationGraphNode >> method [
 AllocationGraphNode >> method: aCollection [
 
 	method := aCollection
+]
+
+{ #category : 'api - accessing' }
+AllocationGraphNode >> outgoingEdges [
+
+	^ self edges
 ]
 
 { #category : 'printing' }

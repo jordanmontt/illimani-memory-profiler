@@ -6,17 +6,32 @@ Class {
 		'isLeaf',
 		'isTextualAllocationSite',
 		'isLongLived',
-		'isShortLived'
+		'isShortLived',
+		'isAmbiguous',
+		'allocatedObjectTypes'
 	],
 	#category : 'AllocationCallGraph-Profiler-AllocationCallGraph',
 	#package : 'AllocationCallGraph-Profiler',
 	#tag : 'AllocationCallGraph'
 }
 
+{ #category : 'accessing' }
+AllocationGraphComponent >> allocatedObjectTypes [
+
+	^ allocatedObjectTypes ifNil: [
+		  allocatedObjectTypes := self allocatedSamples collect: #allocatedObjectClass as: Set ]
+]
+
 { #category : 'api' }
 AllocationGraphComponent >> beAllocationSite [
 
 	isAllocationSite := true
+]
+
+{ #category : 'api' }
+AllocationGraphComponent >> beAmbiguous [
+
+	isAmbiguous := true
 ]
 
 { #category : 'api' }
@@ -55,8 +70,10 @@ AllocationGraphComponent >> initialize [
     super initialize.
     isAllocationSite := false.
     isTextualAllocationSite := false.
+
     isLongLived := false.
-    isShortLived := false
+    isShortLived := false.
+    isAmbiguous := false
 ]
 
 { #category : 'testing' }

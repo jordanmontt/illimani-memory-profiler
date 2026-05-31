@@ -95,33 +95,6 @@ FiLiP >> queryAllocationStats [
 ]
 
 { #category : 'profiling' }
-FiLiP >> registerAllocationUsingNewSamplingRate: anObject [
-
-	"NEDDED: Change the sampling rate in the initialize to self samplingRate: 2552.
-	Why that number? It was the result of a linear regression model:
-	
-	prof startProfiling.
-	before := Smalltalk vm parameterAt: 34.	
-	Object new.
-	after :=Smalltalk vm parameterAt: 34.
-	prof stopProfiling.
-	after - before ""2040"" " 
-
-	| nextSamplingThreshold |
-	"Fast path for sampling 100% capture all"
-	samplingRate = 0 ifTrue: [
-		self internalRegisterAllocation: anObject.
-		^ self ].
-
-	nextSamplingThreshold := (Smalltalk vm parameterAt: 34) - startTime // samplingRate.
-
-	nextSamplingThreshold > samplingCounter ifTrue: [
-		self internalRegisterAllocation: anObject ].
-
-	samplingCounter := nextSamplingThreshold
-]
-
-{ #category : 'profiling' }
 FiLiP >> stopProfiling [
 
 	self forceFinalizationOfObjects.

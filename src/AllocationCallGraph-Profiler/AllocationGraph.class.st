@@ -187,25 +187,3 @@ AllocationGraph >> subgraphReachableFromNode: aNode [
 	self nodes: (prunedNodes collect: [ :node | node method -> node ]) asDictionary.
 	^ self
 ]
-
-{ #category : 'api' }
-AllocationGraph >> traverseLongLivedSenderChainsUsing: aStrategy [
-    "Performs a DFS algorithm to extract the long lived senders chains. Stops the traversal using a using criteria algorithm."
-
-	| stack currentNode pathUntilNow association |
-	stack := Stack newFrom: (self leaves collect: [ :leafNode | leafNode -> {  } ]).
-
-	[ stack isEmpty ] whileFalse: [
-		association := stack pop.
-		currentNode := association key.
-		pathUntilNow := association value.
-
-		"Cut the traversal if we didn't find an allocation site until this depth"
-		pathUntilNow size <= 50 ifTrue: [
-			(aStrategy isAllocationSite: currentNode fromAllocationPath: pathUntilNow)
-				ifTrue: [ currentNode beAllocationSite; appendCallStack: pathUntilNow ]
-				ifFalse: [ 
-					(currentNode incomingEdges select: #isLongLived) do: [ :edge | 
-						(pathUntilNow includes: edge) ifFalse: [ 
-							stack add: edge sourceNode -> (pathUntilNow copyWith: edge) ] ] ] ] ]
-]
