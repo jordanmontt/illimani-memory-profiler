@@ -100,3 +100,9 @@ IllMethodWithOffset >> selector [
 
 	^ compiledMethodOrBlock selector
 ]
+
+{ #category : 'accessing' }
+IllMethodWithOffset >> sourceNodeAtOffset [
+
+   ^ compiledMethodOrBlock sourceNodeForPC: offset
+]
