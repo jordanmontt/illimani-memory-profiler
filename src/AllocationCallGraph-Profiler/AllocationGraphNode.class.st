@@ -5,7 +5,6 @@ Class {
 		'method',
 		'edges',
 		'callers',
-		'allocationPaths',
 		'incomingEdges',
 		'allocatedSamples'
 	],
@@ -42,23 +41,6 @@ AllocationGraphNode >> allocatedSamples [
         allocatedSamples := self isLeaf
             ifTrue: [ self incomingEdges flatCollect: #allocatedSamples as: Set ]
             ifFalse: [ edges values flatCollect: #allocatedSamples ] ]
-]
-
-{ #category : 'accessing' }
-AllocationGraphNode >> allocationCallStacks [
-
-	^ allocationPaths
-]
-
-{ #category : 'accessing' }
-AllocationGraphNode >> allocationCallStacks: aCollection [ 
-	allocationPaths := aCollection
-]
-
-{ #category : 'api' }
-AllocationGraphNode >> appendCallStack: aCollection [
-
-	allocationPaths add: aCollection
 ]
 
 { #category : 'accessing' }
@@ -122,8 +104,7 @@ AllocationGraphNode >> initialize [
     super initialize.
     edges := Dictionary new.
     callers := Set new.
-    incomingEdges := Set new.
-    allocationPaths := Set new
+    incomingEdges := Set new
 ]
 
 { #category : 'inspector' }
@@ -137,13 +118,6 @@ AllocationGraphNode >> inspector: aBuilder [
                    add: (method inspectionSource: aBuilder);
                    yourself);
           yourself
-]
-
-{ #category : 'inspector' }
-AllocationGraphNode >> inspectorAllocationPath: aBuilder [
-
-    <inspectorPresentationOrder: 1 title: 'Allocation paths'>
-    ^ allocationPaths inspectionItems: aBuilder
 ]
 
 { #category : 'inspector' }

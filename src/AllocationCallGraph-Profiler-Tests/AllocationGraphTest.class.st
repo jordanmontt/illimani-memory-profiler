@@ -84,7 +84,6 @@ AllocationGraphTest >> testNodesEdgesAfterPruning [
 	edgesBeforePruning do: #beLongLived.
 
 	newRoot := allocationGraph nodeAtMethod: AllocationGraphFixture class >> #entryPoint.
-	newRoot beAllocationSite.
 	allocationGraph := allocationGraph subgraphReachableFromNode: newRoot.
 
 	edgesAfterPruning := {

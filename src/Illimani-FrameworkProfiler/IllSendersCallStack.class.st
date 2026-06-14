@@ -36,7 +36,7 @@ IllSendersCallStack >> = illSenders [
 	^ senders = illSenders senders
 ]
 
-{ #category : 'accessing' }
+{ #category : 'api' }
 IllSendersCallStack >> asMethodWithOffsetCollection [
 
 	^ self methodWithOffsetCollect: [ :method :offset | IllMethodWithOffset method: method offset: offset ]
@@ -70,13 +70,19 @@ IllSendersCallStack >> hash [
 	^ senders hash
 ]
 
-{ #category : 'accessing' }
+{ #category : 'api - iterating' }
+IllSendersCallStack >> methodWithOffsetAllButFirstDo: aBlock [
+
+	^ (senders allButFirst: 2) pairsDo: aBlock
+]
+
+{ #category : 'api - iterating' }
 IllSendersCallStack >> methodWithOffsetCollect: aBlock [
 
 	^ senders pairsCollect: aBlock
 ]
 
-{ #category : 'accessing' }
+{ #category : 'api - iterating' }
 IllSendersCallStack >> methodWithOffsetDo: aBlock [
 
 	^ senders pairsDo: aBlock

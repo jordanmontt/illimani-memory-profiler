@@ -2,7 +2,6 @@ Class {
 	#name : 'AllocationGraphComponent',
 	#superclass : 'Object',
 	#instVars : [
-		'isAllocationSite',
 		'isLeaf',
 		'isTextualAllocationSite',
 		'isLongLived',
@@ -20,12 +19,6 @@ AllocationGraphComponent >> allocatedObjectTypes [
 
 	^ allocatedObjectTypes ifNil: [
 		  allocatedObjectTypes := self allocatedSamples collect: #allocatedObjectClass as: Set ]
-]
-
-{ #category : 'api' }
-AllocationGraphComponent >> beAllocationSite [
-
-	isAllocationSite := true
 ]
 
 { #category : 'api' }
@@ -68,24 +61,11 @@ AllocationGraphComponent >> beTextualAllocationSite [
 AllocationGraphComponent >> initialize [
 
     super initialize.
-    isAllocationSite := false.
     isTextualAllocationSite := false.
 
     isLongLived := false.
     isShortLived := false.
     isAmbiguous := false
-]
-
-{ #category : 'testing' }
-AllocationGraphComponent >> isAllocationSite [
-
-	^ isAllocationSite
-]
-
-{ #category : 'api' }
-AllocationGraphComponent >> isAllocationSite: boolean [
-
-	isAllocationSite := boolean 
 ]
 
 { #category : 'accessing' }
