@@ -150,6 +150,12 @@ FiLiPEphemeron >> printOn: aStream [
 ]
 
 { #category : 'allocation site' }
+FiLiPEphemeron >> rawSendersCallStack [
+
+   ^ sendersCallStackCollection reject: #isNil
+]
+
+{ #category : 'allocation site' }
 FiLiPEphemeron >> sendersCallStack [
 
 	^ IllSendersCallStack senders: sendersCallStackCollection
