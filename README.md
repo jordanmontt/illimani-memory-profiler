@@ -1,24 +1,26 @@
-
-# Illimani: a memory profiler framework with different profilers implemented
+# Illimani: a memory profiler framework for Pharo
 
 [![Pharo version](https://img.shields.io/badge/Pharo-12-%23aac9ff.svg)](https://pharo.org/download)[![Pharo version](https://img.shields.io/badge/Pharo-13-%23aac9ff.svg)](https://pharo.org/download)[![Pharo version](https://img.shields.io/badge/Pharo-14-%23aac9ff.svg)](https://pharo.org/download)
 
-Illimani is a framework for crafting custom memory profilers. It provides a solid infrastructure that instruments and captures all object allocations during the execution of an application.
-It uses [MethodProxies](https://github.com/pharo-contributions/MethodProxies) as its instrumentation backend, and **it instruments all the 14 allocator methods present in Pharo**. By subclassing a class and overriding a few methods, users can implement their own memory profiler.
+Illimani is a framework for crafting custom memory profilers in Pharo. It instruments and captures **all object allocations** during the execution of an application, providing a solid infrastructure on which to build your own profiler.
 
-The framework Illimani provides different profiler implementations. It implements an allocation rate profiler that counts the number of allocation and their size in memory; an allocation call graph that registers the call stacks that led to object allocations; and an object lifetime profiler. Illimani uses one instrumentation handler (the after method in this case, we register the actions after it is made) to always forward the logic to the profiler. This is an implementation decision to keep the profiler logic in the profiler and not in the instrumentation handler. This decision is key to keep the instrumentation backend independent from the profiler logic, allowing users to use different instrumentation backends if wanted.
+It uses [MethodProxies](https://github.com/pharo-contributions/MethodProxies) as its instrumentation backend and instruments **all 14 allocator methods present in Pharo**. By subclassing a class and overriding a few methods, you can implement your own memory profiler.
+
+Illimani ships with several profiler implementations:
+
+- **Allocation rate profiler** — counts allocations and their size in memory.
+- **Allocation call graph** — records the call stacks that led to object allocations.
+- **Object lifetime profiler (FiLiP)** — estimates the lifetime of each allocated object.
 
 ## About FiLiP
 
-FiLiP is an object lifeteime profiler: it estimate the lifetime for each allocated object. FiLiP also registers the stack trace for each object allocation, allowing for the construction of an allocation call graph and better understanding allocation patterns. It also records the memory size, type, and other relevant information for each object allocation to give a wider picture of the memory profile of the application.
+FiLiP (**Fi**nalization **Li**fetime **P**rofiler) estimates the lifetime of each allocated object. It records the object's **birth time** at allocation (via MethodProxies instrumentation) and its **death time** using finalization, a virtual machine mechanism that runs an action when an object is about to be garbage collected. It also registers the stack trace, memory size, and type of each allocation, enabling the construction of an allocation call graph and a wider picture of the application's memory profile.
 
-We have used FiLiP (**Fi**nalization **Li**fetime **P**rofiler), in several experiments, and to profile industrial applications with memory problems. FiLiP has proved to be useful in identifying the causes of the memory problems. Using finalization, a mechanism provided by the virtual machine to execute an action when an object is about to be garbage collected, we record the object's death time. The birth time is obtained thanks to the MethodProxies instrumentation, as it captures the allocation immediately after it is made. With this information, FiLiP is capable of estimating object lifetimes.
+FiLiP includes **sampling support** to reduce memory overhead. We evaluated the precision of the sampling rate in [this paper](https://hal.science/hal-04581342v1/document) and obtained good results even at a 1% sampling rate. By default FiLiP uses a 1% sampling rate, but it is configurable.
 
-FiLiP includes sampling support to reduce memory overhead. We have evaluated the precision of the sampling rate in [this paper](https://hal.science/hal-04581342v1/document), and we obtained good results even with a sampling rate of 1%. By default, FiLiP uses a sampling rate of 1%, but it is customizable. This configuration can significantly reduce the overhead.
+FiLiP has a full GUI for examining profile information, plus a statistics object model that can be queried programmatically for powerful memory analysis.
 
-FiLiP has a full GUI from which all general information of the profile can be examined. It also has a statistics object model that users can programatically query to obtain all sorts of information. Thanks to these capabilities, users can perform powerful memory analysis to apply memory optimizations.
-
-## How to install it
+## How to install
 
 Latest version
 ```smalltalk
@@ -38,41 +40,22 @@ EpMonitor disableDuring: [
 		load ].
 ```
 
-## Quick Getting Started
+## Quick start
 
-Profiling a given code snippet
-
-```st
-FiLiP new
-	profileOn: [ 15 timesRepeat: [ StPlaygroundPresenter open close ] ] ;
-	open;
-	yourself
-```
-
-Profiling the Pharo IDE activity for a given amount of time
-
-```st
-FiLiP new
-	profileFor: 6 seconds;
-	open;
-	yourself
-```
-
-Example 1, Profiling the Pharo IDE activity
-
-```st
-FiLiP new
-	copyExecutionStack;
-	profileFor: 6 seconds;
-	open;
-	yourself
-```
-
-Example 2, Profiling on a code snippet:
+Profile a code snippet:
 
 ```st
 FiLiP new
 	profileOn: [ 15 timesRepeat: [ StPlaygroundPresenter open close ] ] ;
+	open;
+	yourself
+```
+
+Profile the Pharo IDE activity for a given amount of time:
+
+```st
+FiLiP new
+	profileFor: 6 seconds;
 	open;
 	yourself
 ```
@@ -81,20 +64,18 @@ FiLiP new
 
 ### Profile a code snippet or the Pharo IDE
 
-You can decide both to profile a given method block or just watching the activity of the image for some time.
-
 ```st
 profiler := FiLiP new.
-"With this the profiler will block the ui and you will only capture the objects created by your code snippet"
+"Blocks the UI; captures only the objects created by your code snippet"
 profiler profileOn: [ anObject performSomeAction ].
 
-"With this the profiler with not block the UI nor the image. So, you will capture all the allocations of the image"
+"Does not block the UI; captures all allocations of the image"
 profiler profileFor: 2 seconds.
 ```
 
-### Profiler manual API
+### Manual API
 
-For starting the stoping the profiling manually. This can be useful if you don't know how long your program will run and you need to interact with the Pharo's IDE.
+Start and stop profiling manually, useful when you don't know how long your program will run:
 
 ```st
 profiler startProfiling.
@@ -103,7 +84,7 @@ profiler stopProfiling.
 
 ### Open the GUI
 
-You can open the ui at any time with the message `open` (even if the profiler is still profiling)
+You can open the UI at any time with `open`, even while profiling:
 
 ```st
 profiler open.
@@ -111,7 +92,7 @@ profiler open.
 
 ### Sample the allocations
 
-By default, the profiler captures 1% of the allocations. We chose this number because in our experiments we found out that the profiler producess precise results with minimal overhead with that sampling rate. You can change the sampling rate. Attention, the sampling rate needs to be a fraction.
+By default the profiler captures 1% of allocations. The sampling rate must be a fraction:
 
 ```st
 "Capture 10% of the allocations"
@@ -121,19 +102,19 @@ profiler samplingRate: 1/10.
 profiler samplingRate: 1.
 ```
 
-### Export the profiled data to files
+### Export the profiled data
 
-You can export the data to csv and json files by doing:
+Export the data to csv and json files:
 
 ```st
 profiler exportData
 ```
 
-This will create a csv file with all the information about the allocated objects, and some other auxiliary files in json and csv. This auxiliary files can be the meta data about the total profiled time, the gc activity, etc.
+This creates a csv file with all the information about the allocated objects, plus auxiliary files (json/csv) with metadata such as total profiled time and GC activity.
 
 ### Monitor the GC activity
 
-You can monitor the GC activity while the profiler is profiling with the message `monitorGCActivity`. This will fork a process that will take GC statistics once per second. Then, when exporting the profiler data, two csv files will be exported containing both the scavenges and full GCs. By default, the GC monitoring is disabled. You can enable the GC monitor with the message:
+Fork a process that samples GC statistics once per second. When exporting, two csv files are produced (scavenges and full GCs). Disabled by default:
 
 ```st
 profiler monitorGCActivity
@@ -141,11 +122,11 @@ profiler monitorGCActivity
 
 ## Implement your own memory profiler
 
-Illimani is also a profiling framework. A user can implement his own profiler by subclassing the `IllAbstractProfiler` class and defining the few missing methods. Especially, the `internalRegisterAllocation:` method. The `internalRegisterAllocation:` method will be called each time that an allocation is produced (or when sampling, each time that the sampling rates matches) with the newly allocated object as a parameter. You can the `IllAllocationRateProfiler` class as an example of a simple memory profiler.
+Subclass `IllAbstractProfiler` and define the missing methods, especially `internalRegisterAllocation:`. This method is called each time an allocation is produced (or when sampling matches) with the newly allocated object as parameter. See `IllAllocationRateProfiler` as a simple example.
 
 ## Statistics
 
-Without the UI, because the profiler is independent from the UI, you can access to some statistics. See the protocol `accessing - statistics` in the profiler to see the methods. Also, the profiler has a statistics model that groups and sorts the allocation by class and by methods.
+Without the UI, you can access statistics programmatically. See the `accessing - statistics` protocol on the profiler, plus a statistics model that groups and sorts allocations by class and by method.
 
 ## A glance at the UI
 
@@ -153,12 +134,12 @@ Without the UI, because the profiler is independent from the UI, you can access 
 
 ## Related papers
 
- - [ILLIMANI Memory Profiler - A Technical Report. Jordan Montaño S., Polito G., Ducasse S., Tesone P. 2023. Technical Report.](https://hal.science/hal-04225251/file/conference_101719.pdf)
- - [Evaluating Finalization-Based Object Lifetime Profiling. Jordan Montaño S., Polito G., Ducasse S., Tesone P., 2024, ISMM.](https://hal.science/hal-04581342v1/document)
+- [ILLIMANI Memory Profiler - A Technical Report. Jordan Montaño S., Polito G., Ducasse S., Tesone P. 2023. Technical Report.](https://hal.science/hal-04225251/file/conference_101719.pdf)
+- [Evaluating Finalization-Based Object Lifetime Profiling. Jordan Montaño S., Polito G., Ducasse S., Tesone P., 2024, ISMM.](https://hal.science/hal-04581342v1/document)
 
 ## Implementation details
 
-- Illimani uses [method proxies](https://github.com/pharo-contributions/MethodProxies) library to capture the allocations. It instruments all the allocator methods in Pharo.
-- The object lifetimes profiler uses Ephemerons to know when an object is about to be finalized. 
-- It has an statistics model that helps with the calculations of allocations grouping them by classes and methods and sorting them by number of allocations. 
-- The UI is independent of the profiler. It can be used without it. You will have access to all allocations and to the same statistics.
+- Illimani uses [MethodProxies](https://github.com/pharo-contributions/MethodProxies) to capture allocations, instrumenting all allocator methods in Pharo.
+- The object lifetime profiler uses Ephemerons to know when an object is about to be finalized.
+- It has a statistics model that groups allocations by class and method, sorted by number of allocations.
+- The UI is independent of the profiler and can be used without it.
