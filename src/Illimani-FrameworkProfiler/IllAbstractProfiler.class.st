@@ -31,7 +31,7 @@ IllAbstractProfiler class >> forceUninstall [
 	"Warning, do not use unless you cannot start the profiler because you have the
 	MpCannotInstall exception"
 
-	IllInstrumentator forceUninstall
+	IllInstrumenter forceUninstall
 ]
 
 { #category : 'announcements' }
@@ -63,7 +63,7 @@ IllAbstractProfiler >> forceUninstall [
 	"Warning, do not use unless you cannot start the profiler because you have the
 	MpCannotInstall exception"
 
-	IllInstrumentator forceUninstall
+	IllInstrumenter forceUninstall
 ]
 
 { #category : 'initialization' }
@@ -71,7 +71,7 @@ IllAbstractProfiler >> initialize [
 
 	super initialize.
 	illimaniAnnouncer := IllAnnouncer new.
-	instrumentator := IllInstrumentator onProfiler: self.
+	instrumentator := IllInstrumenter onProfiler: self.
 	samplingCounter := 0.
 	self samplingRate: 1/100
 ]

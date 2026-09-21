@@ -3,7 +3,7 @@ I am the instrumentator for the no action profiler. For more info, see the no ac
 "
 Class {
 	#name : 'IllInstrumentatorNoAction',
-	#superclass : 'IllInstrumentator',
+	#superclass : 'IllInstrumenter',
 	#category : 'Illimani-FrameworkProfiler-Instrumentation',
 	#package : 'Illimani-FrameworkProfiler',
 	#tag : 'Instrumentation'
