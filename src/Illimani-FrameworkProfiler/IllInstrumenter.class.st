@@ -5,9 +5,9 @@ Class {
 	#name : 'IllInstrumenter',
 	#superclass : 'Object',
 	#instVars : [
-		'allocatorMethodsInstrumenter',
 		'handler',
-		'profiler'
+		'profiler',
+		'methodProxies'
 	],
 	#category : 'Illimani-FrameworkProfiler-Instrumentation',
 	#package : 'Illimani-FrameworkProfiler',
@@ -25,16 +25,24 @@ IllInstrumenter class >> forceUninstall [
 { #category : 'instance creation' }
 IllInstrumenter class >> new [
 
-	self error: 'Use onProfiler: instead'
+	self error: 'Use #onProfiler:instrumentationHandler: instead'
 ]
 
 { #category : 'initialization' }
-IllInstrumenter class >> onProfiler: aProfiler [
+IllInstrumenter class >> onProfiler: aProfiler instrumentationHandler: anInstrumentationHandler [
 
 	^ self basicNew
 		profiler: aProfiler;
+		handler: anInstrumentationHandler;
 		initialize;
 		yourself
+]
+
+{ #category : 'api' }
+IllInstrumenter >> deinstrument [
+
+	self disableInstrumentation.
+	self uninstall
 ]
 
 { #category : 'instrumentation' }
@@ -57,33 +65,30 @@ IllInstrumenter >> forceUninstall [
 	self class forceUninstall
 ]
 
-{ #category : 'initialization' }
-IllInstrumenter >> initialize [
+{ #category : 'api - accessing' }
+IllInstrumenter >> handler: anInstrumentationHandler [
 
-	super initialize.
-	self initializeHandler.
-	allocatorMethodsInstrumenter := IllAllocatorMethodsInstrumenter new handler: handler; yourself.
-	self initializeMethodProxies
+    handler := anInstrumentationHandler
 ]
 
 { #category : 'initialization' }
-IllInstrumenter >> initializeHandler [
+IllInstrumenter >> initialize [
 
-	handler := IllHandler new
-		profiler: profiler;
-		yourself
+    super initialize.
+    self initializeMethodProxies
 ]
 
 { #category : 'initialization' }
 IllInstrumenter >> initializeMethodProxies [
 
-    allocatorMethodsInstrumenter initializeMethodProxies
+    methodProxies := IllAllocatorMethodsConstant new allocatorCompiledMethods
+        collect: [ :compiledMethod | MpMethodProxy onMethod: compiledMethod handler: handler ]
 ]
 
 { #category : 'instrumentation' }
 IllInstrumenter >> install [
 
-	self proxyVariables do: #install
+	methodProxies do: #install
 ]
 
 { #category : 'api' }
@@ -100,20 +105,7 @@ IllInstrumenter >> profiler: aProfiler [
 ]
 
 { #category : 'instrumentation' }
-IllInstrumenter >> proxyVariables [
-
-    ^ allocatorMethodsInstrumenter proxyVariables
-]
-
-{ #category : 'instrumentation' }
 IllInstrumenter >> uninstall [
 
-	self proxyVariables do: #uninstall
-]
-
-{ #category : 'api' }
-IllInstrumenter >> uninstrument [
-
-	self disableInstrumentation.
-	self uninstall
+	methodProxies do: #uninstall
 ]

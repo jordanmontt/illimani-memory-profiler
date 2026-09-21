@@ -27,6 +27,13 @@ IllMockInstrumentator class >> onProfiler: aProfiler [
 ]
 
 { #category : 'initialization' }
+IllMockInstrumentator >> deinstrument [
+
+	self disableInstrumentation.
+	self uninstall
+]
+
+{ #category : 'initialization' }
 IllMockInstrumentator >> disableInstrumentation [
 
 	MpMethodProxy disableInstrumentation
@@ -59,7 +66,7 @@ IllMockInstrumentator >> initializeMethodProxies [
 { #category : 'initialization' }
 IllMockInstrumentator >> install [
 
-	self proxyVariables do: #install
+	proxyBasicNew install
 ]
 
 { #category : 'initialization' }
@@ -75,21 +82,8 @@ IllMockInstrumentator >> profiler: aProfiler [
     profiler := aProfiler
 ]
 
-{ #category : 'instrumentation' }
-IllMockInstrumentator >> proxyVariables [
-
-	^ { proxyBasicNew }
-]
-
 { #category : 'initialization' }
 IllMockInstrumentator >> uninstall [
 
-	self proxyVariables do: #uninstall
-]
-
-{ #category : 'initialization' }
-IllMockInstrumentator >> uninstrument [
-
-	self disableInstrumentation.
-	self uninstall
+	proxyBasicNew uninstall
 ]

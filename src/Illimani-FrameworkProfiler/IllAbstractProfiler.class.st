@@ -40,6 +40,12 @@ IllAbstractProfiler >> announceProfilerStoped [
 	illimaniAnnouncer announce: IllStopedProfilingAnnouncement
 ]
 
+{ #category : 'profiling' }
+IllAbstractProfiler >> deinstrument [
+
+	instrumentator deinstrument
+]
+
 { #category : 'accessing' }
 IllAbstractProfiler >> endTime [
 
@@ -69,11 +75,17 @@ IllAbstractProfiler >> forceUninstall [
 { #category : 'initialization' }
 IllAbstractProfiler >> initialize [
 
+	| handler |
 	super initialize.
 	illimaniAnnouncer := IllAnnouncer new.
-	instrumentator := IllInstrumenter onProfiler: self.
 	samplingCounter := 0.
-	self samplingRate: 1/100
+	self samplingRate: 1/100.
+
+	handler := IllHandler new
+		profiler: self;
+		yourself.
+	instrumentator := IllInstrumenter onProfiler: self instrumentationHandler: handler
+	
 ]
 
 { #category : 'profiling' }
@@ -272,7 +284,7 @@ IllAbstractProfiler >> startTime [
 { #category : 'profiling' }
 IllAbstractProfiler >> stopProfiling [
 
-	self uninstrument.
+	self deinstrument.
 	self updateVMStats.
 	self announceProfilerStoped
 ]
@@ -293,12 +305,6 @@ IllAbstractProfiler >> totalScavenges [
 IllAbstractProfiler >> totalTime [
 
 	^ endTime - startTime
-]
-
-{ #category : 'profiling' }
-IllAbstractProfiler >> uninstrument [
-
-	instrumentator uninstrument
 ]
 
 { #category : 'profiling' }

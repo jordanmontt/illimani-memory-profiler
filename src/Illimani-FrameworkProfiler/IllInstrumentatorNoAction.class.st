@@ -10,9 +10,10 @@ Class {
 }
 
 { #category : 'initialization' }
-IllInstrumentatorNoAction >> initializeHandler [
+IllInstrumentatorNoAction >> initialize [
 
-	handler := IllNoActionHandler new
-		profiler: self;
-		yourself
+    super initialize.
+    handler := IllNoActionHandler new
+                   profiler: self;
+                   yourself
 ]
