@@ -1,26 +1,7 @@
 Extension { #name : 'IllMethodWithOffset' }
 
 { #category : '*Illimani-FrameworkProfiler-UI' }
-IllMethodWithOffset >> inspector: aBuilder [
-
-    <inspectorPresentationOrder: 0 title: 'Method code'>
-    | codePresenter |
-    codePresenter := self inspectorPresenter: aBuilder.
-    ^ aBuilder newPresenter
-          layout: (SpBoxLayout newTopToBottom
-                   spacing: 3;
-                   add: (aBuilder newText
-                       text: (self name, ' with offset: ', self offset asString);
-                       beNotEditable;
-                       yourself)
-                   expand: false;
-                   add: codePresenter;
-                   yourself);
-          yourself
-]
-
-{ #category : '*Illimani-FrameworkProfiler-UI' }
-IllMethodWithOffset >> inspectorPresenter: aBuilder [
+IllMethodWithOffset >> highlightedCodePresenter: aBuilder [
 
 	| interval codePresenter |
 	interval := (compiledMethodOrBlock sourceNode sourceNodeForPC: offset) sourceInterval.
@@ -33,4 +14,29 @@ IllMethodWithOffset >> inspectorPresenter: aBuilder [
 		  beNotEditable;
 		  yourself.
 	^ codePresenter
+]
+
+{ #category : '*Illimani-FrameworkProfiler-UI' }
+IllMethodWithOffset >> inspector: aBuilder [
+
+    <inspectorPresentationOrder: 0 title: 'Method code'>
+    ^ self inspectorPresenter: aBuilder
+]
+
+{ #category : '*Illimani-FrameworkProfiler-UI' }
+IllMethodWithOffset >> inspectorPresenter: aBuilder [
+
+    | codePresenter |
+    codePresenter := self highlightedCodePresenter: aBuilder.
+    ^ aBuilder newPresenter
+          layout: (SpBoxLayout newTopToBottom
+                   spacing: 3;
+                   add: (aBuilder newText
+                            text: self name , ' with offset: ' , self offset asString;
+                            beNotEditable;
+                            yourself)
+                   expand: false;
+                   add: codePresenter;
+                   yourself);
+          yourself
 ]

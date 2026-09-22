@@ -4,7 +4,7 @@ Extension { #name : 'IllGroupedAllocationsByAllocatorNode' }
 IllGroupedAllocationsByAllocatorNode >> inspectorAllocSite: aBuilder [
 
 	<inspectorPresentationOrder: 3 title: 'Allocation site'>
-	^ key inspectorPresenter: aBuilder
+	^ key highlightedCodePresenter: aBuilder
 ]
 
 { #category : '*FiLiP-MemoryProfiler-UI' }

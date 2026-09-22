@@ -46,7 +46,7 @@ AllocationGraphEdge >> inspectorMethodWithOffset: aBuilder [
                 yourself)
         expand: false;
         add: ((IllMethodWithOffset method: sourceNode method offset: offset)
-                inspectorPresenter: aBuilder);
+                highlightedCodePresenter: aBuilder);
         add: (aBuilder newText text: 'Target Node: ', targetNode method method name; yourself)
         expand: false;
         add: (targetNode method inspectionSource: aBuilder);
