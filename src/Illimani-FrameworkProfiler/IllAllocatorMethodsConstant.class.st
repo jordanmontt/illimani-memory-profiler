@@ -1,57 +1,55 @@
 Class {
 	#name : 'IllAllocatorMethodsConstant',
 	#superclass : 'Object',
-	#instVars : [
-		'basicNewKeyword',
-		'newPinned',
-		'newPinnedKeyword',
-		'newTenured',
-		'newTenuredKeyword',
-		'arrayClass',
-		'arobas',
-		'copy',
-		'clone',
-		'compiledCodeClone',
-		'externalAddressClone',
-		'fixedBitWidthRegisterCopy',
-		'basicNew',
-		'intervalNew'
+	#classVars : [
+		'Arobas',
+		'ArrayClass',
+		'BasicNew',
+		'BasicNewKeyword',
+		'Clone',
+		'CompiledCodeClone',
+		'Copy',
+		'ExternalAddressClone',
+		'FixedBitWidthRegisterCopy',
+		'IntervalNew',
+		'NewPinned',
+		'NewPinnedKeyword',
+		'NewTenured',
+		'NewTenuredKeyword'
 	],
 	#category : 'Illimani-FrameworkProfiler-Instrumentation',
 	#package : 'Illimani-FrameworkProfiler',
 	#tag : 'Instrumentation'
 }
 
-{ #category : 'initialization' }
-IllAllocatorMethodsConstant >> allocatorCompiledMethods [
+{ #category : 'class initialization' }
+IllAllocatorMethodsConstant class >> allocatorCompiledPrimitiveMethods [
 
-	^ (1 to: self class slots size) collect: [ :index | self instVarAt: index ]
+    ^ self classVariables collect: #value
 ]
 
-{ #category : 'initialization' }
-IllAllocatorMethodsConstant >> initialize [
-
-	super initialize.
+{ #category : 'class initialization' }
+IllAllocatorMethodsConstant class >> initialize [
 
 	"Basic new primitives"
-	basicNew := Behavior >> #basicNew.
-	basicNewKeyword := Behavior >> #basicNew:.
-	newPinned := Behavior >> #basicNewPinned .
-	newPinnedKeyword := Behavior >> #basicNewPinned:.
+	BasicNew := Behavior >> #basicNew.
+	BasicNewKeyword := Behavior >> #basicNew:.
+	NewPinned := Behavior >> #basicNewPinned .
+	NewPinnedKeyword := Behavior >> #basicNewPinned:.
 	
 	"Tenured primitives"
-	newTenured := Behavior >> #basicNewTenured .
-	newTenuredKeyword := Behavior >> #basicNewTenured:.
+	NewTenured := Behavior >> #basicNewTenured .
+	NewTenuredKeyword := Behavior >> #basicNewTenured:.
 
 	"Specialized primitives"
-	arrayClass := Array class lookupSelector: #new:.
-	intervalNew := Interval class >> #new.
-	arobas  := Number >> #@.
+	ArrayClass := Array class lookupSelector: #new:.
+	IntervalNew := Interval class >> #new.
+	Arobas  := Number >> #@.
 
 	"Copy and clone primitives"
-	copy := Object >> #shallowCopy.
-	clone := Object >> #clone.
-	compiledCodeClone := CompiledCode >> #clone.
-	externalAddressClone := ExternalAddress >> #clone.
-	fixedBitWidthRegisterCopy := FixedBitWidthRegister >> #copy
+	Copy := Object >> #shallowCopy.
+	Clone := Object >> #clone.
+	CompiledCodeClone := CompiledCode >> #clone.
+	ExternalAddressClone := ExternalAddress >> #clone.
+	FixedBitWidthRegisterCopy := FixedBitWidthRegister >> #copy
 ]

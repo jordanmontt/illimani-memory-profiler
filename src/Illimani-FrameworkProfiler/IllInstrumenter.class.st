@@ -81,7 +81,7 @@ IllInstrumenter >> initialize [
 { #category : 'initialization' }
 IllInstrumenter >> initializeMethodProxies [
 
-    methodProxies := IllAllocatorMethodsConstant new allocatorCompiledMethods
+    methodProxies := IllAllocatorMethodsConstant allocatorCompiledPrimitiveMethods
         collect: [ :compiledMethod | MpMethodProxy onMethod: compiledMethod handler: handler ]
 ]
 
