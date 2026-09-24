@@ -121,14 +121,6 @@ profiler exportData
 
 This creates a csv file with all the information about the allocated objects, plus auxiliary files (json/csv) with metadata such as total profiled time and GC activity.
 
-### Monitor the GC activity
-
-Fork a process that samples GC statistics once per second. When exporting, two csv files are produced (scavenges and full GCs). Disabled by default:
-
-```st
-profiler monitorGCActivity
-```
-
 ## Implement your own memory profiler
 
 Subclass `IllAbstractProfiler` and define the missing methods, especially `internalRegisterAllocation:`. This method is called each time an allocation is produced (or when sampling matches) with the newly allocated object as parameter. See `IllAllocationRateProfiler` as a simple example.
