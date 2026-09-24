@@ -51,6 +51,15 @@ FiLiP new
 	yourself
 ```
 
+Profile a code snippet and cut the execution after a given amount of time:
+
+```st
+FiLiP new
+	profileOnBlock: aBlock forDuration: 6 seconds;
+	open;
+	yourself
+```
+
 Profile the Pharo IDE activity for a given amount of time:
 
 ```st
