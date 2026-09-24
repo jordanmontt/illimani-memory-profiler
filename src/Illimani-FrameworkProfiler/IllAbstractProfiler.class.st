@@ -150,6 +150,16 @@ IllAbstractProfiler >> profileOn: aBlock [
 		nil ] ensure: [ self stopProfiling ]
 ]
 
+{ #category : 'api' }
+IllAbstractProfiler >> profileOnBlock: aBlock forDuration: aDuration [
+
+    profiledCode := aBlock asString.
+    self startProfiling.
+    [
+        aBlock valueWithin: aDuration onTimeout: [ ].
+        nil ] ensure: [ self stopProfiling ]
+]
+
 { #category : 'accessing' }
 IllAbstractProfiler >> profiledCode [
 

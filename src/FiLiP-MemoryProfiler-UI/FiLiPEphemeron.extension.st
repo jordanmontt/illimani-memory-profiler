@@ -16,9 +16,9 @@ FiLiPEphemeron >> inspectorExtension: aBuilder [
 ]
 
 { #category : '*FiLiP-MemoryProfiler-UI' }
-FiLiPEphemeron >> inspectorExtensionSenders: aBuilder [
+FiLiPEphemeron >> inspectorPath: aBuilder [
 
-	<inspectorPresentationOrder: 2 title: 'Senders call stack'>
+	<inspectorPresentationOrder: 2 title: 'Allocation Path'>
 	^ self sendersCallStack buildInspectorPresenter: aBuilder
 ]
 

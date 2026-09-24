@@ -51,6 +51,15 @@ FiLiP new
 	yourself
 ```
 
+Profile a code snippet and cut the execution after a given amount of time:
+
+```st
+FiLiP new
+	profileOnBlock: aBlock forDuration: 6 seconds;
+	open;
+	yourself
+```
+
 Profile the Pharo IDE activity for a given amount of time:
 
 ```st
@@ -111,14 +120,6 @@ profiler exportData
 ```
 
 This creates a csv file with all the information about the allocated objects, plus auxiliary files (json/csv) with metadata such as total profiled time and GC activity.
-
-### Monitor the GC activity
-
-Fork a process that samples GC statistics once per second. When exporting, two csv files are produced (scavenges and full GCs). Disabled by default:
-
-```st
-profiler monitorGCActivity
-```
 
 ## Implement your own memory profiler
 
